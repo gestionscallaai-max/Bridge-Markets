@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Portal Login | Bridge Markets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Add Three.js and Vanta.js for the stunning 3D background effect -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+  
+  <style>
+    :root {
+      --lila: #9b51e0;
+      --lila-light: #b983ff;
+      --white: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --bg-glass: rgba(255, 255, 255, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.4);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow: hidden; /* Prevent scrolling during login */
+      background: #0f172a;
+      color: var(--text);
+    }
+
+    /* Vanta.js 3D Background Container */
+    #vanta-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    /* Full screen flex container for the login card */
+    .login-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+    }
+
+    /* Premium Glassmorphism Card */
+    .login-card {
+      background: var(--bg-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-glass);
+      border-radius: 24px;
+      padding: 48px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.1s;
+      animation: floatIn 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      opacity: 0;
+    }
+
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(40px) scale(0.95) rotateX(10deg); }
+      100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      transform: translateZ(30px); /* 3D pop effect */
+    }
+
+    .brand-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--lila), var(--lila-light));
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      font-size: 28px;
+      box-shadow: 0 12px 32px rgba(155, 81, 224, 0.4);
+      margin-bottom: 16px;
+    }
+
+    .brand-text {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    .brand-text span {
+      color: var(--lila);
+    }
+    
+    .portal-subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+      transform: translateZ(20px);
+    }
+
+    .input-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .icon-left {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 20px;
+      height: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 14px;
+      padding: 16px 16px 16px 46px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .input-field::placeholder { color: #94a3b8; }
+
+    .input-field:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      border-color: var(--lila);
+      box-shadow: 0 0 0 4px rgba(155, 81, 224, 0.15);
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--lila);
+      text-decoration: none;
+      margin-top: 8px;
+      transition: opacity 0.2s;
+    }
+    .forgot-link:hover { opacity: 0.8; }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--lila), var(--lila-light));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 24px rgba(155, 81, 224, 0.3);
+      transition: all 0.3s ease;
+      transform: translateZ(25px);
+      font-family: 'Inter', sans-serif;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      transform: translateZ(30px) translateY(-2px);
+      box-shadow: 0 16px 32px rgba(155, 81, 224, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateZ(20px) translateY(0);
+    }
+
+    /* Initial overlay purely for a fade-in flash effect */
+    .flash-overlay {
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 999;
+      animation: fadeOutFlash 1.5s ease forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fadeOutFlash {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Flash effect on load -->
+  <div class="flash-overlay"></div>
+
+  <!-- 3D Canvas Background -->
+  <div id="vanta-canvas"></div>
+
+  <!-- Interactive 3D Login Card -->
+  <div class="login-wrapper" id="wrapper">
+    <div class="login-card" id="card">
+      
+      <div class="brand-logo">
+        <div class="brand-icon">BM</div>
+        <div class="brand-text">Bridge<span>Markets</span></div>
+        <div class="portal-subtitle">Partner Portal</div>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <label class="input-label">Affiliate Email</label>
+          <div class="input-wrapper">
+            <svg class="icon-left" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+            </svg>
+            <input type="email" class="input-field" placeholder="partner@example.com" value="partner@bridgemarkets.com" required>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <div class="input-wrapper">
+            <svg class="icon-left" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <input type="password" class="input-field" placeholder="••••••••" value="demo123" required>
+          </div>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Access Dashboard
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </form>
+      
+    </div>
+  </div>
+
+  <script>
+    // Initialize Vanta.js 3D Waves Effect
+    const effect = VANTA.WAVES({
+      el: "#vanta-canvas",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x9b51e0,      // Primary Lila color
+      shininess: 80.00,
+      waveHeight: 20.00,
+      waveSpeed: 0.65,
+      zoom: 0.8
+    });
+
+    // 3D Parallax effect on the card triggered by mouse movement
+    const wrapper = document.getElementById('wrapper');
+    const card = document.getElementById('card');
+
+    wrapper.addEventListener('mousemove', (e) => {
+      // Calculate mouse position relative to the center of the screen
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      
+      // Apply the rotation
+      card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Add easing when mouse leaves the wrapper
+    wrapper.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.5s ease';
+      card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+      
+      // Remove transition after it finished so it follows mouse instantly again
+      setTimeout(() => {
+        card.style.transition = 'transform 0.1s';
+      }, 500);
+    });
+
+    // Handle Mock Authentication Login
+    function handleLogin(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById('submitBtn');
+      const originalText = btn.innerHTML;
+      
+      // Loading State
+      btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" style="animation: spin 1s linear infinite"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="30" stroke-dashoffset="10" stroke-linecap="round"/></svg> Authenticating...`;
+      
+      // Simulate network wait
+      setTimeout(() => {
+        btn.style.background = '#22c55e'; // Success Green
+        btn.innerHTML = `Success! Redirecting...`;
+        
+        // Hide card smoothly
+        card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        card.style.transform = 'translateY(-100px) scale(0.9) rotateX(15deg)';
+        card.style.opacity = '0';
+        
+        // Fade out vanta waves
+        document.getElementById('vanta-canvas').style.transition = 'opacity 1s ease';
+        document.getElementById('vanta-canvas').style.opacity = '0';
+
+        // Redirect to the actual dashboard
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 800);
+        
+      }, 1200);
+    }
+  </script>
+  
+  <style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+
+</body>
+</html>
