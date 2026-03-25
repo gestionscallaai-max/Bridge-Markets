@@ -26,12 +26,12 @@ export default function LinksPage() {
                     <h2 className="text-2xl font-bold text-slate-800">Mis Links de Tracking</h2>
                     <p className="text-slate-500 text-sm">Gestiona y crea enlaces personalizados para tus campañas.</p>
                 </div>
-                <button className="bg-lila hover:bg-lila-light text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-colors shadow-sm w-fit">
+                <button className="bg-brand-500 hover:bg-brand-dark text-white px-5 py-2 rounded-lg font-semibold text-sm flex items-center gap-2 transition-colors shadow-sm w-fit">
                     <Plus className="w-5 h-5" /> Nuevo Link
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+            <div className="card overflow-hidden flex flex-col">
                 {/* Toolbar */}
                 <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row items-center gap-4 justify-between bg-slate-50/50">
                     <div className="relative w-full sm:max-w-xs">
@@ -39,7 +39,7 @@ export default function LinksPage() {
                         <input
                             type="text"
                             placeholder="Buscar links..."
-                            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-lila focus:ring-1 focus:ring-lila transition-all"
+                            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
                         />
                     </div>
                     <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -71,12 +71,12 @@ export default function LinksPage() {
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-2 max-w-[200px] lg:max-w-sm">
-                                            <div className="truncate text-lila font-medium text-xs bg-lila-50 px-3 py-1.5 rounded-md border border-lila/20 flex-1">
+                                            <div className="truncate text-brand-dark font-medium text-xs bg-brand-50 px-3 py-1.5 rounded-md border border-brand-200/50 flex-1">
                                                 {link.url}
                                             </div>
                                             <button
                                                 onClick={() => handleCopy(link.id, link.url)}
-                                                className="p-1.5 text-slate-400 hover:text-lila hover:bg-lila-50 rounded-md transition-colors"
+                                                className="p-1.5 text-slate-400 hover:text-brand-500 hover:bg-brand-50 rounded-md transition-colors"
                                                 title="Copiar URL"
                                             >
                                                 {copiedId === link.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
@@ -97,7 +97,7 @@ export default function LinksPage() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <button className="text-slate-400 hover:text-lila p-1.5 rounded-md hover:bg-lila-50 transition-colors">
+                                        <button className="text-slate-400 hover:text-brand-500 p-1.5 rounded-md hover:bg-brand-50 transition-colors">
                                             <ExternalLink className="w-4 h-4" />
                                         </button>
                                     </td>
@@ -112,7 +112,7 @@ export default function LinksPage() {
                     <div>Mostrando 1 a 4 de 12 links</div>
                     <div className="flex items-center gap-2">
                         <button className="px-3 py-1 border border-slate-200 bg-white rounded-md text-slate-400 cursor-not-allowed">Anterior</button>
-                        <button className="px-3 py-1 bg-lila text-white rounded-md font-medium shadow-sm">1</button>
+                        <button className="px-3 py-1 bg-brand-500 text-white rounded-md font-medium shadow-sm">1</button>
                         <button className="px-3 py-1 border border-slate-200 bg-white rounded-md hover:bg-slate-50 text-slate-700">2</button>
                         <button className="px-3 py-1 border border-slate-200 bg-white rounded-md hover:bg-slate-50 text-slate-700">3</button>
                         <button className="px-3 py-1 border border-slate-200 bg-white rounded-md hover:bg-slate-50 text-slate-700">Siguiente</button>

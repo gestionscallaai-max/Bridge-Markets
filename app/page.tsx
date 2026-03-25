@@ -2,10 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import * as THREE from 'three';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowRight, Mail, Lock, Eye, EyeOff, Shield, BarChart3, Globe, Zap, ShieldCheck, Pencil } from 'lucide-react';
 
-// Declare VANTA for TypeScript
 declare global {
     interface Window {
         VANTA: any;
@@ -15,36 +13,29 @@ declare global {
 export default function LoginPage() {
     const router = useRouter();
     const vantaRef = useRef<HTMLDivElement>(null);
-    const cardRef = useRef<HTMLDivElement>(null);
-    const wrapperRef = useRef<HTMLDivElement>(null);
     const [vantaEffect, setVantaEffect] = useState<any>(null);
 
-    const [email, setEmail] = useState('partner@bridgemarkets.com');
-    const [password, setPassword] = useState('demo123');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    // Initialize Vanta.js only on the client
+    // Initialize Vanta.js
     useEffect(() => {
-        // We dynamically inject the scripts to ensure they load in the correct order for Next.js
         const loadVantaScripts = async () => {
             if (typeof window !== 'undefined' && !window.VANTA) {
-                // Load Three.js
                 const threeScript = document.createElement('script');
                 threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
                 document.head.appendChild(threeScript);
-
                 await new Promise(resolve => threeScript.onload = resolve);
 
-                // Load Vanta.js Waves
                 const vantaScript = document.createElement('script');
                 vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js';
                 document.head.appendChild(vantaScript);
-
                 await new Promise(resolve => vantaScript.onload = resolve);
             }
 
-            // Initialize Effect
             if (!vantaEffect && vantaRef.current && window.VANTA) {
                 const effect = window.VANTA.WAVES({
                     el: vantaRef.current,
@@ -66,28 +57,8 @@ export default function LoginPage() {
         };
 
         loadVantaScripts();
-
-        return () => {
-            if (vantaEffect) vantaEffect.destroy();
-        };
+        return () => { if (vantaEffect) vantaEffect.destroy(); };
     }, [vantaEffect]);
-
-    // Handle 3D Parallax Mouse movement
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!cardRef.current) return;
-        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-        cardRef.current.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-    };
-
-    const handleMouseLeave = () => {
-        if (!cardRef.current) return;
-        cardRef.current.style.transition = 'transform 0.5s ease';
-        cardRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
-        setTimeout(() => {
-            if (cardRef.current) cardRef.current.style.transition = 'transform 0.1s';
-        }, 500);
-    };
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -96,103 +67,149 @@ export default function LoginPage() {
         setTimeout(() => {
             setLoading(false);
             setSuccess(true);
-
-            // Animate card out
-            if (cardRef.current) {
-                cardRef.current.style.transition = 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
-                cardRef.current.style.transform = 'translateY(-100px) scale(0.9) rotateX(15deg)';
-                cardRef.current.style.opacity = '0';
-            }
-
-            if (vantaRef.current) {
-                vantaRef.current.style.transition = 'opacity 1s ease';
-                vantaRef.current.style.opacity = '0';
-            }
-
-            setTimeout(() => {
-                router.push('/dashboard');
-            }, 800);
+            setTimeout(() => router.push('/dashboard'), 800);
         }, 1200);
     };
 
+    const features = [
+        { icon: Pencil, title: 'Piezas Gráficas', desc: '4 formatos, 14 idiomas', color: 'from-pink-500 to-rose-400' },
+        { icon: Globe, title: 'Landing Pages', desc: 'Con IA en 3 pasos', color: 'from-brand to-blue-400' },
+        { icon: Zap, title: 'Tiempo < 30 min', desc: 'De idea a resultado', color: 'from-amber-500 to-orange-400' },
+        { icon: ShieldCheck, title: 'Branding seguro', desc: 'Plantillas bloqueadas', color: 'from-emerald-500 to-teal-400' },
+    ];
+
     return (
-        <div className="relative w-screen h-screen overflow-hidden bg-slate-900 text-slate-900 font-sans">
+        <div className="flex h-screen w-screen font-sans overflow-hidden">
 
-            {/* 3D Background */}
-            <div ref={vantaRef} className="absolute inset-0 z-0" />
+            {/* ========== LEFT PANEL — Branded Info ========== */}
+            <div className="relative w-1/2 hidden lg:flex flex-col items-center justify-center overflow-hidden">
+                {/* Vanta Background */}
+                <div ref={vantaRef} className="absolute inset-0 z-0" />
+                <div className="absolute inset-0 z-[1] bg-gradient-to-b from-purple-900/30 via-transparent to-purple-900/40" />
 
-            {/* Interactive Wrapper */}
-            <div
-                ref={wrapperRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="relative z-10 w-full h-full flex items-center justify-center perspective-[1200px]"
-            >
-                <div
-                    ref={cardRef}
-                    className="bg-white/75 backdrop-blur-xl border border-white/40 rounded-3xl p-12 w-full max-w-md shadow-[0_24px_80px_rgba(0,0,0,0.15),inset_0_0_0_1px_rgba(255,255,255,0.6)] animate-floatIn transform-style-3d will-change-transform"
-                >
-                    <div className="flex flex-col items-center justify-center mb-10 translate-z-[30px]">
-                        <div className="w-16 h-16 bg-gradient-to-br from-lila to-lila-light rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-[0_12px_32px_rgba(155,81,224,0.4)] mb-4">
-                            BM
-                        </div>
-                        <div className="text-2xl font-extrabold tracking-tight">
-                            Bridge<span className="text-lila">Markets</span>
-                        </div>
-                        <div className="text-[13px] font-semibold text-slate-500 uppercase tracking-[0.15em] mt-1">
-                            Partner Portal
-                        </div>
+                {/* Content */}
+                <div className="relative z-10 text-center px-12 max-w-lg">
+                    {/* Logo */}
+                    <div className="mx-auto mb-8">
+                        <img src="/images/logo.png" alt="Bridge Markets" className="h-16 object-contain drop-shadow-2xl" />
                     </div>
 
+                    <h2 className="text-3xl font-bold text-white tracking-tight mb-3">
+                        Bridge Internal Panel
+                    </h2>
+                    <p className="text-white/70 text-sm leading-relaxed mb-10">
+                        Plataforma premium para comerciales. Genera piezas gráficas multilenguaje y landing pages con IA en minutos.
+                    </p>
+
+                    {/* Feature Cards Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                        {features.map((feat) => {
+                            const Icon = feat.icon;
+                            return (
+                                <div
+                                    key={feat.title}
+                                    className="bg-white/10 backdrop-blur-md border border-white/15 rounded-xl p-4 text-left hover:bg-white/15 transition-colors"
+                                >
+                                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${feat.color} flex items-center justify-center mb-2.5 shadow-sm`}>
+                                        <Icon className="w-4 h-4 text-white" />
+                                    </div>
+                                    <div className="text-white text-[13px] font-semibold">{feat.title}</div>
+                                    <div className="text-white/50 text-[11px] mt-0.5">{feat.desc}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            {/* ========== RIGHT PANEL — Login Form ========== */}
+            <div className="w-full lg:w-1/2 bg-white flex items-center justify-center relative">
+                <div className="w-full max-w-[400px] px-8">
+                    {/* Badge */}
+                    <div className="flex items-center gap-2 mb-5">
+                        <Shield className="w-4 h-4 text-brand" />
+                        <span className="text-xs font-semibold text-brand uppercase tracking-wider">Acceso Privado</span>
+                    </div>
+
+                    {/* Heading */}
+                    <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+                        Bienvenido de vuelta
+                    </h1>
+                    <p className="text-sm text-slate-400 mt-1 mb-8">
+                        Ingresa tus credenciales corporativas para continuar
+                    </p>
+
+                    {/* Form */}
                     <form onSubmit={handleLogin}>
-                        <div className="mb-6 translate-z-[20px]">
-                            <label className="block text-[13px] font-semibold text-slate-900 mb-2">Affiliate Email</label>
+                        {/* Email */}
+                        <div className="mb-5">
+                            <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                                Email corporativo
+                            </label>
                             <div className="relative">
-                                <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                                </svg>
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-white/60 border border-white/80 rounded-2xl py-4 pl-11 pr-4 text-[15px] font-medium transition-all focus:outline-none focus:bg-white/90 focus:border-lila focus:ring-4 focus:ring-lila/15"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-brand focus:ring-2 focus:ring-brand/10 placeholder:text-slate-400"
+                                    placeholder="tu@bridge.com"
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="mb-6 translate-z-[20px]">
-                            <label className="block text-[13px] font-semibold text-slate-900 mb-2">Password</label>
+                        {/* Password */}
+                        <div className="mb-7">
+                            <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                                Contraseña
+                            </label>
                             <div className="relative">
-                                <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
                                 <input
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-white/60 border border-white/80 rounded-2xl py-4 pl-11 pr-4 text-[15px] font-medium transition-all focus:outline-none focus:bg-white/90 focus:border-lila focus:ring-4 focus:ring-lila/15"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 pr-11 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-brand focus:ring-2 focus:ring-brand/10"
+                                    placeholder="••••••••"
                                     required
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
                             </div>
-                            <a href="#" className="block text-right text-xs font-semibold text-lila mt-2 hover:opacity-80">Forgot password?</a>
                         </div>
 
+                        {/* Submit */}
                         <button
                             type="submit"
                             disabled={loading || success}
-                            className={`w-full text-white border-none rounded-2xl p-4 text-base font-bold flex items-center justify-center gap-2 shadow-[0_12px_24px_rgba(155,81,224,0.3)] transition-all translate-z-[25px] mt-2 ${success ? 'bg-green-500 shadow-green-500/30' : 'bg-gradient-to-br from-lila to-lila-light hover:translate-y-[-2px] hover:shadow-[0_16px_32px_rgba(155,81,224,0.4)]'}`}
+                            className={`w-full rounded-lg py-3 text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${success
+                                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
+                                : 'bg-gradient-to-r from-purple-600 to-brand-dark text-white hover:from-purple-700 hover:to-indigo-700 shadow-lg shadow-brand/20 hover:shadow-xl'
+                                } disabled:opacity-70 disabled:cursor-not-allowed`}
                         >
                             {loading ? (
-                                <><Loader2 className="w-5 h-5 animate-spin" /> Authenticating...</>
+                                <><Loader2 className="w-4 h-4 animate-spin" /> Autenticando...</>
                             ) : success ? (
-                                <>Success! Redirecting...</>
+                                <>Acceso concedido</>
                             ) : (
-                                <>Access Dashboard <ArrowRight className="w-5 h-5" /></>
+                                <>Iniciar sesión <ArrowRight className="w-4 h-4" /></>
                             )}
                         </button>
                     </form>
 
+                    {/* Help links */}
+                    <div className="mt-6 space-y-3">
+                        <div className="text-center text-[12px] text-slate-400 bg-slate-50 rounded-lg py-2.5 px-4 border border-slate-100">
+                            ¿Sin acceso? Contacta con tu <a href="#" className="font-semibold text-brand hover:text-brand-dark">administrador</a> para que te cree una cuenta.
+                        </div>
+                        <p className="text-center text-[11px] text-slate-400">
+                            ¿Problemas de acceso? Contacta con <a href="mailto:soporte@bridge.com" className="font-semibold text-brand hover:text-brand-dark">soporte@bridge.com</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

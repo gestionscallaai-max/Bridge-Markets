@@ -1,376 +1,498 @@
 "use client";
 
-import React, { useState } from 'react';
-import { ChevronRight, ChevronLeft, Check, Copy, CheckCircle2, AlertCircle, Play, Globe, LayoutTemplate, Shield, Smartphone, ArrowRight, Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState, useRef } from 'react';
+import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Download, Eye, X, RefreshCw } from 'lucide-react';
+import { generateLandingHTML, downloadLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
 
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3;
+
+const COUNTRIES = [
+    'España', 'México', 'Colombia', 'Argentina', 'Chile', 'Perú',
+    'Ecuador', 'Venezuela', 'Uruguay', 'Brasil', 'Estados Unidos', 'Otro'
+];
+
+const LANGUAGES = [
+    { code: 'ES', flag: '🇪🇸', label: 'Español' },
+    { code: 'GB', flag: '🇬🇧', label: 'English' },
+    { code: 'BR', flag: '🇧🇷', label: 'Português' },
+    { code: 'FR', flag: '🇫🇷', label: 'Français' },
+    { code: 'SA', flag: '🇸🇦', label: 'العربية' },
+    { code: 'JP', flag: '🇯🇵', label: '日本語' },
+    { code: 'CN', flag: '🇨🇳', label: '中文' },
+    { code: 'VN', flag: '🇻🇳', label: 'Tiếng Việt' },
+];
+
+const LANDING_TYPES = [
+    { id: 'institucional', title: 'Institucional', desc: 'Página principal del broker con todos los productos', icon: Layout, color: 'from-[#865BFF] to-[#6b3fd6]' },
+    { id: 'forex', title: 'Forex Trading', desc: 'Enfocada en pares de divisas y spreads competitivos', icon: Target, color: 'from-blue-500 to-blue-600' },
+    { id: 'cripto', title: 'Criptomonedas', desc: 'Trading de criptoactivos con apalancamiento', icon: Sparkles, color: 'from-amber-500 to-orange-500' },
+    { id: 'propfirm', title: 'Prop Firm', desc: 'Modelo de fondeo para traders profesionales', icon: Rocket, color: 'from-emerald-500 to-teal-500' },
+];
 
 export default function LandingTypeform() {
     const [step, setStep] = useState<Step>(1);
     const [formData, setFormData] = useState({
-        subdomain: '',
-        displayName: '',
+        fullName: '',
+        country: 'España',
+        language: 'ES',
         whatsapp: '',
-        facebookPixel: '',
-        googleAnalytics: ''
+        email: '',
+        landingType: 'institucional',
+    });
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [generated, setGenerated] = useState(false);
+    const [generatedHtml, setGeneratedHtml] = useState('');
+    const [showPreview, setShowPreview] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [savedLandings, setSavedLandings] = useState<{name: string; date: string; type: string; language: string}[]>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('bridge_landings');
+            return saved ? JSON.parse(saved) : [];
+        }
+        return [];
     });
 
-    const [subdomainStatus, setSubdomainStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
-    const [isDeploying, setIsDeploying] = useState(false);
-    const [deployStatus, setDeployStatus] = useState<'idle' | 'success' | 'error'>('idle');
-    const [deployedUrl, setDeployedUrl] = useState('');
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    const partnerId = 'BM_10940382';
 
-    const handleNext = () => setStep((s) => Math.min(s + 1, 4) as Step);
+    const previewUrl = formData.fullName
+        ? `https://bridge.com/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
+        : 'https://bridge.com/l/tu-nombre';
+
+    const handleNext = () => setStep((s) => Math.min(s + 1, 3) as Step);
     const handlePrev = () => setStep((s) => Math.max(s - 1, 1) as Step);
 
-    const checkSubdomain = () => {
-        if (!formData.subdomain) return;
-        setSubdomainStatus('checking');
-        // Simulate API call
+    const handleGenerate = () => {
+        setIsGenerating(true);
+
+        // Simulate build time for UX
         setTimeout(() => {
-            if (formData.subdomain.includes('admin') || formData.subdomain === 'test') {
-                setSubdomainStatus('taken');
-            } else {
-                setSubdomainStatus('available');
-            }
-        }, 800);
+            const landingData: LandingData = {
+                fullName: formData.fullName,
+                country: formData.country,
+                language: formData.language,
+                whatsapp: formData.whatsapp,
+                email: formData.email,
+                landingType: formData.landingType,
+                partnerId,
+            };
+
+            const html = generateLandingHTML(landingData);
+            setGeneratedHtml(html);
+            setIsGenerating(false);
+            setGenerated(true);
+
+            // Save to history
+            const newLanding = {
+                name: formData.fullName,
+                date: new Date().toLocaleString('es-ES'),
+                type: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType,
+                language: formData.language,
+            };
+            const updated = [newLanding, ...savedLandings].slice(0, 10);
+            setSavedLandings(updated);
+            localStorage.setItem('bridge_landings', JSON.stringify(updated));
+        }, 2000);
     };
 
-    const handleDeploy = async () => {
-        setIsDeploying(true);
-        setDeployStatus('idle');
-
-        try {
-            const response = await fetch('/api/landing/deploy', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) throw new Error('Deployment failed');
-
-            const data = await response.json();
-            setDeployedUrl(data.url);
-            setDeployStatus('success');
-        } catch (error) {
-            console.error('Error deploying landing:', error);
-            setDeployStatus('error');
-        } finally {
-            setIsDeploying(false);
+    const handlePreview = () => {
+        if (generatedHtml) {
+            setShowPreview(true);
         }
     };
 
-    const renderStepContent = () => {
-        switch (step) {
-            case 1:
-                return (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-xl mx-auto space-y-8">
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-indigo-100/50">
-                                <Globe className="w-8 h-8 text-indigo-500" />
-                            </div>
-                            <h2 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Elige tu Subdominio</h2>
-                            <p className="text-slate-500 text-lg font-medium">Esta será la dirección web de tu nueva Landing Page.</p>
-                        </div>
-
-                        <div className="bg-white rounded-3xl p-8 shadow-[0_4px_30px_rgb(0,0,0,0.03)] border border-slate-100">
-                            <div className="space-y-4">
-                                <label className="text-sm font-bold text-slate-700 block">Prefijo del Subdominio</label>
-                                <div className="flex bg-slate-50 border-2 border-slate-200 rounded-2xl overflow-hidden focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-100 transition-all">
-                                    <input
-                                        type="text"
-                                        value={formData.subdomain}
-                                        onChange={(e) => {
-                                            setFormData({ ...formData, subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') });
-                                            setSubdomainStatus('idle');
-                                        }}
-                                        placeholder="mi-nombre"
-                                        className="flex-1 bg-transparent px-5 py-4 text-slate-800 font-bold placeholder-slate-400 focus:outline-none min-w-0"
-                                    />
-                                    <div className="bg-slate-100/80 px-5 flex items-center justify-center border-l-2 border-slate-200 text-slate-500 font-bold text-sm select-none">
-                                        .bridgemarkets.com
-                                    </div>
-                                </div>
-
-                                {formData.subdomain && subdomainStatus === 'idle' && (
-                                    <button onClick={checkSubdomain} className="text-indigo-600 text-sm font-bold hover:text-indigo-700 transition-colors flex items-center gap-1">
-                                        Verificar disponibilidad <ArrowRight className="w-4 h-4" />
-                                    </button>
-                                )}
-
-                                {subdomainStatus === 'checking' && (
-                                    <div className="flex items-center gap-2 text-indigo-500 text-sm font-bold">
-                                        <Loader2 className="w-4 h-4 animate-spin" /> Verificando...
-                                    </div>
-                                )}
-
-                                {subdomainStatus === 'available' && (
-                                    <div className="flex flex-col gap-1 p-4 bg-emerald-50 rounded-xl border border-emerald-100 animate-in zoom-in-95">
-                                        <div className="flex items-center gap-2 text-emerald-600 text-sm font-bold">
-                                            <CheckCircle2 className="w-5 h-5" /> ¡Subdominio disponible!
-                                        </div>
-                                    </div>
-                                )}
-
-                                {subdomainStatus === 'taken' && (
-                                    <div className="flex flex-col gap-1 p-4 bg-rose-50 rounded-xl border border-rose-100 animate-in headShake">
-                                        <div className="flex items-center gap-2 text-rose-600 text-sm font-bold">
-                                            <AlertCircle className="w-5 h-5" /> Este subdominio ya está en uso. Elige otro.
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                );
-            case 2:
-                return (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-xl mx-auto space-y-8">
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-green-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-emerald-100/50">
-                                <LayoutTemplate className="w-8 h-8 text-emerald-500" />
-                            </div>
-                            <h2 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Personalización</h2>
-                            <p className="text-slate-500 text-lg font-medium">Añade tu información de contacto a la página.</p>
-                        </div>
-
-                        <div className="bg-white rounded-3xl p-8 shadow-[0_4px_30px_rgb(0,0,0,0.03)] border border-slate-100 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 block">Nombre a Mostrar</label>
-                                <input
-                                    type="text"
-                                    value={formData.displayName}
-                                    onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                                    placeholder="Ej. Juan Pérez - IB Oficial"
-                                    className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-slate-800 font-bold placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 block flex items-center gap-2">
-                                    <Smartphone className="w-4 h-4 text-emerald-500" /> WhatsApp para contactos
-                                </label>
-                                <input
-                                    type="tel"
-                                    value={formData.whatsapp}
-                                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                                    placeholder="+54 9 11 1234-5678"
-                                    className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-slate-800 font-bold placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all cursor-text text-left"
-                                />
-                                <p className="text-xs text-slate-400 font-medium">Incluye el código de país. Los usuarios podrán contactarte directamente.</p>
-                            </div>
-                        </div>
-                    </div>
-                );
-            case 3:
-                return (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-xl mx-auto space-y-8">
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-100 to-pink-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-fuchsia-100/50">
-                                <Shield className="w-8 h-8 text-fuchsia-500" />
-                            </div>
-                            <h2 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Analítica (Opcional)</h2>
-                            <p className="text-slate-500 text-lg font-medium">Conecta tus píxeles para seguimiento de conversiones.</p>
-                        </div>
-
-                        <div className="bg-white rounded-3xl p-8 shadow-[0_4px_30px_rgb(0,0,0,0.03)] border border-slate-100 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 block">Pixel de Meta (Facebook)</label>
-                                <input
-                                    type="text"
-                                    value={formData.facebookPixel}
-                                    onChange={(e) => setFormData({ ...formData, facebookPixel: e.target.value })}
-                                    placeholder="Ej. 123456789012345"
-                                    className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-slate-800 font-bold placeholder-slate-400 focus:outline-none focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100 transition-all font-mono"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 block">Google Analytics (G-XXXXX)</label>
-                                <input
-                                    type="text"
-                                    value={formData.googleAnalytics}
-                                    onChange={(e) => setFormData({ ...formData, googleAnalytics: e.target.value })}
-                                    placeholder="G-..."
-                                    className="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl px-5 py-4 text-slate-800 font-bold placeholder-slate-400 focus:outline-none focus:border-fuchsia-500 focus:ring-4 focus:ring-fuchsia-100 transition-all font-mono"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                );
-            case 4:
-                return (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl mx-auto space-y-8">
-                        {deployStatus === 'idle' && (
-                            <>
-                                <div className="text-center">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-yellow-50 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-amber-100/50">
-                                        <Play className="w-8 h-8 text-amber-500 ml-1" />
-                                    </div>
-                                    <h2 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Listo para Desplegar</h2>
-                                    <p className="text-slate-500 text-lg font-medium">Revisa tus datos. Tu landing se generará en menos de 1 minuto.</p>
-                                </div>
-
-                                <div className="bg-white rounded-3xl p-8 shadow-[0_4px_30px_rgb(0,0,0,0.03)] border border-slate-100 divide-y divide-slate-100">
-                                    <div className="py-4 flex justify-between items-center">
-                                        <span className="text-slate-500 font-bold text-sm">URL Final</span>
-                                        <span className="text-slate-800 font-black">https://{formData.subdomain || '[subdominio]'}.bridgemarkets.com</span>
-                                    </div>
-                                    <div className="py-4 flex justify-between items-center">
-                                        <span className="text-slate-500 font-bold text-sm">Nombre</span>
-                                        <span className="text-slate-800 font-bold">{formData.displayName || 'No definido'}</span>
-                                    </div>
-                                    <div className="py-4 flex justify-between items-center">
-                                        <span className="text-slate-500 font-bold text-sm">WhatsApp</span>
-                                        <span className="text-slate-800 font-bold">{formData.whatsapp || 'No definido'}</span>
-                                    </div>
-                                    <div className="py-4 flex justify-between items-center">
-                                        <span className="text-slate-500 font-bold text-sm">Analítica</span>
-                                        <span className="text-slate-800 font-bold">
-                                            {formData.facebookPixel ? 'Meta ✅ ' : ''}
-                                            {formData.googleAnalytics ? 'Google ✅' : ''}
-                                            {!formData.facebookPixel && !formData.googleAnalytics ? 'Ninguna' : ''}
-                                        </span>
-                                    </div>
-                                </div>
-                            </>
-                        )}
-
-                        {deployStatus === 'success' && (
-                            <div className="bg-white rounded-3xl p-10 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-slate-100 text-center animate-in zoom-in-95 duration-500">
-                                <div className="w-24 h-24 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-in scale-in-75 duration-500 delay-150">
-                                    <Check className="w-12 h-12" />
-                                </div>
-                                <h2 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">¡Landing Desplegada!</h2>
-                                <p className="text-slate-500 text-lg font-medium mb-8">Tu landing page oficial de Bridge Markets ya está activa y configurada.</p>
-
-                                <div className="bg-slate-50 p-6 rounded-2xl flex flex-col items-center border border-slate-200 mb-8 mx-auto max-w-md">
-                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tu Enlace Público</span>
-                                    <div className="flex items-center gap-3 w-full">
-                                        <div className="flex-1 bg-white border border-slate-200 px-4 py-3 rounded-xl font-mono text-sm text-slate-700 font-bold truncate">
-                                            {deployedUrl}
-                                        </div>
-                                        <button className="bg-slate-200 hover:bg-slate-300 text-slate-700 p-3 rounded-xl transition-colors shrink-0" title="Copiar URL">
-                                            <Copy className="w-5 h-5" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <Link
-                                    href="/dashboard"
-                                    className="inline-flex items-center justify-center px-8 py-4 bg-slate-800 text-white rounded-2xl font-bold hover:bg-slate-900 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                                >
-                                    Volver al Dashboard principal
-                                </Link>
-                            </div>
-                        )}
-
-                        {deployStatus === 'error' && (
-                            <div className="bg-white rounded-3xl p-10 shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-slate-100 text-center animate-in zoom-in-95">
-                                <div className="w-24 h-24 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <AlertCircle className="w-12 h-12" />
-                                </div>
-                                <h2 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Error de Despliegue</h2>
-                                <p className="text-slate-500 text-lg font-medium mb-8">Hubo un problema de conexión con el VPS. Por favor, intenta de nuevo.</p>
-                                <button
-                                    onClick={() => setDeployStatus('idle')}
-                                    className="inline-flex items-center justify-center px-8 py-3.5 bg-slate-100 text-slate-800 rounded-2xl font-bold hover:bg-slate-200 transition-colors"
-                                >
-                                    Reintentar
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                );
+    const handleOpenNewTab = () => {
+        if (generatedHtml) {
+            openLandingPreview(generatedHtml);
         }
     };
 
-    const isNextDisabled = () => {
-        if (step === 1) return !formData.subdomain || subdomainStatus !== 'available';
-        if (step === 4) return isDeploying || deployStatus === 'success';
-        return false;
+    const handleDownload = () => {
+        if (generatedHtml) {
+            const filename = `landing-${formData.fullName.toLowerCase().replace(/\s+/g, '-')}-${formData.landingType}.html`;
+            downloadLandingHTML(generatedHtml, filename);
+        }
     };
+
+    const handleCopyHtml = () => {
+        navigator.clipboard.writeText(generatedHtml);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleReset = () => {
+        setStep(1);
+        setGenerated(false);
+        setGeneratedHtml('');
+        setFormData({ fullName: '', country: 'España', language: 'ES', whatsapp: '', email: '', landingType: 'institucional' });
+    };
+
+    const steps = [
+        { num: 1, label: 'Datos' },
+        { num: 2, label: 'Enfoque' },
+        { num: 3, label: 'Generar' },
+    ];
+
+    const isStep1Valid = formData.fullName.trim().length > 0 && formData.email.trim().length > 0;
 
     return (
-        <div className="w-full relative min-h-[600px] flex flex-col">
-            {/* Progress Bar Header */}
-            {deployStatus !== 'success' && (
-                <div className="mb-10 px-8 pt-8">
-                    <div className="flex justify-between relative mb-2">
-                        {/* Connecting Line */}
-                        <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-200 -z-10 -translate-y-1/2 rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-slate-800 transition-all duration-500 ease-out"
-                                style={{ width: `${((step - 1) / 3) * 100}%` }}
-                            ></div>
-                        </div>
-
-                        {/* Steps */}
-                        {[1, 2, 3, 4].map((s) => (
-                            <div
-                                key={s}
-                                className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 ${step > s ? 'bg-slate-800 text-white shadow-md' :
-                                        step === s ? 'bg-slate-800 text-white shadow-lg shadow-slate-800/20 scale-110 ring-4 ring-white' :
-                                            'bg-white border-2 border-slate-200 text-slate-400'
-                                    }`}
-                            >
-                                {step > s ? <Check className="w-5 h-5" /> : s}
+        <>
+            <div className="w-full">
+                {/* Stepper */}
+                <div className="flex items-center gap-2 mb-8">
+                    {steps.map((s, i) => (
+                        <React.Fragment key={s.num}>
+                            <div className="flex items-center gap-2">
+                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                                    step > s.num ? 'bg-[#865BFF] text-white' :
+                                    step === s.num ? 'bg-[#865BFF] text-white ring-4 ring-[#865BFF]/20' :
+                                    'bg-slate-100 text-slate-400 border border-slate-200'
+                                }`}>
+                                    {step > s.num ? <Check className="w-3.5 h-3.5" /> : s.num}
+                                </div>
+                                <span className={`text-sm font-semibold ${step >= s.num ? 'text-slate-800' : 'text-slate-400'}`}>
+                                    {s.label}
+                                </span>
                             </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-between text-[11px] font-bold text-slate-400 uppercase tracking-widest px-1">
-                        <span className={step >= 1 ? 'text-slate-800' : ''}>Subdominio</span>
-                        <span className={step >= 2 ? 'text-slate-800' : ''}>Personalizar</span>
-                        <span className={step >= 3 ? 'text-slate-800' : ''}>Analítica</span>
-                        <span className={step >= 4 ? 'text-slate-800' : ''}>Desplegar</span>
-                    </div>
-                </div>
-            )}
-
-            {/* Main Form Content */}
-            <div className="flex-1 px-4 lg:px-8 pb-32 flex flex-col justify-center">
-                {renderStepContent()}
-            </div>
-
-            {/* Bottom Actions Bar */}
-            {deployStatus !== 'success' && deployStatus !== 'error' && (
-                <div className="fixed bottom-0 lg:absolute lg:bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-200/80 p-4 lg:p-6 lg:rounded-b-3xl flex justify-between items-center z-50">
-                    <button
-                        onClick={handlePrev}
-                        disabled={step === 1 || isDeploying}
-                        className="px-6 py-3.5 rounded-2xl font-bold text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed flex items-center"
-                    >
-                        <ChevronLeft className="w-5 h-5 mr-1" /> Atrás
-                    </button>
-
-                    {step < 4 ? (
-                        <button
-                            onClick={handleNext}
-                            disabled={isNextDisabled()}
-                            className="px-8 py-3.5 rounded-2xl font-bold text-sm bg-slate-800 text-white hover:bg-slate-900 transition-all shadow-md hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center group"
-                        >
-                            Siguiente <ChevronRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleDeploy}
-                            disabled={isDeploying}
-                            className="px-8 py-3.5 rounded-2xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 transition-all shadow-lg shadow-amber-500/20 flex items-center group disabled:opacity-70 disabled:cursor-not-allowed"
-                        >
-                            {isDeploying ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Procesando VPS...
-                                </>
-                            ) : (
-                                <>
-                                    <Play className="w-5 h-5 mr-2" /> ¡Desplegar Ahora!
-                                </>
+                            {i < steps.length - 1 && (
+                                <ChevronRight className="w-4 h-4 text-slate-300 mx-1" />
                             )}
-                        </button>
+                        </React.Fragment>
+                    ))}
+                </div>
+
+                {/* Step Content */}
+                <div className="bg-white rounded-xl border border-slate-200 shadow-card">
+                    {/* === STEP 1: Datos === */}
+                    {step === 1 && (
+                        <div className="p-8">
+                            <div className="mb-6">
+                                <h3 className="text-lg font-bold text-slate-800">Datos del comercial</h3>
+                                <p className="text-sm text-slate-400 mt-0.5">Esta información aparecerá en tu landing personalizada</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <User className="w-3.5 h-3.5" /> Nombre completo *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.fullName}
+                                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                        placeholder="Carlos Martínez"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <MapPin className="w-3.5 h-3.5" /> País *
+                                    </label>
+                                    <select
+                                        value={formData.country}
+                                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all appearance-none"
+                                    >
+                                        {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="mt-5">
+                                <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-2">
+                                    <Globe className="w-3.5 h-3.5" /> Idioma de la landing *
+                                </label>
+                                <div className="flex flex-wrap gap-2">
+                                    {LANGUAGES.map(lang => (
+                                        <button
+                                            key={lang.code}
+                                            onClick={() => setFormData({ ...formData, language: lang.code })}
+                                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border transition-all ${
+                                                formData.language === lang.code
+                                                    ? 'bg-[#865BFF]/5 border-[#865BFF] text-[#865BFF]'
+                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
+                                            }`}
+                                        >
+                                            <span className="text-base">{lang.flag}</span>
+                                            <span className="text-xs text-slate-500">{lang.code}</span>
+                                            <span>{lang.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+                                <div>
+                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <MessageSquare className="w-3.5 h-3.5" /> WhatsApp *
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        value={formData.whatsapp}
+                                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                                        placeholder="+34 600 000 000"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <Mail className="w-3.5 h-3.5" /> Email *
+                                    </label>
+                                    <input
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        placeholder="admin@bridge.com"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mt-5">
+                                <div className="bg-[#865BFF]/5 border border-[#865BFF]/20 rounded-lg px-4 py-3 flex items-center gap-3">
+                                    <div className="flex items-center gap-1.5 text-[#865BFF]">
+                                        <Globe className="w-4 h-4" />
+                                        <span className="text-[11px] font-bold uppercase">Tu URL</span>
+                                    </div>
+                                    <span className="text-sm font-mono text-slate-600 truncate">{previewUrl}</span>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
+                                <button disabled className="text-sm font-medium text-slate-400 cursor-not-allowed">
+                                    Atrás
+                                </button>
+                                <button
+                                    onClick={handleNext}
+                                    disabled={!isStep1Valid}
+                                    className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#865BFF] text-white hover:bg-[#6b3fd6] transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                                >
+                                    Continuar <ChevronRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* === STEP 2: Enfoque === */}
+                    {step === 2 && (
+                        <div className="p-8">
+                            <div className="mb-6">
+                                <h3 className="text-lg font-bold text-slate-800">Tipo de landing</h3>
+                                <p className="text-sm text-slate-400 mt-0.5">Selecciona el enfoque de tu página personalizada</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {LANDING_TYPES.map(type => {
+                                    const Icon = type.icon;
+                                    const selected = formData.landingType === type.id;
+                                    return (
+                                        <button
+                                            key={type.id}
+                                            onClick={() => setFormData({ ...formData, landingType: type.id })}
+                                            className={`p-5 rounded-xl border-2 text-left transition-all ${
+                                                selected
+                                                    ? 'border-[#865BFF] bg-[#865BFF]/5 shadow-sm'
+                                                    : 'border-slate-200 bg-white hover:border-slate-300'
+                                            }`}
+                                        >
+                                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${type.color} flex items-center justify-center mb-3`}>
+                                                <Icon className="w-5 h-5 text-white" />
+                                            </div>
+                                            <div className="font-bold text-slate-800 text-sm">{type.title}</div>
+                                            <div className="text-xs text-slate-400 mt-0.5">{type.desc}</div>
+                                            {selected && (
+                                                <div className="mt-3 flex items-center gap-1 text-[#865BFF] text-xs font-semibold">
+                                                    <Check className="w-3.5 h-3.5" /> Seleccionado
+                                                </div>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
+                                <button onClick={handlePrev} className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+                                    Atrás
+                                </button>
+                                <button
+                                    onClick={handleNext}
+                                    className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#865BFF] text-white hover:bg-[#6b3fd6] transition-all shadow-sm flex items-center gap-1.5"
+                                >
+                                    Continuar <ChevronRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* === STEP 3: Generar === */}
+                    {step === 3 && !generated && (
+                        <div className="p-8">
+                            <div className="mb-6">
+                                <h3 className="text-lg font-bold text-slate-800">Resumen y generación</h3>
+                                <p className="text-sm text-slate-400 mt-0.5">Revisa tus datos antes de generar la landing page</p>
+                            </div>
+
+                            <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden">
+                                {[
+                                    { label: 'Nombre', value: formData.fullName },
+                                    { label: 'País', value: formData.country },
+                                    { label: 'Idioma', value: LANGUAGES.find(l => l.code === formData.language)?.label || formData.language },
+                                    { label: 'WhatsApp', value: formData.whatsapp || '—' },
+                                    { label: 'Email', value: formData.email },
+                                    { label: 'Tipo', value: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType },
+                                ].map(row => (
+                                    <div key={row.label} className="flex items-center justify-between px-5 py-3 text-sm">
+                                        <span className="font-medium text-slate-400">{row.label}</span>
+                                        <span className="font-semibold text-slate-800">{row.value}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
+                                <button onClick={handlePrev} className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+                                    Atrás
+                                </button>
+                                <button
+                                    onClick={handleGenerate}
+                                    disabled={isGenerating}
+                                    className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#6b3fd6] hover:to-[#5530b0] transition-all shadow-lg shadow-[#865BFF]/20 flex items-center gap-2 disabled:opacity-70"
+                                >
+                                    {isGenerating ? (
+                                        <><Loader2 className="w-4 h-4 animate-spin" /> Generando landing...</>
+                                    ) : (
+                                        <><Rocket className="w-4 h-4" /> Generar Landing Page</>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* === STEP 3: Success === */}
+                    {step === 3 && generated && (
+                        <div className="p-8">
+                            <div className="text-center mb-8">
+                                <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Check className="w-7 h-7 text-emerald-500" />
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-800 mb-1">¡Landing generada exitosamente!</h3>
+                                <p className="text-sm text-slate-400">Tu landing personalizada está lista. Previsualiza, descarga o copia el código.</p>
+                            </div>
+
+                            {/* Action buttons */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                                <button
+                                    onClick={handlePreview}
+                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#865BFF] text-white font-semibold text-sm hover:bg-[#6b3fd6] transition-all"
+                                >
+                                    <Eye className="w-4 h-4" /> Vista Previa
+                                </button>
+                                <button
+                                    onClick={handleOpenNewTab}
+                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-700 font-semibold text-sm hover:bg-slate-200 transition-all"
+                                >
+                                    <ExternalLink className="w-4 h-4" /> Abrir en Nueva Pestaña
+                                </button>
+                                <button
+                                    onClick={handleDownload}
+                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-700 font-semibold text-sm hover:bg-slate-200 transition-all"
+                                >
+                                    <Download className="w-4 h-4" /> Descargar HTML
+                                </button>
+                            </div>
+
+                            {/* Copy HTML source */}
+                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Código HTML</span>
+                                    <button
+                                        onClick={handleCopyHtml}
+                                        className="text-xs font-semibold text-[#865BFF] hover:text-[#6b3fd6] transition-colors flex items-center gap-1"
+                                    >
+                                        {copied ? <><Check className="w-3 h-3" /> Copiado!</> : <><Copy className="w-3 h-3" /> Copiar código</>}
+                                    </button>
+                                </div>
+                                <div className="bg-[#0f172a] rounded-lg p-4 max-h-32 overflow-y-auto">
+                                    <pre className="text-xs text-emerald-400 font-mono whitespace-pre-wrap break-all leading-relaxed">
+                                        {generatedHtml.substring(0, 500)}...
+                                    </pre>
+                                </div>
+                            </div>
+
+                            {/* Create another */}
+                            <div className="flex items-center justify-center mt-6 pt-6 border-t border-slate-100">
+                                <button
+                                    onClick={handleReset}
+                                    className="text-sm font-semibold text-[#865BFF] hover:text-[#6b3fd6] transition-colors flex items-center gap-1.5"
+                                >
+                                    <RefreshCw className="w-3.5 h-3.5" /> Crear otra landing
+                                </button>
+                            </div>
+                        </div>
                     )}
                 </div>
+
+                {/* Saved Landings History */}
+                {savedLandings.length > 0 && (
+                    <div className="mt-6 bg-white rounded-xl border border-slate-200 shadow-card p-6">
+                        <h4 className="text-sm font-bold text-slate-800 mb-3">Landings generadas recientemente</h4>
+                        <div className="divide-y divide-slate-100">
+                            {savedLandings.map((landing, i) => (
+                                <div key={i} className="flex items-center justify-between py-2.5 text-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-[#865BFF]/10 flex items-center justify-center text-xs font-bold text-[#865BFF]">
+                                            {landing.language}
+                                        </div>
+                                        <div>
+                                            <div className="font-semibold text-slate-800">{landing.name}</div>
+                                            <div className="text-xs text-slate-400">{landing.type} · {landing.date}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Preview Modal */}
+            {showPreview && (
+                <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 bg-slate-50">
+                            <div className="flex items-center gap-3">
+                                <div className="flex gap-1.5">
+                                    <div className="w-3 h-3 rounded-full bg-red-400" />
+                                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                                </div>
+                                <span className="text-xs font-mono text-slate-400">{previewUrl}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={handleDownload}
+                                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-200"
+                                >
+                                    <Download className="w-3.5 h-3.5" /> Descargar
+                                </button>
+                                <button
+                                    onClick={() => setShowPreview(false)}
+                                    className="p-1 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                        <iframe
+                            ref={iframeRef}
+                            srcDoc={generatedHtml}
+                            className="flex-1 w-full border-0"
+                            title="Landing Preview"
+                            sandbox="allow-same-origin"
+                        />
+                    </div>
+                </div>
             )}
-        </div>
+        </>
     );
 }
