@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Download, Eye, X, RefreshCw } from 'lucide-react';
 import { generateLandingHTML, downloadLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
+import { supabase } from '@/lib/supabaseClient';
 
 type Step = 1 | 2 | 3;
 
@@ -27,6 +28,9 @@ const LANDING_TYPES = [
     { id: 'forex', title: 'Forex Trading', desc: 'Enfocada en pares de divisas y spreads competitivos', icon: Target, color: 'from-blue-500 to-blue-600' },
     { id: 'cripto', title: 'Criptomonedas', desc: 'Trading de criptoactivos con apalancamiento', icon: Sparkles, color: 'from-amber-500 to-orange-500' },
     { id: 'propfirm', title: 'Prop Firm', desc: 'Modelo de fondeo para traders profesionales', icon: Rocket, color: 'from-emerald-500 to-teal-500' },
+    { id: 'sinteticos', title: 'Índices Sintéticos', desc: 'Opera índices sintéticos 24/7 sin interrupciones', icon: Target, color: 'from-rose-500 to-red-600' },
+    { id: 'bursatiles', title: 'Índices Bursátiles', desc: 'Los principales índices del mercado global', icon: Layout, color: 'from-indigo-500 to-purple-600' },
+    { id: 'promociones', title: 'Promociones (General)', desc: 'Bonos y ofertas especiales para nuevos clientes', icon: Sparkles, color: 'from-pink-500 to-rose-500' },
 ];
 
 export default function LandingTypeform() {
@@ -38,61 +42,84 @@ export default function LandingTypeform() {
         whatsapp: '',
         email: '',
         landingType: 'institucional',
+        googleAnalyticsId: '',
     });
     const [isGenerating, setIsGenerating] = useState(false);
     const [generated, setGenerated] = useState(false);
     const [generatedHtml, setGeneratedHtml] = useState('');
     const [showPreview, setShowPreview] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [savedLandings, setSavedLandings] = useState<{name: string; date: string; type: string; language: string}[]>(() => {
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('bridge_landings');
-            return saved ? JSON.parse(saved) : [];
+    const [deployedUrl, setDeployedUrl] = useState('');
+    const [partnerId, setPartnerId] = useState('');
+    const [savedLandings, setSavedLandings] = useState<{name: string; date: string; type: string; language: string}[]>([]);
+    const [baseUrl, setBaseUrl] = useState('');
+
+    useEffect(() => {
+        setBaseUrl(window.location.origin);
+        const saved = localStorage.getItem('bridge_landings');
+        if (saved) {
+            setSavedLandings(JSON.parse(saved));
         }
-        return [];
-    });
+
+        // Recuperar la ID real del Partner
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            if (user) setPartnerId(user.id);
+        });
+    }, []);
 
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    const partnerId = 'BM_10940382';
 
     const previewUrl = formData.fullName
-        ? `https://bridge.com/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
+        ? (baseUrl || 'https://bridge.com') + `/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
         : 'https://bridge.com/l/tu-nombre';
 
     const handleNext = () => setStep((s) => Math.min(s + 1, 3) as Step);
     const handlePrev = () => setStep((s) => Math.max(s - 1, 1) as Step);
 
-    const handleGenerate = () => {
+    const handleGenerate = async () => {
         setIsGenerating(true);
 
-        // Simulate build time for UX
-        setTimeout(() => {
-            const landingData: LandingData = {
-                fullName: formData.fullName,
-                country: formData.country,
-                language: formData.language,
-                whatsapp: formData.whatsapp,
-                email: formData.email,
-                landingType: formData.landingType,
-                partnerId,
-            };
+        const slug = formData.fullName.toLowerCase().replace(/\s+/g, '-');
 
-            const html = generateLandingHTML(landingData);
-            setGeneratedHtml(html);
-            setIsGenerating(false);
-            setGenerated(true);
+        const landingData: LandingData = {
+            fullName: formData.fullName,
+            country: formData.country,
+            language: formData.language,
+            whatsapp: formData.whatsapp,
+            email: formData.email,
+            landingType: formData.landingType,
+            partnerId,
+            slug,
+            googleAnalyticsId: formData.googleAnalyticsId,
+        };
 
-            // Save to history
-            const newLanding = {
-                name: formData.fullName,
-                date: new Date().toLocaleString('es-ES'),
-                type: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType,
-                language: formData.language,
-            };
-            const updated = [newLanding, ...savedLandings].slice(0, 10);
-            setSavedLandings(updated);
-            localStorage.setItem('bridge_landings', JSON.stringify(updated));
-        }, 2000);
+        const html = generateLandingHTML(landingData);
+        
+        try {
+            await fetch('/api/landings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug, html, data: landingData })
+            });
+        } catch (error) {
+            console.error('Error deploying landing:', error);
+        }
+
+        setGeneratedHtml(html);
+        setDeployedUrl((baseUrl || 'https://bridge.com') + '/l/' + slug);
+        setIsGenerating(false);
+        setGenerated(true);
+
+        // Save to history
+        const newLanding = {
+            name: formData.fullName,
+            date: new Date().toLocaleString('es-ES'),
+            type: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType,
+            language: formData.language,
+        };
+        const updated = [newLanding, ...savedLandings].slice(0, 10);
+        setSavedLandings(updated);
+        localStorage.setItem('bridge_landings', JSON.stringify(updated));
     };
 
     const handlePreview = () => {
@@ -102,7 +129,9 @@ export default function LandingTypeform() {
     };
 
     const handleOpenNewTab = () => {
-        if (generatedHtml) {
+        if (deployedUrl) {
+            window.open(deployedUrl, '_blank');
+        } else if (generatedHtml) {
             openLandingPreview(generatedHtml);
         }
     };
@@ -124,7 +153,7 @@ export default function LandingTypeform() {
         setStep(1);
         setGenerated(false);
         setGeneratedHtml('');
-        setFormData({ fullName: '', country: 'España', language: 'ES', whatsapp: '', email: '', landingType: 'institucional' });
+        setFormData({ fullName: '', country: 'España', language: 'ES', whatsapp: '', email: '', landingType: 'institucional', googleAnalyticsId: '' });
     };
 
     const steps = [
@@ -203,22 +232,18 @@ export default function LandingTypeform() {
                                 <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-2">
                                     <Globe className="w-3.5 h-3.5" /> Idioma de la landing *
                                 </label>
-                                <div className="flex flex-wrap gap-2">
-                                    {LANGUAGES.map(lang => (
-                                        <button
-                                            key={lang.code}
-                                            onClick={() => setFormData({ ...formData, language: lang.code })}
-                                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                                                formData.language === lang.code
-                                                    ? 'bg-[#865BFF]/5 border-[#865BFF] text-[#865BFF]'
-                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-                                            }`}
-                                        >
-                                            <span className="text-base">{lang.flag}</span>
-                                            <span className="text-xs text-slate-500">{lang.code}</span>
-                                            <span>{lang.label}</span>
-                                        </button>
-                                    ))}
+                                <div className="relative">
+                                    <select
+                                        value={formData.language}
+                                        onChange={(e) => setFormData({ ...formData, language: e.target.value })}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all appearance-none"
+                                    >
+                                        {LANGUAGES.map(lang => (
+                                            <option key={lang.code} value={lang.code}>
+                                                {lang.flag} {lang.label} ({lang.code})
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
@@ -250,6 +275,20 @@ export default function LandingTypeform() {
                             </div>
 
                             <div className="mt-5">
+                                <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
+                                    <Target className="w-3.5 h-3.5" /> ID de Google Analytics (Opcional)
+                                </label>
+                                <input
+                                    type="text"
+                                    value={formData.googleAnalyticsId}
+                                    onChange={(e) => setFormData({ ...formData, googleAnalyticsId: e.target.value })}
+                                    placeholder="Ej. G-XXXXXXXXXX"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all font-mono"
+                                />
+                                <p className="text-[10px] text-slate-400 mt-1.5">Permite rastrear visitantes a través de Google Analytics 4.</p>
+                            </div>
+
+                            <div className="mt-6">
                                 <div className="bg-[#865BFF]/5 border border-[#865BFF]/20 rounded-lg px-4 py-3 flex items-center gap-3">
                                     <div className="flex items-center gap-1.5 text-[#865BFF]">
                                         <Globe className="w-4 h-4" />

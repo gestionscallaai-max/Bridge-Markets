@@ -3,7 +3,9 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Home, Pencil, Link2, Users, Globe, ChevronRight, Bell, Settings } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
+import { motion } from 'framer-motion';
 
 export const AdminContext = createContext<{ isAdmin: boolean; setIsAdmin: (val: boolean) => void }>({
     isAdmin: false,
@@ -18,7 +20,23 @@ export default function DashboardUILayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
     const [isAdmin, setIsAdmin] = useState(false);
+    const [partnerId, setPartnerId] = useState('Cargando...');
+
+    React.useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            if (user) {
+                // Generamos un "ID de afiliado" corto apartir del UUID real para mostrarlo de forma estética
+                setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+            }
+        });
+    }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push('/login');
+    };
 
     const navItems = [
         { href: '/dashboard/overview', label: 'Dashboard', icon: Home, exact: false },
@@ -104,11 +122,11 @@ export default function DashboardUILayout({
                         <div className={`rounded-lg p-4 transition-colors duration-200 ${isAdmin ? 'bg-slate-800 border border-slate-700' : 'bg-brand-dark/20 border border-brand-500/20'}`}>
                             <div className="flex items-center justify-between mb-2">
                                 <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{isAdmin ? 'Admin ID' : 'Partner ID'}</span>
-                                <Link href="/" className="text-[10px] font-medium text-slate-500 hover:text-slate-300 transition-colors">
+                                <button onClick={handleLogout} className="text-[10px] font-medium text-slate-500 hover:text-slate-300 transition-colors">
                                     Cerrar Sesión
-                                </Link>
+                                </button>
                             </div>
-                            <div className="text-sm font-bold text-white tracking-wide">{isAdmin ? 'ADMIN_ROOT' : 'BM_10940382'}</div>
+                            <div className="text-sm font-bold text-white tracking-wide">{isAdmin ? 'ADMIN_ROOT' : partnerId}</div>
                         </div>
                     </div>
                 </aside>
@@ -163,10 +181,15 @@ export default function DashboardUILayout({
                     </header>
 
                     {/* Page Content */}
-                    <div className="flex-1 overflow-y-auto w-full scroll-smooth">
-                        <div className="p-8 max-w-[1400px] mx-auto w-full">
+                    <div className="flex-1 overflow-y-auto w-full scroll-smooth bg-[#f8fafc]">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            className="p-8 max-w-[1400px] mx-auto w-full"
+                        >
                             {children}
-                        </div>
+                        </motion.div>
                     </div>
                 </main>
             </div>

@@ -9,6 +9,8 @@ export interface LandingData {
     email: string;
     landingType: string;
     partnerId: string;
+    slug: string;
+    googleAnalyticsId?: string;
 }
 
 const TRANSLATIONS: Record<string, {
@@ -98,6 +100,9 @@ const LANDING_TYPE_CONFIG: Record<string, { gradient: string; accent: string; ic
     forex: { gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #3b82f6 100%)', accent: '#3b82f6', icon: '📊' },
     cripto: { gradient: 'linear-gradient(135deg, #1a1a2e 0%, #e94560 50%, #f59e0b 100%)', accent: '#f59e0b', icon: '₿' },
     propfirm: { gradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #10b981 100%)', accent: '#10b981', icon: '🚀' },
+    sinteticos: { gradient: 'linear-gradient(135deg, #4c0519 0%, #9f1239 50%, #e11d48 100%)', accent: '#e11d48', icon: '📈' },
+    bursatiles: { gradient: 'linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #818cf8 100%)', accent: '#6366f1', icon: '📉' },
+    promociones: { gradient: 'linear-gradient(135deg, #831843 0%, #be185d 50%, #f43f5e 100%)', accent: '#f43f5e', icon: '🎁' },
 };
 
 export function generateLandingHTML(data: LandingData): string {
@@ -106,11 +111,21 @@ export function generateLandingHTML(data: LandingData): string {
     const whatsappLink = data.whatsapp ? `https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}` : '#';
     const referralLink = `https://bridge.com/?ref=${data.partnerId}`;
 
+    const gaScript = data.googleAnalyticsId ? `
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=${data.googleAnalyticsId}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${data.googleAnalyticsId}');
+    </script>` : '';
+
     return `<!DOCTYPE html>
 <html lang="${data.language.toLowerCase()}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">${gaScript}
     <title>Bridge Markets | ${data.fullName}</title>
     <meta name="description" content="${t.heroSubtitle}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -149,17 +164,24 @@ export function generateLandingHTML(data: LandingData): string {
         .step-num { width: 44px; height: 44px; border-radius: 12px; background: ${config.accent}; color: white; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .step-text { font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); }
         
-        /* Contact */
-        .contact { padding: 100px 24px; text-align: center; }
+        /* Contact Form */
+        .contact { padding: 100px 24px; text-align: center; background: white; }
         .contact h2 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; }
-        .contact-info { display: inline-flex; flex-direction: column; gap: 12px; margin-top: 2rem; }
-        .contact-btn { display: inline-flex; align-items: center; gap: 10px; background: #25d366; color: white; padding: 16px 32px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all 0.2s; }
-        .contact-btn:hover { background: #1fb855; transform: translateY(-2px); }
-        .contact-email { font-size: 14px; color: #64748b; }
-        .contact-email a { color: ${config.accent}; font-weight: 600; text-decoration: none; }
+        .contact p { color: #64748b; margin-bottom: 2.5rem; font-size: 1.1rem; }
+        .lead-form { max-width: 440px; margin: 0 auto; text-align: left; background: #f8fafc; padding: 32px; border-radius: 16px; border: 1px solid #e2e8f0; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; transition: all 0.2s; outline: none; background: white; }
+        .form-input:focus { border-color: ${config.accent}; box-shadow: 0 0 0 4px ${config.accent}20; }
+        .form-submit { width: 100%; background: ${config.accent}; color: white; padding: 16px; border: none; border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+        .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px ${config.accent}40; }
+        .form-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+        .form-message { display: none; text-align: center; padding: 16px; border-radius: 8px; margin-top: 16px; font-weight: 600; font-size: 14px; }
+        .form-message.success { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .form-message.error { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
         
         /* Footer */
-        .footer { background: #0f172a; padding: 40px 24px; text-align: center; }
+        .footer { background: #0f172a; padding: 40px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
         .footer-logo { font-size: 20px; font-weight: 800; color: white; margin-bottom: 8px; }
         .footer-logo span { color: ${config.accent}; font-weight: 400; }
         .footer-text { font-size: 12px; color: rgba(255,255,255,0.4); }
@@ -178,7 +200,7 @@ export function generateLandingHTML(data: LandingData): string {
             <div class="hero-badge">${config.icon} Bridge Markets</div>
             <h1>${t.heroTitle}</h1>
             <p>${t.heroSubtitle}</p>
-            <a href="${referralLink}" class="hero-cta" target="_blank">
+            <a href="#registro" class="hero-cta">
                 ${t.cta}
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
@@ -213,16 +235,33 @@ export function generateLandingHTML(data: LandingData): string {
         </div>
     </section>
 
-    <!-- Contact -->
-    <section class="contact">
+    <!-- Contact Form -->
+    <section class="contact" id="registro">
         <h2>${t.contactTitle}</h2>
-        <div class="contact-info">
-            ${data.whatsapp ? `<a href="${whatsappLink}" class="contact-btn" target="_blank">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.616l4.584-1.466A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.239 0-4.308-.724-5.993-1.953l-.42-.307-2.723.87.897-2.658-.336-.443A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-                ${t.contactCta}
-            </a>` : ''}
-            ${data.email ? `<div class="contact-email">${data.email.includes('@') ? `<a href="mailto:${data.email}">${data.email}</a>` : data.email}</div>` : ''}
-        </div>
+        <p>Déjanos tus datos y un especialista se pondrá en contacto preventivo contigo.</p>
+        
+        <form class="lead-form" id="leadForm">
+            <input type="hidden" id="partnerId" value="${data.partnerId}">
+            <input type="hidden" id="landingSlug" value="${data.slug}">
+            
+            <div class="form-group">
+                <label class="form-label" for="name">Nombre Completo</label>
+                <input class="form-input" type="text" id="name" required placeholder="Ej. Juan Pérez">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="email">Correo Electrónico</label>
+                <input class="form-input" type="email" id="email" required placeholder="juan@ejemplo.com">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="whatsapp">Teléfono / WhatsApp</label>
+                <input class="form-input" type="tel" id="whatsapp" required placeholder="+34 600 000 000">
+            </div>
+            
+            <button type="submit" class="form-submit" id="submitBtn">${t.contactCta || 'Comenzar Ahora'}</button>
+            <div id="formMessage" class="form-message"></div>
+        </form>
     </section>
 
     <!-- Footer -->
@@ -231,6 +270,48 @@ export function generateLandingHTML(data: LandingData): string {
         <div class="footer-text">${t.footerText}</div>
         <div class="footer-partner">Partner: ${data.fullName} | ID: ${data.partnerId}</div>
     </footer>
+
+    <script>
+        document.getElementById('leadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('formMessage');
+            
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+            msg.className = 'form-message';
+            
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        whatsapp: document.getElementById('whatsapp').value,
+                        landingSlug: document.getElementById('landingSlug').value,
+                        partnerId: document.getElementById('partnerId').value
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    msg.textContent = '¡Gracias por registrarte! Nos pondremos en contacto pronto.';
+                    msg.className = 'form-message success';
+                    document.getElementById('leadForm').reset();
+                    btn.style.display = 'none';
+                } else {
+                    throw new Error(data.error || 'Error al enviar');
+                }
+            } catch (err) {
+                msg.textContent = 'Hubo un error al enviar el formulario. Inténtalo de nuevo.';
+                msg.className = 'form-message error';
+                btn.disabled = false;
+                btn.textContent = '${t.contactCta || 'Comenzar Ahora'}';
+            }
+        });
+    </script>
 </body>
 </html>`;
 }

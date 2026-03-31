@@ -1,5 +1,5 @@
 export type BannerSize = '300x250' | '728x90' | '1248x600' | '160x600';
-export type BannerCategory = 'Forex' | 'Metales' | 'Acciones' | 'Cripto' | 'Índices';
+export type BannerCategory = 'Forex' | 'Metales Preciosos' | 'Acciones' | 'Criptomonedas' | 'Índices Bursátiles' | 'Índices Sintéticos' | 'Promociones';
 export type BannerLanguage = 'es' | 'en' | 'pt';
 
 export interface BannerTemplate {
@@ -52,7 +52,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
     {
         id: 'gold-trading',
         name: 'Gold Trading',
-        category: 'Metales',
+        category: 'Metales Preciosos',
         description: 'Banner campaña XAUUSD',
         sizes: ['300x250', '728x90', '1248x600'],
         gradient: 'from-amber-900 via-yellow-800 to-orange-900',
@@ -67,7 +67,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
     {
         id: 'silver-platinum',
         name: 'Silver & Platinum',
-        category: 'Metales',
+        category: 'Metales Preciosos',
         description: 'Banner metales preciosos diversificados',
         sizes: ['300x250', '728x90', '160x600'],
         gradient: 'from-slate-700 via-gray-600 to-zinc-700',
@@ -112,7 +112,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
     {
         id: 'crypto-bull',
         name: 'Crypto Bull Run',
-        category: 'Cripto',
+        category: 'Criptomonedas',
         description: 'Banner campaña cripto alcista',
         sizes: ['300x250', '728x90', '1248x600'],
         gradient: 'from-violet-900 via-purple-800 to-fuchsia-900',
@@ -127,7 +127,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
     {
         id: 'indices-global',
         name: 'Índices Globales',
-        category: 'Índices',
+        category: 'Índices Bursátiles',
         description: 'Banner principales índices mundiales',
         sizes: ['300x250', '728x90', '1248x600', '160x600'],
         gradient: 'from-rose-900 via-pink-800 to-red-900',
@@ -141,7 +141,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
     },
 ];
 
-export const CATEGORIES: BannerCategory[] = ['Forex', 'Metales', 'Acciones', 'Cripto', 'Índices'];
+export const CATEGORIES: BannerCategory[] = ['Forex', 'Metales Preciosos', 'Acciones', 'Criptomonedas', 'Índices Bursátiles', 'Índices Sintéticos', 'Promociones'];
 export const LANGUAGES = [
     { code: 'es' as BannerLanguage, label: 'Spanish (LATAM)' },
     { code: 'en' as BannerLanguage, label: 'English' },

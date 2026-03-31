@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Pencil, X, Download, Copy, Check, Link2, Filter,
-    Type, AlignLeft, MousePointer, Palette, ChevronRight, Eye
+    Type, AlignLeft, MousePointer, Palette, ChevronRight, Eye, ChevronDown
 } from 'lucide-react';
 import { BANNER_TEMPLATES, CATEGORIES, LANGUAGES, type BannerTemplate, type BannerCategory, type BannerSize } from '@/lib/data/banners';
 
@@ -13,6 +13,7 @@ const AFFILIATE_ID = "BM_10940382";
 export default function PiezasGraficasPage() {
     const [selectedCategory, setSelectedCategory] = useState<BannerCategory | 'all'>('all');
     const [selectedLang, setSelectedLang] = useState('es');
+    const [isLangOpen, setIsLangOpen] = useState(false);
     const [selectedBanner, setSelectedBanner] = useState<BannerTemplate | null>(null);
 
     // Editor state
@@ -112,19 +113,47 @@ export default function PiezasGraficasPage() {
                     {/* Language */}
                     <div>
                         <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Idioma</div>
-                        <div className="flex flex-wrap gap-1.5">
-                            {LANGUAGES.map(lang => (
-                                <button
-                                    key={lang.code}
-                                    onClick={() => setSelectedLang(lang.code)}
-                                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${selectedLang === lang.code
-                                        ? 'bg-[#865BFF] text-white border-[#865BFF]'
-                                        : 'bg-white text-slate-600 border-slate-200 hover:border-[#865BFF]/30 hover:text-[#140633]'
-                                        }`}
-                                >
-                                    {lang.label}
-                                </button>
-                            ))}
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsLangOpen(!isLangOpen)}
+                                className="w-full min-w-[180px] flex items-center justify-between bg-white border border-slate-200 rounded-lg py-2 pl-4 pr-3 text-xs font-semibold text-slate-600 hover:text-slate-800 focus:outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/10 hover:border-slate-300 transition-all shadow-sm"
+                            >
+                                <span>{LANGUAGES.find(l => l.code === selectedLang)?.label}</span>
+                                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                            
+                            <AnimatePresence>
+                                {isLangOpen && (
+                                    <>
+                                        <div 
+                                            className="fixed inset-0 z-30" 
+                                            onClick={() => setIsLangOpen(false)} 
+                                        />
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -5 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -5 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute top-full left-0 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-xl z-40 overflow-hidden"
+                                        >
+                                            <div className="py-1">
+                                                {LANGUAGES.map(lang => (
+                                                    <button
+                                                        key={lang.code}
+                                                        onClick={() => {
+                                                            setSelectedLang(lang.code);
+                                                            setIsLangOpen(false);
+                                                        }}
+                                                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-slate-50 transition-colors ${selectedLang === lang.code ? 'text-[#865BFF] bg-[#865BFF]/5' : 'text-slate-600'}`}
+                                                    >
+                                                        {lang.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    </>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </div>
@@ -155,7 +184,7 @@ export default function PiezasGraficasPage() {
                                 </span>
                             </div>
                             <div className="absolute top-3 right-3 z-20">
-                                <span className={`text-white text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider ${banner.category === 'Forex' ? 'bg-brand-500' : banner.category === 'Metales' ? 'bg-amber-500' : banner.category === 'Acciones' ? 'bg-blue-500' : banner.category === 'Cripto' ? 'bg-purple-500' : 'bg-rose-500'}`}>
+                                <span className={`text-white text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider ${banner.category === 'Forex' ? 'bg-brand-500' : banner.category === 'Metales Preciosos' ? 'bg-amber-500' : banner.category === 'Acciones' ? 'bg-blue-500' : banner.category === 'Criptomonedas' ? 'bg-purple-500' : banner.category === 'Promociones' ? 'bg-pink-500' : 'bg-rose-500'}`}>
                                     {banner.category}
                                 </span>
                             </div>
