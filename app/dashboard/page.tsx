@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Pencil, X, Download, Copy, Check, Link2, Filter,
-    Type, AlignLeft, MousePointer, Palette, ChevronRight, Eye, ChevronDown
+    Type, AlignLeft, MousePointer, Palette, ChevronRight, Eye, ChevronDown, Loader2
 } from 'lucide-react';
 import { BANNER_TEMPLATES, CATEGORIES, LANGUAGES, type BannerTemplate, type BannerCategory, type BannerSize } from '@/lib/data/banners';
+import { supabase } from '@/lib/supabaseClient';
 
 const AFFILIATE_ID = "BM_10940382";
 
@@ -15,17 +16,55 @@ export default function PiezasGraficasPage() {
     const [selectedLang, setSelectedLang] = useState('es');
     const [isLangOpen, setIsLangOpen] = useState(false);
     const [selectedBanner, setSelectedBanner] = useState<BannerTemplate | null>(null);
+    const [dbMaterials, setDbMaterials] = useState<any[]>([]);
+    const [loadingDb, setLoadingDb] = useState(true);
 
     // Editor state
     const [editorSize, setEditorSize] = useState<BannerSize>('300x250');
     const [editorTitle, setEditorTitle] = useState('');
     const [editorSubtitle, setEditorSubtitle] = useState('');
     const [editorButtonText, setEditorButtonText] = useState('');
-    const [editorButtonColor, setEditorButtonColor] = useState('#6366f1');
+    const [editorButtonColor, setEditorButtonColor] = useState('#865BFF');
     const [affiliateLink, setAffiliateLink] = useState(`https://bridge.com/?ref=${AFFILIATE_ID}`);
     const [copied, setCopied] = useState(false);
 
-    const filteredBanners = BANNER_TEMPLATES.filter(b => {
+    useEffect(() => {
+        async function fetchDbMaterials() {
+            const { data } = await supabase
+                .from('materials')
+                .select('*')
+                .eq('is_active', true)
+                .order('is_featured', { ascending: false });
+            setDbMaterials(data || []);
+            setLoadingDb(false);
+        }
+        fetchDbMaterials();
+    }, []);
+
+    // Merge: convert DB materials to BannerTemplate format, then merge with hardcoded
+    const dbAsBanners: BannerTemplate[] = dbMaterials.map(m => ({
+        id: `db-${m.id}`,
+        name: m.name,
+        category: m.category as BannerCategory,
+        description: m.description || '',
+        sizes: (m.sizes || ['300x250']) as BannerSize[],
+        gradient: 'from-[#140633] via-[#1e0a4a] to-[#2a0e5e]',
+        previewImage: m.image_url || undefined,
+        defaults: {
+            title: m.name,
+            subtitle: m.description || '',
+            buttonText: 'Abrir cuenta',
+            buttonColor: '#865BFF',
+        },
+        languages: m.languages || ['es'],
+    }));
+
+    // Merge: DB items override hardcoded items with same name, others appended
+    const hardcodedIds = BANNER_TEMPLATES.map(b => b.name.toLowerCase());
+    const uniqueDbBanners = dbAsBanners.filter(b => !hardcodedIds.includes(b.name.toLowerCase()));
+    const allBanners = [...BANNER_TEMPLATES, ...uniqueDbBanners];
+
+    const filteredBanners = allBanners.filter(b => {
         const matchCategory = selectedCategory === 'all' || b.category === selectedCategory;
         const matchLanguage = b.languages ? b.languages.includes(selectedLang as any) : true;
         return matchCategory && matchLanguage;
@@ -160,6 +199,12 @@ export default function PiezasGraficasPage() {
             </div>
 
             {/* Banner Grid (2 columns) */}
+            {loadingDb ? (
+                <div className="flex items-center justify-center py-16 gap-3 text-slate-400">
+                    <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
+                    <span className="text-sm font-medium">Cargando materiales...</span>
+                </div>
+            ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredBanners.map((banner) => (
                     <div
@@ -168,7 +213,10 @@ export default function PiezasGraficasPage() {
                         className="card overflow-hidden cursor-pointer group hover:shadow-card-hover transition-all duration-200"
                     >
                         {/* Banner Preview */}
-                        <div className={`relative bg-gradient-to-br ${banner.gradient} aspect-[16/9] flex items-center justify-center overflow-hidden`}>
+                        <div className={`relative ${banner.previewImage ? '' : `bg-gradient-to-br ${banner.gradient}`} aspect-[16/9] flex items-center justify-center overflow-hidden`}>
+                            {banner.previewImage ? (
+                                <img src={banner.previewImage} alt={banner.name} className="w-full h-full object-cover" />
+                            ) : null}
                             {/* Edit overlay on hover */}
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-200 flex items-center justify-center z-10">
                                 <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-2 bg-white text-slate-800 px-4 py-2 rounded-lg font-semibold text-sm shadow-lg">
@@ -189,11 +237,13 @@ export default function PiezasGraficasPage() {
                                 </span>
                             </div>
 
-                            {/* Content preview */}
-                            <div className="relative z-0 text-center px-6">
-                                <div className="text-white text-lg font-bold">{banner.defaults.title}</div>
-                                <div className="text-white/70 text-xs mt-1">{banner.defaults.subtitle}</div>
-                            </div>
+                            {/* Content preview for gradient banners (no image) */}
+                            {!banner.previewImage && (
+                                <div className="relative z-0 text-center px-6">
+                                    <div className="text-white text-lg font-bold">{banner.defaults.title}</div>
+                                    <div className="text-white/70 text-xs mt-1">{banner.defaults.subtitle}</div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Info */}
@@ -209,8 +259,10 @@ export default function PiezasGraficasPage() {
                             </div>
                         </div>
                     </div>
-                ))}
+                ))
+            }
             </div>
+            )}
 
             {/* =================== EDITOR PANEL (Slide-over) =================== */}
             <AnimatePresence>

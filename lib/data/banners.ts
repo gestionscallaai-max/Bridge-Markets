@@ -9,6 +9,7 @@ export interface BannerTemplate {
     description: string;
     sizes: BannerSize[];
     gradient: string;
+    previewImage?: string; // Path to a real generated image in /public
     defaults: {
         title: string;
         subtitle: string;
@@ -26,11 +27,12 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
         description: 'Banner campaña spread cero en majors',
         sizes: ['300x250', '728x90', '1248x600', '160x600'],
         gradient: 'from-indigo-900 via-indigo-800 to-purple-900',
+        previewImage: '/banners/banner_forex.png',
         defaults: {
             title: 'Empieza a operar hoy',
             subtitle: 'Los mejores spreads del mercado, sin comisiones ocultas.',
             buttonText: 'Abrir cuenta',
-            buttonColor: '#6366f1',
+            buttonColor: '#865BFF',
         },
         languages: ['es', 'en', 'pt'],
     },
@@ -45,9 +47,25 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
             title: 'Trading Profesional',
             subtitle: 'Herramientas avanzadas para traders experimentados.',
             buttonText: 'Abrir cuenta',
-            buttonColor: '#6366f1',
+            buttonColor: '#865BFF',
         },
         languages: ['es', 'en'],
+    },
+    {
+        id: 'prop-firm',
+        name: 'Prop Firm Challenge',
+        category: 'Promociones',
+        description: 'Banner fondeo hasta $200K USD',
+        sizes: ['300x250', '728x90', '1248x600'],
+        gradient: 'from-zinc-900 via-neutral-800 to-stone-900',
+        previewImage: '/banners/banner_propfirm.png',
+        defaults: {
+            title: 'Prop Firm',
+            subtitle: 'Fondeo de hasta $200,000 USD para operar.',
+            buttonText: 'Aplicar ahora',
+            buttonColor: '#d97706',
+        },
+        languages: ['es', 'en', 'pt'],
     },
     {
         id: 'gold-trading',
@@ -116,6 +134,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
         description: 'Banner campaña cripto alcista',
         sizes: ['300x250', '728x90', '1248x600'],
         gradient: 'from-violet-900 via-purple-800 to-fuchsia-900',
+        previewImage: '/banners/banner_crypto.png',
         defaults: {
             title: 'Crypto Bull Run',
             subtitle: 'Opera Bitcoin, Ethereum y más con apalancamiento.',
@@ -131,6 +150,7 @@ export const BANNER_TEMPLATES: BannerTemplate[] = [
         description: 'Banner principales índices mundiales',
         sizes: ['300x250', '728x90', '1248x600', '160x600'],
         gradient: 'from-rose-900 via-pink-800 to-red-900',
+        previewImage: '/banners/banner_indices.png',
         defaults: {
             title: 'Índices Globales',
             subtitle: 'S&P 500, DAX, Nikkei — opera los mercados del mundo.',
