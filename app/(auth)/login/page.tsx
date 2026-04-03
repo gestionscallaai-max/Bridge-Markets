@@ -48,11 +48,11 @@ export default function LoginPage() {
                     minWidth: 200.00,
                     scale: 1.00,
                     scaleMobile: 1.00,
-                    color: 0x9b51e0,
-                    shininess: 80.00,
-                    waveHeight: 20.00,
-                    waveSpeed: 0.65,
-                    zoom: 0.8
+                    color: 0x140633,
+                    shininess: 35.00,
+                    waveHeight: 15.00,
+                    waveSpeed: 0.50,
+                    zoom: 0.85
                 });
                 setVantaEffect(effect);
             }
@@ -101,8 +101,8 @@ export default function LoginPage() {
             {/* ========== LEFT PANEL — Branded Info ========== */}
             <div className="relative w-1/2 hidden lg:flex flex-col items-center justify-center overflow-hidden">
                 {/* Vanta Background */}
-                <div ref={vantaRef} className="absolute inset-0 z-0" />
-                <div className="absolute inset-0 z-[1] bg-gradient-to-b from-purple-900/30 via-transparent to-purple-900/40" />
+                <div ref={vantaRef} className="absolute inset-0 z-0" style={{ background: '#0d0221' }} />
+                <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(160deg, rgba(13,2,33,0.85) 0%, rgba(20,6,51,0.6) 50%, rgba(134,91,255,0.15) 100%)' }} />
 
                 {/* Content */}
                 <div className="relative z-10 text-center px-12 max-w-lg">

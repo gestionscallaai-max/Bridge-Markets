@@ -26,7 +26,7 @@ export default function DashboardUILayout({
     // Auto-open accordions based on the current path
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => ({
         'Informes': !!(pathname?.startsWith('/dashboard/reports')),
-        'Promo': !!(pathname?.startsWith('/dashboard/promo') || pathname === '/dashboard' || pathname?.startsWith('/dashboard/landing')),
+        'Promo': !!(pathname?.startsWith('/dashboard/promo') || pathname?.startsWith('/dashboard/landing')),
     }));
 
     React.useEffect(() => {
@@ -43,7 +43,7 @@ export default function DashboardUILayout({
         setOpenMenus(prev => ({
             ...prev,
             'Informes': pathname?.startsWith('/dashboard/reports') ?? false,
-            'Promo': (pathname === '/dashboard' || pathname?.startsWith('/dashboard/landing') || pathname?.startsWith('/dashboard/promo')) ?? false,
+            'Promo': (pathname?.startsWith('/dashboard/landing') || pathname?.startsWith('/dashboard/promo')) ?? false,
         }));
     }, [pathname]);
 
@@ -74,7 +74,7 @@ export default function DashboardUILayout({
         {
             label: 'Promo', icon: Megaphone, isSubmenu: true,
             children: [
-                { href: '/dashboard', label: 'Materiales promocionales' }, 
+                { href: '/dashboard/promo/overview', label: 'Materiales promocionales' }, 
                 { href: '/dashboard/landing', label: 'Herramientas de registro' },
                 { href: '/dashboard/links', label: 'Links de Referido' },
                 { href: '/dashboard/promo/guidelines', label: 'Directrices publicitarias' },
@@ -98,8 +98,8 @@ export default function DashboardUILayout({
         if (pathname?.startsWith('/dashboard/support')) return { main: 'Centro', accent: 'de Asistencia' };
         if (pathname?.startsWith('/dashboard/promo/guidelines')) return { main: 'Directrices', accent: 'Publicitarias' };
         if (pathname?.startsWith('/dashboard/links')) return { main: 'Links', accent: 'de Referido' };
-        if (pathname === '/dashboard') return { main: 'Materiales', accent: 'Promocionales' };
-        if (pathname?.startsWith('/dashboard/landing')) return { main: 'Herramientas', accent: 'de Registro' };
+        if (pathname?.startsWith('/dashboard/promo/overview')) return { main: 'Materiales', accent: 'Promocionales' };
+        if (pathname?.startsWith('/dashboard/landing')) return { main: 'Generador de', accent: 'Landing Pages' };
         return { main: isAdmin ? 'Panel' : 'Dashboard', accent: isAdmin ? 'Administrador' : 'Overview' };
     };
 

@@ -1,5 +1,6 @@
-// Landing page HTML template generator
-// Generates a complete, self-contained HTML landing page based on form data
+// ============================================================
+// Bridge Markets — Premium Landing Page Generator v2
+// ============================================================
 
 export interface LandingData {
     fullName: string;
@@ -13,305 +14,660 @@ export interface LandingData {
     googleAnalyticsId?: string;
 }
 
+// ─── Traducciones ────────────────────────────────────────────
 const TRANSLATIONS: Record<string, {
-    heroTitle: string;
-    heroSubtitle: string;
-    cta: string;
-    featuresTitle: string;
-    features: { title: string; desc: string }[];
-    whyTitle: string;
-    whyItems: string[];
-    contactTitle: string;
-    contactCta: string;
-    footerText: string;
+    heroTitle: string; heroHighlight: string; heroSub: string; cta: string; ctaSec: string;
+    statsLabel: string[]; statsVal: string[];
+    featTitle: string; features: { icon: string; title: string; desc: string }[];
+    stepsTitle: string; steps: string[];
+    testTitle: string; testimonials: { name: string; country: string; text: string }[];
+    formTitle: string; formSub: string; fields: string[]; submit: string;
+    footerText: string; disclaimer: string;
 }> = {
     ES: {
-        heroTitle: 'Opera en los Mercados Globales',
-        heroSubtitle: 'Accede a Forex, Acciones, Criptomonedas e Índices con spreads ultra competitivos y ejecución institucional.',
-        cta: 'Abrir Cuenta Real',
-        featuresTitle: 'Por qué elegirnos',
+        heroTitle: 'Opera en los', heroHighlight: 'Mercados Globales', heroSub: 'Accede a Forex, Acciones, Criptomonedas e Índices con spreads ultra competitivos y ejecución institucional en milisegundos.',
+        cta: 'Abrir Cuenta Real', ctaSec: 'Ver Demo',
+        statsLabel: ['Traders Activos', 'Países', 'Volumen Diario', 'Clasificación'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Por qué Bridge Markets',
         features: [
-            { title: 'Spreads desde 0.0 pips', desc: 'Los spreads más competitivos del mercado en los principales pares de divisas.' },
-            { title: 'Ejecución Ultra Rápida', desc: 'Servidores colocados en Equinix para ejecución en milisegundos.' },
-            { title: 'Regulación Internacional', desc: 'Operamos bajo estrictos estándares regulatorios internacionales.' },
-            { title: 'Soporte 24/5', desc: 'Equipo de soporte multilingüe disponible las 24 horas, 5 días a la semana.' },
+            { icon: '⚡', title: 'Ejecución Ultra Rápida', desc: 'Servidores colocados en Equinix NY4 y LD4 para ejecución en < 1ms en los pares más líquidos.' },
+            { icon: '📉', title: 'Spreads desde 0.0 pips', desc: 'Los spreads más ajustados del mercado en más de 100 instrumentos de divisas, índices y materias primas.' },
+            { icon: '🛡️', title: 'Regulación Internacional', desc: 'Operamos bajo estrictos marcos regulatorios internacionales. Tu capital protegido y segregado.' },
+            { icon: '📊', title: '100+ Instrumentos', desc: 'Forex, Acciones globales, Criptomonedas, Índices Bursátiles, Materias Primas y más en una sola cuenta.' },
+            { icon: '🤝', title: 'Soporte 24/5', desc: 'Equipo de soporte multilingüe disponible 24 horas, 5 días a la semana por chat, email y teléfono.' },
+            { icon: '💳', title: 'Depósitos Fáciles', desc: 'Acepta depósitos desde $100 USD por transferencia bancaria, tarjeta, criptomoneda y más métodos locales.' },
         ],
-        whyTitle: 'Empieza en 3 simples pasos',
-        whyItems: ['Registra tu cuenta en minutos', 'Deposita desde $100 USD', 'Comienza a operar mercados globales'],
-        contactTitle: '¿Tienes preguntas?',
-        contactCta: 'Contactar por WhatsApp',
-        footerText: 'Página gestionada por el partner comercial autorizado',
+        stepsTitle: 'Empieza en 3 pasos',
+        steps: ['Crea tu cuenta en minutos, sin papeleos', 'Deposita desde $100 USD con tu método preferido', 'Opera Forex, Criptos, Índices y más mercados globales'],
+        testTitle: 'Lo que dicen nuestros traders',
+        testimonials: [
+            { name: 'Carlos M.', country: '🇨🇴 Colombia', text: 'Los spreads son increíbles para scalping. Ejecución instantánea y soporte siempre disponible.' },
+            { name: 'Ana R.', country: '🇲🇽 México', text: 'Llevo 2 años con Bridge y no cambiaría. Retiros en 24 horas y plataforma muy estable.' },
+            { name: 'Luis P.', country: '🇪🇸 España', text: 'La cuenta RAW es perfecta para trading algorítmico. Comisiones muy bajas, ideal para alto volumen.' },
+        ],
+        formTitle: '¿Listo para empezar?', formSub: 'Déjanos tus datos y un especialista te contactará.',
+        fields: ['Nombre completo', 'Correo electrónico', 'Teléfono / WhatsApp'],
+        submit: 'Comenzar Ahora →',
+        footerText: 'Página gestionada por el partner comercial autorizado de Bridge Markets',
+        disclaimer: 'El trading de CFDs implica un alto riesgo de pérdida. Más del 70% de los inversores minoristas pierden dinero. Asegúrese de comprender los riesgos antes de invertir.',
     },
     GB: {
-        heroTitle: 'Trade Global Markets',
-        heroSubtitle: 'Access Forex, Stocks, Crypto and Indices with ultra-competitive spreads and institutional execution.',
-        cta: 'Open Live Account',
-        featuresTitle: 'Why Choose Us',
+        heroTitle: 'Trade the', heroHighlight: 'Global Markets', heroSub: 'Access Forex, Stocks, Crypto and Indices with ultra-competitive spreads and institutional execution in milliseconds.',
+        cta: 'Open Live Account', ctaSec: 'Try Demo',
+        statsLabel: ['Active Traders', 'Countries', 'Daily Volume', 'Ranking'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Why Bridge Markets',
         features: [
-            { title: 'Spreads from 0.0 pips', desc: 'The most competitive spreads on major currency pairs.' },
-            { title: 'Ultra-Fast Execution', desc: 'Equinix co-located servers for millisecond execution.' },
-            { title: 'International Regulation', desc: 'Operating under strict international regulatory standards.' },
-            { title: '24/5 Support', desc: 'Multilingual support team available 24 hours, 5 days a week.' },
+            { icon: '⚡', title: 'Ultra-Fast Execution', desc: 'Equinix NY4 and LD4 co-located servers for execution under 1ms on the most liquid pairs.' },
+            { icon: '📉', title: 'Spreads from 0.0 pips', desc: 'The tightest spreads on 100+ instruments including forex, indices and commodities.' },
+            { icon: '🛡️', title: 'International Regulation', desc: 'Operating under strict international regulatory frameworks. Your capital is protected and segregated.' },
+            { icon: '📊', title: '100+ Instruments', desc: 'Forex, global stocks, crypto, indices and commodities — all in a single account.' },
+            { icon: '🤝', title: '24/5 Support', desc: 'Multilingual support team available 24h, 5 days a week via chat, email and phone.' },
+            { icon: '💳', title: 'Easy Deposits', desc: 'Deposit from $100 via bank transfer, card, crypto and more local payment methods.' },
         ],
-        whyTitle: 'Start in 3 Simple Steps',
-        whyItems: ['Register your account in minutes', 'Deposit from $100 USD', 'Start trading global markets'],
-        contactTitle: 'Have Questions?',
-        contactCta: 'Contact via WhatsApp',
-        footerText: 'Page managed by authorized commercial partner',
+        stepsTitle: 'Get Started in 3 Steps',
+        steps: ['Create your account in minutes, no paperwork', 'Deposit from $100 USD with your preferred method', 'Trade Forex, Crypto, Indices and more'],
+        testTitle: 'What Our Traders Say',
+        testimonials: [
+            { name: 'James T.', country: '🇬🇧 United Kingdom', text: 'Incredible spreads for scalping. Instant execution and always-available support.' },
+            { name: 'Sofia L.', country: '🇦🇺 Australia', text: '2 years with Bridge and I wouldn\'t switch. 24-hour withdrawals and a very stable platform.' },
+            { name: 'Marco B.', country: '🇮🇹 Italy', text: 'The RAW account is perfect for algo trading. Very low commissions, ideal for high volume.' },
+        ],
+        formTitle: 'Ready to Start?', formSub: 'Leave your details and a specialist will contact you.',
+        fields: ['Full name', 'Email address', 'Phone / WhatsApp'],
+        submit: 'Get Started →',
+        footerText: 'Page managed by authorized commercial partner of Bridge Markets',
+        disclaimer: 'CFD trading involves a high risk of loss. Over 70% of retail investors lose money. Make sure you understand the risks before investing.',
     },
     BR: {
-        heroTitle: 'Opere nos Mercados Globais',
-        heroSubtitle: 'Acesse Forex, Ações, Criptomoedas e Índices com spreads ultra competitivos e execução institucional.',
-        cta: 'Abrir Conta Real',
-        featuresTitle: 'Por que nos escolher',
+        heroTitle: 'Opere nos', heroHighlight: 'Mercados Globais', heroSub: 'Acesse Forex, Ações, Criptomoedas e Índices com spreads ultra competitivos e execução institucional em milissegundos.',
+        cta: 'Abrir Conta Real', ctaSec: 'Ver Demo',
+        statsLabel: ['Traders Ativos', 'Países', 'Volume Diário', 'Ranking'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Por que Bridge Markets',
         features: [
-            { title: 'Spreads a partir de 0.0 pips', desc: 'Os spreads mais competitivos nos principais pares de moedas.' },
-            { title: 'Execução Ultra Rápida', desc: 'Servidores co-localizados no Equinix para execução em milissegundos.' },
-            { title: 'Regulação Internacional', desc: 'Operamos sob rigorosos padrões regulatórios internacionais.' },
-            { title: 'Suporte 24/5', desc: 'Equipe de suporte multilíngue disponível 24 horas, 5 dias por semana.' },
+            { icon: '⚡', title: 'Execução Ultra Rápida', desc: 'Servidores co-localizados Equinix NY4 e LD4 para execução em menos de 1ms.' },
+            { icon: '📉', title: 'Spreads a partir de 0.0 pips', desc: 'Os spreads mais apertados em mais de 100 instrumentos de forex, índices e commodities.' },
+            { icon: '🛡️', title: 'Regulação Internacional', desc: 'Operamos sob rígidos marcos regulatórios. Seu capital protegido e segregado.' },
+            { icon: '📊', title: '100+ Instrumentos', desc: 'Forex, ações globais, criptomoedas, índices e commodities em uma única conta.' },
+            { icon: '🤝', title: 'Suporte 24/5', desc: 'Equipe multilíngue disponível 24h, 5 dias por semana por chat, e-mail e telefone.' },
+            { icon: '💳', title: 'Depósitos Fáceis', desc: 'Deposite a partir de $100 via transferência bancária, cartão, criptomoeda e mais. ' },
         ],
-        whyTitle: 'Comece em 3 Passos Simples',
-        whyItems: ['Registre sua conta em minutos', 'Deposite a partir de $100 USD', 'Comece a operar mercados globais'],
-        contactTitle: 'Tem perguntas?',
-        contactCta: 'Contatar por WhatsApp',
-        footerText: 'Página gerenciada pelo parceiro comercial autorizado',
+        stepsTitle: 'Comece em 3 Passos',
+        steps: ['Crie sua conta em minutos, sem burocracia', 'Deposite a partir de $100 com seu método preferido', 'Opere Forex, Cripto, Índices e mais mercados'],
+        testTitle: 'O que nossos traders dizem',
+        testimonials: [
+            { name: 'Bruno F.', country: '🇧🇷 Brasil', text: 'Spreads incríveis para scalping. Execução instantânea e suporte sempre disponível.' },
+            { name: 'Juliana C.', country: '🇧🇷 Brasil', text: '2 anos com Bridge e não trocaria. Saques em 24h e plataforma muito estável.' },
+            { name: 'Rafael M.', country: '🇧🇷 Brasil', text: 'A conta RAW é perfeita para trading algorítmico. Comissões muito baixas.' },
+        ],
+        formTitle: 'Pronto para Começar?', formSub: 'Deixe seus dados e um especialista entrará em contato.',
+        fields: ['Nome completo', 'E-mail', 'Telefone / WhatsApp'],
+        submit: 'Começar Agora →',
+        footerText: 'Página gerenciada pelo parceiro comercial autorizado da Bridge Markets',
+        disclaimer: 'O trading de CFDs envolve alto risco de perda. Mais de 70% dos investidores de varejo perdem dinheiro.',
     },
     FR: {
-        heroTitle: 'Tradez les Marchés Mondiaux',
-        heroSubtitle: 'Accédez au Forex, Actions, Crypto et Indices avec des spreads ultra compétitifs et une exécution institutionnelle.',
-        cta: 'Ouvrir un Compte Réel',
-        featuresTitle: 'Pourquoi Nous Choisir',
+        heroTitle: 'Tradez les', heroHighlight: 'Marchés Mondiaux', heroSub: 'Accédez au Forex, Actions, Crypto et Indices avec des spreads ultra compétitifs et une exécution institutionnelle en millisecondes.',
+        cta: 'Ouvrir un Compte Réel', ctaSec: 'Essayer la Démo',
+        statsLabel: ['Traders Actifs', 'Pays', 'Volume Quotidien', 'Classement'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Pourquoi Bridge Markets',
         features: [
-            { title: 'Spreads à partir de 0.0 pips', desc: 'Les spreads les plus compétitifs sur les principales paires de devises.' },
-            { title: 'Exécution Ultra Rapide', desc: 'Serveurs co-localisés chez Equinix pour une exécution en millisecondes.' },
-            { title: 'Régulation Internationale', desc: 'Nous opérons selon des normes réglementaires internationales strictes.' },
-            { title: 'Support 24/5', desc: 'Équipe de support multilingue disponible 24h/24, 5j/7.' },
+            { icon: '⚡', title: 'Exécution Ultra Rapide', desc: 'Serveurs co-localisés Equinix NY4 et LD4 pour une exécution en moins de 1ms.' },
+            { icon: '📉', title: 'Spreads dès 0.0 pip', desc: 'Les spreads les plus serrés sur 100+ instruments forex, indices et matières premières.' },
+            { icon: '🛡️', title: 'Régulation Internationale', desc: 'Opérant sous des cadres réglementaires stricts. Votre capital protégé et ségrégué.' },
+            { icon: '📊', title: '100+ Instruments', desc: 'Forex, actions mondiales, crypto, indices et matières premières en un seul compte.' },
+            { icon: '🤝', title: 'Support 24/5', desc: 'Équipe multilingue disponible 24h/24, 5j/7 par chat, email et téléphone.' },
+            { icon: '💳', title: 'Dépôts Faciles', desc: 'Dépôt à partir de 100$ via virement bancaire, carte, crypto et plus.' },
         ],
-        whyTitle: 'Commencez en 3 Étapes',
-        whyItems: ['Créez votre compte en quelques minutes', 'Déposez à partir de 100$ USD', 'Commencez à trader les marchés mondiaux'],
-        contactTitle: 'Des Questions?',
-        contactCta: 'Contacter par WhatsApp',
-        footerText: 'Page gérée par le partenaire commercial autorisé',
+        stepsTitle: 'Commencez en 3 Étapes',
+        steps: ['Créez votre compte en quelques minutes, sans paperasse', 'Déposez à partir de 100$ avec votre méthode préférée', 'Tradez Forex, Crypto, Indices et plus'],
+        testTitle: 'Ce que disent nos traders',
+        testimonials: [
+            { name: 'Pierre M.', country: '🇫🇷 France', text: 'Des spreads incroyables pour le scalping. Exécution instantanée et support toujours disponible.' },
+            { name: 'Marie L.', country: '🇫🇷 France', text: '2 ans avec Bridge et je ne changerais pas. Retraits en 24h et plateforme très stable.' },
+            { name: 'Jean R.', country: '🇧🇪 Belgique', text: 'Le compte RAW est parfait pour le trading algorithmique. Commissions très basses.' },
+        ],
+        formTitle: 'Prêt à Commencer?', formSub: 'Laissez vos coordonnées et un spécialiste vous contactera.',
+        fields: ['Nom complet', 'Adresse e-mail', 'Téléphone / WhatsApp'],
+        submit: 'Commencer Maintenant →',
+        footerText: 'Page gérée par le partenaire commercial autorisé de Bridge Markets',
+        disclaimer: 'Le trading de CFDs implique un risque élevé de perte. Plus de 70% des investisseurs particuliers perdent de l\'argent.',
+    },
+    AR: {
+        heroTitle: 'تداول في', heroHighlight: 'الأسواق العالمية', heroSub: 'الوصول إلى الفوركس والأسهم والعملات المشفرة والمؤشرات بسبريدات تنافسية للغاية وتنفيذ مؤسسي في أجزاء من الثانية.',
+        cta: 'فتح حساب حقيقي', ctaSec: 'جرب الديمو',
+        statsLabel: ['المتداولون النشطون', 'الدول', 'الحجم اليومي', 'الترتيب'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'لماذا Bridge Markets',
+        features: [
+            { icon: '⚡', title: 'تنفيذ فائق السرعة', desc: 'خوادم Equinix NY4 وLD4 للتنفيذ في أقل من 1 مللي ثانية على أكثر الأزواج سيولة.' },
+            { icon: '📉', title: 'سبريدات من 0.0 نقطة', desc: 'أضيق السبريدات على أكثر من 100 أداة من العملات والمؤشرات والسلع.' },
+            { icon: '🛡️', title: 'تنظيم دولي', desc: 'نعمل وفق أطر تنظيمية صارمة. رأس مالك محمي ومفصول.' },
+            { icon: '📊', title: '+100 أداة', desc: 'الفوركس والأسهم العالمية والعملات المشفرة والمؤشرات والسلع في حساب واحد.' },
+            { icon: '🤝', title: 'دعم 24/5', desc: 'فريق دعم متعدد اللغات متاح 24 ساعة 5 أيام في الأسبوع.' },
+            { icon: '💳', title: 'إيداع سهل', desc: 'أودع من 100 دولار عبر التحويل البنكي والبطاقة والعملات المشفرة وأكثر.' },
+        ],
+        stepsTitle: 'ابدأ في 3 خطوات',
+        steps: ['أنشئ حسابك في دقائق بدون أوراق', 'أودع من 100 دولار بطريقتك المفضلة', 'تداول الفوركس والعملات المشفرة والمؤشرات والمزيد'],
+        testTitle: 'ما يقوله متداولونا',
+        testimonials: [
+            { name: 'أحمد م.', country: '🇸🇦 السعودية', text: 'سبريدات رائعة للسكالبينج. تنفيذ فوري ودعم متاح دائماً.' },
+            { name: 'فاطمة ع.', country: '🇦🇪 الإمارات', text: 'سنتان مع Bridge ولن أغير. سحوبات في 24 ساعة ومنصة مستقرة جداً.' },
+            { name: 'محمد ك.', country: '🇪🇬 مصر', text: 'حساب RAW مثالي للتداول الخوارزمي. عمولات منخفضة جداً.' },
+        ],
+        formTitle: 'مستعد للبدء؟', formSub: 'اترك بياناتك وسيتواصل معك متخصص.',
+        fields: ['الاسم الكامل', 'البريد الإلكتروني', 'الهاتف / واتساب'],
+        submit: 'ابدأ الآن ←',
+        footerText: 'صفحة يديرها الشريك التجاري المعتمد لـ Bridge Markets',
+        disclaimer: 'ينطوي تداول العقود مقابل الفروقات على مخاطر عالية بالخسارة. أكثر من 70٪ من المتداولين الأفراد يخسرون أموالهم.',
+    },
+    ZH: {
+        heroTitle: '交易全球', heroHighlight: '金融市场', heroSub: '以超低点差和毫秒级机构执行速度，访问外汇、股票、加密货币和指数市场。',
+        cta: '开立真实账户', ctaSec: '体验模拟账户',
+        statsLabel: ['活跃交易者', '覆盖国家', '日交易量', '行业排名'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: '为什么选择 Bridge Markets',
+        features: [
+            { icon: '⚡', title: '超快执行速度', desc: 'Equinix NY4 和 LD4 同机房服务器，最流动货币对执行延迟低于 1ms。' },
+            { icon: '📉', title: '点差低至 0.0 点', desc: '100+ 外汇、指数和商品交易品种，提供市场最紧的点差。' },
+            { icon: '🛡️', title: '国际监管', desc: '在严格的国际监管框架下运营。您的资金受到保护和隔离。' },
+            { icon: '📊', title: '100+ 交易品种', desc: '外汇、全球股票、加密货币、指数和大宗商品——单一账户全部涵盖。' },
+            { icon: '🤝', title: '24/5 客户支持', desc: '多语言支持团队，全天候 24 小时、每周 5 天提供聊天、邮件和电话支持。' },
+            { icon: '💳', title: '便捷入金', desc: '最低 100 美元入金，支持银行转账、信用卡、加密货币等多种方式。' },
+        ],
+        stepsTitle: '三步轻松开始',
+        steps: ['几分钟内完成账户注册，无需繁琐手续', '以您偏好的方式存入最低 100 美元', '交易外汇、加密货币、指数及更多全球市场'],
+        testTitle: '交易者的真实反馈',
+        testimonials: [
+            { name: '李明', country: '🇨🇳 中国', text: '点差非常适合剥头皮交易。即时执行，客服随时在线。' },
+            { name: '张婷', country: '🇸🇬 新加坡', text: '和 Bridge 合作两年了，不会更换。24小时内完成出金，平台非常稳定。' },
+            { name: '王浩', country: '🇭🇰 香港', text: 'RAW账户非常适合算法交易，佣金极低，高频交易的理想选择。' },
+        ],
+        formTitle: '准备好开始了吗？', formSub: '留下您的联系方式，专家将与您联系。',
+        fields: ['全名', '电子邮箱', '电话 / WhatsApp'],
+        submit: '立即开始 →',
+        footerText: '此页面由 Bridge Markets 授权合作伙伴管理',
+        disclaimer: '差价合约交易存在高度亏损风险。超过 70% 的散户投资者会蒙受损失。',
+    },
+    ID: {
+        heroTitle: 'Trading di', heroHighlight: 'Pasar Global', heroSub: 'Akses Forex, Saham, Kripto, dan Indeks dengan spread ultra kompetitif dan eksekusi institusional dalam milidetik.',
+        cta: 'Buka Akun Real', ctaSec: 'Coba Demo',
+        statsLabel: ['Trader Aktif', 'Negara', 'Volume Harian', 'Peringkat'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Mengapa Bridge Markets',
+        features: [
+            { icon: '⚡', title: 'Eksekusi Super Cepat', desc: 'Server co-lokasi Equinix NY4 dan LD4 untuk eksekusi di bawah 1ms.' },
+            { icon: '📉', title: 'Spread mulai 0.0 pips', desc: 'Spread tersempit di 100+ instrumen forex, indeks, dan komoditas.' },
+            { icon: '🛡️', title: 'Regulasi Internasional', desc: 'Beroperasi di bawah kerangka regulasi internasional yang ketat. Modal Anda dilindungi.' },
+            { icon: '📊', title: '100+ Instrumen', desc: 'Forex, saham global, kripto, indeks, dan komoditas dalam satu akun.' },
+            { icon: '🤝', title: 'Dukungan 24/5', desc: 'Tim multibahasa tersedia 24 jam 5 hari seminggu melalui chat, email, dan telepon.' },
+            { icon: '💳', title: 'Deposit Mudah', desc: 'Deposit mulai $100 via transfer bank, kartu, kripto dan lebih banyak metode.' },
+        ],
+        stepsTitle: 'Mulai dalam 3 Langkah',
+        steps: ['Buat akun dalam hitungan menit, tanpa birokrasi', 'Deposit mulai $100 dengan metode pilihan Anda', 'Trading Forex, Kripto, Indeks, dan lebih banyak pasar'],
+        testTitle: 'Apa Kata Trader Kami',
+        testimonials: [
+            { name: 'Budi S.', country: '🇮🇩 Indonesia', text: 'Spread luar biasa untuk scalping. Eksekusi instan dan support selalu tersedia.' },
+            { name: 'Sari W.', country: '🇮🇩 Indonesia', text: '2 tahun bersama Bridge dan tidak akan ganti. Penarikan dalam 24 jam, platform sangat stabil.' },
+            { name: 'Andi P.', country: '🇮🇩 Indonesia', text: 'Akun RAW sempurna untuk algo trading. Komisi sangat rendah.' },
+        ],
+        formTitle: 'Siap Memulai?', formSub: 'Tinggalkan data Anda dan spesialis akan menghubungi Anda.',
+        fields: ['Nama lengkap', 'Alamat email', 'Telepon / WhatsApp'],
+        submit: 'Mulai Sekarang →',
+        footerText: 'Halaman dikelola oleh mitra komersial resmi Bridge Markets',
+        disclaimer: 'Trading CFD melibatkan risiko kerugian yang tinggi. Lebih dari 70% investor ritel kehilangan uang.',
+    },
+    VI: {
+        heroTitle: 'Giao dịch trên', heroHighlight: 'Thị Trường Toàn Cầu', heroSub: 'Tiếp cận Forex, Cổ phiếu, Tiền điện tử và Chỉ số với spread siêu cạnh tranh và khớp lệnh tổ chức trong vài mili giây.',
+        cta: 'Mở Tài Khoản Thật', ctaSec: 'Dùng Thử Demo',
+        statsLabel: ['Trader Hoạt Động', 'Quốc gia', 'Khối lượng Hàng ngày', 'Xếp hạng'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Tại sao chọn Bridge Markets',
+        features: [
+            { icon: '⚡', title: 'Khớp lệnh Siêu Nhanh', desc: 'Máy chủ đặt chung Equinix NY4 và LD4, khớp lệnh dưới 1ms cho các cặp thanh khoản cao.' },
+            { icon: '📉', title: 'Spread từ 0.0 pip', desc: 'Spread cạnh tranh nhất cho 100+ công cụ forex, chỉ số và hàng hóa.' },
+            { icon: '🛡️', title: 'Quy định Quốc tế', desc: 'Hoạt động theo khung pháp lý quốc tế nghiêm ngặt. Vốn của bạn được bảo vệ.' },
+            { icon: '📊', title: '100+ Công cụ', desc: 'Forex, cổ phiếu toàn cầu, tiền điện tử, chỉ số và hàng hóa trong một tài khoản.' },
+            { icon: '🤝', title: 'Hỗ trợ 24/5', desc: 'Đội hỗ trợ đa ngôn ngữ, sẵn sàng 24h, 5 ngày/tuần qua chat, email và điện thoại.' },
+            { icon: '💳', title: 'Nạp tiền Dễ dàng', desc: 'Nạp tiền từ $100 qua chuyển khoản, thẻ, tiền điện tử và nhiều phương thức khác.' },
+        ],
+        stepsTitle: 'Bắt đầu trong 3 Bước',
+        steps: ['Tạo tài khoản trong vài phút, không cần giấy tờ', 'Nạp tiền từ $100 theo phương thức bạn thích', 'Giao dịch Forex, Tiền điện tử, Chỉ số và nhiều thị trường hơn'],
+        testTitle: 'Trader Nói Gì Về Chúng Tôi',
+        testimonials: [
+            { name: 'Minh T.', country: '🇻🇳 Việt Nam', text: 'Spread tuyệt vời cho scalping. Khớp lệnh tức thì và hỗ trợ luôn sẵn sàng.' },
+            { name: 'Lan P.', country: '🇻🇳 Việt Nam', text: '2 năm với Bridge và không đổi. Rút tiền trong 24h, nền tảng rất ổn định.' },
+            { name: 'Hùng N.', country: '🇻🇳 Việt Nam', text: 'Tài khoản RAW hoàn hảo cho giao dịch thuật toán. Hoa hồng rất thấp.' },
+        ],
+        formTitle: 'Sẵn Sàng Bắt Đầu?', formSub: 'Để lại thông tin và chuyên gia sẽ liên hệ với bạn.',
+        fields: ['Họ và tên', 'Địa chỉ email', 'Điện thoại / WhatsApp'],
+        submit: 'Bắt Đầu Ngay →',
+        footerText: 'Trang được quản lý bởi đối tác thương mại được ủy quyền của Bridge Markets',
+        disclaimer: 'Giao dịch CFD liên quan đến rủi ro thua lỗ cao. Hơn 70% nhà đầu tư bán lẻ mất tiền.',
     },
 };
 
-const LANDING_TYPE_CONFIG: Record<string, { gradient: string; accent: string; icon: string }> = {
-    institucional: { gradient: 'linear-gradient(135deg, #140633 0%, #2d1566 50%, #865BFF 100%)', accent: '#865BFF', icon: '🏛️' },
-    forex: { gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #3b82f6 100%)', accent: '#3b82f6', icon: '📊' },
-    cripto: { gradient: 'linear-gradient(135deg, #1a1a2e 0%, #e94560 50%, #f59e0b 100%)', accent: '#f59e0b', icon: '₿' },
-    propfirm: { gradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #10b981 100%)', accent: '#10b981', icon: '🚀' },
-    sinteticos: { gradient: 'linear-gradient(135deg, #4c0519 0%, #9f1239 50%, #e11d48 100%)', accent: '#e11d48', icon: '📈' },
-    bursatiles: { gradient: 'linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #818cf8 100%)', accent: '#6366f1', icon: '📉' },
-    promociones: { gradient: 'linear-gradient(135deg, #831843 0%, #be185d 50%, #f43f5e 100%)', accent: '#f43f5e', icon: '🎁' },
+// ─── Config por tipo de landing ─────────────────────────────
+const TYPE_CONFIG: Record<string, {
+    gradient: string; accentHex: string; accentRgb: string;
+    darkBg: string; badge: string; heroTag: string;
+    particleColor: string;
+}> = {
+    institucional: {
+        gradient: 'linear-gradient(135deg, #0d0221 0%, #1a0545 40%, #2d0e7a 70%, #865BFF 100%)',
+        accentHex: '#865BFF', accentRgb: '134,91,255', darkBg: '#0d0221',
+        badge: '🏛️ Bridge Markets', heroTag: 'Broker Premium',
+        particleColor: 'rgba(134,91,255,',
+    },
+    forex: {
+        gradient: 'linear-gradient(135deg, #020b18 0%, #0a2440 40%, #0f3d6b 70%, #1d6fa4 100%)',
+        accentHex: '#38bdf8', accentRgb: '56,189,248', darkBg: '#020b18',
+        badge: '📊 Forex Trading', heroTag: 'Especialistas en Divisas',
+        particleColor: 'rgba(56,189,248,',
+    },
+    cripto: {
+        gradient: 'linear-gradient(135deg, #0f0a00 0%, #2d1500 40%, #f59e0b 70%, #f97316 100%)',
+        accentHex: '#f59e0b', accentRgb: '245,158,11', darkBg: '#0f0a00',
+        badge: '₿ Criptomonedas', heroTag: 'Crypto Trading 24/7',
+        particleColor: 'rgba(245,158,11,',
+    },
+    propfirm: {
+        gradient: 'linear-gradient(135deg, #001a0f 0%, #003320 40%, #004d30 70%, #10b981 100%)',
+        accentHex: '#10b981', accentRgb: '16,185,129', darkBg: '#001a0f',
+        badge: '🚀 Prop Firm', heroTag: 'Fondeo para Traders Pro',
+        particleColor: 'rgba(16,185,129,',
+    },
+    sinteticos: {
+        gradient: 'linear-gradient(135deg, #1a000a 0%, #3d0015 40%, #7f1d1d 70%, #e11d48 100%)',
+        accentHex: '#e11d48', accentRgb: '225,29,72', darkBg: '#1a000a',
+        badge: '📈 Índices Sintéticos', heroTag: 'Opera 24/7 Sin Interrupciones',
+        particleColor: 'rgba(225,29,72,',
+    },
+    bursatiles: {
+        gradient: 'linear-gradient(135deg, #0a0a1a 0%, #1e1b4b 40%, #3730a3 70%, #6366f1 100%)',
+        accentHex: '#818cf8', accentRgb: '129,140,248', darkBg: '#0a0a1a',
+        badge: '📉 Índices Bursátiles', heroTag: 'Mercados Bursátiles Globales',
+        particleColor: 'rgba(129,140,248,',
+    },
+    promociones: {
+        gradient: 'linear-gradient(135deg, #1a0010 0%, #4a0030 40%, #831843 70%, #f43f5e 100%)',
+        accentHex: '#f43f5e', accentRgb: '244,63,94', darkBg: '#1a0010',
+        badge: '🎁 Oferta Especial', heroTag: 'Bonos y Promociones Exclusivas',
+        particleColor: 'rgba(244,63,94,',
+    },
 };
 
+// ─── Generador Principal ─────────────────────────────────────
 export function generateLandingHTML(data: LandingData): string {
     const t = TRANSLATIONS[data.language] || TRANSLATIONS['ES'];
-    const config = LANDING_TYPE_CONFIG[data.landingType] || LANDING_TYPE_CONFIG['institucional'];
-    const whatsappLink = data.whatsapp ? `https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}` : '#';
-    const referralLink = `https://bridge.com/?ref=${data.partnerId}`;
+    const cfg = TYPE_CONFIG[data.landingType] || TYPE_CONFIG['institucional'];
+    const wa = data.whatsapp ? 'https://wa.me/' + data.whatsapp.replace(/[^0-9]/g, '') : '#';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const refLink = 'https://bridgemarkets.com/register?ref=' + (data.partnerId || data.slug);
+
+    // Build ticker JS separately to avoid TS misinterpreting nested template literals
+    const tickerScript = [
+        '(function(){',
+        'var pairs=[',
+        '{pair:"EUR/USD",price:"1.0823",chg:"+0.0012",up:true},',
+        '{pair:"GBP/USD",price:"1.2641",chg:"-0.0008",up:false},',
+        '{pair:"XAU/USD",price:"2,318.40",chg:"+5.20",up:true},',
+        '{pair:"BTC/USD",price:"69,241",chg:"+1.2%",up:true},',
+        '{pair:"US30",price:"38,920",chg:"-0.3%",up:false},',
+        '{pair:"NAS100",price:"17,845",chg:"+0.8%",up:true},',
+        '{pair:"EUR/JPY",price:"164.82",chg:"+0.24",up:true},',
+        '{pair:"OIL/USD",price:"79.14",chg:"-0.42",up:false}',
+        '];',
+        'var track=document.getElementById("tickerTrack");',
+        'var all=pairs.concat(pairs);',
+        'var html="";',
+        'for(var i=0;i<all.length;i++){',
+        '  var p=all[i];',
+        '  var dir=p.up?"up":"down";',
+        '  var arrow=p.up?"\u25b2":"\u25bc";',
+        '  html+="<div class=\\"ticker-item\\"><span class=\\"pair\\">"+(p.pair)+"</span><span>"+(p.price)+"</span><span class=\\""+dir+"\\">"+arrow+" "+(p.chg)+"</span></div>";',
+        '}',
+        'if(track){track.innerHTML=html;}',
+        '})();',
+    ].join('\n');
+
+    // Build form submit JS separately
+    const formScript = [
+        'document.getElementById("leadForm").addEventListener("submit",async function(e){',
+        '  e.preventDefault();',
+        '  var btn=document.getElementById("submitBtn");',
+        '  var msg=document.getElementById("formMessage");',
+        '  var fields=document.querySelectorAll(".form-input[required]");',
+        '  btn.disabled=true;btn.textContent="Enviando...";msg.className="form-message";',
+        '  try{',
+        '    var res=await fetch("/api/leads",{',
+        '      method:"POST",',
+        '      headers:{"Content-Type":"application/json"},',
+        '      body:JSON.stringify({',
+        '        name:fields[0]?fields[0].value:"",',
+        '        email:fields[1]?fields[1].value:"",',
+        '        whatsapp:fields[2]?fields[2].value:"",',
+        '        landingSlug:document.getElementById("landingSlug").value,',
+        '        partnerId:document.getElementById("partnerId").value',
+        '      })',
+        '    });',
+        '    var data=await res.json();',
+        '    if(data.success){',
+        '      msg.textContent="\u00a1Gracias! Nos pondremos en contacto pronto. \uD83C\uDF89";',
+        '      msg.className="form-message success";',
+        '      document.getElementById("leadForm").reset();',
+        '      btn.style.display="none";',
+        '    }else{throw new Error(data.error||"Error");}',
+        '  }catch(err){',
+        '    msg.textContent="Error al enviar. Por favor intenta de nuevo.";',
+        '    msg.className="form-message error";',
+        '    btn.disabled=false;',
+        '    btn.textContent="' + t.submit + '";',
+        '  }',
+        '});',
+    ].join('\n');
 
     const gaScript = data.googleAnalyticsId ? `
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=${data.googleAnalyticsId}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${data.googleAnalyticsId}');
-    </script>` : '';
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${data.googleAnalyticsId}');</script>` : '';
+
+    const featuresHTML = t.features.map((f, i) => `
+        <div class="feat-card" style="animation-delay:${i * 0.08}s">
+            <div class="feat-icon">${f.icon}</div>
+            <h3 class="feat-title">${f.title}</h3>
+            <p class="feat-desc">${f.desc}</p>
+        </div>`).join('');
+
+    const stepsHTML = t.steps.map((s, i) => `
+        <div class="step-row">
+            <div class="step-num">${i + 1}</div>
+            <div class="step-line">${i < t.steps.length - 1 ? '<div class="step-connector"></div>' : ''}</div>
+            <div class="step-body">
+                <p class="step-text">${s}</p>
+            </div>
+        </div>`).join('');
+
+    const testimonialsHTML = t.testimonials.map(te => `
+        <div class="testi-card">
+            <div class="testi-stars">★★★★★</div>
+            <p class="testi-text">"${te.text}"</p>
+            <div class="testi-author">
+                <div class="testi-avatar">${te.name.charAt(0)}</div>
+                <div>
+                    <div class="testi-name">${te.name}</div>
+                    <div class="testi-country">${te.country}</div>
+                </div>
+            </div>
+        </div>`).join('');
+
+    const statsHTML = t.statsVal.map((v, i) => `
+        <div class="stat-item">
+            <div class="stat-val" data-target="${v}">${v}</div>
+            <div class="stat-label">${t.statsLabel[i]}</div>
+        </div>`).join('');
 
     return `<!DOCTYPE html>
 <html lang="${data.language.toLowerCase()}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">${gaScript}
-    <title>Bridge Markets | ${data.fullName}</title>
-    <meta name="description" content="${t.heroSubtitle}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, sans-serif; color: #1e293b; background: #f8fafc; -webkit-font-smoothing: antialiased; }
-        
-        /* Hero */
-        .hero { background: ${config.gradient}; min-height: 85vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%); }
-        .hero-content { position: relative; z-index: 1; text-align: center; max-width: 720px; padding: 2rem; }
-        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); padding: 8px 20px; border-radius: 50px; color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; margin-bottom: 2rem; }
-        .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; color: white; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
-        .hero p { font-size: 1.15rem; color: rgba(255,255,255,0.7); line-height: 1.7; max-width: 580px; margin: 0 auto 2.5rem; }
-        .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: ${config.accent}; color: white; padding: 16px 40px; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
-        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
-        .hero-cta svg { width: 20px; height: 20px; }
-        .hero-partner { margin-top: 2rem; font-size: 13px; color: rgba(255,255,255,0.4); }
-        
-        /* Features */
-        .features { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
-        .features h2 { text-align: center; font-size: 2.2rem; font-weight: 800; margin-bottom: 4rem; letter-spacing: -0.02em; color: #0f172a; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
-        .feature-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; transition: all 0.2s; }
-        .feature-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); transform: translateY(-2px); }
-        .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: ${config.accent}15; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 24px; }
-        .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: #0f172a; }
-        .feature-card p { font-size: 14px; color: #64748b; line-height: 1.6; }
-        
-        /* Steps */
-        .steps { background: #0f172a; padding: 100px 24px; }
-        .steps-inner { max-width: 800px; margin: 0 auto; text-align: center; }
-        .steps h2 { font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 4rem; letter-spacing: -0.02em; }
-        .steps-list { display: flex; flex-direction: column; gap: 24px; text-align: left; }
-        .step-item { display: flex; align-items: center; gap: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px 28px; }
-        .step-num { width: 44px; height: 44px; border-radius: 12px; background: ${config.accent}; color: white; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .step-text { font-size: 1rem; font-weight: 600; color: rgba(255,255,255,0.85); }
-        
-        /* Contact Form */
-        .contact { padding: 100px 24px; text-align: center; background: white; }
-        .contact h2 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; }
-        .contact p { color: #64748b; margin-bottom: 2.5rem; font-size: 1.1rem; }
-        .lead-form { max-width: 440px; margin: 0 auto; text-align: left; background: #f8fafc; padding: 32px; border-radius: 16px; border: 1px solid #e2e8f0; }
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px; }
-        .form-input { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; transition: all 0.2s; outline: none; background: white; }
-        .form-input:focus { border-color: ${config.accent}; box-shadow: 0 0 0 4px ${config.accent}20; }
-        .form-submit { width: 100%; background: ${config.accent}; color: white; padding: 16px; border: none; border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
-        .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px ${config.accent}40; }
-        .form-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
-        .form-message { display: none; text-align: center; padding: 16px; border-radius: 8px; margin-top: 16px; font-weight: 600; font-size: 14px; }
-        .form-message.success { display: block; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-        .form-message.error { display: block; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-        
-        /* Footer */
-        .footer { background: #0f172a; padding: 40px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-logo { font-size: 20px; font-weight: 800; color: white; margin-bottom: 8px; }
-        .footer-logo span { color: ${config.accent}; font-weight: 400; }
-        .footer-text { font-size: 12px; color: rgba(255,255,255,0.4); }
-        .footer-partner { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 16px; }
-        
-        @media (max-width: 768px) {
-            .hero { min-height: 70vh; }
-            .features-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bridge Markets | ${t.heroHighlight} — ${data.fullName}</title>
+<meta name="description" content="${t.heroSub}">
+<meta property="og:title" content="Bridge Markets | ${t.heroHighlight}">
+<meta property="og:description" content="${t.heroSub}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">${gaScript}
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:${cfg.accentHex};--accent-rgb:${cfg.accentRgb};--dark:${cfg.darkBg};--page-bg:#07020f}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;color:rgba(255,255,255,0.85);background:var(--page-bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ─── NAV ─── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.3);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);transition:background 0.3s}
+.nav.scrolled{background:rgba(0,0,0,0.85)}
+.nav-logo{font-size:18px;font-weight:800;color:white;letter-spacing:-0.5px}
+.nav-logo span{color:var(--accent)}
+.nav-cta{background:var(--accent);color:white;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer}
+.nav-cta:hover{opacity:0.9;transform:translateY(-1px)}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:${cfg.gradient}}
+#particles-canvas{position:absolute;inset:0;pointer-events:none}
+.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),0.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:780px;padding:6rem 24px 4rem}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12);padding:8px 20px;border-radius:50px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;margin-bottom:1.5rem;animation:fadeUp 0.8s ease both}
+.hero-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;animation:fadeUp 0.8s 0.1s ease both}
+.hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;color:white;line-height:1.05;letter-spacing:-0.04em;margin-bottom:1.5rem;animation:fadeUp 0.8s 0.2s ease both}
+.hero h1 .hl{color:var(--accent);display:block}
+.hero-sub{font-size:1.1rem;color:rgba(255,255,255,0.65);line-height:1.75;max-width:580px;margin:0 auto 2.5rem;animation:fadeUp 0.8s 0.3s ease both}
+.hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 0.4s ease both}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:white;padding:16px 36px;border-radius:12px;font-size:16px;font-weight:700;text-decoration:none;transition:all 0.25s;box-shadow:0 8px 32px rgba(var(--accent-rgb),0.4)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(var(--accent-rgb),0.5)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);color:white;padding:16px 36px;border-radius:12px;font-size:16px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(10px);transition:all 0.25s}
+.btn-secondary:hover{background:rgba(255,255,255,0.15);transform:translateY(-2px)}
+.hero-partner{margin-top:2.5rem;font-size:12px;color:rgba(255,255,255,0.3);animation:fadeUp 0.8s 0.5s ease both}
+
+/* ─── TICKER ─── */
+.ticker{background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.06);padding:12px 0;overflow:hidden}
+.ticker-track{display:flex;gap:48px;animation:tickerScroll 30s linear infinite;white-space:nowrap}
+.ticker-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);flex-shrink:0}
+.ticker-item .pair{color:white;font-weight:700}
+.ticker-item .up{color:#22c55e}.ticker-item .down{color:#ef4444}
+
+/* ─── STATS ─── */
+.stats-section{background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,rgba(var(--accent-rgb),0.04) 100%);border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04)}
+.stats-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);padding:52px 24px}
+.stat-item{text-align:center;padding:0 24px;border-right:1px solid rgba(255,255,255,0.06)}
+.stat-item:last-child{border-right:none}
+.stat-val{font-size:2.5rem;font-weight:900;color:var(--accent);letter-spacing:-0.03em;line-height:1}
+.stat-label{font-size:13px;color:rgba(255,255,255,0.4);font-weight:500;margin-top:6px}
+
+/* ─── FEATURES ─── */
+.features{padding:100px 24px;background:linear-gradient(180deg,var(--page-bg) 0%,rgba(var(--accent-rgb),0.05) 50%,var(--page-bg) 100%)}
+.section-label{text-align:center;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;opacity:0.8}
+.section-title{text-align:center;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:white;letter-spacing:-0.03em;margin-bottom:64px}
+.feat-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.feat-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:32px;transition:all 0.35s;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);backdrop-filter:blur(10px)}
+.feat-card.visible{opacity:1;transform:translateY(0);transition:opacity 0.6s ease,transform 0.6s ease}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(var(--accent-rgb),0.06) 0%,transparent 60%);pointer-events:none}
+.feat-card:hover{border-color:rgba(var(--accent-rgb),0.25);box-shadow:0 12px 40px rgba(var(--accent-rgb),0.12),inset 0 1px 0 rgba(255,255,255,0.08);transform:translateY(-4px)}
+.feat-icon{width:52px;height:52px;border-radius:14px;background:rgba(var(--accent-rgb),0.12);border:1px solid rgba(var(--accent-rgb),0.2);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:20px}
+.feat-title{font-size:1rem;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:10px}
+.feat-desc{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.65}
+
+/* ─── STEPS ─── */
+.steps-section{background:linear-gradient(180deg,var(--page-bg) 0%,rgba(var(--accent-rgb),0.06) 50%,var(--page-bg) 100%);padding:100px 24px;border-top:1px solid rgba(255,255,255,0.04)}
+.steps-inner{max-width:700px;margin:0 auto}
+.steps-inner .section-title{color:white}
+.step-row{display:flex;gap:0;margin-bottom:0;position:relative}
+.step-num{width:52px;height:52px;border-radius:16px;background:var(--accent);color:white;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 24px rgba(var(--accent-rgb),0.4);position:relative;z-index:2}
+.step-line{width:2px;background:rgba(var(--accent-rgb),0.15);margin:0 25px;flex-shrink:0;position:relative;min-height:60px}
+.step-connector{position:absolute;inset:0;background:rgba(var(--accent-rgb),0.3)}
+.step-body{flex:1;padding-bottom:40px;display:flex;align-items:flex-start;padding-top:12px}
+.step-text{font-size:1.05rem;font-weight:500;color:rgba(255,255,255,0.8);line-height:1.6}
+
+/* ─── TESTIMONIALS ─── */
+.testi-section{padding:100px 24px;background:var(--page-bg);border-top:1px solid rgba(255,255,255,0.04)}
+.testi-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.testi-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:28px;transition:all 0.35s;backdrop-filter:blur(10px)}
+.testi-card:hover{border-color:rgba(var(--accent-rgb),0.2);box-shadow:0 12px 36px rgba(var(--accent-rgb),0.08);transform:translateY(-3px)}
+.testi-stars{color:#f59e0b;font-size:18px;letter-spacing:2px;margin-bottom:16px}
+.testi-text{font-size:15px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent) 0%,rgba(var(--accent-rgb),0.5) 100%);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:16px;flex-shrink:0}
+.testi-name{font-weight:700;font-size:14px;color:rgba(255,255,255,0.9)}
+.testi-country{font-size:12px;color:rgba(255,255,255,0.35);margin-top:2px}
+
+/* ─── FORM ─── */
+.form-section{padding:100px 24px;background:linear-gradient(180deg,var(--page-bg) 0%,rgba(var(--accent-rgb),0.08) 50%,var(--page-bg) 100%);position:relative;overflow:hidden;border-top:1px solid rgba(255,255,255,0.04)}
+.form-section::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),0.08) 0%,transparent 70%)}
+.form-inner{max-width:500px;margin:0 auto;position:relative;z-index:1}
+.form-inner .section-title{color:white;text-align:left}
+.form-inner .section-label{text-align:left}
+.form-sub{color:rgba(255,255,255,0.5);margin-bottom:32px;font-size:15px;margin-top:8px}
+.lead-form{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:32px;backdrop-filter:blur(10px)}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.form-input{width:100%;padding:14px 18px;border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:15px;font-family:'Inter',sans-serif;transition:all 0.2s;outline:none;background:rgba(255,255,255,0.06);color:white}
+.form-input::placeholder{color:rgba(255,255,255,0.25)}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(var(--accent-rgb),0.15);background:rgba(255,255,255,0.08)}
+.form-submit{width:100%;background:var(--accent);color:white;padding:16px;border:none;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;transition:all 0.25s;margin-top:8px;font-family:'Inter',sans-serif;letter-spacing:-0.3px;box-shadow:0 8px 24px rgba(var(--accent-rgb),0.35)}
+.form-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 32px rgba(var(--accent-rgb),0.5)}
+.form-submit:disabled{opacity:0.6;cursor:not-allowed}
+.form-message{display:none;text-align:center;padding:14px;border-radius:10px;margin-top:16px;font-weight:600;font-size:14px}
+.form-message.success{display:block;background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
+.form-message.error{display:block;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
+.wa-alt{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;color:rgba(255,255,255,0.4);font-size:13px}
+.wa-link{color:#22c55e;font-weight:600;text-decoration:none}
+.wa-link:hover{text-decoration:underline}
+
+/* ─── FOOTER ─── */
+footer{background:rgba(0,0,0,0.6);padding:40px 24px;text-align:center;border-top:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(10px)}
+.footer-logo{font-size:20px;font-weight:800;color:white;margin-bottom:8px}
+.footer-logo span{color:var(--accent)}
+.footer-text{font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:6px}
+.footer-partner{font-size:11px;color:rgba(255,255,255,0.18);margin-top:12px}
+.disclaimer{font-size:10px;color:rgba(255,255,255,0.2);max-width:700px;margin:16px auto 0;line-height:1.6}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+.stats-inner{grid-template-columns:repeat(2,1fr);gap:0}
+.stat-item{border-right:none;border-bottom:1px solid #f1f5f9;padding:24px}
+.hero-ctas{flex-direction:column;align-items:center}
+.btn-primary,.btn-secondary{width:100%;justify-content:center;max-width:320px}
+.step-row{flex-direction:column}
+.step-line{display:none}
+.step-body{padding-top:8px;padding-bottom:24px}
+.nav-cta{display:none}
+}
+</style>
 </head>
 <body>
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">${config.icon} Bridge Markets</div>
-            <h1>${t.heroTitle}</h1>
-            <p>${t.heroSubtitle}</p>
-            <a href="#registro" class="hero-cta">
-                ${t.cta}
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </a>
-            <div class="hero-partner">${data.fullName} · ${data.country}</div>
-        </div>
-    </section>
 
-    <!-- Features -->
-    <section class="features">
-        <h2>${t.featuresTitle}</h2>
-        <div class="features-grid">
-            ${t.features.map((f, i) => `
-            <div class="feature-card">
-                <div class="feature-icon">${['📈', '⚡', '🛡️', '🎧'][i]}</div>
-                <h3>${f.title}</h3>
-                <p>${f.desc}</p>
-            </div>`).join('')}
-        </div>
-    </section>
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+    <div class="nav-logo">Bridge<span>Markets</span></div>
+    <a href="#registro" class="nav-cta">${t.cta}</a>
+</nav>
 
-    <!-- Steps -->
-    <section class="steps">
-        <div class="steps-inner">
-            <h2>${t.whyTitle}</h2>
-            <div class="steps-list">
-                ${t.whyItems.map((item, i) => `
-                <div class="step-item">
-                    <div class="step-num">${i + 1}</div>
-                    <div class="step-text">${item}</div>
-                </div>`).join('')}
-            </div>
+<!-- HERO -->
+<section class="hero">
+    <canvas id="particles-canvas"></canvas>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+        <div class="hero-badge">${cfg.badge}</div>
+        <p class="hero-tag">${cfg.heroTag}</p>
+        <h1>${t.heroTitle} <span class="hl">${t.heroHighlight}</span></h1>
+        <p class="hero-sub">${t.heroSub}</p>
+        <div class="hero-ctas">
+            <a href="#registro" class="btn-primary">${t.cta}</a>
+            <a href="#registro" class="btn-secondary">${t.ctaSec}</a>
         </div>
-    </section>
+        <p class="hero-partner">Partner: ${data.fullName} · ${data.country}</p>
+    </div>
+</section>
 
-    <!-- Contact Form -->
-    <section class="contact" id="registro">
-        <h2>${t.contactTitle}</h2>
-        <p>Déjanos tus datos y un especialista se pondrá en contacto preventivo contigo.</p>
-        
+<!-- TICKER -->
+<div class="ticker">
+    <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- STATS -->
+<section class="stats-section">
+    <div class="stats-inner">${statsHTML}</div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <p class="section-label">Ventajas Competitivas</p>
+    <h2 class="section-title">${t.featTitle}</h2>
+    <div class="feat-grid">${featuresHTML}</div>
+</section>
+
+<!-- STEPS -->
+<section class="steps-section">
+    <div class="steps-inner">
+        <p class="section-label" style="color:rgba(var(--accent-rgb),0.8)">Proceso Simple</p>
+        <h2 class="section-title">${t.stepsTitle}</h2>
+        ${stepsHTML}
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+    <p class="section-label">Traders Reales</p>
+    <h2 class="section-title">${t.testTitle}</h2>
+    <div class="testi-grid">${testimonialsHTML}</div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="registro">
+    <div class="form-inner">
+        <p class="section-label">Empieza Hoy</p>
+        <h2 class="section-title">${t.formTitle}</h2>
+        <p class="form-sub">${t.formSub}</p>
         <form class="lead-form" id="leadForm">
             <input type="hidden" id="partnerId" value="${data.partnerId}">
             <input type="hidden" id="landingSlug" value="${data.slug}">
-            
+            ${t.fields.map((f, i) => `
             <div class="form-group">
-                <label class="form-label" for="name">Nombre Completo</label>
-                <input class="form-input" type="text" id="name" required placeholder="Ej. Juan Pérez">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="email">Correo Electrónico</label>
-                <input class="form-input" type="email" id="email" required placeholder="juan@ejemplo.com">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="whatsapp">Teléfono / WhatsApp</label>
-                <input class="form-input" type="tel" id="whatsapp" required placeholder="+34 600 000 000">
-            </div>
-            
-            <button type="submit" class="form-submit" id="submitBtn">${t.contactCta || 'Comenzar Ahora'}</button>
+                <label class="form-label" for="field${i}">${f}</label>
+                <input class="form-input" type="${i === 1 ? 'email' : i === 2 ? 'tel' : 'text'}" id="field${i}" required placeholder="${f}...">
+            </div>`).join('')}
+            <button type="submit" class="form-submit" id="submitBtn">${t.submit}</button>
             <div id="formMessage" class="form-message"></div>
         </form>
-    </section>
+        <div class="wa-alt">
+            ¿Prefieres WhatsApp? <a href="${wa}" class="wa-link" target="_blank">Escríbenos directo →</a>
+        </div>
+    </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-logo">Bridge<span>Markets</span></div>
-        <div class="footer-text">${t.footerText}</div>
-        <div class="footer-partner">Partner: ${data.fullName} | ID: ${data.partnerId}</div>
-    </footer>
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">Bridge<span>Markets</span></div>
+    <div class="footer-text">${t.footerText}</div>
+    <div class="footer-partner">Partner: ${data.fullName} · ID: ${data.partnerId || data.slug}</div>
+    <div class="disclaimer">${t.disclaimer}</div>
+</footer>
 
-    <script>
-        document.getElementById('leadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const msg = document.getElementById('formMessage');
-            
-            btn.disabled = true;
-            btn.textContent = 'Enviando...';
-            msg.className = 'form-message';
-            
-            try {
-                const res = await fetch('/api/leads', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: document.getElementById('name').value,
-                        email: document.getElementById('email').value,
-                        whatsapp: document.getElementById('whatsapp').value,
-                        landingSlug: document.getElementById('landingSlug').value,
-                        partnerId: document.getElementById('partnerId').value
-                    })
-                });
-                
-                const data = await res.json();
-                
-                if (data.success) {
-                    msg.textContent = '¡Gracias por registrarte! Nos pondremos en contacto pronto.';
-                    msg.className = 'form-message success';
-                    document.getElementById('leadForm').reset();
-                    btn.style.display = 'none';
-                } else {
-                    throw new Error(data.error || 'Error al enviar');
-                }
-            } catch (err) {
-                msg.textContent = 'Hubo un error al enviar el formulario. Inténtalo de nuevo.';
-                msg.className = 'form-message error';
-                btn.disabled = false;
-                btn.textContent = '${t.contactCta || 'Comenzar Ahora'}';
-            }
+<script>
+// ─── Nav scroll ───
+window.addEventListener('scroll',()=>{
+    document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>50)
+});
+
+// ─── Particles ───
+(function(){
+    const canvas=document.getElementById('particles-canvas');
+    const ctx=canvas.getContext('2d');
+    let W,H,particles=[];
+    function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+    resize();window.addEventListener('resize',resize);
+    for(let i=0;i<60;i++)particles.push({x:Math.random()*1000,y:Math.random()*1000,r:Math.random()*2+0.5,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,o:Math.random()*0.4+0.1});
+    function draw(){
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p=>{
+            p.x+=p.vx;p.y+=p.vy;
+            if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+            ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle='${cfg.particleColor}'+p.o+')';ctx.fill();
         });
-    </script>
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+
+// ─── Scroll reveal ───
+(function(){
+  document.querySelectorAll(".feat-card").forEach(function(c){
+    new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting)e.target.classList.add("visible");});},{threshold:0.1}).observe(c);
+  });
+})();
+</script>
+<script>` + tickerScript + `</script>
+<script>` + formScript + `</script>
 </body>
 </html>`;
 }
@@ -320,16 +676,13 @@ export function downloadLandingHTML(html: string, filename: string) {
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
 
 export function openLandingPreview(html: string) {
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
+    window.open(URL.createObjectURL(blob), '_blank');
 }
