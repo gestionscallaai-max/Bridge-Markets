@@ -17,10 +17,10 @@ const LANGUAGES = [
     { code: 'GB', flag: '🇬🇧', label: 'English' },
     { code: 'BR', flag: '🇧🇷', label: 'Português' },
     { code: 'FR', flag: '🇫🇷', label: 'Français' },
-    { code: 'SA', flag: '🇸🇦', label: 'العربية' },
+    { code: 'AR', flag: '🇸🇦', label: 'العربية' },
     { code: 'JP', flag: '🇯🇵', label: '日本語' },
-    { code: 'CN', flag: '🇨🇳', label: '中文' },
-    { code: 'VN', flag: '🇻🇳', label: 'Tiếng Việt' },
+    { code: 'ZH', flag: '🇨🇳', label: '中文' },
+    { code: 'VI', flag: '🇻🇳', label: 'Tiếng Việt' },
 ];
 
 const LANDING_TYPES = [
@@ -31,6 +31,7 @@ const LANDING_TYPES = [
     { id: 'sinteticos', title: 'Índices Sintéticos', desc: 'Opera índices sintéticos 24/7 sin interrupciones', icon: Target, color: 'from-rose-500 to-red-600' },
     { id: 'bursatiles', title: 'Índices Bursátiles', desc: 'Los principales índices del mercado global', icon: Layout, color: 'from-indigo-500 to-purple-600' },
     { id: 'promociones', title: 'Promociones (General)', desc: 'Bonos y ofertas especiales para nuevos clientes', icon: Sparkles, color: 'from-pink-500 to-rose-500' },
+    { id: 'premium_chess', title: 'Premium Black (Ajedrez)', desc: 'Diseño exclusivo con piezas 3D y temática elite', icon: Sparkles, color: 'from-[#140633] via-[#865BFF] to-[#07020f]' },
 ];
 
 export default function LandingTypeform() {

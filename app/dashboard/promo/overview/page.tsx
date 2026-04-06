@@ -83,6 +83,17 @@ const PROMO_LANDINGS = [
         gradient: 'linear-gradient(135deg,#1a0010,#4a0030,#f43f5e)',
         accentColor: '#f43f5e',
     },
+    {
+        id: 'premium_chess',
+        title: 'Premium Black — Ajedrez',
+        desc: 'Diseño exclusivo con piezas 3D y temática elite para captación VIP.',
+        type: 'premium_chess',
+        category: 'top',
+        badge: 'Exclusivo',
+        badgeColor: '#07020f',
+        gradient: 'linear-gradient(135deg,#07020f,#140633,#865BFF)',
+        accentColor: '#865BFF',
+    },
 ];
 
 // ─── Idiomas disponibles ─────────────────────────────────────
@@ -92,6 +103,7 @@ const LANGUAGES = [
     { code: 'BR', flag: '🇧🇷', label: 'Português' },
     { code: 'FR', flag: '🇫🇷', label: 'Français' },
     { code: 'AR', flag: '🇸🇦', label: 'العربية', rtl: true },
+    { code: 'JP', flag: '🇯🇵', label: '日本語' },
     { code: 'ZH', flag: '🇨🇳', label: '中文 (简体)' },
     { code: 'ID', flag: '🇮🇩', label: 'Bahasa Indonesia' },
     { code: 'VI', flag: '🇻🇳', label: 'Tiếng Việt' },
@@ -133,7 +145,7 @@ export default function PromoMaterialsPage() {
 
     const buildLandingData = (landing: typeof PROMO_LANDINGS[0], langCode: string): LandingData => ({
         fullName: 'Bridge Markets Partner',
-        country: langCode === 'BR' ? 'Brasil' : langCode === 'GB' ? 'Global' : langCode === 'AR' ? 'Arabia' : langCode === 'ZH' ? 'China' : langCode === 'ID' ? 'Indonesia' : langCode === 'VI' ? 'Vietnam' : langCode === 'FR' ? 'Francia' : 'España',
+        country: langCode === 'BR' ? 'Brasil' : langCode === 'GB' ? 'Global' : langCode === 'AR' ? 'Arabia' : langCode === 'JP' ? 'Japón' : langCode === 'ZH' ? 'China' : langCode === 'ID' ? 'Indonesia' : langCode === 'VI' ? 'Vietnam' : langCode === 'FR' ? 'Francia' : 'España',
         language: langCode,
         whatsapp: '',
         email: 'partner@bridgemarkets.com',

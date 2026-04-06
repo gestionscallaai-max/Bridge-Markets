@@ -23,6 +23,12 @@ const TRANSLATIONS: Record<string, {
     testTitle: string; testimonials: { name: string; country: string; text: string }[];
     formTitle: string; formSub: string; fields: string[]; submit: string;
     footerText: string; disclaimer: string;
+    chessTitle: string; chessSubtitle: string;
+    chessBenefits: { icon: string; title: string }[];
+    chessSteps: { title: string; steps: string[] };
+    chessAccounts: { title: string; desc: string; img: string }[];
+    chessPromo: { title: string; cta: string; img: string };
+    chessFooter: { title: string; img: string; text: string[] };
 }> = {
     ES: {
         heroTitle: 'Opera en los', heroHighlight: 'Mercados Globales', heroSub: 'Accede a Forex, Acciones, Criptomonedas e Índices con spreads ultra competitivos y ejecución institucional en milisegundos.',
@@ -30,12 +36,10 @@ const TRANSLATIONS: Record<string, {
         statsLabel: ['Traders Activos', 'Países', 'Volumen Diario', 'Clasificación'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
         featTitle: 'Por qué Bridge Markets',
         features: [
-            { icon: '⚡', title: 'Ejecución Ultra Rápida', desc: 'Servidores colocados en Equinix NY4 y LD4 para ejecución en < 1ms en los pares más líquidos.' },
-            { icon: '📉', title: 'Spreads desde 0.0 pips', desc: 'Los spreads más ajustados del mercado en más de 100 instrumentos de divisas, índices y materias primas.' },
-            { icon: '🛡️', title: 'Regulación Internacional', desc: 'Operamos bajo estrictos marcos regulatorios internacionales. Tu capital protegido y segregado.' },
-            { icon: '📊', title: '100+ Instrumentos', desc: 'Forex, Acciones globales, Criptomonedas, Índices Bursátiles, Materias Primas y más en una sola cuenta.' },
-            { icon: '🤝', title: 'Soporte 24/5', desc: 'Equipo de soporte multilingüe disponible 24 horas, 5 días a la semana por chat, email y teléfono.' },
-            { icon: '💳', title: 'Depósitos Fáciles', desc: 'Acepta depósitos desde $100 USD por transferencia bancaria, tarjeta, criptomoneda y más métodos locales.' },
+            { icon: '🎯', title: 'Ejecución Ultra Rápida', desc: 'Servidores Equinix NY4 y LD4 para ejecución en < 1ms.' },
+            { icon: '📢', title: 'Para herramientas de marketing de impacto', desc: 'Toda la tecnología necesaria para atraer y captar clientes.' },
+            { icon: '📝', title: 'Soporte 24/5 confiable', desc: 'Soporte técnico y comercial especializado en su idioma las 24 horas.' },
+            { icon: '📊', title: 'Total visibilidad', desc: 'Controle detalladamente sus procesos internos y métricas de desempeño en tiempo real.' },
         ],
         stepsTitle: 'Empieza en 3 pasos',
         steps: ['Crea tu cuenta en minutos, sin papeleos', 'Deposita desde $100 USD con tu método preferido', 'Opera Forex, Criptos, Índices y más mercados globales'],
@@ -50,6 +54,43 @@ const TRANSLATIONS: Record<string, {
         submit: 'Comenzar Ahora →',
         footerText: 'Página gestionada por el partner comercial autorizado de Bridge Markets',
         disclaimer: 'El trading de CFDs implica un alto riesgo de pérdida. Más del 70% de los inversores minoristas pierden dinero. Asegúrese de comprender los riesgos antes de invertir.',
+        chessTitle: '¡Empieza a copiar Traders ahora!',
+        chessSubtitle: 'A través del cual usted no solo tiene acceso a una amplia gama de instrumentos sino también a las mejores herramientas del mercado financiero y el más alto nivel de seguridad para su inversión.',
+        chessBenefits: [
+            { icon: '🛡️', title: 'Ventaja en el mercado' },
+            { icon: '📈', title: 'Rentabilidad' },
+            { icon: '🏆', title: 'Gane de operar en los mercados' }
+        ],
+        chessSteps: {
+            title: '¿Cómo acceder al Social Trading?',
+            steps: [
+                'Seleccione su cuenta de trading social.',
+                'Elija de la lista los Traders a seguir conforme a su rendimiento.',
+                'Ingrese el monto que desea dedicar al trading.',
+                'Espere el trading de los operadores y reciba beneficios directos.',
+                'Control de capital: Retire fondos cuando desee.'
+            ]
+        },
+        chessAccounts: [
+            { title: 'Cuentas Apalancadas', desc: 'Permite al trader operar con más fondos de los que tiene, aumentando su poder de compra y ganancias potenciales.', img: '/images/landing/knight.png' },
+            { title: 'Cuentas PAMM', desc: 'Nuestra cuenta gestionada permite a los traders profesionales gestionar múltiples cuentas de inversores simultáneamente.', img: '/images/landing/pawns.png' },
+            { title: 'Cuentas MAM', desc: 'Permite a los gestores de activos y fondos financieros asignar operaciones entre una cantidad ilimitada de cuentas.', img: '/images/landing/king.png' },
+            { title: 'Cuenta Leverage', desc: 'Acceso a niveles superiores de apalancamiento institucional con ejecución directa al mercado.', img: '/images/landing/queen.png' },
+            { title: 'Cuenta ECN', desc: 'Ejecución transparente y directa con los principales proveedores de liquidez global sin mesa de dinero.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: {
+            title: 'Activa tu cuenta, expande tu universo financiero',
+            cta: 'ABRIR TU CUENTA DE TRADING',
+            img: '/images/landing/hourglass.png'
+        },
+        chessFooter: {
+            title: 'Conecta clientes con Brokers y gana comisiones',
+            img: '/images/landing/hourglass.png',
+            text: [
+                'Como broker de Bridge Markets, tienes acceso a una red de contactos y socios estratégicos que te ayudan a expandir tu negocio y maximizar tus ingresos por comisiones.',
+                'El modelo de gestión de activos que ofrecemos permite recibir comisiones diarias sobre el volumen de operaciones de tus clientes referidos, con total transparencia y liquidación instantánea.'
+            ]
+        }
     },
     GB: {
         heroTitle: 'Trade the', heroHighlight: 'Global Markets', heroSub: 'Access Forex, Stocks, Crypto and Indices with ultra-competitive spreads and institutional execution in milliseconds.',
@@ -77,6 +118,43 @@ const TRANSLATIONS: Record<string, {
         submit: 'Get Started →',
         footerText: 'Page managed by authorized commercial partner of Bridge Markets',
         disclaimer: 'CFD trading involves a high risk of loss. Over 70% of retail investors lose money. Make sure you understand the risks before investing.',
+        chessTitle: 'Start copying Traders now!',
+        chessSubtitle: 'Through which you not only have access to a wide range of instruments but also to the best financial market tools and the highest level of security for your investment.',
+        chessBenefits: [
+            { icon: '🛡️', title: 'Market Advantage' },
+            { icon: '📈', title: 'Profitability' },
+            { icon: '🏆', title: 'Earn from market trading' }
+        ],
+        chessSteps: {
+            title: 'How to access Social Trading?',
+            steps: [
+                'Select your social trading account.',
+                'Choose Traders to follow based on their performance.',
+                'Enter the amount you wish to dedicate to trading.',
+                'Wait for the operators\' trading and receive direct benefits.',
+                'Total control to withdraw funds whenever you want.'
+            ]
+        },
+        chessAccounts: [
+            { title: 'Leveraged Accounts', desc: 'Allows the trader to operate with more funds than they have, increasing buying power and potential profits.', img: '/images/landing/knight.png' },
+            { title: 'PAMM Accounts', desc: 'Our managed account allows professional traders to manage multiple investor accounts simultaneously.', img: '/images/landing/pawns.png' },
+            { title: 'MAM Accounts', desc: 'Allows asset and fund managers to allocate trades among an unlimited number of accounts.', img: '/images/landing/king.png' },
+            { title: 'Leverage Account', desc: 'Access to superior levels of institutional leverage with direct market execution.', img: '/images/landing/queen.png' },
+            { title: 'ECN Account', desc: 'Transparent and direct execution with major global liquidity providers without a dealing desk.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: {
+            title: 'Activate your account, expand your financial universe',
+            cta: 'OPEN YOUR TRADING ACCOUNT',
+            img: '/images/landing/hourglass.png'
+        },
+        chessFooter: {
+            title: 'Connect clients with Brokers and earn commissions',
+            img: '/images/landing/hourglass.png',
+            text: [
+                'As a Bridge Markets broker, you have access to a network of contacts and strategic partners that help you expand your business and maximize your commission income.',
+                'The asset management model we offer allows you to receive daily commissions on the trading volume of your referred clients, with total transparency and instant settlement.'
+            ]
+        }
     },
     BR: {
         heroTitle: 'Opere nos', heroHighlight: 'Mercados Globais', heroSub: 'Acesse Forex, Ações, Criptomoedas e Índices com spreads ultra competitivos e execução institucional em milissegundos.',
@@ -104,6 +182,19 @@ const TRANSLATIONS: Record<string, {
         submit: 'Começar Agora →',
         footerText: 'Página gerenciada pelo parceiro comercial autorizado da Bridge Markets',
         disclaimer: 'O trading de CFDs envolve alto risco de perda. Mais de 70% dos investidores de varejo perdem dinheiro.',
+        chessTitle: 'Comece a copiar Traders agora!',
+        chessSubtitle: 'Através do qual você não apenas tem acesso a uma ampla gama de instrumentos, mas também às melhores ferramentas do mercado financeiro.',
+        chessBenefits: [ { icon: '🛡️', title: 'Vantagem no mercado' }, { icon: '📈', title: 'Rentabilidade' }, { icon: '🏆', title: 'Ganhe operando nos mercados' } ],
+        chessSteps: { title: 'Como acessar o Social Trading?', steps: [ 'Selecione sua conta de trading social.', 'Escolha os Traders para seguir.', 'Insira o valor que deseja dedicar.', 'Receba benefícios diretos.', 'Controle total para retirar fundos.' ] },
+        chessAccounts: [
+            { title: 'Contas Alavancadas', desc: 'Permite ao trader operar com mais fundos do que possui.', img: '/images/landing/knight.png' },
+            { title: 'Contas PAMM', desc: 'Gestão de múltiplas contas de investidores.', img: '/images/landing/pawns.png' },
+            { title: 'Contas MAM', desc: 'Alocação de operações para gestores de ativos.', img: '/images/landing/king.png' },
+            { title: 'Conta Leverage', desc: 'Níveis superiores de alavancagem institucional.', img: '/images/landing/queen.png' },
+            { title: 'Conta ECN', desc: 'Execução transparente e direta sem mesa de operações.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: 'Ative sua conta, expanda seu universo financeiro', cta: 'ABRIR SUA CONTA DE TRADING', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: 'Conecte clientes com Brokers e ganhe comissões', img: '/images/landing/hourglass.png', text: [ 'Acesso a uma rede de contatos estratégicos.', 'Receba comissões diárias sobre o volume.' ] }
     },
     FR: {
         heroTitle: 'Tradez les', heroHighlight: 'Marchés Mondiaux', heroSub: 'Accédez au Forex, Actions, Crypto et Indices avec des spreads ultra compétitifs et une exécution institutionnelle en millisecondes.',
@@ -131,6 +222,19 @@ const TRANSLATIONS: Record<string, {
         submit: 'Commencer Maintenant →',
         footerText: 'Page gérée par le partenaire commercial autorisé de Bridge Markets',
         disclaimer: 'Le trading de CFDs implique un risque élevé de perte. Plus de 70% des investisseurs particuliers perdent de l\'argent.',
+        chessTitle: 'Commencez à copier les Traders maintenant !',
+        chessSubtitle: 'Grâce auquel vous avez non seulement accès à une large gamme d\'instruments mais aussi aux meilleurs outils.',
+        chessBenefits: [ { icon: '🛡️', title: 'Avantage du marché' }, { icon: '📈', title: 'Rentabilité' }, { icon: '🏆', title: 'Gagnez en tradant' } ],
+        chessSteps: { title: 'Comment accéder au Social Trading ?', steps: [ 'Sélectionnez votre compte de trading social.', 'Choisissez les Traders à suivre.', 'Entrez le montant à dédier.', 'Recevez des bénéfices directs.', 'Retrait de fonds à tout moment.' ] },
+        chessAccounts: [
+            { title: 'Comptes à effet de levier', desc: 'Opérez avec plus de fonds que vous n\'en possédez.', img: '/images/landing/knight.png' },
+            { title: 'Comptes PAMM', desc: 'Gestion de plusieurs comptes investisseurs.', img: '/images/landing/pawns.png' },
+            { title: 'Comptes MAM', desc: 'Allocation d\'opérations pour les gestionnaires.', img: '/images/landing/king.png' },
+            { title: 'Compte Leverage', desc: 'Accès à des niveaux supérieurs de levier.', img: '/images/landing/queen.png' },
+            { title: 'Compte ECN', desc: 'Exécution transparente sans bureau de négociation.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: 'Activez votre compte, élargissez votre univers financier', cta: 'OUVRIR VOTRE COMPTE', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: 'Connectez des clients aux courtiers et gagnez des commissions', img: '/images/landing/hourglass.png', text: [ 'Accès à un réseau de partenaires stratégiques.', 'Commissions quotidiennes sur le volume.' ] }
     },
     AR: {
         heroTitle: 'تداول في', heroHighlight: 'الأسواق العالمية', heroSub: 'الوصول إلى الفوركس والأسهم والعملات المشفرة والمؤشرات بسبريدات تنافسية للغاية وتنفيذ مؤسسي في أجزاء من الثانية.',
@@ -158,6 +262,19 @@ const TRANSLATIONS: Record<string, {
         submit: 'ابدأ الآن ←',
         footerText: 'صفحة يديرها الشريك التجاري المعتمد لـ Bridge Markets',
         disclaimer: 'ينطوي تداول العقود مقابل الفروقات على مخاطر عالية بالخسارة. أكثر من 70٪ من المتداولين الأفراد يخسرون أموالهم.',
+        chessTitle: 'ابدأ بنسخ المتداولين الآن!',
+        chessSubtitle: 'الذي من خلاله لا يمكنك الوصول فقط إلى مجموعة واسعة من الأدوات ولكن أيضاً إلى أفضل أدوات السوق المالي.',
+        chessBenefits: [ { icon: '🛡️', title: 'ميزة في السوق' }, { icon: '📈', title: 'الربحية' }, { icon: '🏆', title: 'اربح من التداول' } ],
+        chessSteps: { title: 'كيفية الوصول إلى التداول الاجتماعي؟', steps: [ 'اختر حساب التداول الاجتماعي الخاص بك.', 'اختر المتداولين للمتابعة.', 'أدخل المبلغ الذي تريد تخصيصه.', 'احصل على فوائد مباشرة.', 'تحكم كامل لسحب الأموال.' ] },
+        chessAccounts: [
+            { title: 'حسابات الرافعة المالية', desc: 'تسمح للمتداول بالعمل بمبالغ أكبر.', img: '/images/landing/knight.png' },
+            { title: 'حسابات PAMM', desc: 'إدارة حسابات مستثمرين متعددة.', img: '/images/landing/pawns.png' },
+            { title: 'حسابات MAM', desc: 'توزيع العمليات لمديري الأصول.', img: '/images/landing/king.png' },
+            { title: 'حساب Leverage', desc: 'مستويات أعلى من الرافعة المؤسسية.', img: '/images/landing/queen.png' },
+            { title: 'حساب ECN', desc: 'تنفيذ شفاف ومباشر بدون مكتب تداول.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: 'نشط حسابك، وسع آفاقك المالية', cta: 'افتح حساب تداولك', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: 'اربط العملاء بالوسطاء واربح عمولات', img: '/images/landing/hourglass.png', text: [ 'الوصول إلى شبكة من الشركاء الاستراتيجيين.', 'احصل على عمولات يومية على الحجم.' ] }
     },
     ZH: {
         heroTitle: '交易全球', heroHighlight: '金融市场', heroSub: '以超低点差和毫秒级机构执行速度，访问外汇、股票、加密货币和指数市场。',
@@ -185,6 +302,19 @@ const TRANSLATIONS: Record<string, {
         submit: '立即开始 →',
         footerText: '此页面由 Bridge Markets 授权合作伙伴管理',
         disclaimer: '差价合约交易存在高度亏损风险。超过 70% 的散户投资者会蒙受损失。',
+        chessTitle: '立即开始复制交易者！',
+        chessSubtitle: '通过它，您不仅可以访问广泛的工具，还可以访问最佳金融市场工具。',
+        chessBenefits: [ { icon: '🛡️', title: '市场优势' }, { icon: '📈', title: '盈利能力' }, { icon: '🏆', title: '从市场交易中获利' } ],
+        chessSteps: { title: '如何访问社交交易？', steps: [ '选择您的社交交易账户。', '选择要关注的交易者。', '输入交易金额。', '获得直接利益。', '随时提取资金。' ] },
+        chessAccounts: [
+            { title: '杠杆账户', desc: '允许交易者使用更多资金。', img: '/images/landing/knight.png' },
+            { title: 'PAMM 账户', desc: '管理多个投资者账户。', img: '/images/landing/pawns.png' },
+            { title: 'MAM 账户', desc: '为资产管理分配交易。', img: '/images/landing/king.png' },
+            { title: '杠杆账户', desc: '获得更高级级的机构杠杆。', img: '/images/landing/queen.png' },
+            { title: 'ECN 账户', desc: '透明直接执行，无交易台。', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: '激活您的账户，扩展您的金融世界', cta: '开设交易账户', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: '连接客户与经纪人并赚取佣金', img: '/images/landing/hourglass.png', text: [ '访问战略合作伙伴网络。', '按交易量赚取每日佣金。' ] }
     },
     ID: {
         heroTitle: 'Trading di', heroHighlight: 'Pasar Global', heroSub: 'Akses Forex, Saham, Kripto, dan Indeks dengan spread ultra kompetitif dan eksekusi institusional dalam milidetik.',
@@ -212,6 +342,19 @@ const TRANSLATIONS: Record<string, {
         submit: 'Mulai Sekarang →',
         footerText: 'Halaman dikelola oleh mitra komersial resmi Bridge Markets',
         disclaimer: 'Trading CFD melibatkan risiko kerugian yang tinggi. Lebih dari 70% investor ritel kehilangan uang.',
+        chessTitle: 'Mulai menyalin Trader ahora!',
+        chessSubtitle: 'Melalui mana Anda tidak hanya memiliki akses ke berbagai instrumen tetapi juga alat pasar keuangan terbaik.',
+        chessBenefits: [ { icon: '🛡️', title: 'Keuntungan Pasar' }, { icon: '📈', title: 'Profitabilitas' }, { icon: '🏆', title: 'Dapatkan dari trading' } ],
+        chessSteps: { title: 'Cara mengakses Social Trading?', steps: [ 'Pilih akun social trading Anda.', 'Pilih Trader untuk diikuti.', 'Masukkan jumlah trading.', 'Terima manfaat langsung.', 'Tarik dana kapan saja.' ] },
+        chessAccounts: [
+            { title: 'Akun Leverage', desc: 'Operasikan dengan dana lebih besar.', img: '/images/landing/knight.png' },
+            { title: 'Akun PAMM', desc: 'Kelola banyak akun investor.', img: '/images/landing/pawns.png' },
+            { title: 'Akun MAM', desc: 'Alokasi trading bagi manajer aset.', img: '/images/landing/king.png' },
+            { title: 'Akun Leverage', desc: 'Akses tingkat leverage institusional.', img: '/images/landing/queen.png' },
+            { title: 'Akun ECN', desc: 'Eksekusi transparan tanpa dealing desk.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: 'Aktifkan akun, perluas semesta finansial Anda', cta: 'BUKA AKUN TRADING', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: 'Hubungkan klien dengan Broker dan dapatkan komisi', img: '/images/landing/hourglass.png', text: [ 'Akses ke jaringan mitra strategis.', 'Dapatkan komisi harian dari volume.' ] }
     },
     VI: {
         heroTitle: 'Giao dịch trên', heroHighlight: 'Thị Trường Toàn Cầu', heroSub: 'Tiếp cận Forex, Cổ phiếu, Tiền điện tử và Chỉ số với spread siêu cạnh tranh và khớp lệnh tổ chức trong vài mili giây.',
@@ -239,6 +382,48 @@ const TRANSLATIONS: Record<string, {
         submit: 'Bắt Đầu Ngay →',
         footerText: 'Trang được quản lý bởi đối tác thương mại được ủy quyền của Bridge Markets',
         disclaimer: 'Giao dịch CFD liên quan đến rủi ro thua lỗ cao. Hơn 70% nhà đầu tư bán lẻ mất tiền.',
+        chessTitle: 'Bắt đầu sao chép Trader ngay!',
+        chessSubtitle: 'Qua đó bạn không chỉ tiếp cận nhiều công cụ mà còn có các công cụ thị trường tài chính tốt nhất.',
+        chessBenefits: [ { icon: '🛡️', title: 'Lợi thế thị trường' }, { icon: '📈', title: 'Lợi nhuận' }, { icon: '🏆', title: 'Kiếm tiền từ giao dịch' } ],
+        chessSteps: { title: 'Làm sao để truy cập Social Trading?', steps: [ 'Chọn tài khoản social trading.', 'Chọn Trader để theo dõi.', 'Nhập số tiền muốn đầu tư.', 'Nhận lợi nhuận trực tiếp.', 'Rút tiền bất cứ lúc nào.' ] },
+        chessAccounts: [
+            { title: 'Tài khoản Đòn bẩy', desc: 'Giao dịch với số vốn lớn hơn.', img: '/images/landing/knight.png' },
+            { title: 'Tài khoản PAMM', desc: 'Quản lý nhiều tài khoản nhà đầu tư.', img: '/images/landing/pawns.png' },
+            { title: 'Tài khoản MAM', desc: 'Phân bổ giao dịch cho người quản lý.', img: '/images/landing/king.png' },
+            { title: 'Tài khoản Leverage', desc: 'Tiếp cận đòn bẩy tổ chức.', img: '/images/landing/queen.png' },
+            { title: 'Tài khoản ECN', desc: 'Khớp lệnh minh bạch, trực tiếp.', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: 'Kích hoạt tài khoản, mở rộng vũ trụ tài chính', cta: 'MỞ TÀI KHOẢN GIAO DỊCH', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: 'Kết nối khách hàng với Broker và kiếm hoa hồng', img: '/images/landing/hourglass.png', text: [ 'Tiếp cận mạng lưới đối tác chiến lược.', 'Nhận hoa hồng hàng ngày trên khối lượng.' ] }
+    },
+    JP: {
+        heroTitle: '世界市場で', heroHighlight: 'トレードする', heroSub: '超低スプレッドとミリ秒単位の機関投資家レベルの約定で、FX、株式、仮想通貨、インデックスにアクセス。',
+        cta: 'リアル口座開設', ctaSec: 'デモを試す',
+        statsLabel: ['アクティブトレーダー', '国', '日次ボリューム', 'ランキング'], statsVal: ['500K+', '170+', '$2.5B+', '#1'],
+        featTitle: 'Bridge Markets を選ぶ理由',
+        features: [ { icon: '⚡', title: '超高速約定', desc: 'Equinix NY4 および LD4 サーバーで 1ms 未満の約定。' }, { icon: '📉', title: 'スプレッド 0.0 ピップ〜', desc: 'FX、インデックス、コモディティのタイトなスプレッド。' }, { icon: '🛡️', title: '国際規制', desc: '厳格な国際規制枠組みの下で運営。' }, { icon: '📊', title: '100+ 銘柄', desc: '1つのアカウントでFX、個別株、仮想通貨などを取引。' }, { icon: '🤝', title: '24/5 サポート', desc: 'チャット、メール、電話による多言語サポート。' }, { icon: '💳', title: '簡単な入金', desc: '銀行振込、カード、仮想通貨などで100ドルから。' } ],
+        stepsTitle: '3ステップで開始',
+        steps: ['数分でアカウント作成', 'お好みの方法で100ドル以上入金', 'FX、仮想通貨、インデックスをトレード'],
+        testTitle: 'トレーダーの声',
+        testimonials: [ { name: '健太', country: '🇯🇵 日本', text: 'スキャルピングに最適なスプレッド。' }, { name: '美香', country: '🇯🇵 日本', text: '安定したプラットフォーム。' }, { name: '浩司', country: '🇯🇵 日本', text: 'RAW口座は完璧。' } ],
+        formTitle: '今すぐ始めますか？', formSub: '詳細を入力してください。',
+        fields: ['氏名', 'メールアドレス', '電話番号'],
+        submit: '今すぐ開始 →',
+        footerText: 'Bridge Markets公認パートナーによる管理ページ',
+        disclaimer: 'CFD取引には高いリスクが伴います。',
+        chessTitle: '今すぐトレーダーのコピーを開始！',
+        chessSubtitle: '幅広い銘柄だけでなく、最高レベルのセキュリティにもアクセス可能。',
+        chessBenefits: [ { icon: '🛡️', title: '市場の優位性' }, { icon: '📈', title: '収益性' }, { icon: '🏆', title: '市場トレードで稼ぐ' } ],
+        chessSteps: { title: 'ソーシャルトレードへのアクセス方法は？', steps: [ 'ソーシャルトレード口座を選択。', 'トレーダーを選択。', '金額を入力。', '利益を受け取る。', 'いつでも出金可能。' ] },
+        chessAccounts: [
+            { title: 'レバレッジ口座', desc: 'より大きな資金で運用。', img: '/images/landing/knight.png' },
+            { title: 'PAMM 口座', desc: '複数投資家を管理。', img: '/images/landing/pawns.png' },
+            { title: 'MAM 口座', desc: 'マネージャー向け取引配分。', img: '/images/landing/king.png' },
+            { title: 'レバレッジ口座', desc: '機関レベルのレバレッジ。', img: '/images/landing/queen.png' },
+            { title: 'ECN 口座', desc: '透明性の高い直接約定。', img: '/images/landing/knight.png' }
+        ],
+        chessPromo: { title: '口座を有効化し、金融の世界を広げましょう', cta: 'トレード口座を開設', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: '顧客とブローカーをつなぎ、報酬を獲得', img: '/images/landing/hourglass.png', text: [ '戦略的パートナーネットワーク。', 'ボリュームに応じて毎日報酬。' ] }
     },
 };
 
@@ -289,6 +474,12 @@ const TYPE_CONFIG: Record<string, {
         accentHex: '#f43f5e', accentRgb: '244,63,94', darkBg: '#1a0010',
         badge: '🎁 Oferta Especial', heroTag: 'Bonos y Promociones Exclusivas',
         particleColor: 'rgba(244,63,94,',
+    },
+    premium_chess: {
+        gradient: 'linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%)',
+        accentHex: '#865BFF', accentRgb: '134,91,255', darkBg: '#FFFFFF',
+        badge: '✨ Exclusivo', heroTag: 'Elite Trading Experience',
+        particleColor: 'rgba(134,91,255,',
     },
 };
 
@@ -400,6 +591,208 @@ export function generateLandingHTML(data: LandingData): string {
             <div class="stat-val" data-target="${v}">${v}</div>
             <div class="stat-label">${t.statsLabel[i]}</div>
         </div>`).join('');
+
+    // --- TEMPLATE PREMIUM CHESS ---
+    if (data.landingType === 'premium_chess') {
+        const chessBenefitsHTML = t.chessBenefits?.map(b => `
+            <div class="chess-benefit">
+                <div class="chess-benefit-icon">${b.icon}</div>
+                <div class="chess-benefit-title">${b.title}</div>
+            </div>`).join('') || '';
+
+        const chessFeaturesHTML = t.features.slice(0, 4).map(f => `
+            <div class="chess-feat-card">
+                <div class="chess-feat-icon">${f.icon}</div>
+                <div>
+                    <div class="chess-feat-title">${f.title}</div>
+                    <div class="chess-feat-desc">${f.desc}</div>
+                </div>
+            </div>`).join('') || '';
+
+        const chessStepsHTML = t.chessSteps?.steps.map((s, i) => `
+            <div class="chess-step">
+                <div class="chess-step-num">${i + 1}</div>
+                <div class="chess-step-text">${s}</div>
+            </div>`).join('') || '';
+
+        const chessAccountsHTML = t.chessAccounts?.map(a => `
+            <div class="chess-acc-card">
+                <div class="chess-acc-img">
+                    <img src="${a.img}" alt="${a.title}">
+                </div>
+                <div class="chess-acc-content">
+                    <h3 class="chess-acc-title">${a.title}</h3>
+                    <p class="chess-acc-desc">${a.desc}</p>
+                    <a href="#registro" class="chess-acc-btn">ME INTERESA</a>
+                </div>
+            </div>`).join('') || '';
+
+        return `<!DOCTYPE html>
+<html lang="${data.language.toLowerCase()}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bridge Markets | ${t.chessTitle}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">${gaScript}
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:${cfg.accentHex};--accent-rgb:${cfg.accentRgb};--dark:#140633;--bg-light:#FFFFFF;--bg-gray:#F8F9FA}
+body{font-family:'Inter',sans-serif;background:var(--bg-light);color:#1a1a1a;overflow-x:hidden;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+
+/* HERO / HEADER */
+.chess-hero{padding:60px 24px;text-align:center;max-width:1200px;margin:0 auto}
+.chess-hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;margin-bottom:16px;color:#1a1a1a;letter-spacing:-0.03em}
+.chess-hero h1 span{color:var(--accent)}
+.chess-hero p{font-size:1.1rem;color:#666;max-width:800px;margin:0 auto 48px;line-height:1.6}
+.chess-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:60px}
+.chess-benefit{background:white;border:1px solid #eee;padding:24px;border-radius:20px;display:flex;align-items:center;gap:16px;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,0.05);transition:transform 0.3s}
+.chess-benefit:hover{transform:translateY(-5px)}
+.chess-benefit-icon{width:48px;height:48px;border-radius:12px;background:rgba(var(--accent-rgb),0.1);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--accent)}
+.chess-benefit-title{font-weight:700;font-size:14px;color:#333}
+
+/* SOCIAL TRADING SECTION */
+.chess-steps-section{background:var(--dark);padding:100px 24px;overflow:hidden;position:relative}
+.chess-steps-container{max-width:1200px;margin:0 auto;display:flex;gap:40px;align-items:center;background:rgba(255,255,255,0.02);border-radius:40px;border:1px solid rgba(255,255,255,0.05);overflow:hidden;position:relative}
+.chess-steps-container::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 40px);z-index:0}
+.chess-steps-left{flex:1;padding:80px;position:relative;z-index:1;background:linear-gradient(135deg, rgba(var(--accent-rgb),0.2) 0%, transparent 100%)}
+.chess-steps-left h2{font-size:3.5rem;font-weight:900;color:white;line-height:1.1;letter-spacing:-0.03em}
+.chess-steps-right{flex:1.2;padding:80px;position:relative;z-index:1}
+.chess-step{display:flex;gap:20px;margin-bottom:20px;background:rgba(255,255,255,0.05);padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);transition:0.3s}
+.chess-step:hover{background:rgba(255,255,255,0.1)}
+.chess-step-num{width:44px;height:44px;border-radius:50%;background:white;color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0}
+.chess-step-text{color:white;font-weight:600;font-size:1.05rem;line-height:1.4}
+
+/* ACCOUNTS */
+.chess-accounts{padding:100px 24px;max-width:1200px;margin:0 auto}
+.chess-acc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
+.chess-acc-grid-v2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.chess-acc-card{background:#000;border-radius:32px;overflow:hidden;transition:transform 0.4s;border:1px solid #222}
+.chess-acc-card:hover{transform:translateY(-10px);border-color:var(--accent)}
+.chess-acc-img{height:300px;display:flex;align-items:center;justify-content:center;padding:40px}
+.chess-acc-img img{max-height:100%;max-width:100%;object-fit:contain;animation:floating 4s ease-in-out infinite}
+.chess-acc-content{padding:0 40px 40px;text-align:left}
+.chess-acc-title{font-size:1.6rem;font-weight:800;color:white;margin-bottom:12px}
+.chess-acc-desc{font-size:13px;color:#999;margin-bottom:30px;line-height:1.6;height:65px;overflow:hidden}
+.chess-acc-btn{display:block;width:100%;padding:18px;background:var(--accent);color:white;text-decoration:none;font-weight:900;border-radius:16px;text-align:center;font-size:14px;letter-spacing:1px;transition:0.3s}
+.chess-acc-btn:hover{background:#7040ff;box-shadow:0 10px 25px rgba(var(--accent-rgb),0.4)}
+
+/* FEATURES SECTION */
+.chess-features-section{background:var(--bg-gray);padding:100px 24px;text-align:center}
+.chess-features-section h2{font-size:3rem;font-weight:900;margin-bottom:60px;color:#333}
+.chess-features-section h2 span{color:var(--accent)}
+.chess-feat-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.chess-feat-card{background:white;padding:32px;border-radius:24px;display:flex;align-items:center;gap:20px;text-align:left;border:1px solid #eee}
+.chess-feat-icon{width:56px;height:56px;border-radius:16px;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:28px;color:white;flex-shrink:0}
+.chess-feat-title{font-weight:800;font-size:16px;color:#333;margin-bottom:4px}
+.chess-feat-desc{font-size:13px;color:#777;line-height:1.5}
+
+/* PROMO BANNER */
+.chess-promo{margin:60px 24px;background:var(--accent);padding:80px;border-radius:40px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden}
+.chess-promo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 30px);z-index:0}
+.chess-promo-content{max-width:600px;position:relative;z-index:1}
+.chess-promo-title{font-size:2.8rem;font-weight:900;color:white;margin-bottom:32px;line-height:1.1}
+.chess-promo-btn{display:inline-block;padding:20px 48px;background:white;color:var(--accent);text-decoration:none;font-weight:900;border-radius:12px;font-size:14px;transition:0.3s}
+.chess-promo-btn:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(0,0,0,0.2)}
+
+/* COMMISSION SECTION */
+.chess-comm-section{padding:100px 24px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:80px}
+.chess-comm-content{flex:1}
+.chess-comm-title{font-size:3rem;font-weight:900;margin-bottom:32px;color:var(--dark);line-height:1.1}
+.chess-comm-title span{color:var(--accent)}
+.chess-comm-text{font-size:1.1rem;color:#666;line-height:1.7;margin-bottom:24px}
+.chess-comm-img{flex:0.8;text-align:right}
+.chess-comm-img img{height:450px;animation:floating 5s ease-in-out infinite alternate}
+
+/* FORM OVERLAY */
+.form-section{background:var(--bg-gray);padding:100px 24px;border-top:1px solid #eee}
+.form-inner{max-width:500px;margin:0 auto;text-align:center}
+.form-inner h2{font-size:2.5rem;font-weight:900;margin-bottom:48px}
+.lead-form{background:white;padding:40px;border-radius:30px;box-shadow:0 30px 60px rgba(0,0,0,0.1);border:1px solid #eee}
+.form-group{margin-bottom:20px;text-align:left}
+.form-label{display:block;font-size:12px;font-weight:800;color:#999;text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
+.form-input{width:100%;background:#fcfcfc;border:1px solid #ddd;padding:16px;border-radius:12px;font-family:inherit;outline:none;transition:0.3s}
+.form-input:focus{border-color:var(--accent);background:white}
+.form-submit{width:100%;padding:18px;background:var(--accent);border:none;border-radius:12px;color:white;font-weight:900;cursor:pointer;transition:0.3s;font-size:16px}
+.form-submit:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(var(--accent-rgb),0.3)}
+.form-message{padding:15px;border-radius:12px;margin-top:20px;display:none;font-weight:700}
+.form-message.success{display:block;background:#ecfdf5;color:#10b981}
+.form-message.error{display:block;background:#fef2f2;color:#ef4444}
+
+@keyframes floating{0%{transform:translateY(0)}50%{transform:translateY(-15px)}100%{transform:translateY(0)}}
+
+@media (max-width: 968px) {
+    .chess-benefits, .chess-steps-container, .chess-acc-grid, .chess-acc-grid-v2, .chess-feat-grid, .chess-promo, .chess-comm-section { grid-template-columns: 1fr; flex-direction: column; padding: 40px 20px; text-align: center; }
+    .chess-steps-left, .chess-steps-right, .chess-promo{padding:40px 24px}
+    .chess-comm-img img{height:300px}
+}
+</style>
+</head>
+<body>
+    <section class="chess-hero">
+        <h1>¡Empieza a copiar <span>Traders</span> ahora!</h1>
+        <p>${t.chessSubtitle}</p>
+        <div class="chess-benefits">${chessBenefitsHTML}</div>
+    </section>
+
+    <section class="chess-steps-section">
+        <div class="chess-steps-container">
+            <div class="chess-steps-left">
+                <h2>¿Cómo acceder al Social Trading?</h2>
+            </div>
+            <div class="chess-steps-right">
+                ${chessStepsHTML}
+            </div>
+        </div>
+    </section>
+
+    <section class="chess-accounts">
+        <div class="chess-acc-grid">${chessAccountsHTML.split('</div>').slice(0,3).join('</div>') + '</div>'}</div>
+        <div class="chess-acc-grid-v2">${chessAccountsHTML.split('</div>').slice(3,5).join('</div>') + '</div>'}</div>
+    </section>
+
+    <section class="chess-features-section">
+        <h2>¿Por qué <span>Bridge Markets?</span></h2>
+        <div class="chess-feat-grid">
+            ${chessFeaturesHTML}
+        </div>
+    </section>
+
+    <section class="chess-promo">
+        <div class="chess-promo-content">
+            <h2 class="chess-promo-title">Activa tu cuenta, expande tu universo financiero</h2>
+            <a href="#registro" class="chess-promo-btn">${t.chessPromo.cta}</a>
+        </div>
+    </section>
+
+    <section class="chess-comm-section">
+        <div class="chess-comm-content">
+            <h2 class="chess-comm-title">Conecta clientes con Brokers y <span>gana comisiones</span></h2>
+            ${t.chessFooter.text.map(tx => `<p class="chess-comm-text">${tx}</p>`).join('')}
+        </div>
+        <div class="chess-comm-img"><img src="${t.chessFooter.img}" alt=""></div>
+    </section>
+
+    <section class="form-section" id="registro">
+        <div class="form-inner">
+            <h2>${t.formTitle}</h2>
+            <form class="lead-form" id="leadForm">
+                <input type="hidden" id="partnerId" value="${data.partnerId}">
+                <input type="hidden" id="landingSlug" value="${data.slug}">
+                ${t.fields.map((f, i) => `
+                <div class="form-group">
+                    <label class="form-label" for="f${i}">${f}</label>
+                    <input class="form-input" id="f${i}" type="${i === 1 ? 'email' : i === 2 ? 'tel' : 'text'}" required placeholder="${f}...">
+                </div>`).join('')}
+                <button type="submit" class="form-submit" id="submitBtn">ME INTERESA</button>
+                <div id="formMessage" class="form-message"></div>
+            </form>
+        </div>
+    </section>
+
+    <script>` + formScript + `</script>
+</body>
+</html>`;
+    }
 
     return `<!DOCTYPE html>
 <html lang="${data.language.toLowerCase()}">
