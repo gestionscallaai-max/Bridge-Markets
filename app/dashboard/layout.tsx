@@ -63,14 +63,9 @@ export default function DashboardUILayout({
             children: [
                 { href: '/dashboard/reports/clients', label: 'Clientes' },
                 { href: '/dashboard/reports/accounts', label: 'Cuentas del cliente' },
-                { href: '/dashboard/reports/rewards', label: 'Historial de recompensas' },
-                { href: '/dashboard/reports/transactions', label: 'Transacciones' },
-                { href: '/dashboard/reports/pending-transactions', label: 'Transacciones pendientes de pago' },
                 { href: '/dashboard/reports/stats', label: 'Estadísticas de rendimiento' },
             ]
         },
-        { href: '/dashboard/rebates', label: 'Reembolsos', icon: Percent, isSubmenu: false },
-        { href: '/dashboard/balance', label: 'Saldo de Cuenta', icon: Wallet, isSubmenu: false },
         {
             label: 'Promo', icon: Megaphone, isSubmenu: true,
             children: [
@@ -88,12 +83,7 @@ export default function DashboardUILayout({
         if (pathname === '/dashboard/overview') return { main: 'Panel', accent: 'de Control' };
         if (pathname?.startsWith('/dashboard/reports/clients')) return { main: 'Informes /', accent: 'Clientes' };
         if (pathname?.startsWith('/dashboard/reports/accounts')) return { main: 'Informes /', accent: 'Cuentas del Cliente' };
-        if (pathname?.startsWith('/dashboard/reports/rewards')) return { main: 'Informes /', accent: 'Historial de Recompensas' };
-        if (pathname?.startsWith('/dashboard/reports/pending-transactions')) return { main: 'Informes /', accent: 'Pendientes de Pago' };
-        if (pathname?.startsWith('/dashboard/reports/transactions')) return { main: 'Informes /', accent: 'Transacciones' };
         if (pathname?.startsWith('/dashboard/reports/stats')) return { main: 'Informes /', accent: 'Estadísticas' };
-        if (pathname?.startsWith('/dashboard/rebates')) return { main: 'Mis', accent: 'Reembolsos' };
-        if (pathname?.startsWith('/dashboard/balance')) return { main: 'Saldo', accent: 'de Cuenta' };
         if (pathname?.startsWith('/dashboard/settings')) return { main: 'Configuración', accent: 'de Cuenta' };
         if (pathname?.startsWith('/dashboard/support')) return { main: 'Centro', accent: 'de Asistencia' };
         if (pathname?.startsWith('/dashboard/promo/guidelines')) return { main: 'Directrices', accent: 'Publicitarias' };

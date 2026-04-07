@@ -19,7 +19,6 @@ export default function OverviewPage() {
     const [stats, setStats] = useState({
         leads: 0,
         clicks: 0,
-        commissions: 0,
         landings: 0,
     });
 
@@ -43,11 +42,6 @@ export default function OverviewPage() {
                 const { count: cc } = await queryClicks;
                 clicksCount = cc || 0;
 
-                let queryComms = supabase.from('commissions').select('amount').eq('status', 'paid');
-                if (!isAdmin) queryComms = queryComms.eq('partner_id', user.id);
-                const { data: commsData } = await queryComms;
-                totalCommissions = commsData?.reduce((acc, curr) => acc + Number(curr.amount), 0) || 0;
-
                 let queryLandings = supabase.from('landings').select('*', { count: 'exact', head: true });
                 if (!isAdmin) queryLandings = queryLandings.eq('partner_id', user.id);
                 const { count: lndc } = await queryLandings;
@@ -57,7 +51,7 @@ export default function OverviewPage() {
                 console.error('Error fetching stats:', err);
             }
 
-            setStats({ leads: leadsCount, clicks: clicksCount, commissions: totalCommissions, landings: landingsCount });
+            setStats({ leads: leadsCount, clicks: clicksCount, landings: landingsCount });
             setLoading(false);
         }
         fetchStats();
@@ -79,14 +73,6 @@ export default function OverviewPage() {
             iconColor: 'text-blue-500',
             iconBg: 'bg-blue-50',
             accent: '#3b82f6',
-        },
-        {
-            title: isAdmin ? 'Comisiones Pagadas' : 'Mis Ganancias',
-            value: `$${stats.commissions.toLocaleString()}`,
-            icon: DollarSign,
-            iconColor: 'text-emerald-500',
-            iconBg: 'bg-emerald-50',
-            accent: '#10b981',
         },
         {
             title: isAdmin ? 'Landings de Partners' : 'Mis Landing Pages',
@@ -125,7 +111,7 @@ export default function OverviewPage() {
         },
         {
             label: 'Informes',
-            desc: 'Comisiones, volumen y estadísticas',
+            desc: 'Clics, leads y estadísticas de rendimiento',
             icon: BarChart2,
             color: '#f59e0b',
             bg: 'rgba(245,158,11,0.08)',
@@ -180,7 +166,7 @@ export default function OverviewPage() {
             </motion.div>
 
             {/* Stats en tiempo real */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {statCards.map((s, i) => {
                     const Icon = s.icon;
                     return (

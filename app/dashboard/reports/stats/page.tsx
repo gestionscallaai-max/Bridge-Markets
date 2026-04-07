@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { BarChart2, Loader2, MousePointerClick, Users, Globe, DollarSign } from 'lucide-react';
 
 export default function ReportsStatsPage() {
-    const [stats, setStats] = useState({ leads: 0, clicks: 0, landings: 0, commissions: 0 });
+    const [stats, setStats] = useState({ leads: 0, clicks: 0, landings: 0 });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -12,17 +12,15 @@ export default function ReportsStatsPage() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { setLoading(false); return; }
 
-            const [l, c, ln, cm] = await Promise.all([
+            const [l, c, ln] = await Promise.all([
                 supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
                 supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
                 supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
-                supabase.from('commissions').select('amount').eq('partner_id', user.id).eq('status', 'paid'),
             ]);
             setStats({
                 leads: l.count || 0,
                 clicks: c.count || 0,
                 landings: ln.count || 0,
-                commissions: (cm.data || []).reduce((a, v) => a + Number(v.amount), 0),
             });
             setLoading(false);
         }
@@ -33,7 +31,6 @@ export default function ReportsStatsPage() {
         { label: 'Clics Totales', value: stats.clicks, icon: MousePointerClick, color: 'text-blue-600', bg: 'bg-blue-50' },
         { label: 'Leads Registrados', value: stats.leads, icon: Users, color: 'text-purple-600', bg: 'bg-purple-50' },
         { label: 'Landing Pages Activas', value: stats.landings, icon: Globe, color: 'text-amber-600', bg: 'bg-amber-50' },
-        { label: 'Comisiones Cobradas', value: `$${stats.commissions.toFixed(2)}`, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
     ];
 
     return (
@@ -51,7 +48,7 @@ export default function ReportsStatsPage() {
             {loading ? (
                 <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-brand-500" /></div>
             ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {cards.map(card => {
                         const Icon = card.icon;
                         return (
