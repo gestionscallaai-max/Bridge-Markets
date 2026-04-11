@@ -202,12 +202,12 @@ export default function DashboardUILayout({
                 {/* Main Content */}
                 <main className="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
 
-                    {/* Topbar — Clean Enterprise */}
-                    <header className="flex items-center justify-between px-8 h-[72px] bg-white border-b border-slate-200 shrink-0 shadow-sm">
+                    {/* Topbar — Dark Premium */}
+                    <header className="flex items-center justify-between px-8 h-[72px] bg-[#140633] border-b border-white/[0.06] shrink-0 shadow-sm">
                         <div>
-                            <h1 className="text-xl font-bold tracking-tight text-slate-800">
+                            <h1 className="text-xl font-bold tracking-tight text-white">
                                 {title.main}{' '}
-                                <span className="text-brand-500 font-semibold">{title.accent}</span>
+                                <span className="text-brand-light font-semibold">{title.accent}</span>
                             </h1>
                         </div>
 
@@ -216,21 +216,21 @@ export default function DashboardUILayout({
                                 onClick={() => setIsAdmin(!isAdmin)}
                                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all border ${isAdmin
                                     ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
-                                    : 'bg-brand-50 text-brand-dark border-brand-200 hover:bg-brand-100'
+                                    : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10 hover:text-white'
                                     }`}
                             >
                                 {isAdmin ? '← Partner View' : 'Admin View'}
                             </button>
 
-                            <div className="h-6 w-px bg-slate-200"></div>
+                            <div className="h-6 w-px bg-white/10"></div>
 
-                            <div className="flex items-center bg-slate-50 rounded-lg border border-slate-200 p-0.5">
+                            <div className="flex items-center bg-white/5 rounded-lg border border-white/10 p-0.5">
                                 {['ES', 'EN', 'PT'].map((lang) => (
                                     <button
                                         key={lang}
                                         className={`px-3 py-1 text-[11px] font-semibold rounded-md transition-all ${lang === 'ES'
-                                            ? 'bg-white text-slate-800 shadow-sm border border-slate-200'
-                                            : 'text-slate-400 hover:text-slate-600'
+                                            ? 'bg-white/15 text-white shadow-sm border border-white/10'
+                                            : 'text-slate-400 hover:text-slate-200'
                                             }`}
                                     >
                                         {lang}
@@ -238,7 +238,7 @@ export default function DashboardUILayout({
                                 ))}
                             </div>
 
-                            <button className="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all">
+                            <button className="w-9 h-9 rounded-lg border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/5 transition-all">
                                 <Bell className="w-4 h-4" />
                             </button>
 

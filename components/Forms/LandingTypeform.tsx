@@ -52,8 +52,9 @@ export default function LandingTypeform() {
     const [copied, setCopied] = useState(false);
     const [deployedUrl, setDeployedUrl] = useState('');
     const [partnerId, setPartnerId] = useState('');
-    const [savedLandings, setSavedLandings] = useState<{name: string; date: string; type: string; language: string}[]>([]);
+    const [savedLandings, setSavedLandings] = useState<{name: string; date: string; type: string; language: string; slug?: string}[]>([]);
     const [baseUrl, setBaseUrl] = useState('');
+    const [copiedId, setCopiedId] = useState<number | null>(null);
 
     useEffect(() => {
         setBaseUrl(window.location.origin);
@@ -71,8 +72,8 @@ export default function LandingTypeform() {
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
     const previewUrl = formData.fullName
-        ? (baseUrl || 'https://bridge.com') + `/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
-        : 'https://bridge.com/l/tu-nombre';
+        ? (baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + `/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
+        : (baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + '/l/tu-nombre';
 
     const handleNext = () => setStep((s) => Math.min(s + 1, 3) as Step);
     const handlePrev = () => setStep((s) => Math.max(s - 1, 1) as Step);
@@ -110,7 +111,7 @@ export default function LandingTypeform() {
         }
 
         setGeneratedHtml(html);
-        setDeployedUrl((baseUrl || 'https://bridge.com') + '/l/' + slug);
+        setDeployedUrl((baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + '/l/' + slug);
         setIsGenerating(false);
         setGenerated(true);
 
@@ -124,6 +125,7 @@ export default function LandingTypeform() {
             date: new Date().toLocaleString('es-ES'),
             type: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType,
             language: formData.language,
+            slug,
         };
         const updated = [newLanding, ...savedLandings].slice(0, 10);
         setSavedLandings(updated);
@@ -466,19 +468,46 @@ export default function LandingTypeform() {
                     <div className="mt-6 bg-white rounded-xl border border-slate-200 shadow-card p-6">
                         <h4 className="text-sm font-bold text-slate-800 mb-3">Landings generadas recientemente</h4>
                         <div className="divide-y divide-slate-100">
-                            {savedLandings.map((landing, i) => (
-                                <div key={i} className="flex items-center justify-between py-2.5 text-sm">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-[#865BFF]/10 flex items-center justify-center text-xs font-bold text-[#865BFF]">
-                                            {landing.language}
+                            {savedLandings.map((landing, i) => {
+                                const itemSlug = landing.slug || landing.name.toLowerCase().replace(/\s+/g, '-');
+                                const itemLink = `${baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')}/l/${itemSlug}`;
+                                
+                                return (
+                                    <div key={i} className="flex items-center justify-between py-2.5 text-sm">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-lg bg-[#865BFF]/10 flex items-center justify-center text-xs font-bold text-[#865BFF]">
+                                                {landing.language}
+                                            </div>
+                                            <div>
+                                                <div className="font-semibold text-slate-800">{landing.name}</div>
+                                                <div className="text-xs text-slate-400">{landing.type} · {landing.date}</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div className="font-semibold text-slate-800">{landing.name}</div>
-                                            <div className="text-xs text-slate-400">{landing.type} · {landing.date}</div>
+                                        <div className="flex items-center gap-2">
+                                            <button 
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(itemLink);
+                                                    setCopiedId(i);
+                                                    setTimeout(() => setCopiedId(null), 2000);
+                                                }}
+                                                className="p-1.5 text-slate-400 hover:text-[#865BFF] hover:bg-[#865BFF]/10 rounded-md transition-colors"
+                                                title="Copiar Link"
+                                            >
+                                                {copiedId === i ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                                            </button>
+                                            <a 
+                                                href={itemLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"
+                                                title="Ver Landing"
+                                            >
+                                                <ExternalLink className="w-4 h-4" />
+                                            </a>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 )}

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, ExternalLink, Eye, X, Globe, Filter, Zap, Star, TrendingUp, ChevronDown } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Copy, Check, ExternalLink, Eye, X, Globe, Filter, Zap, Star, TrendingUp, ChevronDown, User, Layout, Download, Image as ImageIcon } from 'lucide-react';
 import { generateLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -19,7 +20,7 @@ const PROMO_LANDINGS = [
     },
     {
         id: 'forex',
-        title: 'Forex Trading — Spreads 0.0',
+        title: 'Mercados de Divisas — Spreads 0.0',
         desc: 'Enfocada en pares de divisas y ejecución ultra rápida.',
         type: 'forex',
         category: 'top',
@@ -41,7 +42,7 @@ const PROMO_LANDINGS = [
     },
     {
         id: 'propfirm',
-        title: 'Prop Firm — Fondeo Pro',
+        title: 'Prop Firm — Evaluación de Capital',
         desc: 'Para traders que buscan capital de terceros.',
         type: 'propfirm',
         category: 'new',
@@ -115,6 +116,44 @@ const TABS = [
     { id: 'all', label: 'Todas', icon: Globe },
 ];
 
+const MAIN_CATEGORIES = [
+    { id: 'landings', label: 'Landings Web Generables', icon: Globe },
+    { id: 'banners', label: 'Piezas Gráficas y Banners', icon: Layout },
+];
+
+const PROMO_BANNERS = [
+    {
+        id: 'b1', title: 'Bono 100% de Bienvenida', format: 'Post (1080x1080)',
+        url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=800',
+        category: 'Promociones'
+    },
+    {
+        id: 'b2', title: 'Trading Institucional PRO', format: 'Story (1080x1920)',
+        url: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&q=80&w=800',
+        category: 'Institucional'
+    },
+    {
+        id: 'b3', title: 'Cuentas de Evaluación', format: 'Banner Web (1920x1080)',
+        url: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&q=80&w=800',
+        category: 'Prop Firm'
+    },
+    {
+        id: 'b4', title: 'Mercados de Divisas', format: 'Post Cuadrado (1080x1080)',
+        url: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=800',
+        category: 'Divisas'
+    },
+    {
+        id: 'b5', title: 'Criptomonedas 24/7', format: 'Reel (1080x1920)',
+        url: 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?auto=format&fit=crop&q=80&w=800',
+        category: 'Cripto'
+    },
+    {
+        id: 'b6', title: 'Índices Sintéticos', format: 'Post Cuadrado (1080x1080)',
+        url: 'https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?auto=format&fit=crop&q=80&w=800',
+        category: 'Sintéticos'
+    }
+];
+
 interface ModalState {
     landing: typeof PROMO_LANDINGS[0];
     selectedLang: string;
@@ -124,7 +163,10 @@ interface ModalState {
 }
 
 export default function PromoMaterialsPage() {
+    const [mainTab, setMainTab] = useState<'landings' | 'banners'>('landings');
     const [activeTab, setActiveTab] = useState<'top' | 'new' | 'all'>('top');
+    const [bannerCategory, setBannerCategory] = useState<string>('all');
+    const [bannerLanguages, setBannerLanguages] = useState<Record<string, string>>({});
     const [modal, setModal] = useState<ModalState | null>(null);
     const [copied, setCopied] = useState<string | null>(null);
     const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -217,35 +259,58 @@ export default function PromoMaterialsPage() {
     return (
         <div className="space-y-6 pb-10">
 
-            {/* Tabs */}
-            <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 w-fit shadow-sm">
-                {TABS.map(tab => {
-                    const Icon = tab.icon;
+            {/* Main Tabs (Landings vs Banners) */}
+            <div className="flex bg-slate-100 p-1.5 rounded-xl w-fit mb-6">
+                {MAIN_CATEGORIES.map(cat => {
+                    const Icon = cat.icon;
                     return (
                         <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id as 'top' | 'new' | 'all')}
-                            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === tab.id
-                                    ? 'bg-[#865BFF] text-white shadow-md shadow-[#865BFF]/20'
-                                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
-                                }`}
+                            key={cat.id}
+                            onClick={() => setMainTab(cat.id as any)}
+                            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                                mainTab === cat.id
+                                    ? 'bg-white text-slate-800 shadow-sm border border-slate-200/50'
+                                    : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                            }`}
                         >
-                            <Icon className="w-3.5 h-3.5" />
-                            {tab.label}
+                            <Icon className={`w-4 h-4 ${mainTab === cat.id ? 'text-[#865BFF]' : 'text-slate-400'}`} />
+                            {cat.label}
                         </button>
                     );
                 })}
             </div>
 
-            {/* Idiomas rápidos info */}
-            <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-slate-400 font-medium">Idiomas disponibles:</span>
-                {LANGUAGES.map(l => (
-                    <span key={l.code} className="text-xs bg-white border border-slate-200 rounded-full px-2.5 py-1 font-medium text-slate-600 flex items-center gap-1">
-                        {l.flag} {l.label}
-                    </span>
-                ))}
-            </div>
+            {mainTab === 'landings' && (
+                <>
+                    {/* Tabs */}
+                    <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 w-fit shadow-sm">
+                        {TABS.map(tab => {
+                            const Icon = tab.icon;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id as 'top' | 'new' | 'all')}
+                                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === tab.id
+                                            ? 'bg-[#865BFF] text-white shadow-md shadow-[#865BFF]/20'
+                                            : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                                        }`}
+                                >
+                                    <Icon className="w-3.5 h-3.5" />
+                                    {tab.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Idiomas rápidos info */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs text-slate-400 font-medium">Idiomas disponibles:</span>
+                        {LANGUAGES.map(l => (
+                            <span key={l.code} className="text-xs bg-white border border-slate-200 rounded-full px-2.5 py-1 font-medium text-slate-600 flex items-center gap-1">
+                                {l.flag} {l.label}
+                            </span>
+                        ))}
+                    </div>
 
             {/* Grid de landing cards - Larger cards! */}
             <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
@@ -336,9 +401,98 @@ export default function PromoMaterialsPage() {
                     </div>
                 ))}
             </div>
+                </>
+            )}
+
+            {/* PIEZAS GRÁFICAS - BANNERS SECTION */}
+            {mainTab === 'banners' && (
+                <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                            {['all', 'Promociones', 'Institucional', 'Prop Firm', 'Divisas', 'Cripto', 'Sintéticos'].map(cat => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setBannerCategory(cat)}
+                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                                        bannerCategory === cat 
+                                            ? 'bg-slate-800 text-white' 
+                                            : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'
+                                    }`}
+                                >
+                                    {cat === 'all' ? 'Todas las Categorías' : cat}
+                                </button>
+                            ))}
+                        </div>
+                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-all">
+                            <Filter className="w-4 h-4" /> Filtros
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {PROMO_BANNERS.filter(b => bannerCategory === 'all' || b.category === bannerCategory).map((banner) => (
+                            <div key={banner.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all duration-300">
+                                <div className="aspect-[4/5] relative bg-slate-100 overflow-hidden flex items-center justify-center">
+                                    <img src={banner.url} alt={banner.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                                        <button 
+                                            onClick={() => {
+                                                const lang = bannerLanguages[banner.id] || 'ES';
+                                                console.log(`Iniciando descarga: ${banner.url}?lang=${lang}`);
+                                                handleCopy(`${banner.url}?lang=${lang}`, banner.id);
+                                                // Simulación visual en vez de descarga real
+                                                alert(`Descargando ${banner.title} en el idioma seleccionado: ${lang}`);
+                                            }}
+                                            className="w-full flex items-center justify-center gap-2 bg-[#865BFF] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#6b3fd6] transition-colors shadow-lg"
+                                        >
+                                            {copied === banner.id ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
+                                            {copied === banner.id ? 'Descargado' : 'Descargar Alta Calidad'}
+                                        </button>
+                                    </div>
+                                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 text-white text-[10px] font-bold rounded-md tracking-wider border border-white/20">
+                                        {banner.category}
+                                    </div>
+                                </div>
+                                <div className="p-4">
+                                    <h3 className="font-bold text-slate-800 mb-2 truncate" title={banner.title}>{banner.title}</h3>
+                                    <div className="flex items-center justify-between mb-3">
+                                        <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">{banner.format}</span>
+                                        <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
+                                            <ImageIcon className="w-3 h-3" /> HD
+                                        </span>
+                                    </div>
+                                    <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5 w-full">
+                                            <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                            <select
+                                                value={bannerLanguages[banner.id] || 'ES'}
+                                                onChange={(e) => setBannerLanguages(prev => ({ ...prev, [banner.id]: e.target.value }))}
+                                                className="w-full text-xs font-bold text-slate-700 bg-transparent border-none appearance-none outline-none cursor-pointer hover:text-[#865BFF] transition-colors"
+                                            >
+                                                {LANGUAGES.map(l => (
+                                                    <option key={l.code} value={l.code}>{l.flag} {l.label} ({l.code})</option>
+                                                ))}
+                                            </select>
+                                            <ChevronDown className="w-3 h-3 text-slate-400 shrink-0 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {/* Placeholder when filtered but none match */}
+                    {PROMO_BANNERS.filter(b => bannerCategory === 'all' || b.category === bannerCategory).length === 0 && (
+                        <div className="py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
+                            <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                            <h3 className="text-slate-600 font-bold mb-1">No hay piezas en esta categoría</h3>
+                            <p className="text-slate-400 text-sm">Estamos agregando material publicitario. Vuelve pronto.</p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* ─── Modal "Obtener link" con selector de idioma ─── */}
-            {modal && (
+            {modal && typeof document !== 'undefined' && createPortal(
                 <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-[680px] shadow-2xl overflow-hidden">
 
@@ -485,7 +639,7 @@ export default function PromoMaterialsPage() {
                                     </div>
                                 </div>
 
-                                {/* Inline preview iframe */}
+                        {/* Inline preview iframe */}
                                 {modal.showPreview && (
                                     <div className="border border-slate-200 rounded-xl overflow-hidden" style={{ height: '180px' }}>
                                         <iframe srcDoc={modal.html} className="w-full h-full border-0 scale-[0.6] origin-top-left" style={{ width: '167%', height: '167%' }} title="Preview" sandbox="allow-same-origin" />
@@ -515,7 +669,8 @@ export default function PromoMaterialsPage() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

@@ -442,7 +442,7 @@ const TYPE_CONFIG: Record<string, {
     forex: {
         gradient: 'linear-gradient(135deg, #020b18 0%, #0a2440 40%, #0f3d6b 70%, #1d6fa4 100%)',
         accentHex: '#38bdf8', accentRgb: '56,189,248', darkBg: '#020b18',
-        badge: '📊 Forex Trading', heroTag: 'Especialistas en Divisas',
+        badge: '📊 Mercados de Divisas', heroTag: 'Especialistas en FX',
         particleColor: 'rgba(56,189,248,',
     },
     cripto: {
@@ -454,7 +454,7 @@ const TYPE_CONFIG: Record<string, {
     propfirm: {
         gradient: 'linear-gradient(135deg, #001a0f 0%, #003320 40%, #004d30 70%, #10b981 100%)',
         accentHex: '#10b981', accentRgb: '16,185,129', darkBg: '#001a0f',
-        badge: '🚀 Prop Firm', heroTag: 'Fondeo para Traders Pro',
+        badge: '🚀 Prop Firm', heroTag: 'Evaluación para Traders Pro',
         particleColor: 'rgba(16,185,129,',
     },
     sinteticos: {
@@ -486,7 +486,53 @@ const TYPE_CONFIG: Record<string, {
 // ─── Generador Principal ─────────────────────────────────────
 export function generateLandingHTML(data: LandingData): string {
     console.log('--- GENERATING LANDING ---', data.landingType, data.language);
-    const t = TRANSLATIONS[data.language] || TRANSLATIONS['ES'];
+    
+    // Clonamos las traducciones para aplicar personalizaciones dinámicas sin mutar los valores originales
+    const t = JSON.parse(JSON.stringify(TRANSLATIONS[data.language] || TRANSLATIONS['ES']));
+    
+    // 1. ELIMINAR TÉRMINOS RESTRINGIDOS ("FOREX") Y GENERALIZARLOS EN TODO EL OBJETO
+    t.heroSub = t.heroSub.replace(/Forex/gi, 'Divisas');
+    if(t.steps) {
+        t.steps = t.steps.map((s: string) => s.replace(/Forex/gi, 'Divisas'));
+    }
+    if(t.features) {
+        t.features = t.features.map((f: any) => ({...f, desc: f.desc.replace(/Forex/gi, 'Divisas')}));
+    }
+
+    // 2. PERSONALIZAR TOTALMENTE CADA LANDING PARA QUE NO SEAN IGUALES (DIFERENCIACIÓN VISUAL)
+    if (data.landingType === 'forex') {
+        t.heroHighlight = data.language === 'ES' ? 'Mercados de Divisas' : 'FX Markets';
+    } else if (data.landingType === 'cripto') {
+        t.heroHighlight = data.language === 'ES' ? 'Criptomonedas' : 'Crypto Markets';
+        t.heroSub = data.language === 'ES' ? 'Opera Bitcoin, Ethereum y principales Altcoins con spreads ajustados y ejecución instantánea 24/7.' : 'Trade Bitcoin, Ethereum and major Altcoins with tight spreads and instant execution 24/7.';
+        t.steps[2] = data.language === 'ES' ? 'Opera en el mercado Cripto sin interrupciones' : 'Trade the Crypto market without interruptions';
+    } else if (data.landingType === 'propfirm') {
+        t.heroTitle = data.language === 'ES' ? 'Potencia tu' : 'Boost your';
+        t.heroHighlight = data.language === 'ES' ? 'Carrera Trading' : 'Trading Career';
+        t.heroSub = data.language === 'ES' ? 'Demuestra tus habilidades, supera nuestras pruebas de evaluación y accede a capital institucional para catapultar tus ganancias.' : 'Prove your skills, pass our evaluation challenges and access institutional capital to skyrocket your profits.';
+        t.steps = data.language === 'ES' ? [
+            'Regístrate en nuestro programa de evaluación',
+            'Demuestra tu rentabilidad y gestión de riesgo',
+            'Recibe capital institucional y retén hasta el 90% de tus ganancias'
+        ] : [
+            'Sign up for our evaluation program',
+            'Prove your profitability and risk management',
+            'Receive institutional capital and keep up to 90% of your profits'
+        ];
+        t.cta = data.language === 'ES' ? 'Iniciar Evaluación' : 'Start Evaluation';
+    } else if (data.landingType === 'sinteticos') {
+        t.heroHighlight = data.language === 'ES' ? 'Índices Sintéticos' : 'Synthetic Indices';
+        t.heroSub = data.language === 'ES' ? 'Mercados algorítmicos que simulan la volatilidad del mundo real, disponibles 24/7 sin manipulación ni impacto de noticias.' : 'Markets that simulate real-world volatility, available 24/7 without manipulation or news impact.';
+        t.steps[2] = data.language === 'ES' ? 'Opera Índices Sintéticos con alta volatilidad garantizada' : 'Trade Synthetic Indices with high volatility';
+    } else if (data.landingType === 'bursatiles') {
+        t.heroHighlight = data.language === 'ES' ? 'Índices Bursátiles' : 'Stock Indices';
+        t.heroSub = data.language === 'ES' ? 'Participa en los mercados financieros globales operando el NASDAQ, S&P 500, Dow Jones y los mercados europeos.' : 'Participate in global financial markets by trading the NASDAQ, S&P 500, Dow Jones and European markets.';
+        t.steps[2] = data.language === 'ES' ? 'Opera las principales bolsas del mundo desde una sola cuenta' : 'Trade the world\'s major stock exchanges from a single account';
+    } else if (data.landingType === 'promociones') {
+        t.heroHighlight = data.language === 'ES' ? 'Ofertas Exclusivas' : 'Exclusive Offers';
+        t.heroSub = data.language === 'ES' ? 'Aprovecha condiciones inmejorables para operar. Multiplica tu capacidad de inversión desde hoy pre-registrándote.' : 'Take advantage of exclusive trading conditions. Multiply your investment capacity today.';
+    }
+
     const cfg = TYPE_CONFIG[data.landingType] || TYPE_CONFIG['institucional'];
     const wa = data.whatsapp ? 'https://wa.me/' + data.whatsapp.replace(/[^0-9]/g, '') : '#';
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
