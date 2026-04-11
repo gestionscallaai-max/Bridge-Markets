@@ -342,19 +342,19 @@ const TRANSLATIONS: Record<string, {
         submit: 'Mulai Sekarang →',
         footerText: 'Halaman dikelola oleh mitra komersial resmi Bridge Markets',
         disclaimer: 'Trading CFD melibatkan risiko kerugian yang tinggi. Lebih dari 70% investor ritel kehilangan uang.',
-        chessTitle: 'Mulai menyalin Trader ahora!',
-        chessSubtitle: 'Melalui mana Anda tidak hanya memiliki akses ke berbagai instrumen tetapi juga alat pasar keuangan terbaik.',
-        chessBenefits: [ { icon: '🛡️', title: 'Keuntungan Pasar' }, { icon: '📈', title: 'Profitabilitas' }, { icon: '🏆', title: 'Dapatkan dari trading' } ],
-        chessSteps: { title: 'Cara mengakses Social Trading?', steps: [ 'Pilih akun social trading Anda.', 'Pilih Trader untuk diikuti.', 'Masukkan jumlah trading.', 'Terima manfaat langsung.', 'Tarik dana kapan saja.' ] },
+        chessTitle: 'Mulai menyalin Trader sekarang!',
+        chessSubtitle: 'Melalui mana Anda tidak hanya memiliki akses ke berbagai instrumen tetapi juga alat pasar keuangan terbaik dan tingkat keamanan tertinggi untuk investasi Anda.',
+        chessBenefits: [ { icon: '🛡️', title: 'Keuntungan Pasar' }, { icon: '📈', title: 'Profitabilitas' }, { icon: '🏆', title: 'Dapatkan dari trading di pasar' } ],
+        chessSteps: { title: 'Bagaimana cara mengakses Social Trading?', steps: [ 'Pilih akun social trading Anda.', 'Pilih Trader dari daftar untuk diikuti berdasarkan kinerjanya.', 'Masukkan jumlah yang ingin Anda dedikasikan untuk trading.', 'Tunggu trading dari operator dan terima manfaat langsung.', 'Kontrol modal: Tarik dana kapan pun Anda mau.' ] },
         chessAccounts: [
-            { title: 'Akun Leverage', desc: 'Operasikan dengan dana lebih besar.', img: '/images/landing/knight.png' },
-            { title: 'Akun PAMM', desc: 'Kelola banyak akun investor.', img: '/images/landing/pawns.png' },
-            { title: 'Akun MAM', desc: 'Alokasi trading bagi manajer aset.', img: '/images/landing/king.png' },
-            { title: 'Akun Leverage', desc: 'Akses tingkat leverage institusional.', img: '/images/landing/queen.png' },
-            { title: 'Akun ECN', desc: 'Eksekusi transparan tanpa dealing desk.', img: '/images/landing/knight.png' }
+            { title: 'Akun Leverage', desc: 'Memungkinkan trader beroperasi dengan dana lebih besar dari yang dimiliki, meningkatkan daya beli dan potensi keuntungan.', img: '/images/landing/knight.png' },
+            { title: 'Akun PAMM', desc: 'Akun terkelola kami memungkinkan trader profesional mengelola banyak akun investor secara bersamaan.', img: '/images/landing/pawns.png' },
+            { title: 'Akun MAM', desc: 'Memungkinkan manajer aset dan dana keuangan mengalokasikan trading di antara akun tanpa batas.', img: '/images/landing/king.png' },
+            { title: 'Akun Leverage', desc: 'Akses ke tingkat leverage institusional yang lebih tinggi dengan eksekusi pasar langsung.', img: '/images/landing/queen.png' },
+            { title: 'Akun ECN', desc: 'Eksekusi transparan dan langsung dengan penyedia likuiditas global utama tanpa dealing desk.', img: '/images/landing/knight.png' }
         ],
-        chessPromo: { title: 'Aktifkan akun, perluas semesta finansial Anda', cta: 'BUKA AKUN TRADING', img: '/images/landing/hourglass.png' },
-        chessFooter: { title: 'Hubungkan klien dengan Broker dan dapatkan komisi', img: '/images/landing/hourglass.png', text: [ 'Akses ke jaringan mitra strategis.', 'Dapatkan komisi harian dari volume.' ] }
+        chessPromo: { title: 'Aktifkan akun Anda, perluas semesta finansial Anda', cta: 'BUKA AKUN TRADING ANDA', img: '/images/landing/hourglass.png' },
+        chessFooter: { title: 'Hubungkan klien dengan Broker dan dapatkan komisi', img: '/images/landing/hourglass.png', text: [ 'Sebagai broker Bridge Markets, Anda memiliki akses ke jaringan kontak dan mitra strategis yang membantu Anda memperluas bisnis dan memaksimalkan pendapatan komisi Anda.', 'Model manajemen aset yang kami tawarkan memungkinkan Anda menerima komisi harian dari volume perdagangan klien referensi Anda, dengan transparansi total dan setelmen instan.' ] }
     },
     VI: {
         heroTitle: 'Giao dịch trên', heroHighlight: 'Thị Trường Toàn Cầu', heroSub: 'Tiếp cận Forex, Cổ phiếu, Tiền điện tử và Chỉ số với spread siêu cạnh tranh và khớp lệnh tổ chức trong vài mili giây.',
@@ -485,6 +485,7 @@ const TYPE_CONFIG: Record<string, {
 
 // ─── Generador Principal ─────────────────────────────────────
 export function generateLandingHTML(data: LandingData): string {
+    console.log('--- GENERATING LANDING ---', data.landingType, data.language);
     const t = TRANSLATIONS[data.language] || TRANSLATIONS['ES'];
     const cfg = TYPE_CONFIG[data.landingType] || TYPE_CONFIG['institucional'];
     const wa = data.whatsapp ? 'https://wa.me/' + data.whatsapp.replace(/[^0-9]/g, '') : '#';
@@ -615,7 +616,7 @@ export function generateLandingHTML(data: LandingData): string {
                 <div class="chess-step-text">${s}</div>
             </div>`).join('') || '';
 
-        const chessAccountsHTML = t.chessAccounts?.map(a => `
+        const chessAccountsHTML_part1 = t.chessAccounts?.slice(0, 3).map(a => `
             <div class="chess-acc-card">
                 <div class="chess-acc-img">
                     <img src="${a.img}" alt="${a.title}">
@@ -623,113 +624,134 @@ export function generateLandingHTML(data: LandingData): string {
                 <div class="chess-acc-content">
                     <h3 class="chess-acc-title">${a.title}</h3>
                     <p class="chess-acc-desc">${a.desc}</p>
-                    <a href="#registro" class="chess-acc-btn">ME INTERESA</a>
+                    <a href="#registro" class="chess-acc-btn">${t.submit.replace(' →', '').toUpperCase()}</a>
+                </div>
+            </div>`).join('') || '';
+
+        const chessAccountsHTML_part2 = t.chessAccounts?.slice(3, 5).map(a => `
+            <div class="chess-acc-card">
+                <div class="chess-acc-img">
+                    <img src="${a.img}" alt="${a.title}">
+                </div>
+                <div class="chess-acc-content">
+                    <h3 class="chess-acc-title">${a.title}</h3>
+                    <p class="chess-acc-desc">${a.desc}</p>
+                    <a href="#registro" class="chess-acc-btn">${t.submit.replace(' →', '').toUpperCase()}</a>
                 </div>
             </div>`).join('') || '';
 
         return `<!DOCTYPE html>
+<!-- Bridge Markets Premium Generator v2.1-FIX -->
 <html lang="${data.language.toLowerCase()}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Bridge Markets | ${t.chessTitle}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">${gaScript}
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">${gaScript}
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--accent:${cfg.accentHex};--accent-rgb:${cfg.accentRgb};--dark:#140633;--bg-light:#FFFFFF;--bg-gray:#F8F9FA}
-body{font-family:'Inter',sans-serif;background:var(--bg-light);color:#1a1a1a;overflow-x:hidden;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+:root{--accent:${cfg.accentHex};--accent-rgb:${cfg.accentRgb};--dark:#07020f;--bg-white:#FFFFFF;--bg-light:#F8F9FA}
+body{font-family:'Outfit',sans-serif;background:var(--bg-white);color:#1a1a1a;overflow-x:hidden;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 
-/* HERO / HEADER */
-.chess-hero{padding:60px 24px;text-align:center;max-width:1200px;margin:0 auto}
-.chess-hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;margin-bottom:16px;color:#1a1a1a;letter-spacing:-0.03em}
-.chess-hero h1 span{color:var(--accent)}
-.chess-hero p{font-size:1.1rem;color:#666;max-width:800px;margin:0 auto 48px;line-height:1.6}
-.chess-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:60px}
-.chess-benefit{background:white;border:1px solid #eee;padding:24px;border-radius:20px;display:flex;align-items:center;gap:16px;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,0.05);transition:transform 0.3s}
-.chess-benefit:hover{transform:translateY(-5px)}
-.chess-benefit-icon{width:48px;height:48px;border-radius:12px;background:rgba(var(--accent-rgb),0.1);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--accent)}
-.chess-benefit-title{font-weight:700;font-size:14px;color:#333}
+/* HEADER / HERO */
+.chess-hero{padding:100px 24px 60px;text-align:center;max-width:1200px;margin:0 auto;position:relative}
+.chess-hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle, rgba(var(--accent-rgb),0.08) 0%, transparent 70%);z-index:-1}
+.chess-hero h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;margin-bottom:20px;color:var(--dark);letter-spacing:-0.04em;line-height:1}
+.chess-hero h1 span{color:var(--accent);position:relative}
+.chess-hero h1 span::after{content:'';position:absolute;bottom:10px;left:0;width:100%;height:12px;background:rgba(var(--accent-rgb),0.15);z-index:-1;border-radius:4px}
+.chess-hero p{font-size:1.25rem;color:#666;max-width:850px;margin:0 auto 60px;line-height:1.6;font-weight:400}
 
-/* SOCIAL TRADING SECTION */
-.chess-steps-section{background:var(--dark);padding:100px 24px;overflow:hidden;position:relative}
-.chess-steps-container{max-width:1200px;margin:0 auto;display:flex;gap:40px;align-items:center;background:rgba(255,255,255,0.02);border-radius:40px;border:1px solid rgba(255,255,255,0.05);overflow:hidden;position:relative}
-.chess-steps-container::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 40px);z-index:0}
-.chess-steps-left{flex:1;padding:80px;position:relative;z-index:1;background:linear-gradient(135deg, rgba(var(--accent-rgb),0.2) 0%, transparent 100%)}
+.chess-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:80px}
+.chess-benefit{background:white;border:1px solid rgba(0,0,0,0.06);padding:28px;border-radius:24px;display:flex;align-items:center;gap:20px;text-align:left;box-shadow:0 15px 35px rgba(0,0,0,0.03);transition:0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+.chess-benefit:hover{transform:translateY(-10px);box-shadow:0 20px 45px rgba(var(--accent-rgb),0.1);border-color:var(--accent)}
+.chess-benefit-icon{width:56px;height:56px;border-radius:18px;background:rgba(var(--accent-rgb),0.08);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--accent);flex-shrink:0}
+.chess-benefit-title{font-weight:800;font-size:15px;color:var(--dark);line-height:1.3}
+
+/* SOCIAL TRADING - HYBRID DARK SECTION */
+.chess-steps-section{background:var(--dark);padding:120px 24px;position:relative;overflow:hidden}
+.chess-steps-section::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:0.5}
+.chess-steps-container{max-width:1200px;margin:0 auto;display:flex;gap:60px;align-items:center;position:relative;z-index:2}
+.chess-steps-left{flex:1}
 .chess-steps-left h2{font-size:3.5rem;font-weight:900;color:white;line-height:1.1;letter-spacing:-0.03em}
-.chess-steps-right{flex:1.2;padding:80px;position:relative;z-index:1}
-.chess-step{display:flex;gap:20px;margin-bottom:20px;background:rgba(255,255,255,0.05);padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);transition:0.3s}
-.chess-step:hover{background:rgba(255,255,255,0.1)}
-.chess-step-num{width:44px;height:44px;border-radius:50%;background:white;color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0}
-.chess-step-text{color:white;font-weight:600;font-size:1.05rem;line-height:1.4}
+.chess-steps-left h2 span{color:var(--accent)}
+.chess-steps-right{flex:1.2;display:grid;gap:18px}
+.chess-step{display:flex;gap:24px;background:rgba(255,255,255,0.03);padding:24px 30px;border-radius:24px;border:1px solid rgba(255,255,255,0.08);transition:0.4s;backdrop-filter:blur(10px)}
+.chess-step:hover{background:rgba(255,255,255,0.06);transform:translateX(15px);border-color:rgba(var(--accent-rgb),0.3)}
+.chess-step-num{width:50px;height:50px;border-radius:50%;background:white;color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex-shrink:0;box-shadow:0 10px 20px rgba(0,0,0,0.2)}
+.chess-step-text{color:rgba(255,255,255,0.9);font-weight:600;font-size:1.15rem;line-height:1.4}
 
-/* ACCOUNTS */
-.chess-accounts{padding:100px 24px;max-width:1200px;margin:0 auto}
-.chess-acc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
-.chess-acc-grid-v2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-.chess-acc-card{background:#000;border-radius:32px;overflow:hidden;transition:transform 0.4s;border:1px solid #222}
-.chess-acc-card:hover{transform:translateY(-10px);border-color:var(--accent)}
-.chess-acc-img{height:300px;display:flex;align-items:center;justify-content:center;padding:40px}
-.chess-acc-img img{max-height:100%;max-width:100%;object-fit:contain;animation:floating 4s ease-in-out infinite}
-.chess-acc-content{padding:0 40px 40px;text-align:left}
-.chess-acc-title{font-size:1.6rem;font-weight:800;color:white;margin-bottom:12px}
-.chess-acc-desc{font-size:13px;color:#999;margin-bottom:30px;line-height:1.6;height:65px;overflow:hidden}
-.chess-acc-btn{display:block;width:100%;padding:18px;background:var(--accent);color:white;text-decoration:none;font-weight:900;border-radius:16px;text-align:center;font-size:14px;letter-spacing:1px;transition:0.3s}
-.chess-acc-btn:hover{background:#7040ff;box-shadow:0 10px 25px rgba(var(--accent-rgb),0.4)}
+/* ACCOUNTS GRID */
+.chess-accounts{padding:120px 24px;max-width:1260px;margin:0 auto;text-align:center}
+.chess-acc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-bottom:30px}
+.chess-acc-grid-v2{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;max-width:840px;margin:0 auto}
+.chess-acc-card{background:#0a0314;border-radius:40px;overflow:hidden;transition:0.4s;border:1px solid #1a0b30;position:relative}
+.chess-acc-card:hover{transform:translateY(-15px);border-color:var(--accent);box-shadow:0 30px 60px rgba(0,0,0,0.3)}
+.chess-acc-img{height:340px;display:flex;align-items:center;justify-content:center;padding:50px;background:radial-gradient(circle at center, rgba(var(--accent-rgb),0.1) 0%, transparent 70%)}
+.chess-acc-img img{max-height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5));animation:floating 4s ease-in-out infinite}
+.chess-acc-content{padding:0 40px 45px;text-align:center}
+.chess-acc-title{font-size:1.8rem;font-weight:900;color:white;margin-bottom:15px;letter-spacing:-0.02em}
+.chess-acc-desc{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:35px;line-height:1.6;height:68px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.chess-acc-btn{display:block;width:100%;padding:22px;background:var(--accent);color:white;text-decoration:none;font-weight:900;border-radius:20px;text-align:center;font-size:15px;letter-spacing:1.5px;transition:0.4s}
+.chess-acc-btn:hover{background:#7040ff;box-shadow:0 15px 35px rgba(var(--accent-rgb),0.5);transform:scale(1.02)}
 
-/* FEATURES SECTION */
-.chess-features-section{background:var(--bg-gray);padding:100px 24px;text-align:center}
-.chess-features-section h2{font-size:3rem;font-weight:900;margin-bottom:60px;color:#333}
+/* FEATURES */
+.chess-features-section{background:var(--bg-light);padding:120px 24px;text-align:center;border-top:1px solid #eee}
+.chess-features-section h2{font-size:3.5rem;font-weight:900;margin-bottom:80px;color:var(--dark);letter-spacing:-0.03em}
 .chess-features-section h2 span{color:var(--accent)}
-.chess-feat-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.chess-feat-card{background:white;padding:32px;border-radius:24px;display:flex;align-items:center;gap:20px;text-align:left;border:1px solid #eee}
-.chess-feat-icon{width:56px;height:56px;border-radius:16px;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:28px;color:white;flex-shrink:0}
-.chess-feat-title{font-weight:800;font-size:16px;color:#333;margin-bottom:4px}
-.chess-feat-desc{font-size:13px;color:#777;line-height:1.5}
+.chess-feat-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.chess-feat-card{background:white;padding:40px;border-radius:32px;display:flex;align-items:center;gap:25px;text-align:left;border:1px solid rgba(0,0,0,0.05);box-shadow:0 10px 30px rgba(0,0,0,0.02);transition:0.3s}
+.chess-feat-card:hover{border-color:var(--accent);transform:translateY(-5px)}
+.chess-feat-icon{width:64px;height:64px;border-radius:20px;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:32px;color:white;flex-shrink:0;box-shadow:0 10px 20px rgba(0,0,0,0.1)}
+.chess-feat-title{font-weight:900;font-size:18px;color:var(--dark);margin-bottom:6px}
+.chess-feat-desc{font-size:14px;color:#777;line-height:1.6}
 
-/* PROMO BANNER */
-.chess-promo{margin:60px 24px;background:var(--accent);padding:80px;border-radius:40px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden}
-.chess-promo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 30px);z-index:0}
-.chess-promo-content{max-width:600px;position:relative;z-index:1}
-.chess-promo-title{font-size:2.8rem;font-weight:900;color:white;margin-bottom:32px;line-height:1.1}
-.chess-promo-btn{display:inline-block;padding:20px 48px;background:white;color:var(--accent);text-decoration:none;font-weight:900;border-radius:12px;font-size:14px;transition:0.3s}
-.chess-promo-btn:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(0,0,0,0.2)}
+/* CTA PROMO */
+.chess-promo{margin:80px 24px;background:linear-gradient(135deg, var(--accent) 0%, #7040ff 100%);padding:100px;border-radius:50px;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin-left:auto;margin-right:auto;position:relative;overflow:hidden;box-shadow:0 40px 80px rgba(var(--accent-rgb),0.3)}
+.chess-promo::before{content:'\u265B';position:absolute;right:-50px;bottom:-50px;font-size:400px;color:rgba(255,255,255,0.07);z-index:0;transform:rotate(-15deg)}
+.chess-promo-content{max-width:650px;position:relative;z-index:2}
+.chess-promo-title{font-size:3.5rem;font-weight:900;color:white;margin-bottom:45px;line-height:1;letter-spacing:-0.03em}
+.chess-promo-btn{display:inline-block;padding:24px 60px;background:white;color:var(--accent);text-decoration:none;font-weight:900;border-radius:20px;font-size:16px;letter-spacing:1px;transition:0.4s;box-shadow:0 15px 35px rgba(0,0,0,0.1)}
+.chess-promo-btn:hover{transform:translateY(-5px);box-shadow:0 25px 50px rgba(0,0,0,0.2)}
 
-/* COMMISSION SECTION */
-.chess-comm-section{padding:100px 24px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:80px}
+/* COMMISSION */
+.chess-comm-section{padding:120px 24px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:100px}
 .chess-comm-content{flex:1}
-.chess-comm-title{font-size:3rem;font-weight:900;margin-bottom:32px;color:var(--dark);line-height:1.1}
+.chess-comm-title{font-size:3.5rem;font-weight:900;margin-bottom:40px;color:var(--dark);line-height:1.1;letter-spacing:-0.03em}
 .chess-comm-title span{color:var(--accent)}
-.chess-comm-text{font-size:1.1rem;color:#666;line-height:1.7;margin-bottom:24px}
+.chess-comm-text{font-size:1.2rem;color:#555;line-height:1.7;margin-bottom:30px}
 .chess-comm-img{flex:0.8;text-align:right}
-.chess-comm-img img{height:450px;animation:floating 5s ease-in-out infinite alternate}
+.chess-comm-img img{height:550px;filter:drop-shadow(0 30px 60px rgba(0,0,0,0.1));animation:floating 6s ease-in-out infinite alternate}
 
-/* FORM OVERLAY */
-.form-section{background:var(--bg-gray);padding:100px 24px;border-top:1px solid #eee}
-.form-inner{max-width:500px;margin:0 auto;text-align:center}
-.form-inner h2{font-size:2.5rem;font-weight:900;margin-bottom:48px}
-.lead-form{background:white;padding:40px;border-radius:30px;box-shadow:0 30px 60px rgba(0,0,0,0.1);border:1px solid #eee}
-.form-group{margin-bottom:20px;text-align:left}
-.form-label{display:block;font-size:12px;font-weight:800;color:#999;text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
-.form-input{width:100%;background:#fcfcfc;border:1px solid #ddd;padding:16px;border-radius:12px;font-family:inherit;outline:none;transition:0.3s}
-.form-input:focus{border-color:var(--accent);background:white}
-.form-submit{width:100%;padding:18px;background:var(--accent);border:none;border-radius:12px;color:white;font-weight:900;cursor:pointer;transition:0.3s;font-size:16px}
-.form-submit:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(var(--accent-rgb),0.3)}
-.form-message{padding:15px;border-radius:12px;margin-top:20px;display:none;font-weight:700}
-.form-message.success{display:block;background:#ecfdf5;color:#10b981}
-.form-message.error{display:block;background:#fef2f2;color:#ef4444}
+/* FORM */
+.form-section{background:white;padding:120px 24px;position:relative;z-index:10}
+.form-inner{max-width:600px;margin:0 auto;text-align:center}
+.form-inner h2{font-size:3rem;font-weight:900;margin-bottom:60px;letter-spacing:-0.03em}
+.lead-form{background:white;padding:50px;border-radius:40px;box-shadow:0 40px 100px rgba(0,0,0,0.08);border:1px solid #f0f0f0}
+.form-group{margin-bottom:25px;text-align:left}
+.form-label{display:block;font-size:13px;font-weight:900;color:#999;text-transform:uppercase;margin-bottom:10px;letter-spacing:1.5px}
+.form-input{width:100%;background:#f9f9f9;border:2px solid #f0f0f0;padding:18px 24px;border-radius:18px;font-family:inherit;font-size:16px;font-weight:500;outline:none;transition:0.3s}
+.form-input:focus{border-color:var(--accent);background:white;box-shadow:0 0 0 6px rgba(var(--accent-rgb),0.1)}
+.form-submit{width:100%;padding:22px;background:var(--accent);border:none;border-radius:18px;color:white;font-weight:900;cursor:pointer;transition:0.4s;font-size:18px;letter-spacing:1px;box-shadow:0 15px 30px rgba(var(--accent-rgb),0.3)}
+.form-submit:hover{transform:translateY(-3px);background:#7040ff;box-shadow:0 20px 45px rgba(var(--accent-rgb),0.4)}
+.form-message{padding:20px;border-radius:18px;margin-top:25px;display:none;font-weight:800;font-size:15px}
+.form-message.success{display:block;background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)}
+.form-message.error{display:block;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2)}
 
-@keyframes floating{0%{transform:translateY(0)}50%{transform:translateY(-15px)}100%{transform:translateY(0)}}
+@keyframes floating{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-20px) rotate(2deg)}100%{transform:translateY(0) rotate(0)}}
 
 @media (max-width: 968px) {
     .chess-benefits, .chess-steps-container, .chess-acc-grid, .chess-acc-grid-v2, .chess-feat-grid, .chess-promo, .chess-comm-section { grid-template-columns: 1fr; flex-direction: column; padding: 40px 20px; text-align: center; }
-    .chess-steps-left, .chess-steps-right, .chess-promo{padding:40px 24px}
-    .chess-comm-img img{height:300px}
+    .chess-steps-left h2 { font-size: 2.5rem; }
+    .chess-promo-title { font-size: 2.2rem; }
+    .chess-comm-img img { height: 350px; }
+    .chess-hero h1 { font-size: 3rem; }
+    .lead-form { padding: 30px 20px; }
 }
 </style>
 </head>
 <body>
     <section class="chess-hero">
-        <h1>¡Empieza a copiar <span>Traders</span> ahora!</h1>
+        <h1>${t.chessTitle.replace('Traders', '<span>Traders</span>')}</h1>
         <p>${t.chessSubtitle}</p>
         <div class="chess-benefits">${chessBenefitsHTML}</div>
     </section>
@@ -737,7 +759,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:#1a1a1a;ove
     <section class="chess-steps-section">
         <div class="chess-steps-container">
             <div class="chess-steps-left">
-                <h2>¿Cómo acceder al Social Trading?</h2>
+                <h2>${t.chessSteps.title.replace('Social Trading', '<span>Social Trading</span>')}</h2>
             </div>
             <div class="chess-steps-right">
                 ${chessStepsHTML}
@@ -746,12 +768,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:#1a1a1a;ove
     </section>
 
     <section class="chess-accounts">
-        <div class="chess-acc-grid">${chessAccountsHTML.split('</div>').slice(0,3).join('</div>') + '</div>'}</div>
-        <div class="chess-acc-grid-v2">${chessAccountsHTML.split('</div>').slice(3,5).join('</div>') + '</div>'}</div>
+        <div class="chess-acc-grid">${chessAccountsHTML_part1}</div>
+        <div class="chess-acc-grid-v2">${chessAccountsHTML_part2}</div>
     </section>
 
     <section class="chess-features-section">
-        <h2>¿Por qué <span>Bridge Markets?</span></h2>
+        <h2>${t.featTitle.split(' ').slice(0,3).join(' ')} <span>${t.featTitle.split(' ').slice(3).join(' ')}</span></h2>
         <div class="chess-feat-grid">
             ${chessFeaturesHTML}
         </div>
@@ -759,14 +781,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:#1a1a1a;ove
 
     <section class="chess-promo">
         <div class="chess-promo-content">
-            <h2 class="chess-promo-title">Activa tu cuenta, expande tu universo financiero</h2>
+            <h2 class="chess-promo-title">${t.chessPromo.title}</h2>
             <a href="#registro" class="chess-promo-btn">${t.chessPromo.cta}</a>
         </div>
     </section>
 
     <section class="chess-comm-section">
         <div class="chess-comm-content">
-            <h2 class="chess-comm-title">Conecta clientes con Brokers y <span>gana comisiones</span></h2>
+            <h2 class="chess-comm-title">${t.chessFooter.title.split(' ').slice(0,-2).join(' ')} <span>${t.chessFooter.title.split(' ').slice(-2).join(' ')}</span></h2>
             ${t.chessFooter.text.map(tx => `<p class="chess-comm-text">${tx}</p>`).join('')}
         </div>
         <div class="chess-comm-img"><img src="${t.chessFooter.img}" alt=""></div>
@@ -783,7 +805,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-light);color:#1a1a1a;ove
                     <label class="form-label" for="f${i}">${f}</label>
                     <input class="form-input" id="f${i}" type="${i === 1 ? 'email' : i === 2 ? 'tel' : 'text'}" required placeholder="${f}...">
                 </div>`).join('')}
-                <button type="submit" class="form-submit" id="submitBtn">ME INTERESA</button>
+                <button type="submit" class="form-submit" id="submitBtn">${t.submit.toUpperCase()}</button>
                 <div id="formMessage" class="form-message"></div>
             </form>
         </div>

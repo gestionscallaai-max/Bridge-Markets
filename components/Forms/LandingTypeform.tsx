@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Download, Eye, X, RefreshCw } from 'lucide-react';
+import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Pencil, Eye, X, RefreshCw } from 'lucide-react';
 import { generateLandingHTML, downloadLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -96,12 +96,15 @@ export default function LandingTypeform() {
 
         const html = generateLandingHTML(landingData);
         
+        let deploySuccess = false;
         try {
-            await fetch('/api/landings', {
+            const response = await fetch('/api/landings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ slug, html, data: landingData })
             });
+            const result = await response.json();
+            deploySuccess = result.success;
         } catch (error) {
             console.error('Error deploying landing:', error);
         }
@@ -110,6 +113,10 @@ export default function LandingTypeform() {
         setDeployedUrl((baseUrl || 'https://bridge.com') + '/l/' + slug);
         setIsGenerating(false);
         setGenerated(true);
+
+        if (!deploySuccess) {
+            console.warn('Landing generated locally but not saved to DB. Download or Copy is still available.');
+        }
 
         // Save to history
         const newLanding = {
@@ -137,11 +144,9 @@ export default function LandingTypeform() {
         }
     };
 
-    const handleDownload = () => {
-        if (generatedHtml) {
-            const filename = `landing-${formData.fullName.toLowerCase().replace(/\s+/g, '-')}-${formData.landingType}.html`;
-            downloadLandingHTML(generatedHtml, filename);
-        }
+    const handleEdit = () => {
+        setGenerated(false);
+        setStep(1);
     };
 
     const handleCopyHtml = () => {
@@ -415,8 +420,8 @@ export default function LandingTypeform() {
                                 <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <Check className="w-7 h-7 text-emerald-500" />
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-800 mb-1">¡Landing generada exitosamente!</h3>
-                                <p className="text-sm text-slate-400">Tu landing personalizada está lista. Previsualiza, descarga o copia el código.</p>
+                                 <h3 className="text-xl font-bold text-slate-800 mb-1">¡Landing generada exitosamente!</h3>
+                                 <p className="text-sm text-slate-400">Tu landing personalizada está lista. Previsualiza o edita los datos.</p>
                             </div>
 
                             {/* Action buttons */}
@@ -434,30 +439,14 @@ export default function LandingTypeform() {
                                     <ExternalLink className="w-4 h-4" /> Abrir en Nueva Pestaña
                                 </button>
                                 <button
-                                    onClick={handleDownload}
+                                    onClick={handleEdit}
                                     className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-700 font-semibold text-sm hover:bg-slate-200 transition-all"
                                 >
-                                    <Download className="w-4 h-4" /> Descargar HTML
+                                    <Pencil className="w-4 h-4" /> Editar
                                 </button>
                             </div>
 
-                            {/* Copy HTML source */}
-                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Código HTML</span>
-                                    <button
-                                        onClick={handleCopyHtml}
-                                        className="text-xs font-semibold text-[#865BFF] hover:text-[#6b3fd6] transition-colors flex items-center gap-1"
-                                    >
-                                        {copied ? <><Check className="w-3 h-3" /> Copiado!</> : <><Copy className="w-3 h-3" /> Copiar código</>}
-                                    </button>
-                                </div>
-                                <div className="bg-[#0f172a] rounded-lg p-4 max-h-32 overflow-y-auto">
-                                    <pre className="text-xs text-emerald-400 font-mono whitespace-pre-wrap break-all leading-relaxed">
-                                        {generatedHtml.substring(0, 500)}...
-                                    </pre>
-                                </div>
-                            </div>
+
 
                             {/* Create another */}
                             <div className="flex items-center justify-center mt-6 pt-6 border-t border-slate-100">

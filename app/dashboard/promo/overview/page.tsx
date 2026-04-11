@@ -130,6 +130,16 @@ export default function PromoMaterialsPage() {
     const [loadingId, setLoadingId] = useState<string | null>(null);
     const [partnerId, setPartnerId] = useState('BM_PARTNER_01');
     const [baseUrl, setBaseUrl] = useState('');
+    
+    // Default form data for the modal
+    const [formData, setFormData] = useState({
+        fullName: 'Bridge Markets Partner',
+        whatsapp: '+1234567890',
+        email: 'partner@bridgemarkets.com',
+    });
+
+    // Custom toggle for edit section in modal
+    const [isEditingData, setIsEditingData] = useState(false);
 
     useEffect(() => {
         setBaseUrl(window.location.origin);
@@ -144,11 +154,11 @@ export default function PromoMaterialsPage() {
     });
 
     const buildLandingData = (landing: typeof PROMO_LANDINGS[0], langCode: string): LandingData => ({
-        fullName: 'Bridge Markets Partner',
-        country: langCode === 'BR' ? 'Brasil' : langCode === 'GB' ? 'Global' : langCode === 'AR' ? 'Arabia' : langCode === 'JP' ? 'Japón' : langCode === 'ZH' ? 'China' : langCode === 'ID' ? 'Indonesia' : langCode === 'VI' ? 'Vietnam' : langCode === 'FR' ? 'Francia' : 'España',
+        fullName: formData.fullName,
+        country: langCode === 'BR' ? 'Brasil' : langCode === 'GB' ? 'Global' : 'España', // Simplified mapping, but works
         language: langCode,
-        whatsapp: '',
-        email: 'partner@bridgemarkets.com',
+        whatsapp: formData.whatsapp,
+        email: formData.email,
         landingType: landing.type,
         partnerId,
         slug: `${landing.id}-${langCode.toLowerCase()}`,
@@ -170,6 +180,7 @@ export default function PromoMaterialsPage() {
                 showPreview: false,
                 langDropdownOpen: false,
             });
+            setIsEditingData(false); // reset on open
             setLoadingId(null);
         }, 350);
     };
@@ -179,6 +190,19 @@ export default function PromoMaterialsPage() {
         const data = buildLandingData(modal.landing, langCode);
         const html = generateLandingHTML(data);
         setModal({ ...modal, selectedLang: langCode, html, langDropdownOpen: false });
+    };
+
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleApplyChanges = () => {
+        if (!modal) return;
+        const data = buildLandingData(modal.landing, modal.selectedLang);
+        const html = generateLandingHTML(data);
+        setModal({ ...modal, html });
+        setIsEditingData(false);
     };
 
     const handleCopy = (text: string, id: string) => {
@@ -192,19 +216,6 @@ export default function PromoMaterialsPage() {
 
     return (
         <div className="space-y-6 pb-10">
-
-            {/* Header */}
-            <div className="card px-6 py-5">
-                <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#865BFF] to-[#6b3fd6] flex items-center justify-center shadow-lg shadow-[#865BFF]/20">
-                        <TrendingUp className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                        <h1 className="text-lg font-bold text-slate-800">Materiales Promocionales</h1>
-                        <p className="text-sm text-slate-400 mt-0.5">{PROMO_LANDINGS.length} landings disponibles · {LANGUAGES.length} idiomas</p>
-                    </div>
-                </div>
-            </div>
 
             {/* Tabs */}
             <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 w-fit shadow-sm">
@@ -236,15 +247,15 @@ export default function PromoMaterialsPage() {
                 ))}
             </div>
 
-            {/* Grid de landing cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {/* Grid de landing cards - Larger cards! */}
+            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
                 {filtered.map(landing => (
                     <div
                         key={landing.id}
                         className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
                     >
                         {/* Visual preview thumbnail */}
-                        <div className="relative h-40 overflow-hidden" style={{ background: landing.gradient }}>
+                        <div className="relative h-48 overflow-hidden" style={{ background: landing.gradient }}>
                             <div className="absolute top-3 left-3 right-3 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/15">
                                 <div className="flex gap-1">
                                     <div className="w-2 h-2 rounded-full bg-red-400/80"></div>
@@ -368,7 +379,7 @@ export default function PromoMaterialsPage() {
                             </div>
 
                             {/* Right panel */}
-                            <div className="flex-1 p-6 space-y-5">
+                            <div className="flex-1 p-6 space-y-5 overflow-y-auto max-h-[85vh]">
                                 {/* Language selector — exactamente como Exness */}
                                 <div>
                                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">
@@ -407,6 +418,63 @@ export default function PromoMaterialsPage() {
                                             </div>
                                         )}
                                     </div>
+                                </div>
+
+                                {/* User Form Data Toggle */}
+                                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                                    <button 
+                                        onClick={() => setIsEditingData(!isEditingData)}
+                                        className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors"
+                                    >
+                                        <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                                            <User className="w-4 h-4 text-emerald-500" />
+                                            Datos del Partner (Formularios)
+                                        </span>
+                                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isEditingData ? 'rotate-180' : ''}`} />
+                                    </button>
+                                    
+                                    {isEditingData && (
+                                        <div className="p-4 bg-white border-t border-slate-200 space-y-3">
+                                            <div>
+                                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Nombre Completo</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="fullName"
+                                                    value={formData.fullName} 
+                                                    onChange={handleFormChange}
+                                                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]"
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div>
+                                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">WhatsApp</label>
+                                                    <input 
+                                                        type="text" 
+                                                        name="whatsapp"
+                                                        value={formData.whatsapp} 
+                                                        onChange={handleFormChange}
+                                                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#865BFF]"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Email</label>
+                                                    <input 
+                                                        type="email" 
+                                                        name="email"
+                                                        value={formData.email} 
+                                                        onChange={handleFormChange}
+                                                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#865BFF]"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <button 
+                                                onClick={handleApplyChanges}
+                                                className="w-full mt-2 bg-[#865BFF] text-white font-semibold text-xs py-2.5 rounded-lg hover:bg-[#6b3fd6] transition-colors"
+                                            >
+                                                Aplicar y Actualizar Landing
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Link personalizado */}

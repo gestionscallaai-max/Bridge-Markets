@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Use service role to look up the profile server-side
+// Use service role or fallback to the publishable key
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!
 );
 
 export async function POST(request: Request) {
@@ -37,13 +37,22 @@ export async function POST(request: Request) {
             }, { onConflict: 'slug' });
 
         if (error) {
-            console.error('Supabase Error:', error);
+            console.error('Supabase Upsert Error:', {
+                message: error.message,
+                details: error.details,
+                hint: error.hint,
+                code: error.code
+            });
             throw error;
         }
 
         return NextResponse.json({ success: true, url: `/l/${slug}` });
-    } catch (e) {
-        console.error(e);
-        return NextResponse.json({ success: false, error: 'Failed to deploy landing page' }, { status: 500 });
+    } catch (e: any) {
+        console.error('Critical API Error:', e.message || e);
+        return NextResponse.json({ 
+            success: false, 
+            error: 'Failed to deploy landing page',
+            details: e.message || 'Unknown error'
+        }, { status: 500 });
     }
 }
