@@ -1,16 +1,24 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Pencil, Eye, X, RefreshCw, Download } from 'lucide-react';
-import { generateLandingHTML, downloadLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+    ChevronRight, ChevronDown, ChevronUp, Check, Globe, User,
+    Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
+    Pencil, Eye, X, Download, ToggleLeft, ToggleRight,
+    Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play
+} from 'lucide-react';
+import {
+    generateLandingHTML, generateModularLandingHTML, openLandingPreview,
+    type LandingData, type ModularConfig
+} from '@/lib/landing-generator';
+import {
+    SECTION_CATALOG, SECTION_CATEGORIES, SECTION_RENDERERS,
+    type SectionMeta, type SectionCategory
+} from '@/lib/landing-sections';
+import { LANDING_TEMPLATES, type LandingTemplate } from '@/lib/landing-templates';
 import { supabase } from '@/lib/supabaseClient';
 
-type Step = 1 | 2 | 3;
-
-const COUNTRIES = [
-    'España', 'México', 'Colombia', 'Argentina', 'Chile', 'Perú',
-    'Ecuador', 'Venezuela', 'Uruguay', 'Brasil', 'Estados Unidos', 'Otro'
-];
+type Step = 1 | 2 | 3 | 4 | 5;
 
 const LANGUAGES = [
     { code: 'ES', flag: '🇪🇸', label: 'Español' },
@@ -23,626 +31,828 @@ const LANGUAGES = [
     { code: 'VI', flag: '🇻🇳', label: 'Tiếng Việt' },
 ];
 
-const LANDING_TYPES = [
-    { id: 'institucional', title: 'Institucional', desc: 'Página principal del broker con todos los productos', icon: Layout, color: 'from-[#865BFF] to-[#6b3fd6]' },
-    { id: 'forex', title: 'Forex Trading', desc: 'Enfocada en pares de divisas y spreads competitivos', icon: Target, color: 'from-blue-500 to-blue-600' },
-    { id: 'cripto', title: 'Criptomonedas', desc: 'Trading de criptoactivos con apalancamiento', icon: Sparkles, color: 'from-amber-500 to-orange-500' },
-    { id: 'propfirm', title: 'Prop Firm', desc: 'Modelo de fondeo para traders profesionales', icon: Rocket, color: 'from-emerald-500 to-teal-500' },
-    { id: 'sinteticos', title: 'Índices Sintéticos', desc: 'Opera índices sintéticos 24/7 sin interrupciones', icon: Target, color: 'from-rose-500 to-red-600' },
-    { id: 'bursatiles', title: 'Índices Bursátiles', desc: 'Los principales índices del mercado global', icon: Layout, color: 'from-indigo-500 to-purple-600' },
-    { id: 'promociones', title: 'Promociones (General)', desc: 'Bonos y ofertas especiales para nuevos clientes', icon: Sparkles, color: 'from-pink-500 to-rose-500' },
+const COUNTRIES = [
+    'España', 'México', 'Colombia', 'Argentina', 'Chile', 'Perú',
+    'Ecuador', 'Venezuela', 'Uruguay', 'Brasil', 'Estados Unidos', 'Otro'
 ];
 
-export default function LandingTypeform() {
-    const [step, setStep] = useState<Step>(1);
-    const [formData, setFormData] = useState({
-        fullName: '',
-        country: 'España',
-        language: 'ES',
-        whatsapp: '',
-        email: '',
-        landingType: 'institucional',
-        googleAnalyticsId: '',
-    });
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [generated, setGenerated] = useState(false);
-    const [generatedHtml, setGeneratedHtml] = useState('');
-    const [showPreview, setShowPreview] = useState(false);
-    const [copied, setCopied] = useState(false);
-    const [deployedUrl, setDeployedUrl] = useState('');
+// ─── Section Editor Component ───────────────────────────────
+function SectionCard({
+    section,
+    isEnabled,
+    onToggle,
+    overrides,
+    onUpdateOverride,
+}: {
+    section: SectionMeta;
+    isEnabled: boolean;
+    onToggle: () => void;
+    overrides: Record<string, any>;
+    onUpdateOverride: (key: string, value: any) => void;
+}) {
+    const [expanded, setExpanded] = useState(false);
+    const content = { ...section.defaultContent, ...overrides };
+
+    // Get editable string fields from content
+    const editableFields = Object.entries(content).filter(
+        ([, v]) => typeof v === 'string'
+    );
+
+    return (
+        <div className={`rounded-xl border-2 transition-all duration-300 overflow-hidden ${
+            isEnabled
+                ? 'border-[#865BFF]/30 bg-white shadow-sm'
+                : 'border-slate-200 bg-slate-50/50 opacity-60'
+        }`}>
+            <div className="flex items-center justify-between px-4 py-3.5">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className="text-lg flex-shrink-0">{section.icon}</span>
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                            <h4 className={`font-bold text-[13px] truncate ${isEnabled ? 'text-slate-800' : 'text-slate-400'}`}>
+                                {section.name}
+                            </h4>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 font-bold uppercase tracking-wider flex-shrink-0">
+                                L{section.sourceTemplate}
+                            </span>
+                        </div>
+                        <p className={`text-[10px] mt-0.5 truncate ${isEnabled ? 'text-slate-400' : 'text-slate-300'}`}>
+                            {section.description}
+                        </p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                    {isEnabled && (
+                        <button
+                            onClick={() => setExpanded(!expanded)}
+                            className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-[#865BFF] transition-colors"
+                        >
+                            {expanded ? <ChevronUp className="w-4 h-4" /> : <Pencil className="w-4 h-4" />}
+                        </button>
+                    )}
+                    <button onClick={onToggle} className="transition-colors">
+                        {isEnabled ? (
+                            <ToggleRight className="w-7 h-7 text-[#865BFF]" />
+                        ) : (
+                            <ToggleLeft className="w-7 h-7 text-slate-300" />
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            {isEnabled && expanded && (
+                <div className="px-4 pb-4 border-t border-slate-100 pt-3 space-y-3">
+                    {editableFields.map(([key, val]) => (
+                        <div key={key}>
+                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">
+                                {key.replace(/([A-Z])/g, ' $1').trim()}
+                            </label>
+                            {(val as string).length > 80 ? (
+                                <textarea
+                                    value={(overrides[key] ?? val) as string}
+                                    onChange={(e) => onUpdateOverride(key, e.target.value)}
+                                    rows={3}
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10 resize-none"
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    value={(overrides[key] ?? val) as string}
+                                    onChange={(e) => onUpdateOverride(key, e.target.value)}
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10"
+                                />
+                            )}
+                        </div>
+                    ))}
+                    <p className="text-[10px] text-slate-400 italic pt-1">
+                        Los arrays (items, traders, etc.) usan valores por defecto. Edita los textos básicos aquí.
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ─── Section Picker Modal ───────────────────────────────────
+function SectionPicker({
+    onAdd,
+    onClose,
+    alreadySelected,
+}: {
+    onAdd: (sectionId: string) => void;
+    onClose: () => void;
+    alreadySelected: string[];
+}) {
+    const [filterCat, setFilterCat] = useState<SectionCategory | 'all'>('all');
+
+    const filtered = filterCat === 'all'
+        ? SECTION_CATALOG
+        : SECTION_CATALOG.filter(s => s.category === filterCat);
+
+    return (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                    <div>
+                        <h3 className="text-lg font-black text-slate-800">Agregar Sección</h3>
+                        <p className="text-xs text-slate-400">Selecciona secciones de cualquier template</p>
+                    </div>
+                    <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Category filters */}
+                <div className="flex items-center gap-1.5 px-6 py-3 border-b border-slate-100 overflow-x-auto">
+                    <button
+                        onClick={() => setFilterCat('all')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex-shrink-0 ${
+                            filterCat === 'all'
+                                ? 'bg-[#865BFF] text-white'
+                                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                        }`}
+                    >Todas</button>
+                    {(Object.entries(SECTION_CATEGORIES) as [SectionCategory, { label: string; icon: string }][]).map(([key, val]) => (
+                        <button
+                            key={key}
+                            onClick={() => setFilterCat(key)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex-shrink-0 ${
+                                filterCat === key
+                                    ? 'bg-[#865BFF] text-white'
+                                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                            }`}
+                        >{val.icon} {val.label}</button>
+                    ))}
+                </div>
+
+                {/* Section list */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                    {filtered.map(section => {
+                        const isAlready = alreadySelected.includes(section.id);
+                        return (
+                            <div
+                                key={section.id}
+                                className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                                    isAlready
+                                        ? 'border-emerald-200 bg-emerald-50'
+                                        : 'border-slate-200 hover:border-[#865BFF]/30 hover:bg-[#865BFF]/5 cursor-pointer'
+                                }`}
+                                onClick={() => !isAlready && onAdd(section.id)}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className="text-lg">{section.icon}</span>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-slate-800">{section.name}</h4>
+                                        <p className="text-[10px] text-slate-400">{section.description}</p>
+                                    </div>
+                                </div>
+                                {isAlready ? (
+                                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                                        <Check className="w-3.5 h-3.5" /> Incluida
+                                    </span>
+                                ) : (
+                                    <Plus className="w-5 h-5 text-[#865BFF]" />
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ─── Main Component ─────────────────────────────────────────
+interface LandingTypeformProps {
+    initialTemplateId?: string; // Pre-select a template
+}
+
+export default function LandingTypeform({ initialTemplateId }: LandingTypeformProps) {
+    const [step, setStep] = useState<Step>(initialTemplateId ? 2 : 1);
+    const [userId, setUserId] = useState('');
     const [partnerId, setPartnerId] = useState('');
-    const [friendlyPartnerId, setFriendlyPartnerId] = useState('');
-    const [savedLandings, setSavedLandings] = useState<any[]>([]);
-    const [isLoadingLandings, setIsLoadingLandings] = useState(false);
-    const [baseUrl, setBaseUrl] = useState('');
-    const [copiedId, setCopiedId] = useState<number | null>(null);
 
-    const fetchLandings = async (uuid: string, friendlyId: string) => {
-        setIsLoadingLandings(true);
-        const { data, error } = await supabase
-            .from('landings')
-            .select('*')
-            .or(`partner_id.eq.${uuid},partner_id.eq.${friendlyId}`)
-            .order('created_at', { ascending: false });
-        
-        if (data) {
-            const mapped = data.map(l => ({
-                id: l.id,
-                name: l.full_name,
-                date: new Date(l.created_at).toLocaleString('es-ES'),
-                type: LANDING_TYPES.find(t => t.id === l.landing_type)?.title || l.landing_type,
-                language: l.language,
-                slug: l.slug,
-                rawData: {
-                    fullName: l.full_name,
-                    country: l.country,
-                    language: l.language,
-                    whatsapp: l.whatsapp,
-                    email: l.email,
-                    landingType: l.landing_type,
-                    googleAnalyticsId: l.google_analytics_id || '',
-                }
-            }));
-            setSavedLandings(mapped);
-        }
-        setIsLoadingLandings(false);
-    };
+    // Step 1: Basic Data
+    const [fullName, setFullName] = useState('');
+    const [country, setCountry] = useState('');
+    const [language, setLanguage] = useState('ES');
+    const [whatsapp, setWhatsapp] = useState('');
+    const [email, setEmail] = useState('');
 
+    // Step 2: Template Selection
+    const [selectedTemplate, setSelectedTemplate] = useState<string>(initialTemplateId || '');
+    const [templateFilter, setTemplateFilter] = useState<string>('all');
+
+    // Step 3: Section Editor
+    const [selectedSections, setSelectedSections] = useState<string[]>([]);
+    const [sectionOverrides, setSectionOverrides] = useState<Record<string, Record<string, any>>>({});
+    const [showSectionPicker, setShowSectionPicker] = useState(false);
+
+    // Step 4-5: Generate
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [generatedHTML, setGeneratedHTML] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    // Load user
     useEffect(() => {
-        setBaseUrl(window.location.origin);
-        
-        const loadInitialData = async () => {
+        const loadUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                setPartnerId(user.id);
-                
-                // Fetch profile to get THE truth about the partner_id
+                setUserId(user.id);
                 const { data: profile } = await supabase
                     .from('profiles')
-                    .select('partner_id')
+                    .select('partner_id, full_name, email, whatsapp, country')
                     .eq('id', user.id)
                     .single();
-                
-                // Fallback robusto que no dependa de cálculos manuales si ya existe en DB
-                const fId = profile?.partner_id || ''; 
-                setFriendlyPartnerId(fId);
-                
-                // Fetch using BOTH to ensure we find old and new records
-                await fetchLandings(user.id, fId);
+                if (profile) {
+                    setPartnerId(profile.partner_id || 'BM_' + user.id.substring(0, 8).toUpperCase());
+                    if (profile.full_name) setFullName(profile.full_name);
+                    if (profile.email) setEmail(profile.email);
+                    if (profile.whatsapp) setWhatsapp(profile.whatsapp);
+                    if (profile.country) setCountry(profile.country);
+                }
             }
         };
-
-        loadInitialData();
+        loadUser();
     }, []);
 
-    const handleEditItem = (item: any) => {
-        setFormData(item.rawData);
-        setStep(1);
-        setGenerated(false);
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    // When template is selected, pre-fill sections
+    useEffect(() => {
+        if (selectedTemplate) {
+            const template = LANDING_TEMPLATES.find(t => t.id === selectedTemplate);
+            if (template) {
+                setSelectedSections([...template.sections]);
+                setSectionOverrides({});
+            }
+        }
+    }, [selectedTemplate]);
 
-    const iframeRef = useRef<HTMLIFrameElement>(null);
+    // Pre-select if initialTemplateId passed
+    useEffect(() => {
+        if (initialTemplateId) {
+            setSelectedTemplate(initialTemplateId);
+        }
+    }, [initialTemplateId]);
 
-    const previewUrl = formData.fullName
-        ? `${baseUrl}/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
-        : `${baseUrl}/l/tu-nombre`;
+    const toggleSection = useCallback((sectionId: string) => {
+        setSelectedSections(prev =>
+            prev.includes(sectionId)
+                ? prev.filter(s => s !== sectionId)
+                : [...prev, sectionId]
+        );
+    }, []);
 
-    const handleNext = () => setStep((s) => Math.min(s + 1, 3) as Step);
-    const handlePrev = () => setStep((s) => Math.max(s - 1, 1) as Step);
+    const addSection = useCallback((sectionId: string) => {
+        if (!selectedSections.includes(sectionId)) {
+            setSelectedSections(prev => [...prev, sectionId]);
+        }
+    }, [selectedSections]);
+
+    const removeSection = useCallback((sectionId: string) => {
+        setSelectedSections(prev => prev.filter(s => s !== sectionId));
+    }, []);
+
+    const moveSectionUp = useCallback((index: number) => {
+        if (index === 0) return;
+        setSelectedSections(prev => {
+            const arr = [...prev];
+            [arr[index - 1], arr[index]] = [arr[index], arr[index - 1]];
+            return arr;
+        });
+    }, []);
+
+    const moveSectionDown = useCallback((index: number) => {
+        setSelectedSections(prev => {
+            if (index >= prev.length - 1) return prev;
+            const arr = [...prev];
+            [arr[index], arr[index + 1]] = [arr[index + 1], arr[index]];
+            return arr;
+        });
+    }, []);
+
+    const updateOverride = useCallback((sectionId: string, key: string, value: any) => {
+        setSectionOverrides(prev => ({
+            ...prev,
+            [sectionId]: { ...(prev[sectionId] || {}), [key]: value },
+        }));
+    }, []);
 
     const handleGenerate = async () => {
         setIsGenerating(true);
 
-        // Generar un slug más único combinando nombre y parte del ID de socio
-        const namePart = formData.fullName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-        const partnerPart = (friendlyPartnerId || partnerId).substring(0, 5).toLowerCase();
-        const slug = `${namePart}-${partnerPart}`;
-
-        const landingData: LandingData = {
-            fullName: formData.fullName,
-            country: formData.country,
-            language: formData.language,
-            whatsapp: formData.whatsapp,
-            email: formData.email,
-            landingType: formData.landingType,
+        const data: LandingData = {
+            fullName,
+            country,
+            language,
+            whatsapp,
+            email,
+            landingType: selectedTemplate,
             partnerId,
-            slug,
-            googleAnalyticsId: formData.googleAnalyticsId,
+            slug: `${selectedTemplate}-${language.toLowerCase()}-${Date.now()}`,
+            modularConfig: {
+                templateId: selectedTemplate,
+                selectedSections,
+                sectionOverrides,
+            },
         };
 
-        const html = generateLandingHTML(landingData);
-        
         try {
-            const response = await fetch('/api/landings', {
+            const html = generateModularLandingHTML(data);
+            setGeneratedHTML(html);
+
+            // Save to Supabase
+            const res = await fetch('/api/landings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    slug, 
-                    html, 
+                body: JSON.stringify({
+                    userId,
+                    slug: data.slug,
+                    html,
                     data: {
-                        ...landingData,
-                        userId: partnerId // explicit userId for API to resolve friendly ID
-                    } 
-                })
+                        ...data,
+                        modularConfig: data.modularConfig,
+                    },
+                }),
             });
-            
-            if (!response.ok) throw new Error('Failed to save');
-            
-            const resData = await response.json();
-            
-            // Si la API nos devolvió el partner_id real, actualizamos el estado para futuras peticiones
-            if (resData.partner_id && resData.partner_id !== friendlyPartnerId) {
-                setFriendlyPartnerId(resData.partner_id);
-            }
 
-            // Refresh list from DB using the most up to date IDs
-            await fetchLandings(partnerId, resData.partner_id || friendlyPartnerId);
-        } catch (error) {
-            console.error('Error deploying landing:', error);
-        }
+            if (!res.ok) console.error('Failed to save landing');
 
-        setGeneratedHtml(html);
-        setDeployedUrl((baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + '/l/' + slug);
-        setIsGenerating(false);
-        setGenerated(true);
-    };
-
-    const handlePreview = () => {
-        if (generatedHtml) {
-            setShowPreview(true);
+            setStep(5);
+        } catch (err) {
+            console.error('Error generating:', err);
+        } finally {
+            setIsGenerating(false);
         }
     };
 
-    const handleDownload = () => {
-        if (generatedHtml) {
-            downloadLandingHTML(generatedHtml, `landing-${formData.fullName.toLowerCase().replace(/\s+/g, '-')}.html`);
-        }
+    const canAdvance = (s: Step): boolean => {
+        if (s === 1) return !!(fullName && language);
+        if (s === 2) return !!selectedTemplate;
+        if (s === 3) return selectedSections.length >= 1;
+        return true;
     };
 
-    const handleOpenNewTab = () => {
-        if (deployedUrl) {
-            window.open(deployedUrl, '_blank');
-        } else if (generatedHtml) {
-            openLandingPreview(generatedHtml);
-        }
-    };
+    const filteredTemplates = templateFilter === 'all'
+        ? LANDING_TEMPLATES
+        : LANDING_TEMPLATES.filter(t => t.category === templateFilter);
 
-    const handleEdit = () => {
-        setGenerated(false);
-        setStep(1);
-    };
+    const templateCategories = ['all', ...Array.from(new Set(LANDING_TEMPLATES.map(t => t.category)))];
 
-    const handleCopyHtml = () => {
-        navigator.clipboard.writeText(generatedHtml);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
-    const handleReset = () => {
-        setStep(1);
-        setGenerated(false);
-        setGeneratedHtml('');
-        setFormData({ fullName: '', country: 'España', language: 'ES', whatsapp: '', email: '', landingType: 'institucional', googleAnalyticsId: '' });
-    };
-
-    const steps = [
-        { num: 1, label: 'Datos' },
-        { num: 2, label: 'Enfoque' },
-        { num: 3, label: 'Generar' },
+    // Step indicator
+    const STEPS = [
+        { num: 1, label: 'Datos', icon: User },
+        { num: 2, label: 'Template', icon: Layout },
+        { num: 3, label: 'Secciones', icon: Sparkles },
+        { num: 4, label: 'Generar', icon: Rocket },
     ];
 
-    const isStep1Valid = formData.fullName.trim().length > 0 && formData.email.trim().length > 0;
-
     return (
-        <>
-            <div className="w-full">
-                {/* Stepper */}
-                <div className="flex items-center gap-2 mb-8">
-                    {steps.map((s, i) => (
+        <div className="max-w-5xl mx-auto pb-12">
+            {/* Step Indicator */}
+            <div className="flex items-center justify-center gap-2 mb-8">
+                {STEPS.map((s, i) => {
+                    const Icon = s.icon;
+                    const isActive = step === s.num;
+                    const isDone = step > s.num;
+                    return (
                         <React.Fragment key={s.num}>
-                            <div className="flex items-center gap-2">
-                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                                    step > s.num ? 'bg-[#865BFF] text-white' :
-                                    step === s.num ? 'bg-[#865BFF] text-white ring-4 ring-[#865BFF]/20' :
-                                    'bg-slate-100 text-slate-400 border border-slate-200'
-                                }`}>
-                                    {step > s.num ? <Check className="w-3.5 h-3.5" /> : s.num}
-                                </div>
-                                <span className={`text-sm font-semibold ${step >= s.num ? 'text-slate-800' : 'text-slate-400'}`}>
-                                    {s.label}
-                                </span>
-                            </div>
-                            {i < steps.length - 1 && (
-                                <ChevronRight className="w-4 h-4 text-slate-300 mx-1" />
-                            )}
+                            <button
+                                onClick={() => { if (isDone) setStep(s.num as Step); }}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                                    isActive
+                                        ? 'bg-[#865BFF] text-white shadow-md shadow-[#865BFF]/20'
+                                        : isDone
+                                            ? 'bg-emerald-100 text-emerald-700 cursor-pointer hover:bg-emerald-200'
+                                            : 'bg-slate-100 text-slate-400'
+                                }`}
+                            >
+                                {isDone ? <Check className="w-3.5 h-3.5" /> : <Icon className="w-3.5 h-3.5" />}
+                                {s.label}
+                            </button>
+                            {i < STEPS.length - 1 && <ChevronRight className="w-4 h-4 text-slate-300" />}
                         </React.Fragment>
-                    ))}
-                </div>
-
-                {/* Step Content */}
-                <div className="bg-white rounded-xl border border-slate-200 shadow-card">
-                    {/* === STEP 1: Datos === */}
-                    {step === 1 && (
-                        <div className="p-8">
-                            <div className="mb-6">
-                                <h3 className="text-lg font-bold text-slate-800">Datos del comercial</h3>
-                                <p className="text-sm text-slate-400 mt-0.5">Esta información aparecerá en tu landing personalizada</p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div>
-                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
-                                        <User className="w-3.5 h-3.5" /> Nombre completo *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={formData.fullName}
-                                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                        placeholder="Carlos Martínez"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
-                                        <MapPin className="w-3.5 h-3.5" /> País *
-                                    </label>
-                                    <select
-                                        value={formData.country}
-                                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all appearance-none"
-                                    >
-                                        {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="mt-5">
-                                <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-2">
-                                    <Globe className="w-3.5 h-3.5" /> Idioma de la landing *
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.language}
-                                        onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all appearance-none"
-                                    >
-                                        {LANGUAGES.map(lang => (
-                                            <option key={lang.code} value={lang.code}>
-                                                {lang.flag} {lang.label} ({lang.code})
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-                                <div>
-                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
-                                        <MessageSquare className="w-3.5 h-3.5" /> WhatsApp *
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        value={formData.whatsapp}
-                                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                                        placeholder="+34 600 000 000"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
-                                        <Mail className="w-3.5 h-3.5" /> Email *
-                                    </label>
-                                    <input
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        placeholder="admin@bridge.com"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="mt-5">
-                                <label className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 mb-1.5">
-                                    <Target className="w-3.5 h-3.5" /> ID de Google Analytics (Opcional)
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.googleAnalyticsId}
-                                    onChange={(e) => setFormData({ ...formData, googleAnalyticsId: e.target.value })}
-                                    placeholder="Ej. G-XXXXXXXXXX"
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 transition-all font-mono"
-                                />
-                                <p className="text-[10px] text-slate-400 mt-1.5">Permite rastrear visitantes a través de Google Analytics 4.</p>
-                            </div>
-
-                            <div className="mt-6">
-                                <div className="bg-[#865BFF]/5 border border-[#865BFF]/20 rounded-lg px-4 py-3 flex items-center gap-3">
-                                    <div className="flex items-center gap-1.5 text-[#865BFF]">
-                                        <Globe className="w-4 h-4" />
-                                        <span className="text-[11px] font-bold uppercase">Tu URL</span>
-                                    </div>
-                                    <span className="text-sm font-mono text-slate-600 truncate">{previewUrl}</span>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
-                                <button disabled className="text-sm font-medium text-slate-400 cursor-not-allowed">
-                                    Atrás
-                                </button>
-                                <button
-                                    onClick={handleNext}
-                                    disabled={!isStep1Valid}
-                                    className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#865BFF] text-white hover:bg-[#6b3fd6] transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
-                                >
-                                    Continuar <ChevronRight className="w-4 h-4" />
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* === STEP 2: Enfoque === */}
-                    {step === 2 && (
-                        <div className="p-8">
-                            <div className="mb-6">
-                                <h3 className="text-lg font-bold text-slate-800">Tipo de landing</h3>
-                                <p className="text-sm text-slate-400 mt-0.5">Selecciona el enfoque de tu página personalizada</p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {LANDING_TYPES.map(type => {
-                                    const Icon = type.icon;
-                                    const selected = formData.landingType === type.id;
-                                    return (
-                                        <button
-                                            key={type.id}
-                                            onClick={() => setFormData({ ...formData, landingType: type.id })}
-                                            className={`p-5 rounded-xl border-2 text-left transition-all ${
-                                                selected
-                                                    ? 'border-[#865BFF] bg-[#865BFF]/5 shadow-sm'
-                                                    : 'border-slate-200 bg-white hover:border-slate-300'
-                                            }`}
-                                        >
-                                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${type.color} flex items-center justify-center mb-3`}>
-                                                <Icon className="w-5 h-5 text-white" />
-                                            </div>
-                                            <div className="font-bold text-slate-800 text-sm">{type.title}</div>
-                                            <div className="text-xs text-slate-400 mt-0.5">{type.desc}</div>
-                                            {selected && (
-                                                <div className="mt-3 flex items-center gap-1 text-[#865BFF] text-xs font-semibold">
-                                                    <Check className="w-3.5 h-3.5" /> Seleccionado
-                                                </div>
-                                            )}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-
-                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
-                                <button onClick={handlePrev} className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
-                                    Atrás
-                                </button>
-                                <button
-                                    onClick={handleNext}
-                                    className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#865BFF] text-white hover:bg-[#6b3fd6] transition-all shadow-sm flex items-center gap-1.5"
-                                >
-                                    Continuar <ChevronRight className="w-4 h-4" />
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* === STEP 3: Generar === */}
-                    {step === 3 && !generated && (
-                        <div className="p-8">
-                            <div className="mb-6">
-                                <h3 className="text-lg font-bold text-slate-800">Resumen y generación</h3>
-                                <p className="text-sm text-slate-400 mt-0.5">Revisa tus datos antes de generar la landing page</p>
-                            </div>
-
-                            <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden">
-                                {[
-                                    { label: 'Nombre', value: formData.fullName },
-                                    { label: 'País', value: formData.country },
-                                    { label: 'Idioma', value: LANGUAGES.find(l => l.code === formData.language)?.label || formData.language },
-                                    { label: 'WhatsApp', value: formData.whatsapp || '—' },
-                                    { label: 'Email', value: formData.email },
-                                    { label: 'Tipo', value: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType },
-                                ].map(row => (
-                                    <div key={row.label} className="flex items-center justify-between px-5 py-3 text-sm">
-                                        <span className="font-medium text-slate-400">{row.label}</span>
-                                        <span className="font-semibold text-slate-800">{row.value}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
-                                <button onClick={handlePrev} className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
-                                    Atrás
-                                </button>
-                                <button
-                                    onClick={handleGenerate}
-                                    disabled={isGenerating}
-                                    className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#6b3fd6] hover:to-[#5530b0] transition-all shadow-lg shadow-[#865BFF]/20 flex items-center gap-2 disabled:opacity-70"
-                                >
-                                    {isGenerating ? (
-                                        <><Loader2 className="w-4 h-4 animate-spin" /> Generando landing...</>
-                                    ) : (
-                                        <><Rocket className="w-4 h-4" /> Generar Landing Page</>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* === STEP 3: Success === */}
-                    {step === 3 && generated && (
-                        <div className="p-8">
-                            <div className="text-center mb-8">
-                                <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <Check className="w-7 h-7 text-emerald-500" />
-                                </div>
-                                 <h3 className="text-xl font-bold text-slate-800 mb-1">¡Landing generada exitosamente!</h3>
-                                 <p className="text-sm text-slate-400">Tu landing personalizada está lista. Previsualiza o edita los datos.</p>
-                            </div>
-
-                            {/* Action buttons */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-                                <button
-                                    onClick={handlePreview}
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#865BFF] text-white font-semibold text-sm hover:bg-[#6b3fd6] transition-all"
-                                >
-                                    <Eye className="w-4 h-4" /> Vista Previa
-                                </button>
-                                <button
-                                    onClick={handleOpenNewTab}
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-700 font-semibold text-sm hover:bg-slate-200 transition-all"
-                                >
-                                    <ExternalLink className="w-4 h-4" /> Abrir en Nueva Pestaña
-                                </button>
-                                <button
-                                    onClick={handleEdit}
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-700 font-semibold text-sm hover:bg-slate-200 transition-all"
-                                >
-                                    <Pencil className="w-4 h-4" /> Editar
-                                </button>
-                            </div>
-
-                            {/* Create another */}
-                            <div className="flex items-center justify-center mt-6 pt-6 border-t border-slate-100">
-                                <button
-                                    onClick={handleReset}
-                                    className="text-sm font-semibold text-[#865BFF] hover:text-[#6b3fd6] transition-colors flex items-center gap-1.5"
-                                >
-                                    <RefreshCw className="w-3.5 h-3.5" /> Crear otra landing
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Historial de Landings — Siempre visible para confirmar funcionamiento */}
-                <div className="mt-12 space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                            <Rocket className="w-4 h-4" />
-                            Tus Landing Pages Recientes
-                        </h3>
-                        {isLoadingLandings && <Loader2 className="w-4 h-4 animate-spin text-[#865BFF]" />}
-                    </div>
-
-                    {savedLandings.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {savedLandings.map((l) => (
-                                <div key={l.id} className="card p-4 hover:shadow-md transition-all group border-slate-100">
-                                    <div className="flex flex-col h-full">
-                                        <div className="flex items-start justify-between mb-3">
-                                            <div className="w-10 h-10 rounded-lg bg-[#865BFF]/10 flex items-center justify-center text-[#865BFF]">
-                                                <Globe className="w-5 h-5" />
-                                            </div>
-                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button 
-                                                    onClick={() => handleEditItem(l)}
-                                                    className="p-1.5 hover:bg-slate-100 rounded-md text-slate-400 hover:text-[#865BFF] transition-colors"
-                                                    title="Editar"
-                                                >
-                                                    <Pencil className="w-3.5 h-3.5" />
-                                                </button>
-                                                <button 
-                                                    onClick={() => {
-                                                        const url = (baseUrl || window.location.origin) + '/l/' + l.slug;
-                                                        window.open(url, '_blank');
-                                                    }}
-                                                    className="p-1.5 hover:bg-slate-100 rounded-md text-slate-400 hover:text-blue-500 transition-colors"
-                                                    title="Ver Link"
-                                                >
-                                                    <Eye className="w-3.5 h-3.5" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <h4 className="font-bold text-slate-800 text-sm mb-1 truncate">{l.name}</h4>
-                                        <div className="text-[10px] text-slate-400 font-medium mb-3">{l.type} · {l.date}</div>
-                                        
-                                        <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-slate-50">
-                                            <button 
-                                                onClick={() => {
-                                                    const url = (baseUrl || window.location.origin) + '/l/' + l.slug;
-                                                    navigator.clipboard.writeText(url);
-                                                    setCopiedId(l.id);
-                                                    setTimeout(() => setCopiedId(null), 2000);
-                                                }}
-                                                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md bg-slate-50 hover:bg-[#865BFF]/5 text-slate-500 hover:text-[#865BFF] transition-all text-[10px] font-bold"
-                                            >
-                                                {copiedId === l.id ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                                                {copiedId === l.id ? 'Copiado' : 'Copiar Link'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="card p-12 border-dashed border-2 bg-slate-50/30 flex flex-col items-center justify-center text-center">
-                            {!isLoadingLandings ? (
-                                <>
-                                    <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
-                                        <Rocket className="w-8 h-8 text-slate-300" />
-                                    </div>
-                                    <h4 className="text-slate-800 font-bold mb-1">Aún no tienes landings generadas</h4>
-                                    <p className="text-slate-400 text-xs max-w-xs">Usa el formulario de arriba para crear tu primera landing page personalizada en segundos.</p>
-                                </>
-                            ) : (
-                                <div className="flex flex-col items-center">
-                                    <Loader2 className="w-8 h-8 animate-spin text-[#865BFF] mb-4" />
-                                    <p className="text-slate-400 text-xs text-center">Buscando tus landings...</p>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                    );
+                })}
             </div>
 
-            {/* Preview Modal */}
-            {showPreview && (
-                <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-                        <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 bg-slate-50">
-                            <div className="flex items-center gap-3">
-                                <div className="flex gap-1.5">
-                                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                                    <div className="w-3 h-3 rounded-full bg-green-400" />
-                                </div>
-                                <span className="text-xs font-mono text-slate-400">{previewUrl}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={handleDownload}
-                                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-200"
-                                >
-                                    <Download className="w-3.5 h-3.5" /> Descargar
-                                </button>
-                                <button
-                                    onClick={() => setShowPreview(false)}
-                                    className="p-1 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-                            </div>
+            {/* ─── STEP 1: Basic Data ─── */}
+            {step === 1 && (
+                <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <h2 className="text-2xl font-black text-slate-800 mb-1">Datos del Partner</h2>
+                    <p className="text-sm text-slate-400 mb-8">Información que se reflejará en la landing generada</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">Nombre Completo *</label>
+                            <input
+                                type="text" value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="John Doe"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
+                            />
                         </div>
-                        <iframe
-                            ref={iframeRef}
-                            srcDoc={generatedHtml}
-                            className="flex-1 w-full border-0"
-                            title="Landing Preview"
-                            sandbox="allow-same-origin"
-                        />
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">Email</label>
+                            <input
+                                type="email" value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="partner@email.com"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">WhatsApp</label>
+                            <input
+                                type="text" value={whatsapp}
+                                onChange={(e) => setWhatsapp(e.target.value)}
+                                placeholder="+1 234 567 8900"
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">País</label>
+                            <select
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
+                            >
+                                <option value="">Seleccionar...</option>
+                                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Language */}
+                    <div className="mt-6">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3 block">Idioma de la Landing *</label>
+                        <div className="flex flex-wrap gap-2">
+                            {LANGUAGES.map(lang => (
+                                <button
+                                    key={lang.code}
+                                    onClick={() => setLanguage(lang.code)}
+                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                                        language === lang.code
+                                            ? 'bg-[#865BFF] text-white shadow-md'
+                                            : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-[#865BFF]/30'
+                                    }`}
+                                >
+                                    <span>{lang.flag}</span> {lang.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="mt-8 flex justify-end">
+                        <button
+                            onClick={() => setStep(2)}
+                            disabled={!canAdvance(1)}
+                            className="flex items-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#865BFF]/20"
+                        >
+                            Siguiente <ArrowRight className="w-4 h-4" />
+                        </button>
                     </div>
                 </div>
             )}
-        </>
+
+            {/* ─── STEP 2: Template Selection ─── */}
+            {step === 2 && (
+                <div>
+                    <div className="text-center mb-6">
+                        <h2 className="text-2xl font-black text-slate-800 mb-1">Elegir Template Base</h2>
+                        <p className="text-sm text-slate-400">Selecciona un diseño como punto de partida. Podrás personalizar las secciones después.</p>
+                    </div>
+
+                    {/* Category filters */}
+                    <div className="flex items-center justify-center gap-1.5 mb-6 flex-wrap">
+                        {templateCategories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setTemplateFilter(cat)}
+                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                                    templateFilter === cat
+                                        ? 'bg-[#865BFF] text-white shadow-sm'
+                                        : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
+                                }`}
+                            >
+                                {cat === 'all' ? '🌐 Todas' : cat}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Template Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {filteredTemplates.map(template => {
+                            const isSelected = selectedTemplate === template.id;
+                            return (
+                                <div
+                                    key={template.id}
+                                    onClick={() => setSelectedTemplate(template.id)}
+                                    className={`group relative rounded-2xl border-2 overflow-hidden cursor-pointer transition-all duration-300 ${
+                                        isSelected
+                                            ? 'border-[#865BFF] shadow-xl shadow-[#865BFF]/10 ring-2 ring-[#865BFF]/20'
+                                            : 'border-slate-200 hover:border-slate-300 hover:shadow-lg hover:-translate-y-0.5'
+                                    }`}
+                                >
+                                    {/* Gradient Header */}
+                                    <div
+                                        className="h-28 relative overflow-hidden"
+                                        style={{ background: template.gradient }}
+                                    >
+                                        <div className="absolute inset-0 opacity-20" style={{
+                                            backgroundImage: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.2) 0%, transparent 50%)',
+                                        }} />
+                                        {template.badge && (
+                                            <span className="absolute top-3 right-3 text-white text-[9px] font-black px-2 py-0.5 rounded-lg uppercase tracking-wider"
+                                                style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}
+                                            >{template.badge}</span>
+                                        )}
+                                        <div className="absolute bottom-3 left-4">
+                                            <div className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/40">Bridge Markets</div>
+                                            <h3 className="text-lg font-black text-white leading-tight">{template.name}</h3>
+                                        </div>
+                                        {isSelected && (
+                                            <div className="absolute top-3 left-3">
+                                                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                                                    <Check className="w-4 h-4 text-[#865BFF]" />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Body */}
+                                    <div className="p-4 bg-white">
+                                        <p className="text-[12px] text-slate-500 mb-3 line-clamp-2">{template.description}</p>
+                                        <div className="flex items-center gap-1 flex-wrap">
+                                            {template.sections.slice(0, 4).map(sId => {
+                                                const sec = SECTION_CATALOG.find(s => s.id === sId);
+                                                return sec ? (
+                                                    <span key={sId} className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">
+                                                        {sec.icon} {sec.name.split(' ')[0]}
+                                                    </span>
+                                                ) : null;
+                                            })}
+                                            {template.sections.length > 4 && (
+                                                <span className="text-[9px] text-slate-400 font-bold">+{template.sections.length - 4}</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Nav */}
+                    <div className="mt-8 flex justify-between">
+                        <button
+                            onClick={() => setStep(1)}
+                            className="flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                        >
+                            <ArrowLeft className="w-4 h-4" /> Atrás
+                        </button>
+                        <button
+                            onClick={() => setStep(3)}
+                            disabled={!canAdvance(2)}
+                            className="flex items-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#865BFF]/20"
+                        >
+                            Personalizar Secciones <ArrowRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ─── STEP 3: Section Editor ─── */}
+            {step === 3 && (
+                <div>
+                    <div className="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 className="text-2xl font-black text-slate-800 mb-1">Editor de Secciones</h2>
+                            <p className="text-sm text-slate-400">
+                                Activa/desactiva, reordena y edita el contenido de cada sección.
+                                <span className="font-bold text-[#865BFF] ml-1">{selectedSections.length} activas</span>
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setShowSectionPicker(true)}
+                            className="flex items-center gap-2 px-4 py-2.5 bg-[#865BFF]/10 text-[#865BFF] font-bold rounded-xl hover:bg-[#865BFF]/20 transition-all text-sm border border-[#865BFF]/20"
+                        >
+                            <Plus className="w-4 h-4" /> Agregar Sección
+                        </button>
+                    </div>
+
+                    {/* Active sections */}
+                    <div className="space-y-3 mb-6">
+                        {selectedSections.map((sId, index) => {
+                            const section = SECTION_CATALOG.find(s => s.id === sId);
+                            if (!section) return null;
+                            return (
+                                <div key={`${sId}-${index}`} className="flex items-start gap-2">
+                                    {/* Reorder controls */}
+                                    <div className="flex flex-col gap-0.5 pt-3">
+                                        <button
+                                            onClick={() => moveSectionUp(index)}
+                                            className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
+                                            disabled={index === 0}
+                                        >
+                                            <ChevronUp className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => moveSectionDown(index)}
+                                            className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
+                                            disabled={index === selectedSections.length - 1}
+                                        >
+                                            <ChevronDown className="w-4 h-4" />
+                                        </button>
+                                    </div>
+
+                                    {/* Section card */}
+                                    <div className="flex-1">
+                                        <SectionCard
+                                            section={section}
+                                            isEnabled={true}
+                                            onToggle={() => removeSection(sId)}
+                                            overrides={sectionOverrides[sId] || {}}
+                                            onUpdateOverride={(key, val) => updateOverride(sId, key, val)}
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Available sections not yet added */}
+                    {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).length > 0 && (
+                        <div className="border-t border-slate-200 pt-6">
+                            <h3 className="text-sm font-bold text-slate-400 mb-3">Secciones Disponibles</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).map(section => (
+                                    <SectionCard
+                                        key={section.id}
+                                        section={section}
+                                        isEnabled={false}
+                                        onToggle={() => addSection(section.id)}
+                                        overrides={{}}
+                                        onUpdateOverride={() => {}}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Nav */}
+                    <div className="mt-8 flex justify-between">
+                        <button
+                            onClick={() => setStep(2)}
+                            className="flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                        >
+                            <ArrowLeft className="w-4 h-4" /> Cambiar Template
+                        </button>
+                        <button
+                            onClick={() => setStep(4)}
+                            disabled={!canAdvance(3)}
+                            className="flex items-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#865BFF]/20"
+                        >
+                            Preview y Generar <ArrowRight className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                    {/* Section Picker Modal */}
+                    {showSectionPicker && (
+                        <SectionPicker
+                            onAdd={(id) => { addSection(id); }}
+                            onClose={() => setShowSectionPicker(false)}
+                            alreadySelected={selectedSections}
+                        />
+                    )}
+                </div>
+            )}
+
+            {/* ─── STEP 4: Preview & Generate ─── */}
+            {step === 4 && (
+                <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <h2 className="text-2xl font-black text-slate-800 mb-1">Preview y Generar</h2>
+                    <p className="text-sm text-slate-400 mb-6">Revisa tu configuración antes de generar</p>
+
+                    {/* Summary */}
+                    <div className="bg-slate-50 rounded-xl p-6 mb-6 space-y-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Template</span>
+                                <p className="text-sm font-bold text-slate-800">
+                                    {LANDING_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
+                                </p>
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Idioma</span>
+                                <p className="text-sm font-bold text-slate-800">
+                                    {LANGUAGES.find(l => l.code === language)?.flag} {LANGUAGES.find(l => l.code === language)?.label}
+                                </p>
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Secciones</span>
+                                <p className="text-sm font-bold text-[#865BFF]">{selectedSections.length} activas</p>
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Partner</span>
+                                <p className="text-sm font-bold text-slate-800">{partnerId}</p>
+                            </div>
+                        </div>
+
+                        {/* Section list */}
+                        <div className="flex flex-wrap gap-1.5 pt-2">
+                            {selectedSections.map(sId => {
+                                const sec = SECTION_CATALOG.find(s => s.id === sId);
+                                return sec ? (
+                                    <span key={sId} className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2.5 py-1 rounded-lg font-semibold">
+                                        {sec.icon} {sec.name}
+                                    </span>
+                                ) : null;
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setStep(3)}
+                            className="flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                        >
+                            <ArrowLeft className="w-4 h-4" /> Editar
+                        </button>
+                        <button
+                            onClick={() => {
+                                const data: LandingData = {
+                                    fullName, country, language, whatsapp, email,
+                                    landingType: selectedTemplate, partnerId,
+                                    slug: `preview-${Date.now()}`,
+                                    modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
+                                };
+                                const html = generateModularLandingHTML(data);
+                                openLandingPreview(html);
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 border-2 border-[#865BFF]/30 text-[#865BFF] font-bold rounded-xl hover:bg-[#865BFF]/5 transition-all"
+                        >
+                            <Play className="w-4 h-4" /> Preview en Vivo
+                        </button>
+                        <button
+                            onClick={handleGenerate}
+                            disabled={isGenerating}
+                            className="flex-1 flex items-center justify-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 transition-all shadow-lg shadow-[#865BFF]/20"
+                        >
+                            {isGenerating ? (
+                                <><Loader2 className="w-4 h-4 animate-spin" /> Generando...</>
+                            ) : (
+                                <><Rocket className="w-4 h-4" /> Generar y Guardar</>
+                            )}
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* ─── STEP 5: Success ─── */}
+            {step === 5 && (
+                <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm text-center">
+                    <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Check className="w-8 h-8 text-emerald-500" />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-800 mb-2">¡Landing Generada!</h2>
+                    <p className="text-sm text-slate-400 mb-8">Tu landing modular está lista para compartir</p>
+
+                    <div className="flex flex-wrap gap-3 justify-center">
+                        <button
+                            onClick={() => openLandingPreview(generatedHTML)}
+                            className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                        >
+                            <Eye className="w-4 h-4" /> Ver en Vivo
+                        </button>
+                        <button
+                            onClick={() => {
+                                const blob = new Blob([generatedHTML], { type: 'text/html' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `landing-${selectedTemplate}-${language.toLowerCase()}.html`;
+                                a.click();
+                                URL.revokeObjectURL(url);
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                        >
+                            <Download className="w-4 h-4" /> Descargar HTML
+                        </button>
+                        <button
+                            onClick={() => {
+                                setStep(1);
+                                setSelectedTemplate('');
+                                setSelectedSections([]);
+                                setSectionOverrides({});
+                                setGeneratedHTML('');
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] transition-all shadow-lg shadow-[#865BFF]/20"
+                        >
+                            <Plus className="w-4 h-4" /> Crear Otra
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

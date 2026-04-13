@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#645495",
+                    "secondary-fixed": "#e8ddff",
+                    "inverse-on-surface": "#f7edff",
+                    "tertiary-container": "#7d55f6",
+                    "surface-container-high": "#f0e3ff",
+                    "inverse-surface": "#362b4b",
+                    "surface-container-low": "#f9f0ff",
+                    "on-primary-fixed-variant": "#500fc8",
+                    "surface-tint": "#6939e0",
+                    "surface-bright": "#fef7ff",
+                    "surface-container": "#f4eaff",
+                    "on-surface": "#211635",
+                    "on-primary-container": "#fffbff",
+                    "secondary-fixed-dim": "#cebdff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#6438dc",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#cdbdff",
+                    "on-tertiary-fixed-variant": "#4e15c6",
+                    "outline-variant": "#cbc3d8",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#e8ddff",
+                    "primary-container": "#7f54f8",
+                    "tertiary-fixed": "#e7deff",
+                    "on-tertiary-fixed": "#1f005f",
+                    "outline": "#7a7486",
+                    "surface": "#fef7ff",
+                    "surface-container-highest": "#ebdcff",
+                    "primary": "#6635de",
+                    "surface-dim": "#e3d3fd",
+                    "on-secondary-fixed": "#200c4e",
+                    "background": "#fef7ff",
+                    "on-secondary-fixed-variant": "#4c3c7c",
+                    "inverse-primary": "#cebdff",
+                    "primary-fixed-dim": "#cebdff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#fffbff",
+                    "on-background": "#211635",
+                    "secondary-container": "#c9b6ff",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#20005e",
+                    "on-surface-variant": "#494455",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#ebdcff",
+                    "on-secondary-container": "#544484"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .editorial-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #6635de 0%, #7f54f8 100%);
+        }
+        .floating-3d-shape {
+            filter: blur(60px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .custom-corner {
+            border-top-left-radius: 80px;
+            border-bottom-right-radius: 80px;
+        }
+        .custom-corner-alt {
+            border-top-right-radius: 80px;
+            border-bottom-left-radius: 80px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<nav class="fixed top-0 w-full z-50 rounded-br-[40px] bg-white/60 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-slate-900 font-headline">IB Portal</div>
+<div class="hidden md:flex items-center space-x-10">
+<a class="text-violet-600 font-semibold border-b-2 border-violet-600 py-1 transition-all duration-300 font-headline tracking-tight" href="#">Markets</a>
+<a class="text-slate-600 hover:text-slate-900 transition-all duration-300 font-headline tracking-tight" href="#">Portfolio</a>
+<a class="text-slate-600 hover:text-slate-900 transition-all duration-300 font-headline tracking-tight" href="#">Analytics</a>
+<a class="text-slate-600 hover:text-slate-900 transition-all duration-300 font-headline tracking-tight" href="#">Tools</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 text-slate-600 font-medium hover:bg-slate-100/50 rounded-full transition-all duration-300">Login</button>
+<button class="px-6 py-2.5 bg-primary text-white font-semibold rounded-full shadow-lg shadow-primary/20 scale-95 active:scale-90 transition-all duration-300">Open Account</button>
+</div>
+</div>
+</nav>
+<main class="relative pt-32 overflow-hidden">
+<div class="absolute top-20 right-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full floating-3d-shape"></div>
+<div class="absolute bottom-[20%] left-[-10%] w-[500px] h-[500px] bg-tertiary/20 rounded-full floating-3d-shape"></div>
+<section class="max-w-[1440px] mx-auto px-8 mb-32">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="editorial-stack">
+<span class="text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-primary">Institutional Trading Excellence</span>
+<h1 class="text-[3.5rem] font-bold leading-[1.1] tracking-tight font-headline text-on-surface">
+                        Precision Execution for <span class="text-transparent bg-clip-text hero-gradient">Global Institutions</span>
+</h1>
+<p class="text-lg text-on-surface-variant max-w-xl mt-6 leading-relaxed">
+                        Access deep liquidity pools and low-latency infrastructure across 150+ global markets. Our institutional portal combines cutting-edge FIX connectivity with premium multi-asset management.
+                    </p>
+<div class="flex gap-4 mt-10">
+<button class="px-8 py-4 bg-primary text-white rounded-full font-semibold shadow-xl shadow-primary/30 flex items-center gap-2 group">
+                            Start Partnership
+                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="px-8 py-4 bg-surface-container-high text-on-primary-fixed-variant rounded-full font-semibold">
+                            View API Docs
+                        </button>
+</div>
+</div>
+<div class="relative">
+<div class="w-full aspect-square bg-surface-container-low custom-corner overflow-hidden shadow-2xl relative">
+<img class="w-full h-full object-cover" data-alt="Abstract 3D glass sculpture with purple and blue light refraction and geometric sharp edges on a minimalist white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLAJx9iCo1uoKvf8wncnCiCo-t4vWF5nJCCGw0PsHzDIb37jEQL6LWaeDMmHJTRsl3FBSqhw248WxI5JxiTl0-7Lu0mAQyfi7xxQZR1DZxO8QENDVbAKjElTiydGatdjtmfbzXQwUykHIFIT77fvLXxBx5CZIeXQL0qjThlzvvwzd9mEAftvzkGcVUVpTN7Qf66DU6yNQ3Ow4nN3LF0YDapnW2ucCur_Bk6aOFHBjo3YDNIyVPtytPFy_Yxn8v9_onJh0tvCwrlCU"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent"></div>
+</div>
+<div class="absolute -bottom-10 -left-10 bg-white/80 backdrop-blur-xl p-8 rounded-xl shadow-2xl max-w-xs border border-white/40">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div class="editorial-stack">
+<span class="text-xs text-on-surface-variant uppercase tracking-widest font-medium">Execution Speed</span>
+<span class="font-headline font-bold text-xl">12ms Average</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface-container-low py-32 custom-corner-alt">
+<div class="max-w-[1440px] mx-auto px-8">
+<div class="text-center mb-20 editorial-stack items-center">
+<span class="text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-primary">Infrastructure</span>
+<h2 class="text-4xl font-bold font-headline">Global Network Topology</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="p-10 bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-500 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-6 group-hover:scale-110 transition-transform">hub</span>
+<h3 class="text-xl font-bold font-headline mb-4">NY4 &amp; LD4 Proximity</h3>
+<p class="text-on-surface-variant leading-relaxed">Direct cross-connects at Equinix data centers providing the lowest possible latency for high-frequency trading strategies.</p>
+</div>
+<div class="p-10 bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-500 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-6 group-hover:scale-110 transition-transform">terminal</span>
+<h3 class="text-xl font-bold font-headline mb-4">FIX 4.2 / 4.4 Engine</h3>
+<p class="text-on-surface-variant leading-relaxed">Robust Financial Information eXchange protocols ensuring seamless integration with existing order management systems.</p>
+</div>
+<div class="p-10 bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-500 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-6 group-hover:scale-110 transition-transform">shield_with_heart</span>
+<h3 class="text-xl font-bold font-headline mb-4">Regulatory Integrity</h3>
+<p class="text-on-surface-variant leading-relaxed">Fully compliant with MiFID II and SEC regulations, providing comprehensive audit trails and transparent reporting.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 max-w-[1440px] mx-auto px-8 relative">
+<div class="grid lg:grid-cols-2 gap-20 items-center">
+<div class="relative order-2 lg:order-1">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-4 pt-12">
+<div class="bg-surface-container-high custom-corner h-64 overflow-hidden shadow-lg">
+<img class="w-full h-full object-cover" data-alt="Close-up of a high-tech trading terminal screen showing vibrant green and blue candlesticks and financial data charts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJDwTd12lxqfDydS9OU-diqv8VHeOxZ4HRbZNSv01pgFo7tgiffVamXfIZkfwjDEG_pzxWCvcIT307sMvi0eZ76fnxYoJTmOVNrjdJkeGVTc8TodQrWXctz67e2p3haUzjQd7UXmlUjBs12JXTtuAS43r6Da5MY4l2rcXeacSt_nQdIO83MZBOPnsfpHGc46Dxn1NF1IqR6Yv3CU5g75V_Nbp3Pfk8lVCPPDoVKdmRMcR6iw-Eme4ioPC7xlEm5h8tj2_we0ixuEk"/>
+</div>
+<div class="bg-primary p-8 text-white rounded-xl shadow-xl">
+<span class="material-symbols-outlined text-3xl mb-4">public</span>
+<div class="text-3xl font-bold font-headline">150+</div>
+<div class="text-sm opacity-80">Global Exchanges</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-secondary p-8 text-white rounded-xl shadow-xl">
+<span class="material-symbols-outlined text-3xl mb-4">account_balance</span>
+<div class="text-3xl font-bold font-headline">$2.4T</div>
+<div class="text-sm opacity-80">Annual Volume</div>
+</div>
+<div class="bg-surface-container-high custom-corner h-64 overflow-hidden shadow-lg">
+<img class="w-full h-full object-cover" data-alt="High-resolution digital representation of global fiber optic networks spanning across a dark globe with luminous connections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1CfDwSpaKjpcHGvg00K1LngWzNXjnBPpknn0sPW7YCgtOI6nh0Bis_-PC2VTGmUn9-miMomASr4HA1iC9FoMrzLKT570IF2LX6a8KFNcACqLTsvfa_7AlWqWPPFpqlVBV-8_E_peE4rlJWNZrojaczK8IcuUwyn-IC3O36OnZCieOJ0IWe_UNa3MQXjfkBJrm0pByTUXWHUMmhc2oZAdfrw-1L2kUA-PWHOhYSXriPprOjLIVf_cZJEhl3HQWsbsMr5jzoCDQWTg"/>
+</div>
+</div>
+</div>
+</div>
+<div class="editorial-stack order-1 lg:order-2">
+<span class="text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-primary">Compliance &amp; Safety</span>
+<h2 class="text-[2.5rem] font-bold leading-tight font-headline">Built on Institutional <br/>Trust and Security</h2>
+<p class="text-lg text-on-surface-variant mt-6 mb-8">
+                        Our platform is engineered for the rigorous demands of institutional finance. We provide the peace of mind required for managing large-scale assets across multiple jurisdictions.
+                    </p>
+<ul class="space-y-6">
+<li class="flex items-start gap-4">
+<div class="w-6 h-6 bg-primary-fixed rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-sm text-on-primary-fixed-variant">check</span>
+</div>
+<div>
+<h4 class="font-bold font-headline">SOC2 Type II Certified</h4>
+<p class="text-sm text-on-surface-variant">Annual audits ensuring the highest standards of data security.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="w-6 h-6 bg-primary-fixed rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-sm text-on-primary-fixed-variant">check</span>
+</div>
+<div>
+<h4 class="font-bold font-headline">Tier 1 Custody</h4>
+<p class="text-sm text-on-surface-variant">Assets are held with world-class custodian banks under segregated accounts.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="py-32 bg-inverse-surface text-inverse-on-surface custom-corner">
+<div class="max-w-[1440px] mx-auto px-8">
+<div class="grid md:grid-cols-4 gap-12 text-center">
+<div class="editorial-stack items-center">
+<span class="text-primary-fixed-dim text-[3rem] font-bold font-headline">24/7</span>
+<span class="text-xs uppercase tracking-widest text-outline-variant">Support Coverage</span>
+</div>
+<div class="editorial-stack items-center">
+<span class="text-primary-fixed-dim text-[3rem] font-bold font-headline">0.01%</span>
+<span class="text-xs uppercase tracking-widest text-outline-variant">Error Rate</span>
+</div>
+<div class="editorial-stack items-center">
+<span class="text-primary-fixed-dim text-[3rem] font-bold font-headline">Unlimited</span>
+<span class="text-xs uppercase tracking-widest text-outline-variant">Liquidity Access</span>
+</div>
+<div class="editorial-stack items-center">
+<span class="text-primary-fixed-dim text-[3rem] font-bold font-headline">150+</span>
+<span class="text-xs uppercase tracking-widest text-outline-variant">Countries</span>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 max-w-[1440px] mx-auto px-8">
+<div class="bg-surface-container rounded-[40px] p-16 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 bg-primary/20 floating-3d-shape"></div>
+<div class="relative z-10 max-w-2xl">
+<h2 class="text-4xl font-bold font-headline mb-6">Ready to upgrade your institutional workflow?</h2>
+<p class="text-lg text-on-surface-variant mb-10">Connect with our institutional specialists to discuss a bespoke integration plan for your firm.</p>
+<div class="flex flex-wrap gap-4">
+<button class="px-10 py-5 bg-primary text-white rounded-full font-bold shadow-xl shadow-primary/30">Speak with an Advisor</button>
+<button class="px-10 py-5 border-2 border-outline-variant text-on-surface rounded-full font-bold hover:bg-surface-container-high transition-colors">Request a Demo</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full bg-slate-50 dark:bg-slate-900 rounded-tl-[80px] mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 max-w-7xl mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="font-['Plus_Jakarta_Sans'] font-bold text-slate-900 dark:text-white text-xl mb-4">IB Portal Luminous</div>
+<p class="text-slate-500 text-sm max-w-xs font-body tracking-wide">© 2024 IB Portal Luminous. Precision in Every Trade.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8 md:gap-12">
+<a class="text-slate-500 hover:text-violet-500 transition-colors text-sm font-medium tracking-wide" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors text-sm font-medium tracking-wide" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors text-sm font-medium tracking-wide" href="#">Risk Disclosure</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors text-sm font-medium tracking-wide" href="#">Contact Support</a>
+</div>
+<div class="mt-12 md:mt-0 flex gap-4">
+<div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-slate-600 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">share</span>
+</div>
+<div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-slate-600 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">mail</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

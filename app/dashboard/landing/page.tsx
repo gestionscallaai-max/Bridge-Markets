@@ -2,9 +2,13 @@
 
 import React from 'react';
 import { Globe } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import LandingTypeform from '@/components/Forms/LandingTypeform';
 
 export default function LandingPageGenerator() {
+    const searchParams = useSearchParams();
+    const templateId = searchParams.get('template') || undefined;
+
     return (
         <div className="space-y-6 pb-10">
             {/* Header */}
@@ -13,13 +17,13 @@ export default function LandingPageGenerator() {
                     <Globe className="w-5 h-5 text-[#865BFF]" />
                 </div>
                 <div>
-                    <h2 className="text-lg font-bold text-slate-800">Generador de Landing Pages</h2>
-                    <p className="text-sm text-slate-400 mt-0.5">Crea tu landing page de Bridge personalizada con IA en 3 pasos</p>
+                    <h2 className="text-lg font-bold text-slate-800">Generador Modular de Landing Pages</h2>
+                    <p className="text-sm text-slate-400 mt-0.5">Elige un template, personaliza las secciones y genera tu landing</p>
                 </div>
             </div>
 
             {/* Wizard */}
-            <LandingTypeform />
+            <LandingTypeform initialTemplateId={templateId} />
         </div>
     );
 }

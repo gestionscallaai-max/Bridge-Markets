@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IB Portal | PRO LEVERAGE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#645495",
+                        "secondary-fixed": "#e8ddff",
+                        "inverse-on-surface": "#f7edff",
+                        "tertiary-container": "#7d55f6",
+                        "surface-container-high": "#f0e3ff",
+                        "inverse-surface": "#362b4b",
+                        "surface-container-low": "#f9f0ff",
+                        "on-primary-fixed-variant": "#500fc8",
+                        "surface-tint": "#6939e0",
+                        "surface-bright": "#fef7ff",
+                        "surface-container": "#f4eaff",
+                        "on-surface": "#211635",
+                        "on-primary-container": "#fffbff",
+                        "secondary-fixed-dim": "#cebdff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#6438dc",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#cdbdff",
+                        "on-tertiary-fixed-variant": "#4e15c6",
+                        "outline-variant": "#cbc3d8",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#e8ddff",
+                        "primary-container": "#7f54f8",
+                        "tertiary-fixed": "#e7deff",
+                        "on-tertiary-fixed": "#1f005f",
+                        "outline": "#7a7486",
+                        "surface": "#fef7ff",
+                        "surface-container-highest": "#ebdcff",
+                        "primary": "#6635de",
+                        "surface-dim": "#e3d3fd",
+                        "on-secondary-fixed": "#200c4e",
+                        "background": "#fef7ff",
+                        "on-secondary-fixed-variant": "#4c3c7c",
+                        "inverse-primary": "#cebdff",
+                        "primary-fixed-dim": "#cebdff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-background": "#211635",
+                        "secondary-container": "#c9b6ff",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#20005e",
+                        "on-surface-variant": "#494455",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#ebdcff",
+                        "on-secondary-container": "#544484"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .asym-card {
+            border-bottom-right-radius: 80px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(102, 53, 222, 0.4);
+        }
+        .perspective-grid {
+            perspective: 1000px;
+        }
+        .skew-3d {
+            transform: rotateX(10deg) rotateY(-10deg) rotateZ(2deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-body antialiased selection:bg-primary selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 rounded-br-[40px] bg-slate-950/60 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-white font-headline">IB Portal</div>
+<div class="hidden md:flex items-center gap-8 font-headline tracking-tight">
+<a class="text-slate-400 hover:text-white transition-all duration-300" href="#">Markets</a>
+<a class="text-slate-400 hover:text-white transition-all duration-300" href="#">Portfolio</a>
+<a class="text-slate-400 hover:text-white transition-all duration-300" href="#">Analytics</a>
+<a class="text-violet-400 font-semibold border-b-2 border-violet-600" href="#">Tools</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all font-medium">Login</button>
+<button class="px-6 py-2 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold scale-95 active:scale-90 transition-all">Open Account</button>
+</div>
+</div>
+</nav>
+<main class="pt-24 space-y-32">
+<!-- Hero: Execution Engine -->
+<section class="relative px-8 max-w-[1440px] mx-auto min-h-[819px] flex items-center">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="z-10">
+<div class="inline-block px-4 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary-fixed-dim text-xs font-bold tracking-widest uppercase mb-6">
+                        Ultra-High Speed Core
+                    </div>
+<h1 class="text-7xl font-headline font-extrabold tracking-tighter leading-none text-white mb-8">
+                        PRO <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-violet-400">LEVERAGE</span> ENGINE
+                    </h1>
+<p class="text-xl text-slate-400 leading-relaxed max-w-xl mb-10">
+                        Designed for quantitative dominance. Execute orders in <span class="text-white font-mono">0.02ms</span> with our proprietary STP model and 3D terminal interface.
+                    </p>
+<div class="flex gap-4">
+<button class="px-8 py-4 rounded-full bg-primary text-white font-bold text-lg shadow-lg hover:shadow-primary/40 transition-all">Launch Terminal</button>
+<button class="px-8 py-4 rounded-full glass-panel text-white font-bold text-lg hover:bg-white/10 transition-all">View Specs</button>
+</div>
+</div>
+<div class="relative perspective-grid">
+<div class="skew-3d asym-card bg-gradient-to-br from-slate-900 to-slate-950 p-8 border border-white/10 neon-glow">
+<div class="flex justify-between items-center mb-12">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-red-500"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+<div class="w-3 h-3 rounded-full bg-green-500"></div>
+</div>
+<span class="text-primary-fixed-dim font-mono text-sm tracking-widest uppercase">System.Live</span>
+</div>
+<div class="space-y-6">
+<div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full w-3/4 bg-primary neon-glow"></div>
+</div>
+<div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full w-1/2 bg-violet-500 neon-glow"></div>
+</div>
+<div class="grid grid-cols-3 gap-4 mt-8">
+<div class="glass-panel p-4 rounded-xl text-center">
+<span class="block text-xs text-slate-500 font-bold mb-1">LATENCY</span>
+<span class="text-xl font-mono text-white">0.02ms</span>
+</div>
+<div class="glass-panel p-4 rounded-xl text-center">
+<span class="block text-xs text-slate-500 font-bold mb-1">STP FLOW</span>
+<span class="text-xl font-mono text-white">100%</span>
+</div>
+<div class="glass-panel p-4 rounded-xl text-center">
+<span class="block text-xs text-slate-500 font-bold mb-1">THROUGHPUT</span>
+<span class="text-xl font-mono text-white">1.2M/s</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Background Element -->
+<div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-primary/10 to-transparent blur-3xl pointer-events-none -z-10"></div>
+</section>
+<!-- Technical Specs Bento Grid -->
+<section class="px-8 max-w-[1440px] mx-auto">
+<h2 class="text-4xl font-headline font-bold mb-16 text-center">TECHNICAL <span class="text-primary">ARCHITECTURE</span></h2>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-[600px]">
+<div class="md:col-span-2 md:row-span-2 bg-slate-900 asym-card p-8 border border-white/5 relative overflow-hidden group">
+<div class="relative z-10">
+<span class="material-symbols-outlined text-primary text-5xl mb-6" data-icon="memory">memory</span>
+<h3 class="text-3xl font-headline font-bold mb-4">Neural Execution Core</h3>
+<p class="text-slate-400">High-performance computing cluster optimized for HFT strategies with integrated risk-checks at the silicon level.</p>
+</div>
+<div class="absolute -bottom-10 -right-10 opacity-10 group-hover:opacity-20 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="Close-up of high-tech computer circuit board with glowing components and futuristic architecture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJmgTMIUfbIHMxN783owI5z4SS90rDGYFTxVpmg3uhi-2i_GYiRRxLN__AuPh5CFsoDfpteAYa68pAbGBubF1g60Bvocl4F8HHHrHosBVevvTwGBY-j2F1O_c8XDkyYFqTQEQbHdaaDDVxQZjmCPsL8S-qxeItnH-557A1NIrUWJAFzcIhgRXUHzGS9-KOCKeiMdYGyv5x08a-jTqW_K_4u439sOoexnp6DDJHlB3OP-KeiOjgPSsrLyJd2dySigMr_RNo33qZgrg"/>
+</div>
+</div>
+<div class="bg-slate-900/50 p-8 border border-white/5 asym-card">
+<span class="material-symbols-outlined text-violet-400 text-3xl mb-4" data-icon="speed">speed</span>
+<h4 class="text-xl font-headline font-bold">Ultra Low Latency</h4>
+<p class="text-sm text-slate-500 mt-2">Equinix data center proximity.</p>
+</div>
+<div class="bg-slate-900/50 p-8 border border-white/5 asym-card">
+<span class="material-symbols-outlined text-violet-400 text-3xl mb-4" data-icon="security">security</span>
+<h4 class="text-xl font-headline font-bold">STP Verification</h4>
+<p class="text-sm text-slate-500 mt-2">Zero conflict of interest model.</p>
+</div>
+<div class="md:col-span-2 bg-gradient-to-r from-primary/20 to-slate-900 asym-card p-8 border border-white/5 flex items-center justify-between">
+<div>
+<h4 class="text-2xl font-headline font-bold">Execution Engine V4.0</h4>
+<p class="text-slate-400 mt-2">Refined for the most demanding market conditions.</p>
+</div>
+<span class="material-symbols-outlined text-6xl text-primary/40" data-icon="rocket_launch">rocket_launch</span>
+</div>
+</div>
+</section>
+<!-- STP Model & Depth Section -->
+<section class="bg-slate-900/30 py-32 relative overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="relative">
+<div class="absolute inset-0 bg-primary/20 blur-[120px] rounded-full"></div>
+<div class="relative glass-panel asym-card p-12 border border-white/10">
+<div class="space-y-8">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+</div>
+<div>
+<h5 class="font-headline font-bold text-lg">Direct Market Access</h5>
+<p class="text-sm text-slate-400">Institutional grade liquidity pools.</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-violet-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-violet-400" data-icon="account_tree">account_tree</span>
+</div>
+<div>
+<h5 class="font-headline font-bold text-lg">Transparent Routing</h5>
+<p class="text-sm text-slate-400">Full audit trail for every single execution.</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_done">cloud_done</span>
+</div>
+<div>
+<h5 class="font-headline font-bold text-lg">Multi-Tier Redundancy</h5>
+<p class="text-sm text-slate-400">99.99% uptime via distributed nodes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-5xl font-headline font-extrabold mb-8 leading-tight">Straight Through Processing (STP) <span class="text-primary">Redefined.</span></h2>
+<p class="text-slate-400 text-lg mb-10">We've eliminated the middleman. Our STP model ensures that your orders are routed directly to Tier-1 liquidity providers, providing better fills, tighter spreads, and zero price manipulation.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-slate-300">
+<span class="material-symbols-outlined text-green-400 text-sm" data-icon="check_circle">check_circle</span>
+                            Deep ECN Liquidity
+                        </li>
+<li class="flex items-center gap-3 text-slate-300">
+<span class="material-symbols-outlined text-green-400 text-sm" data-icon="check_circle">check_circle</span>
+                            No Dealer Intervention
+                        </li>
+<li class="flex items-center gap-3 text-slate-300">
+<span class="material-symbols-outlined text-green-400 text-sm" data-icon="check_circle">check_circle</span>
+                            Institutional Level Fills
+                        </li>
+</ul>
+</div>
+</div>
+</section>
+<!-- 3D Performance Terminal Visual -->
+<section class="px-8 max-w-[1440px] mx-auto text-center">
+<h2 class="text-6xl font-headline font-extrabold tracking-tighter mb-20">COMMAND THE <span class="text-primary">FLOW</span></h2>
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/20 rounded-xl blur-2xl group-hover:bg-primary/30 transition-all"></div>
+<div class="relative rounded-xl overflow-hidden border border-white/10 asym-card shadow-2xl">
+<img class="w-full grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="High-end dashboard with glowing blue and purple charts, 3D data visualizations and complex financial trading interface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_k_kG6cU6-w9s9HqcluZQeT-UD-XNUaUSRe5ZhYW5GpSajw6IeWLE5JdqU1CIFOWVk0ExRkfHWNgDYd7anTJ4uJ-qWAognz6XvA7V6oVFoabuGEhxvRkbgOEVy5l890b0W2lr0S87Eey3VcjQRApFgeSU5q-3SZPMf_pdORbc9Vw8oqmKR5dBU8jL1omeWODhx0tLf-CrSNpFqXO0phOczPBR4mt-JVFd_INa57GIODFA0GubY7NU8wR4VQomBpNLe_f-RHcp0JE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2">
+<button class="px-12 py-5 rounded-full bg-white text-slate-950 font-extrabold text-xl hover:scale-105 transition-all shadow-xl">ENTER TERMINAL</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Advanced Trading Tools Grid -->
+<section class="px-8 max-w-[1440px] mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="p-10 asym-card bg-slate-900 border border-white/5 hover:border-primary/50 transition-colors">
+<div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="insights">insights</span>
+</div>
+<h3 class="text-2xl font-headline font-bold mb-4">Precision Analytics</h3>
+<p class="text-slate-400">Deep-dive into trade performance with institutional-grade metrics and attribution analysis.</p>
+</div>
+<div class="p-10 asym-card bg-slate-900 border border-white/5 hover:border-primary/50 transition-colors">
+<div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<h3 class="text-2xl font-headline font-bold mb-4">AI Risk Sentry</h3>
+<p class="text-slate-400">Autonomous risk management that monitors volatility and exposure in real-time.</p>
+</div>
+<div class="p-10 asym-card bg-slate-900 border border-white/5 hover:border-primary/50 transition-colors">
+<div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="terminal">terminal</span>
+</div>
+<h3 class="text-2xl font-headline font-bold mb-4">API First Core</h3>
+<p class="text-slate-400">Robust REST &amp; FIX APIs for seamless integration of custom-built trading algorithms.</p>
+</div>
+</div>
+</section>
+<!-- Performance Stats -->
+<section class="px-8 max-w-[1440px] mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-12 border-y border-white/5 py-20">
+<div class="text-center">
+<span class="text-sm font-bold text-slate-500 tracking-widest uppercase block mb-4">Volume</span>
+<span class="text-5xl font-headline font-extrabold text-white">$12.4B+</span>
+</div>
+<div class="text-center">
+<span class="text-sm font-bold text-slate-500 tracking-widest uppercase block mb-4">Instruments</span>
+<span class="text-5xl font-headline font-extrabold text-white">400+</span>
+</div>
+<div class="text-center">
+<span class="text-sm font-bold text-slate-500 tracking-widest uppercase block mb-4">Active Nodes</span>
+<span class="text-5xl font-headline font-extrabold text-white">2.5k</span>
+</div>
+<div class="text-center">
+<span class="text-sm font-bold text-slate-500 tracking-widest uppercase block mb-4">Leverage</span>
+<span class="text-5xl font-headline font-extrabold text-white">500:1</span>
+</div>
+</div>
+</section>
+<!-- Connectivity Section -->
+<section class="px-8 max-w-[1440px] mx-auto">
+<div class="bg-gradient-to-br from-primary/30 to-slate-900 asym-card p-16 border border-white/10 flex flex-col md:flex-row gap-16 items-center">
+<div class="flex-1">
+<h2 class="text-5xl font-headline font-extrabold mb-6">Global Low-Latency Fabric</h2>
+<p class="text-xl text-slate-300">Connected to NY4, LD4, and TY3 via dark fiber, ensuring you are always closer to the source of price discovery.</p>
+</div>
+<div class="flex-1 w-full h-[300px] bg-slate-950/50 rounded-2xl relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-50" data-alt="Satellite view of the earth at night with glowing blue networks connecting major global cities" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARD1AjAAFnxYaIPNBtsJr7UeWBAVMhoN8nmdxFRCsGZ_1lLycPqQ-hEc6kmCuLEyrBm4UbHxwzLQsraBQf1bS3AZWeaMynnZW83Guqao5ksshaOsa_IeOy_LAFcvXqloydwJq7Zr6AHSXfUm0dlZn4cCYFCDW5O8RM5QOnP8QSVyRUmHB0DpQPP-xVY7XP1dzD4sj8lnWSOfaFye1eyyGK-HpuCqctO_MKmG7_20sjsKGIIXHDF5zqm6SMsq_UwqZW_WYThF5jkGA"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-4 h-4 bg-primary rounded-full neon-glow animate-pulse"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA -->
+<section class="px-8 max-w-[1440px] mx-auto pb-32">
+<div class="text-center space-y-12">
+<h2 class="text-7xl font-headline font-extrabold tracking-tight">READY TO <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-violet-400">DOMINATE?</span></h2>
+<div class="flex flex-col md:flex-row justify-center gap-6">
+<button class="px-12 py-6 rounded-full bg-primary text-white font-extrabold text-2xl shadow-[0_0_40px_rgba(102,53,222,0.4)] hover:scale-105 transition-all">START TRADING NOW</button>
+<button class="px-12 py-6 rounded-full glass-panel text-white font-extrabold text-2xl hover:bg-white/10 transition-all">GET API KEYS</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full rounded-tl-[80px] mt-20 bg-slate-900 font-body text-sm tracking-wide">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 max-w-7xl mx-auto">
+<div class="mb-8 md:mb-0">
+<div class="font-headline font-bold text-slate-900 dark:text-white text-xl mb-2">IB Portal</div>
+<p class="text-slate-500">© 2024 IB Portal Luminous. Precision in Every Trade.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8 text-slate-500">
+<a class="hover:text-violet-500 transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-violet-500 transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-violet-500 transition-colors" href="#">Risk Disclosure</a>
+<a class="hover:text-violet-500 transition-colors" href="#">Contact Support</a>
+</div>
+<div class="mt-8 md:mt-0 flex gap-4">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center opacity-80 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-white text-lg" data-icon="language">language</span>
+</div>
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center opacity-80 hover:opacity-100 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-white text-lg" data-icon="share">share</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -34,6 +34,7 @@ export async function POST(request: Request) {
                 email: data.email,
                 landing_type: data.landingType,
                 partner_id: realPartnerId,
+                data: data.config ? JSON.stringify(data.config) : null,
             }, { onConflict: 'slug' });
 
         if (error) {

@@ -1,6 +1,48 @@
 // ============================================================
-// Bridge Markets — Premium Landing Page Generator v2
+// Bridge Markets — Premium Landing Page Generator v3
+// With Section Editor & Content Customization Support
 // ============================================================
+
+// ─── Section Configuration ──────────────────────────────────
+export interface SectionConfig {
+    hero: boolean;
+    benefits: boolean;
+    steps: boolean;
+    accounts: boolean;
+    services: boolean;
+    whyBridge: boolean;
+    finalCTA: boolean;
+    registration: boolean;
+}
+
+export interface ContentOverrides {
+    heroTitle?: string;
+    heroHighlight?: string;
+    heroSub?: string;
+    benefitsItems?: { icon: string; title: string; desc: string }[];
+    stepsItems?: { num: string; text: string; link?: string }[];
+    accountsItems?: { title: string; desc: string; img: string; btn: string }[];
+    servicesItems?: { icon: string; title: string; desc: string; btn: string }[];
+    whyBridgeCards?: { icon: string; title: string; desc: string }[];
+    whyBridgeInfo?: { icon: string; title: string; desc: string; variant?: string }[];
+    finalCTATitle?: string;
+    finalCTADesc?: string;
+    finalCTABtn?: string;
+    formTitle?: string;
+    formSub?: string;
+}
+
+export interface LandingConfig {
+    enabledSections: SectionConfig;
+    content: ContentOverrides;
+}
+
+// ─── Modular Template Config ─────────────────────────────────
+export interface ModularConfig {
+    templateId: string;
+    selectedSections: string[];
+    sectionOverrides: Record<string, Record<string, any>>;
+}
 
 export interface LandingData {
     fullName: string;
@@ -12,7 +54,31 @@ export interface LandingData {
     partnerId: string;
     slug: string;
     googleAnalyticsId?: string;
+    config?: LandingConfig;
+    modularConfig?: ModularConfig;
 }
+
+export const DEFAULT_SECTIONS: SectionConfig = {
+    hero: true,
+    benefits: true,
+    steps: true,
+    accounts: true,
+    services: true,
+    whyBridge: true,
+    finalCTA: true,
+    registration: true,
+};
+
+export const SECTION_LABELS: Record<keyof SectionConfig, { label: string; desc: string; icon: string }> = {
+    hero: { label: 'Hero Principal', desc: 'Título, subtítulo y llamado a la acción principal', icon: '🎯' },
+    benefits: { label: 'Beneficios', desc: 'Tarjetas con las ventajas del Social Trading', icon: '🛡️' },
+    steps: { label: 'Pasos para Acceder', desc: 'Guía paso a paso para empezar a operar', icon: '📋' },
+    accounts: { label: 'Tipos de Cuenta', desc: 'Cards con los distintos tipos de cuenta disponibles', icon: '💳' },
+    services: { label: 'Servicios', desc: 'Grid de servicios adicionales (señales, ranking, educación)', icon: '🚩' },
+    whyBridge: { label: '¿Por qué Bridge?', desc: 'Razones para elegir Bridge Markets como broker', icon: '🏆' },
+    finalCTA: { label: 'CTA Final', desc: 'Llamado a la acción grande antes del registro', icon: '🚀' },
+    registration: { label: 'Registro / Formulario', desc: 'Formulario de captura de leads', icon: '📝' },
+};
 
 // ─── Traducciones ────────────────────────────────────────────
 const TRANSLATIONS: Record<string, {
@@ -213,18 +279,41 @@ const TRANSLATIONS: Record<string, {
     JP: { heroTitle: 'コピー', heroHighlight: 'トレーダー', heroSub: '経験不要。', cta: 'アクセス', ctaSec: '興味', statsLabel: ['活動', '国', '出来高', '順位'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'🎯',title:'高速',desc:'< 1ms.'}], stepsTitle: 'ソーシャルトレード', steps: [{num:'1',text:'口座',link:''}], testTitle: 'トレーダー', testimonials: [{name:'C',country:'C',text:'良'}], formTitle: '開始', formSub: '情報', fields: ['名', 'メ', '電'], submit: '開始', footerText: '技術', disclaimer: 'リスク', chessTitle: 'コピー', chessSubtitle: '経験不要', chessBenefits: [{icon:'🛡️',title:'透明性',desc:'データ'}], chessSteps: {title:'アクセス',subtitle:'ソーシャル',steps:[{num:'1',text:'登録',link:''}]}, chessAccounts: [{title:'レバ',desc:'パワー',img:'/images/landing/rey.png',btn:'興味'}], servicesGrid: [{icon:'🚩',title:'シグナル',desc:'参考',btn:'知る'}], whyBridge: {title:'なぜ?',cards:[{icon:'💰',title:'報酬',desc:'6 USD'}],info:[{icon:'👥',title:'無料',desc:'登録'}]}, finalCTA: {title:'有効化',desc:'技術',btn:'口座'}, finalInfo: {title:'成功',desc:'報酬',quote:'*勝'} },
 };
 
-
+// ─── Helper: get translations for a language ──────────────────
+export function getTranslationsForLanguage(lang: string) {
+    return TRANSLATIONS[lang] || TRANSLATIONS['ES'];
+}
 
 export function generateLandingHTML(data: LandingData): string {
     const t = TRANSLATIONS[data.language] || TRANSLATIONS['ES'];
+    const cfg = data.config || { enabledSections: DEFAULT_SECTIONS, content: {} };
+    const sections = cfg.enabledSections || DEFAULT_SECTIONS;
+    const content = cfg.content || {};
+
     const gaScript = data.googleAnalyticsId ? `
     <script async src="https://www.googletagmanager.com/gtag/js?id=${data.googleAnalyticsId}"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${data.googleAnalyticsId}');</script>` : '';
 
     const wa = data.whatsapp ? 'https://wa.me/' + data.whatsapp.replace(/[^0-9]/g, '') : '#';
 
+    // Content with overrides
+    const heroTitle = content.heroTitle || t.heroTitle;
+    const heroHighlight = content.heroHighlight || t.heroHighlight;
+    const heroSub = content.heroSub || t.heroSub;
+    const benefits = content.benefitsItems && content.benefitsItems.length > 0 ? content.benefitsItems : t.chessBenefits;
+    const stepsItems = content.stepsItems && content.stepsItems.length > 0 ? content.stepsItems : t.chessSteps.steps;
+    const accountsItems = content.accountsItems && content.accountsItems.length > 0 ? content.accountsItems : t.chessAccounts;
+    const servicesItems = content.servicesItems && content.servicesItems.length > 0 ? content.servicesItems : t.servicesGrid;
+    const whyCards = content.whyBridgeCards && content.whyBridgeCards.length > 0 ? content.whyBridgeCards : t.whyBridge.cards;
+    const whyInfo = content.whyBridgeInfo && content.whyBridgeInfo.length > 0 ? content.whyBridgeInfo : t.whyBridge.info;
+    const fctaTitle = content.finalCTATitle || t.finalCTA.title;
+    const fctaDesc = content.finalCTADesc || t.finalCTA.desc;
+    const fctaBtn = content.finalCTABtn || t.finalCTA.btn;
+    const formTitle = content.formTitle || t.formTitle;
+    const formSub = content.formSub || t.formSub;
+
     // Account Cards Builder
-    const accountsHTML = t.chessAccounts.map((a, i) => {
+    const accountsHTML = sections.accounts ? accountsItems.map((a, i) => {
         const isRight = i === 2; 
         const isWide = i >= 3; 
         
@@ -254,7 +343,7 @@ export function generateLandingHTML(data: LandingData): string {
                         <button class="btn-purple text-white w-full py-4 rounded-2xl font-bold text-sm" onclick="location.href='#registro'">${a.btn}</button>
                     </div>
                 </article>`;
-    }).join('');
+    }).join('') : '';
 
     // Form Logic
     const formScript = `
@@ -288,13 +377,152 @@ export function generateLandingHTML(data: LandingData): string {
             }
         });`;
 
+    // ─── Build Sections ─────────────────────────────────────
+    const heroSection = sections.hero ? `
+        <section id="social-trading" class="reveal">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-7xl font-extrabold mb-6 text-brand-dark tracking-tight">
+                    ${heroTitle} <span class="text-brand-purple">${heroHighlight}</span> ${data.language === 'ES' ? 'ahora!' : 'now!'}
+                </h1>
+                <p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">${heroSub}</p>
+            </div>
+        </section>` : '';
+
+    const benefitsSection = sections.benefits ? `
+        <section class="reveal">
+            <div class="bg-brand-dark rounded-[3rem] p-8 md:p-16 shadow-[0_20px_50px_rgba(10,5,26,0.3)] relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-brand-purple opacity-20 blur-[100px]"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 relative z-10">
+                    ${benefits.map(b => `
+                        <article class="bg-white rounded-[2rem] p-6 flex items-center gap-5 shadow-xl hover:scale-105 transition duration-300">
+                            <div class="bg-brand-dark rounded-2xl w-14 h-14 flex items-center justify-center flex-shrink-0 text-brand-purple text-2xl shadow-lg">${b.icon}</div>
+                            <div>
+                                <h4 class="font-bold text-brand-dark text-sm">${b.title}</h4>
+                                <p class="text-[10px] text-gray-500 mt-1">${b.desc}</p>
+                            </div>
+                        </article>
+                    `).join('')}
+                </div>
+                ${sections.steps ? `
+                <div class="flex flex-col lg:flex-row gap-16 relative z-10 items-center">
+                    <div class="lg:w-1/2">
+                        <h2 class="text-4xl md:text-5xl font-light text-gray-300 leading-tight">
+                            ${t.chessSteps.title}<br>
+                            <span class="text-white font-bold block mt-2">${t.chessSteps.subtitle}</span>
+                        </h2>
+                        <p class="text-gray-400 mt-6 text-sm">Partner: ${data.fullName} · ${data.country}</p>
+                    </div>
+                    <div class="lg:w-1/2 space-y-4">
+                        ${stepsItems.map(s => `
+                            <div class="bg-brand-stepBg/50 border border-white/5 rounded-2xl p-5 flex items-center gap-5">
+                                <div class="bg-white text-brand-purple font-black text-xl rounded-xl w-12 h-12 flex items-center justify-center flex-shrink-0">${s.num}</div>
+                                <div>
+                                    <h4 class="text-white text-sm font-semibold">${s.text}</h4>
+                                    ${s.link ? `<span class="text-brand-accent text-xs mt-1 block">${s.link}</span>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>` : ''}
+            </div>
+        </section>` : '';
+
+    const accountsSection = sections.accounts ? `
+        <section id="cuentas" class="space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">${accountsHTML}</div>
+        </section>` : '';
+
+    const servicesSection = sections.services ? `
+        <section class="reveal bg-transparent p-10 md:p-20 border-y border-purple-50">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+                ${servicesItems.map(s => `
+                    <article>
+                        <div class="text-brand-purple text-4xl mb-6 flex justify-center md:justify-start">${s.icon}</div>
+                        <h3 class="font-bold text-xl text-brand-dark mb-3">${s.title}</h3>
+                        <p class="text-sm text-gray-500 mb-8 leading-relaxed">${s.desc}</p>
+                        <button class="bg-brand-dark text-white px-8 py-3 rounded-2xl text-xs font-bold hover:bg-brand-purple transition-all w-full md:w-auto" onclick="location.href='#registro'">${s.btn}</button>
+                    </article>
+                `).join('')}
+            </div>
+        </section>` : '';
+
+    const whyBridgeSection = sections.whyBridge ? `
+        <section id="ib-program" class="py-12 reveal">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 text-brand-dark">
+                ${t.whyBridge.title.split('Bridge')[0]} <span class="text-brand-purple">Bridge Markets?</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                ${whyCards.map(c => `
+                    <article class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-8 flex gap-6 items-start shadow-sm hover:shadow-xl hover:border-brand-purple/20 transition duration-300">
+                        <div class="bg-brand-dark text-white p-4 rounded-2xl text-xl shadow-lg">${c.icon}</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-brand-dark mb-2">${c.title}</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed">${c.desc}</p>
+                        </div>
+                    </article>
+                `).join('')}
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                ${whyInfo.map(i => `
+                    <article class="${i.variant === 'purple' ? 'bg-brand-purple text-white' : i.variant === 'dark' ? 'bg-brand-dark text-white' : 'bg-white/40 backdrop-blur-md border border-white/50'} rounded-3xl p-8 shadow-lg text-center flex flex-col items-center hover:-translate-y-2 transition duration-300">
+                        <div class="${i.variant ? 'bg-white/20' : 'bg-purple-100'} text-brand-purple p-4 rounded-full mb-6 ${i.variant ? 'text-white' : ''}">${i.icon}</div>
+                        <h3 class="font-bold text-sm mb-3">${i.title}</h3>
+                        <p class="text-xs ${i.variant ? 'text-purple-100' : 'text-gray-400'}">${i.desc}</p>
+                    </article>
+                `).join('')}
+            </div>
+        </section>` : '';
+
+    const finalCTASection = sections.finalCTA ? `
+        <section class="reveal bg-brand-purple rounded-[3rem] p-12 md:p-24 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between text-center lg:text-left gap-10">
+            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+                <svg width="600" height="400" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 300L50 200L150 250L250 100L400 150V300H0Z" fill="white"/></svg>
+            </div>
+            <div class="relative z-10 lg:w-2/3">
+                <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">${fctaTitle}</h2>
+                <p class="text-purple-100 text-lg mb-10 font-light">${fctaDesc}</p>
+                <a href="#registro" class="bg-white text-brand-purple font-extrabold py-5 px-12 rounded-2xl shadow-2xl hover:bg-gray-50 transform hover:scale-105 transition-all text-lg inline-block">${fctaBtn}</a>
+            </div>
+        </section>` : '';
+
+    const registrationSection = sections.registration ? `
+        <section id="registro" class="reveal bg-transparent p-10 md:p-24 flex flex-col lg:flex-row items-center gap-20 border-t border-purple-50">
+            <div class="lg:w-1/2">
+                <h2 class="text-4xl md:text-6xl font-black text-brand-dark mb-8 leading-tight">
+                    ${t.finalInfo.title.split('referiendo')[0]} <span class="text-brand-purple">Éxito</span>
+                </h2>
+                <div class="space-y-6">
+                    <p class="text-base text-gray-600 leading-relaxed font-medium">${t.finalInfo.desc}</p>
+                    <p class="text-xs text-gray-400 leading-relaxed italic border-l-4 border-brand-purple pl-4">${t.finalInfo.quote}</p>
+                    <div class="mt-10 p-8 bg-white rounded-3xl shadow-xl border border-purple-50">
+                        <h4 class="font-bold text-xl mb-2 text-brand-dark">${formTitle}</h4>
+                        <p class="text-sm text-gray-400 mb-6">${formSub}</p>
+                        <form id="leadForm" class="space-y-4">
+                            ${t.fields.map((f, idx) => `
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">${f}</label>
+                                    <input type="${idx === 1 ? 'email' : idx === 2 ? 'tel' : 'text'}" required class="lead-input w-full bg-gray-50 border border-gray-100 rounded-xl p-4 outline-none focus:border-brand-purple transition" placeholder="${f}">
+                                </div>
+                            `).join('')}
+                            <button type="submit" id="submitBtn" class="btn-purple text-white w-full py-5 rounded-xl font-bold text-lg">${t.submit}</button>
+                            <div id="formMessage"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2 flex justify-center relative group">
+                <div class="absolute w-80 h-80 bg-brand-purple/10 rounded-full blur-[100px] -z-10 group-hover:bg-brand-purple/20 transition duration-500"></div>
+                <img src="/images/landing/reloj-arena.png" alt="Efectividad" class="w-full max-w-md object-contain drop-shadow-2xl transform group-hover:rotate-6 transition duration-700">
+            </div>
+        </section>` : '';
+
     return `<!DOCTYPE html>
 <html lang="${data.language.toLowerCase()}" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bridge Markets | ${t.chessTitle}</title>
-    <meta name="description" content="${t.heroSub}">
+    <meta name="description" content="${heroSub}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">${gaScript}
     <script>
@@ -322,7 +550,6 @@ export function generateLandingHTML(data: LandingData): string {
         .btn-purple { background: linear-gradient(90deg, #6D28D9 0%, #8B5CF6 100%); transition: all 0.4s; }
         .btn-purple:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3); }
         
-        /* Mejorada la visibilidad para evitar página en blanco en la vista previa */
         .reveal { transition: all 0.8s ease-out; }
         .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(30px); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -339,142 +566,22 @@ export function generateLandingHTML(data: LandingData): string {
                 <span class="text-xl font-extrabold tracking-tighter text-brand-dark">BRIDGE <span class="text-brand-purple">MARKETS</span></span>
             </div>
             <nav class="hidden md:flex gap-8 text-sm font-semibold">
-                <a href="#social-trading" class="hover:text-brand-purple transition">Social Trading</a>
-                <a href="#cuentas" class="hover:text-brand-purple transition">Cuentas</a>
-                <a href="#ib-program" class="hover:text-brand-purple transition">Programa IB</a>
+                ${sections.hero ? '<a href="#social-trading" class="hover:text-brand-purple transition">Social Trading</a>' : ''}
+                ${sections.accounts ? '<a href="#cuentas" class="hover:text-brand-purple transition">Cuentas</a>' : ''}
+                ${sections.whyBridge ? '<a href="#ib-program" class="hover:text-brand-purple transition">Programa IB</a>' : ''}
             </nav>
             <a href="#registro" class="bg-brand-dark text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-brand-purple transition-all">${t.cta}</a>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-24">
-        <section id="social-trading" class="reveal">
-            <div class="text-center mb-16">
-                <h1 class="text-4xl md:text-7xl font-extrabold mb-6 text-brand-dark tracking-tight">
-                    ${t.heroTitle} <span class="text-brand-purple">${t.heroHighlight}</span> ${data.language === 'ES' ? 'ahora!' : 'now!'}
-                </h1>
-                <p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">${t.heroSub}</p>
-            </div>
-
-            <div class="bg-brand-dark rounded-[3rem] p-8 md:p-16 shadow-[0_20px_50px_rgba(10,5,26,0.3)] relative overflow-hidden">
-                <div class="absolute -top-24 -right-24 w-64 h-64 bg-brand-purple opacity-20 blur-[100px]"></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 relative z-10">
-                    ${t.chessBenefits.map(b => `
-                        <article class="bg-white rounded-[2rem] p-6 flex items-center gap-5 shadow-xl hover:scale-105 transition duration-300">
-                            <div class="bg-brand-dark rounded-2xl w-14 h-14 flex items-center justify-center flex-shrink-0 text-brand-purple text-2xl shadow-lg">${b.icon}</div>
-                            <div>
-                                <h4 class="font-bold text-brand-dark text-sm">${b.title}</h4>
-                                <p class="text-[10px] text-gray-500 mt-1">${b.desc}</p>
-                            </div>
-                        </article>
-                    `).join('')}
-                </div>
-
-                <div class="flex flex-col lg:flex-row gap-16 relative z-10 items-center">
-                    <div class="lg:w-1/2">
-                        <h2 class="text-4xl md:text-5xl font-light text-gray-300 leading-tight">
-                            ${t.chessSteps.title}<br>
-                            <span class="text-white font-bold block mt-2">${t.chessSteps.subtitle}</span>
-                        </h2>
-                        <p class="text-gray-400 mt-6 text-sm">Partner: ${data.fullName} · ${data.country}</p>
-                    </div>
-                    <div class="lg:w-1/2 space-y-4">
-                        ${t.chessSteps.steps.map(s => `
-                            <div class="bg-brand-stepBg/50 border border-white/5 rounded-2xl p-5 flex items-center gap-5">
-                                <div class="bg-white text-brand-purple font-black text-xl rounded-xl w-12 h-12 flex items-center justify-center flex-shrink-0">${s.num}</div>
-                                <div>
-                                    <h4 class="text-white text-sm font-semibold">${s.text}</h4>
-                                    ${s.link ? `<span class="text-brand-accent text-xs mt-1 block">${s.link}</span>` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="cuentas" class="space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">${accountsHTML}</div>
-        </section>
-
-        <section class="reveal bg-transparent p-10 md:p-20 border-y border-purple-50">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-                ${t.servicesGrid.map(s => `
-                    <article>
-                        <div class="text-brand-purple text-4xl mb-6 flex justify-center md:justify-start">${s.icon}</div>
-                        <h3 class="font-bold text-xl text-brand-dark mb-3">${s.title}</h3>
-                        <p class="text-sm text-gray-500 mb-8 leading-relaxed">${s.desc}</p>
-                        <button class="bg-brand-dark text-white px-8 py-3 rounded-2xl text-xs font-bold hover:bg-brand-purple transition-all w-full md:w-auto" onclick="location.href='#registro'">${s.btn}</button>
-                    </article>
-                `).join('')}
-            </div>
-        </section>
-
-        <section id="ib-program" class="py-12 reveal">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 text-brand-dark">
-                ${t.whyBridge.title.split('Bridge')[0]} <span class="text-brand-purple">Bridge Markets?</span>
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                ${t.whyBridge.cards.map(c => `
-                    <article class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-8 flex gap-6 items-start shadow-sm hover:shadow-xl hover:border-brand-purple/20 transition duration-300">
-                        <div class="bg-brand-dark text-white p-4 rounded-2xl text-xl shadow-lg">${c.icon}</div>
-                        <div>
-                            <h3 class="font-bold text-lg text-brand-dark mb-2">${c.title}</h3>
-                            <p class="text-sm text-gray-500 leading-relaxed">${c.desc}</p>
-                        </div>
-                    </article>
-                `).join('')}
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                ${t.whyBridge.info.map(i => `
-                    <article class="${i.variant === 'purple' ? 'bg-brand-purple text-white' : i.variant === 'dark' ? 'bg-brand-dark text-white' : 'bg-white/40 backdrop-blur-md border border-white/50'} rounded-3xl p-8 shadow-lg text-center flex flex-col items-center hover:-translate-y-2 transition duration-300">
-                        <div class="${i.variant ? 'bg-white/20' : 'bg-purple-100'} text-brand-purple p-4 rounded-full mb-6 ${i.variant ? 'text-white' : ''}">${i.icon}</div>
-                        <h3 class="font-bold text-sm mb-3">${i.title}</h3>
-                        <p class="text-xs ${i.variant ? 'text-purple-100' : 'text-gray-400'}">${i.desc}</p>
-                    </article>
-                `).join('')}
-            </div>
-        </section>
-
-        <section class="reveal bg-brand-purple rounded-[3rem] p-12 md:p-24 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between text-center lg:text-left gap-10">
-            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
-                <svg width="600" height="400" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 300L50 200L150 250L250 100L400 150V300H0Z" fill="white"/></svg>
-            </div>
-            <div class="relative z-10 lg:w-2/3">
-                <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">${t.finalCTA.title}</h2>
-                <p class="text-purple-100 text-lg mb-10 font-light">${t.finalCTA.desc}</p>
-                <a href="#registro" class="bg-white text-brand-purple font-extrabold py-5 px-12 rounded-2xl shadow-2xl hover:bg-gray-50 transform hover:scale-105 transition-all text-lg inline-block">${t.finalCTA.btn}</a>
-            </div>
-        </section>
-
-        <section id="registro" class="reveal bg-transparent p-10 md:p-24 flex flex-col lg:flex-row items-center gap-20 border-t border-purple-50">
-            <div class="lg:w-1/2">
-                <h2 class="text-4xl md:text-6xl font-black text-brand-dark mb-8 leading-tight">
-                    ${t.finalInfo.title.split('referiendo')[0]} <span class="text-brand-purple">Éxito</span>
-                </h2>
-                <div class="space-y-6">
-                    <p class="text-base text-gray-600 leading-relaxed font-medium">${t.finalInfo.desc}</p>
-                    <p class="text-xs text-gray-400 leading-relaxed italic border-l-4 border-brand-purple pl-4">${t.finalInfo.quote}</p>
-                    <div class="mt-10 p-8 bg-white rounded-3xl shadow-xl border border-purple-50">
-                        <h4 class="font-bold text-xl mb-6 text-brand-dark">${t.formTitle}</h4>
-                        <form id="leadForm" class="space-y-4">
-                            ${t.fields.map((f, idx) => `
-                                <div>
-                                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">${f}</label>
-                                    <input type="${idx === 1 ? 'email' : idx === 2 ? 'tel' : 'text'}" required class="lead-input w-full bg-gray-50 border border-gray-100 rounded-xl p-4 outline-none focus:border-brand-purple transition" placeholder="${f}">
-                                </div>
-                            `).join('')}
-                            <button type="submit" id="submitBtn" class="btn-purple text-white w-full py-5 rounded-xl font-bold text-lg">${t.submit}</button>
-                            <div id="formMessage"></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="lg:w-1/2 flex justify-center relative group">
-                <div class="absolute w-80 h-80 bg-brand-purple/10 rounded-full blur-[100px] -z-10 group-hover:bg-brand-purple/20 transition duration-500"></div>
-                <img src="/images/landing/reloj-arena.png" alt="Efectividad" class="w-full max-w-md object-contain drop-shadow-2xl transform group-hover:rotate-6 transition duration-700">
-            </div>
-        </section>
+        ${heroSection}
+        ${benefitsSection}
+        ${accountsSection}
+        ${servicesSection}
+        ${whyBridgeSection}
+        ${finalCTASection}
+        ${registrationSection}
     </main>
 
     <footer class="bg-brand-dark text-white pt-24 pb-12 mt-24">
@@ -527,7 +634,7 @@ export function generateLandingHTML(data: LandingData): string {
             }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
             reveals.forEach(reveal => revealOnScroll.observe(reveal));
         });
-        ${formScript}
+        ${sections.registration ? formScript : ''}
     </script>
 </body>
 </html>`;
@@ -548,3 +655,173 @@ export function openLandingPreview(html: string) {
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     window.open(URL.createObjectURL(blob), '_blank');
 }
+
+// ─── MODULAR GENERATOR ──────────────────────────────────────
+// Assembles sections from the catalog to create a full landing page
+import { SECTION_RENDERERS, getSharedStyles, getSharedHead, type BrandConfig } from './landing-sections';
+import { getTemplateById } from './landing-templates';
+
+export function generateModularLandingHTML(data: LandingData): string {
+    const modConf = data.modularConfig;
+    if (!modConf) return generateLandingHTML(data); // fallback to legacy
+
+    const template = getTemplateById(modConf.templateId);
+    const sectionIds = modConf.selectedSections.length > 0
+        ? modConf.selectedSections
+        : (template?.sections || ['hero_dark', 'stats_row']);
+
+    const brand: BrandConfig = {
+        partnerName: data.fullName,
+        whatsapp: data.whatsapp,
+        email: data.email,
+        partnerId: data.partnerId,
+        language: data.language,
+    };
+
+    // Render each section
+    const sectionsHtml = sectionIds
+        .map(sId => {
+            const renderer = SECTION_RENDERERS[sId];
+            if (!renderer) return `<!-- Section "${sId}" not found -->`;
+            const overrides = modConf.sectionOverrides[sId] || {};
+            return renderer(overrides, brand);
+        })
+        .join('\n');
+
+    // Registration form
+    const formHtml = `
+    <section id="register" class="py-24 px-8 relative" style="background: linear-gradient(135deg, #0f081d 0%, #6635de 100%);">
+        <div class="max-w-xl mx-auto glass-panel asym-card p-12 md:p-16 relative section-reveal">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold font-headline text-white mb-3">Open Account</h2>
+                <p class="text-white/60 text-sm">Start your trading journey with Bridge Markets</p>
+            </div>
+            <form id="landing-form" class="space-y-6" onsubmit="return false;">
+                <input type="hidden" name="partner_id" value="${data.partnerId}" />
+                <div>
+                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">Full Name</label>
+                    <input name="name" type="text" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary" placeholder="John Doe" required />
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">Email</label>
+                    <input name="email" type="email" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary" placeholder="john@example.com" required />
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">Phone</label>
+                    <input name="phone" type="tel" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/30 focus:outline-none focus:border-primary" placeholder="+1 234 567 8900" required />
+                </div>
+                <button type="submit" class="w-full py-5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-2xl transition-all text-lg">Create Account</button>
+                <p class="text-[10px] text-white/30 text-center italic mt-4">Trading involves risk. Only invest capital you can afford to lose.</p>
+            </form>
+        </div>
+    </section>`;
+
+    // Footer
+    const footerHtml = `
+    <footer class="border-t border-white/5 pt-20 pb-12" style="background: #0f081d;">
+        <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
+            <div class="max-w-xs">
+                <div class="text-2xl font-bold font-headline mb-6 text-white">Bridge <span class="text-primary">Markets</span></div>
+                <p class="text-white/40 text-sm leading-relaxed">The global standard for transparent, institutional-grade social trading and fund management.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-sm font-medium">
+                <div class="flex flex-col gap-4">
+                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Platform</p>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Copy Trading</a>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">MAM Engine</a>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Company</p>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">About</a>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Security</a>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Support</p>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Knowledge Base</a>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Contact</a>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Legal</p>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Privacy</a>
+                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Terms</a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-8 text-center text-[10px] text-white/10 leading-relaxed border-t border-white/5 pt-12">
+            High-Risk Investment Warning: Trading in financial markets involves significant risk. Leverage can work against you as well as for you. Past performance is not indicative of future results. Only invest capital you can afford to lose.
+            <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${data.partnerId}
+        </div>
+    </footer>`;
+
+    return `<!DOCTYPE html>
+<html lang="${data.language === 'ES' ? 'es' : data.language === 'BR' ? 'pt' : 'en'}">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bridge Markets | ${template?.name || 'Trading Platform'}</title>
+    ${getSharedHead()}
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+        ${getSharedStyles()}
+    </style>
+</head>
+<body class="bg-[#fef7ff] text-[#211635]">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/60 backdrop-blur-xl border border-white/20 rounded-full px-8 h-16 shadow-[0_25px_50px_-12px_rgba(102,53,222,0.15)]">
+            <div class="text-2xl font-bold tracking-tighter text-primary font-headline">Bridge Markets</div>
+            <div class="hidden md:flex items-center gap-10 text-sm font-semibold">
+                <a class="text-[#494455] hover:text-primary transition-all" href="#">Platform</a>
+                <a class="text-[#494455] hover:text-primary transition-all" href="#">Security</a>
+                <a class="text-[#494455] hover:text-primary transition-all" href="#">Pricing</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#register" class="bg-primary px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg hover:shadow-primary/40 active:scale-95 transition-all">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20">
+        ${sectionsHtml}
+        ${formHtml}
+    </main>
+
+    ${footerHtml}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.section-reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            reveals.forEach(r => observer.observe(r));
+
+            // Form handler
+            const form = document.getElementById('landing-form');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const fd = new FormData(form);
+                    const btn = form.querySelector('button[type=submit]');
+                    if (btn) { btn.textContent = 'Processing...'; btn.disabled = true; }
+                    try {
+                        // In production, replace with actual API endpoint
+                        console.log('Form submitted:', Object.fromEntries(fd));
+                        if (btn) { btn.textContent = '✓ Account Created!'; btn.style.background = '#10b981'; }
+                    } catch (err) {
+                        if (btn) { btn.textContent = 'Error — Try Again'; btn.disabled = false; }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>`;
+}
+

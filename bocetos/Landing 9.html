@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IB Portal | The Master Portal</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#645495",
+                    "secondary-fixed": "#e8ddff",
+                    "inverse-on-surface": "#f7edff",
+                    "tertiary-container": "#7d55f6",
+                    "surface-container-high": "#f0e3ff",
+                    "inverse-surface": "#362b4b",
+                    "surface-container-low": "#f9f0ff",
+                    "on-primary-fixed-variant": "#500fc8",
+                    "surface-tint": "#6939e0",
+                    "surface-bright": "#fef7ff",
+                    "surface-container": "#f4eaff",
+                    "on-surface": "#211635",
+                    "on-primary-container": "#fffbff",
+                    "secondary-fixed-dim": "#cebdff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#6438dc",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#cdbdff",
+                    "on-tertiary-fixed-variant": "#4e15c6",
+                    "outline-variant": "#cbc3d8",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#e8ddff",
+                    "primary-container": "#7f54f8",
+                    "tertiary-fixed": "#e7deff",
+                    "on-tertiary-fixed": "#1f005f",
+                    "outline": "#7a7486",
+                    "surface": "#fef7ff",
+                    "surface-container-highest": "#ebdcff",
+                    "primary": "#6635de",
+                    "surface-dim": "#e3d3fd",
+                    "on-secondary-fixed": "#200c4e",
+                    "background": "#fef7ff",
+                    "on-secondary-fixed-variant": "#4c3c7c",
+                    "inverse-primary": "#cebdff",
+                    "primary-fixed-dim": "#cebdff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#fffbff",
+                    "on-background": "#211635",
+                    "secondary-container": "#c9b6ff",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#20005e",
+                    "on-surface-variant": "#494455",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#ebdcff",
+                    "on-secondary-container": "#544484"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .bento-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(102, 53, 222, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+        }
+        .editorial-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .asym-card-1 { border-radius: 40px 12px 40px 12px; }
+        .asym-card-2 { border-radius: 12px 40px 12px 40px; }
+        .asym-card-3 { border-radius: 60px 12px 12px 12px; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Shell -->
+<nav class="fixed top-0 w-full z-50 rounded-br-[40px] bg-white/60 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.06)] font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto">
+<div class="flex items-center gap-12">
+<span class="text-2xl font-bold tracking-tighter text-slate-900">IB Portal</span>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 hover:text-slate-900 transition-all duration-300" href="#">Markets</a>
+<a class="text-violet-600 font-semibold border-b-2 border-violet-600 transition-all duration-300" href="#">Portfolio</a>
+<a class="text-slate-600 hover:text-slate-900 transition-all duration-300" href="#">Analytics</a>
+<a class="text-slate-600 hover:text-slate-900 transition-all duration-300" href="#">Tools</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2 text-slate-600 font-medium hover:bg-slate-100/50 rounded-full transition-all duration-300">Login</button>
+<button class="px-6 py-2.5 bg-gradient-to-br from-primary to-primary-container text-white font-semibold rounded-full shadow-lg hover:scale-95 active:scale-90 transition-all">Open Account</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-20 px-8 max-w-[1440px] mx-auto">
+<!-- Hero Section: Dynamic Portfolio Synthesis -->
+<header class="mb-16 grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+<div class="md:col-span-8">
+<div class="editorial-stack mb-4">
+<span class="font-label text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-primary">Master Dashboard</span>
+<h1 class="font-headline text-[3.5rem] font-bold leading-[1.1] tracking-tight text-on-surface">Luminous Precision <br/>at Every Scale.</h1>
+</div>
+<p class="text-on-surface-variant text-lg max-w-xl">Welcome to the central nexus of your financial empire. Real-time synthesized data, institutional-grade execution.</p>
+</div>
+<div class="md:col-span-4 flex flex-col gap-2 glass-panel p-8 asym-card-1 bg-surface-container-high/40">
+<span class="font-label text-[0.6875rem] font-medium text-secondary uppercase tracking-widest">Total Net Liquidity</span>
+<span class="font-headline text-4xl font-extrabold text-on-surface tracking-tighter">$1,248,592.42</span>
+<div class="flex items-center gap-2 text-emerald-600 font-semibold text-sm">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+12.4% vs last month</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Synthesis (12+ Sections Visualized) -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 grid-rows-auto gap-6">
+<!-- 1. Live Market Pulse (Large Centerpiece) -->
+<section class="md:col-span-4 lg:col-span-8 bg-surface-container-low asym-card-2 p-8 relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h2 class="font-headline text-xl font-bold mb-1">Global Market Synthesis</h2>
+<p class="text-sm text-on-surface-variant">Synthesized index performance across 24h cycle.</p>
+</div>
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold">LIVE FEED</span>
+</div>
+<div class="h-64 flex items-end gap-4 overflow-hidden">
+<!-- Chart Mockup -->
+<div class="flex-1 bg-gradient-to-t from-primary/20 to-transparent rounded-t-xl h-[60%] group-hover:h-[80%] transition-all duration-700"></div>
+<div class="flex-1 bg-gradient-to-t from-tertiary/20 to-transparent rounded-t-xl h-[40%] group-hover:h-[55%] transition-all duration-700"></div>
+<div class="flex-1 bg-gradient-to-t from-primary/30 to-transparent rounded-t-xl h-[90%] group-hover:h-[95%] transition-all duration-700"></div>
+<div class="flex-1 bg-gradient-to-t from-secondary/20 to-transparent rounded-t-xl h-[30%] group-hover:h-[45%] transition-all duration-700"></div>
+<div class="flex-1 bg-gradient-to-t from-primary/20 to-transparent rounded-t-xl h-[70%] group-hover:h-[85%] transition-all duration-700"></div>
+<div class="flex-1 bg-gradient-to-t from-tertiary/10 to-transparent rounded-t-xl h-[50%] group-hover:h-[60%] transition-all duration-700"></div>
+</div>
+</div>
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/5 rounded-full blur-[80px]"></div>
+</section>
+<!-- 2. Portfolio Health -->
+<section class="md:col-span-4 lg:col-span-4 bg-inverse-surface text-inverse-on-surface asym-card-1 p-8 flex flex-col justify-between">
+<div>
+<h2 class="font-headline text-xl font-bold mb-6">Portfolio Health</h2>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<span class="text-sm opacity-70">Diversity Index</span>
+<span class="font-bold">0.82 High</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary-fixed w-[82%] h-full"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm opacity-70">Risk Tolerance</span>
+<span class="font-bold">Aggressive</span>
+</div>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary w-[65%] h-full"></div>
+</div>
+</div>
+</div>
+<button class="mt-8 flex items-center justify-center gap-2 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all">
+<span>Detailed Audit</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</section>
+<!-- 3. Asset Classes (Mini Bento Items) -->
+<section class="md:col-span-2 lg:col-span-3 bg-surface-container-highest asym-card-3 p-6 group hover:shadow-xl transition-all duration-500">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<span class="font-bold">Equities</span>
+</div>
+<p class="text-2xl font-bold tracking-tight">$450.2k</p>
+<div class="mt-2 text-xs text-emerald-600 font-bold">+2.4% Today</div>
+</section>
+<section class="md:col-span-2 lg:col-span-3 bg-surface-container-highest rounded-full p-6 group hover:shadow-xl transition-all duration-500">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">currency_exchange</span>
+</div>
+<span class="font-bold">Options</span>
+</div>
+<p class="text-2xl font-bold tracking-tight">$124.8k</p>
+<div class="mt-2 text-xs text-error font-bold">-0.8% Today</div>
+</section>
+<!-- 4. Insight Hub (The Overlap) -->
+<section class="md:col-span-4 lg:col-span-6 bg-gradient-to-br from-tertiary/10 to-primary/5 border border-primary/10 asym-card-2 p-8 relative overflow-hidden">
+<div class="relative z-10 flex flex-col h-full">
+<div class="editorial-stack mb-6">
+<span class="font-label text-[0.6875rem] font-semibold text-primary uppercase">AI Strategy Nexus</span>
+<h3 class="text-2xl font-bold">Opportunities Found</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-4 glass-panel rounded-2xl hover:translate-x-2 transition-transform cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary" data-weight="fill">lightbulb</span>
+</div>
+<div>
+<h4 class="font-bold text-sm">Long Straddle Opportunity</h4>
+<p class="text-xs text-on-surface-variant">TSLA Volatility Spike detected ahead of earnings.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 glass-panel rounded-2xl hover:translate-x-2 transition-transform cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary" data-weight="fill">trending_up</span>
+</div>
+<div>
+<h4 class="font-bold text-sm">Sector Rebalancing</h4>
+<p class="text-xs text-on-surface-variant">Tech exposure exceeds set risk threshold of 40%.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 3D Decorative Element -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-primary to-tertiary rounded-full blur-[60px] opacity-20"></div>
+</section>
+<!-- 5. Orders & Executions -->
+<section class="md:col-span-4 lg:col-span-4 bg-white asym-card-1 p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-bold text-lg">Active Orders</h3>
+<span class="material-symbols-outlined text-slate-400">more_horiz</span>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-center border-b border-surface-container-low pb-4">
+<div>
+<p class="font-bold text-sm">AAPL <span class="font-normal text-on-surface-variant">Limit Buy</span></p>
+<p class="text-[0.6875rem] text-slate-400">100 Shares @ $185.00</p>
+</div>
+<span class="px-2 py-1 bg-surface-container text-xs font-semibold rounded">PENDING</span>
+</div>
+<div class="flex justify-between items-center border-b border-surface-container-low pb-4">
+<div>
+<p class="font-bold text-sm">NVDA <span class="font-normal text-on-surface-variant">Market Sell</span></p>
+<p class="text-[0.6875rem] text-slate-400">50 Shares</p>
+</div>
+<span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">FILLED</span>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-bold text-sm">BTC/USD <span class="font-normal text-on-surface-variant">Stop Loss</span></p>
+<p class="text-[0.6875rem] text-slate-400">1.5 Units @ $62,000</p>
+</div>
+<span class="px-2 py-1 bg-surface-container text-xs font-semibold rounded">ACTIVE</span>
+</div>
+</div>
+</section>
+<!-- 6. Yield & Income -->
+<section class="md:col-span-4 lg:col-span-3 bg-surface-container p-8 asym-card-2 flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-primary mb-4">payments</span>
+<h3 class="font-bold text-lg mb-2">Projected Income</h3>
+<p class="text-sm text-on-surface-variant mb-6">Estimated dividend &amp; interest yield for Q3.</p>
+</div>
+<div class="editorial-stack">
+<span class="text-3xl font-extrabold text-on-surface">$12,450</span>
+<span class="font-label text-[0.6875rem] font-bold text-primary tracking-widest">+15% YoY</span>
+</div>
+</section>
+<!-- 7. Global Connectivity Map (Visual Placeholder) -->
+<section class="md:col-span-4 lg:col-span-5 bg-slate-900 rounded-2xl overflow-hidden relative min-h-[300px]">
+<img class="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000" data-alt="abstract digital representation of global network nodes and glowing connections on a dark background with futuristic aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI3X0IICv9-arWdbPs5tYBEtd__w-4a6oxgW5cfQbBhf6tC-8d1kFLVL-fQ8Yu4jkYDQaeusl3qF6_dpNEA5UWe2oR5JTsoYMyCCGglDYG8PBFaFMdZ9-NtapA-S-S80S2b4DLmZFCJfpCPWVgGRiY3xkRIJz8FMiDqzzsvY5hwXmRUalj1jzj3ibpmGPSWfYrP4wKMclcYBdnZ7zEJxJyxD-kyE7AalHOttnL606L4Fj6FqEN6Ds1z3EgbQcIm_dT0mcwXe_xWt8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent p-8 flex flex-col justify-end">
+<h3 class="text-white font-bold text-xl mb-2">Global Routing</h3>
+<p class="text-slate-400 text-xs">Direct access to 150+ exchanges in 33 countries. Execution latency &lt; 5ms.</p>
+</div>
+</section>
+<!-- 8. Regulatory Compass -->
+<section class="md:col-span-2 lg:col-span-2 bg-surface-container-low p-6 asym-card-3 border border-outline-variant/30">
+<h4 class="font-label text-[0.6875rem] font-bold opacity-50 uppercase mb-4">Compliance</h4>
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+<span class="font-bold text-sm">Tier 1 Secured</span>
+</div>
+<p class="text-xs text-on-surface-variant">Accounts protected up to $500k via SIPC.</p>
+</section>
+<!-- 9. Educational Portal -->
+<section class="md:col-span-2 lg:col-span-2 bg-primary/5 p-6 rounded-3xl group cursor-pointer hover:bg-primary/10 transition-colors">
+<h4 class="font-bold text-sm mb-4">Trading Academy</h4>
+<div class="space-y-3">
+<div class="h-1 bg-white/50 w-full rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<p class="text-[0.6875rem] font-medium">Next: Mastering Iron Condors</p>
+</div>
+</section>
+<!-- 10. Tools & APIs (Quick Links) -->
+<section class="md:col-span-4 lg:col-span-3 glass-panel p-6 asym-card-1 border border-primary/5">
+<h4 class="font-bold text-sm mb-4">Power Tools</h4>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface p-3 rounded-xl shadow-sm flex flex-col items-center gap-2 hover:bg-primary-container hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined text-lg">code</span>
+<span class="text-[10px] font-bold">API Docs</span>
+</div>
+<div class="bg-surface p-3 rounded-xl shadow-sm flex flex-col items-center gap-2 hover:bg-primary-container hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined text-lg">calculate</span>
+<span class="text-[10px] font-bold">Margin Calc</span>
+</div>
+</div>
+</section>
+<!-- 11. Customer Support Concierge -->
+<section class="md:col-span-4 lg:col-span-4 bg-secondary-fixed p-8 asym-card-2 flex items-center gap-6 group">
+<div class="w-16 h-16 rounded-full bg-white p-1 shadow-inner relative">
+<img class="w-full h-full object-cover rounded-full" data-alt="professional woman advisor smiling kindly in a bright office setting with soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZlqlA60UVupUJOrQSbVQAJmcnZ0wxF3YuJ7YHVI1Yvlh4e4sCMPB-3SrXr915FvRzdy-Vk9DtQsidT1CxBd2IWRLK8goskqVLEUQNB0dkzfvcmUxZxbxux3BRaOsvP0fWviGlelmFXCtkve-OYFSFUuSqfe7mAU2jGZGNzMV-OKy3zNEWuL5rbbZDW5f5Rt7eUHg7OdMGkX0qOSINpS9CSYeBPe8AsFnQO4ie3NMcU1LqyZrVRS-U3AkjEXiUyDvHZDSOD447s4g"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
+</div>
+<div>
+<h4 class="font-bold text-lg">Dedicated Advisor</h4>
+<p class="text-sm opacity-70">Sarah is online for Portfolio review.</p>
+<button class="mt-2 text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">Start Chat <span class="material-symbols-outlined text-sm">arrow_right_alt</span></button>
+</div>
+</section>
+<!-- 12. Security & Login History -->
+<section class="md:col-span-4 lg:col-span-5 bg-surface-container-high/20 p-8 asym-card-3 border border-outline-variant/10">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-bold">Security Synthesis</h4>
+<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold rounded uppercase">Encrypted</span>
+</div>
+<div class="flex gap-8 items-center">
+<div class="text-center">
+<p class="text-2xl font-bold">2FA</p>
+<p class="text-[10px] opacity-60">ENABLED</p>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant"></div>
+<div>
+<p class="text-sm font-medium">Last Login: London, GB</p>
+<p class="text-xs text-on-surface-variant">Today, 09:42 AM via MacOS</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Navigation Shell Support (FAB) - Filtered context check: Dashboard needs it -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary text-white rounded-2xl shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+<!-- Footer Shell -->
+<footer class="w-full rounded-tl-[80px] mt-20 bg-slate-50 font-['Inter'] text-sm tracking-wide">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 max-w-7xl mx-auto">
+<div class="mb-8 md:mb-0">
+<span class="font-['Plus_Jakarta_Sans'] font-bold text-slate-900 text-xl block mb-2">IB Portal Luminous.</span>
+<p class="text-slate-500 max-w-xs">© 2024 IB Portal Luminous. Precision in Every Trade. Institutional grade performance for the private investor.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-slate-500 hover:text-violet-500 transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors" href="#">Risk Disclosure</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</body></html>

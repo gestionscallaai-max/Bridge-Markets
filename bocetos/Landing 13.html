@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IB Portal | Universo Sintéticos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#645495",
+                        "secondary-fixed": "#e8ddff",
+                        "inverse-on-surface": "#f7edff",
+                        "tertiary-container": "#7d55f6",
+                        "surface-container-high": "#f0e3ff",
+                        "inverse-surface": "#362b4b",
+                        "surface-container-low": "#f9f0ff",
+                        "on-primary-fixed-variant": "#500fc8",
+                        "surface-tint": "#6939e0",
+                        "surface-bright": "#fef7ff",
+                        "surface-container": "#f4eaff",
+                        "on-surface": "#211635",
+                        "on-primary-container": "#fffbff",
+                        "secondary-fixed-dim": "#cebdff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#6438dc",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#cdbdff",
+                        "on-tertiary-fixed-variant": "#4e15c6",
+                        "outline-variant": "#cbc3d8",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#e8ddff",
+                        "primary-container": "#7f54f8",
+                        "tertiary-fixed": "#e7deff",
+                        "on-tertiary-fixed": "#1f005f",
+                        "outline": "#7a7486",
+                        "surface": "#fef7ff",
+                        "surface-container-highest": "#ebdcff",
+                        "primary": "#6635de",
+                        "surface-dim": "#e3d3fd",
+                        "on-secondary-fixed": "#200c4e",
+                        "background": "#0a0614",
+                        "on-secondary-fixed-variant": "#4c3c7c",
+                        "inverse-primary": "#cebdff",
+                        "primary-fixed-dim": "#cebdff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#fffbff",
+                        "on-background": "#fef7ff",
+                        "secondary-container": "#c9b6ff",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#20005e",
+                        "on-surface-variant": "#cbc3d8",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#2a1e45",
+                        "on-secondary-container": "#544484"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem",
+                        "asym": "0px 80px 0px 80px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #0a0614; color: #fef7ff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .glass-nav { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .asym-container { border-radius: 0px 80px 0px 80px; }
+        .gradient-text { background: linear-gradient(135deg, #6635de 0%, #7f54f8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(102, 53, 222, 0.15) 0%, transparent 70%); z-index: -1; }
+        .depth-card { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .depth-card:hover { transform: translateY(-8px) scale(1.02); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="selection:bg-primary-container selection:text-white">
+<nav class="fixed top-0 w-full z-50 rounded-br-[40px] bg-slate-950/60 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-[1440px] mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-white">IB Portal</div>
+<div class="hidden md:flex items-center space-gap-8 gap-x-8">
+<a class="text-violet-400 font-semibold border-b-2 border-violet-600 px-1 py-1" href="#">Markets</a>
+<a class="text-slate-400 hover:text-white transition-all duration-300" href="#">Portfolio</a>
+<a class="text-slate-400 hover:text-white transition-all duration-300" href="#">Analytics</a>
+<a class="text-slate-400 hover:text-white transition-all duration-300" href="#">Tools</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-white font-medium px-4 py-2 transition-all">Login</button>
+<button class="bg-primary-container text-white px-6 py-2.5 rounded-full font-semibold shadow-lg shadow-primary/20 hover:scale-95 active:scale-90 transition-all duration-300">Open Account</button>
+</div>
+</div>
+</nav>
+<main class="relative pt-32">
+<div class="hero-glow top-0 left-1/4"></div>
+<div class="hero-glow bottom-0 right-1/4"></div>
+<section class="px-8 max-w-[1440px] mx-auto mb-32">
+<div class="flex flex-col md:flex-row items-center gap-16">
+<div class="flex-1 space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-variant/30 text-primary-fixed-dim text-[0.6875rem] font-medium tracking-widest uppercase">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                        Next-Gen Synthetic Trading
+                    </div>
+<h1 class="font-headline text-[3.5rem] font-bold leading-[1.1] tracking-tight text-white">
+                        Master the <span class="gradient-text">Synthetic</span> <br/>Market Ecosystem
+                    </h1>
+<p class="font-body text-on-surface-variant text-lg max-w-xl">
+                        Universo Sintéticos redefines precision with luminous 3D visual data and deep institutional liquidity. Experience professional trading without standard boundaries.
+                    </p>
+<div class="flex items-center gap-6">
+<button class="bg-primary text-white px-8 py-4 rounded-full font-bold text-lg shadow-2xl shadow-primary/40 hover:scale-105 transition-all">Start Trading Now</button>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-3">
+<img alt="" class="w-10 h-10 rounded-full border-2 border-background" data-alt="close up headshot portrait of a confident businessman in a suit with clean modern background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl_aVtiULfj9V98V5ueA82Uy2-M8Y7KvbFIG4ZJtQrrOZ1U7fLszl5JpLUvHzwSsIE8cuHbscjMFdvqPq7kNMsfUZtlTia_lheJWCrCloCWHS483EasmtkAN-ABf_Xj8glc9Y4YnHN5WBQrSlTW9-u7qST5MBJEAsDXXOHv1f1l0yV93vTIuhNxX576VRedtCO4ArS1wGrJTNVbnthsuEl0pv6RcTzJrhuEsX4GIShbd_-I2icH9UAKgG11y60GKKAls5xx9th4q8"/>
+<img alt="" class="w-10 h-10 rounded-full border-2 border-background" data-alt="professional woman in creative office setting looking at camera with warm smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx0S5Qe9nl6QfkhyjLEY4TRUzESEQLbzEAqOgRSpIEyArTCpuAd0F54yraI35wv7c95s4ZoGVvbO7S1RBe_sj1fu9uAAj7BaIm2gLXqhEN-WDNWnrrixzAaZ19jXWJN-N2ergyXGG3MmVb__kHHpMrMIWlgSv8YWlbD12SeiZ-du_TPGS_QjnDk3el9F9m8ebSxKVqPX8iywbNKBxSepECKp3zTgyjHbs44ud-9izoeZ9ICQ-F7x8u6KcZ10txsGngN1NkDMXiC5o"/>
+<img alt="" class="w-10 h-10 rounded-full border-2 border-background" data-alt="diverse group of modern digital nomads in a collaborative workspace with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuNm8w6gdpDRjZw-IgKKgKtqeMpV0heMSMLmGSOCaNa2mEAhPpFnNY5_SYoizW3bvGsOk-FLHgGjnZ-UFTrkC8gRC4G9lJStAq2F4epN_RoQeqtCGQN-8xucSLrfXPQfdoXc-3oSK6aYzYYTa4Q8dOl2ekH9O-p7ki3BZl8pw_eENuYkjbPkZoLbA0ZbxkhsFEHqtf3vAiVsDYQrSZz-DuXSnkAeWfa2jQHb3usIccqlxJwpGo4BGTfyrHyd4CbyPkzCh4y4ugjTQ"/>
+</div>
+<span class="text-sm font-label text-on-surface-variant"><strong class="text-white">12k+</strong> Active Traders</span>
+</div>
+</div>
+</div>
+<div class="flex-1 relative">
+<div class="asym-container bg-surface-variant/40 p-8 shadow-2xl backdrop-blur-md relative overflow-hidden group">
+<img class="w-full h-auto rounded-xl grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" data-alt="abstract 3d glass shapes floating in a dark purple void with glowing neon highlights and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO_k5GPUPixPVkK9jarhlHVcpk5LxIG9jQsdzrs0DxU0bwKRLi089ixUOEdk60BaBujQWWHyz4PGlDyIQjTXx36jm98l1kKwnXYl2oxFjIm1stQFD6xSRwf9ZFaKL5vjS76-hmYo4LSU7xMe1Gp1wmOQSqkaBZgLfjLKAtT32eICBwSfUM6xJlrMrXC-2iiM1sGf-GkFdeY4DhwmO7zA8blTxPdmUQ21L0f5ub-WLllQ-y9wBos4bLbIwJZ7PWTLc30pTpuckbC7o"/>
+<div class="absolute bottom-12 right-12 bg-primary/90 p-6 rounded-xl shadow-2xl backdrop-blur-xl">
+<div class="label-sm text-primary-fixed mb-1">REAL-TIME APY</div>
+<div class="text-3xl font-headline font-bold text-white">24.8%</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface-container-low/5 py-24">
+<div class="px-8 max-w-[1440px] mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="depth-card bg-surface-variant/20 p-8 asym-container border border-white/5 hover:bg-surface-variant/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim text-4xl mb-4">analytics</span>
+<h3 class="font-headline text-xl font-semibold mb-2">Market Matrix</h3>
+<p class="text-on-surface-variant text-sm">Real-time correlation mapping across 500+ synthetic assets.</p>
+</div>
+<div class="depth-card bg-surface-variant/20 p-8 asym-container border border-white/5 hover:bg-surface-variant/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim text-4xl mb-4">shield</span>
+<h3 class="font-headline text-xl font-semibold mb-2">Safety Protocol</h3>
+<p class="text-on-surface-variant text-sm">Multi-layer cold storage and real-time fraud detection AI.</p>
+</div>
+<div class="depth-card bg-surface-variant/20 p-8 asym-container border border-white/5 hover:bg-surface-variant/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim text-4xl mb-4">layers</span>
+<h3 class="font-headline text-xl font-semibold mb-2">Tech Stack</h3>
+<p class="text-on-surface-variant text-sm">Built on low-latency Rust core for sub-millisecond execution.</p>
+</div>
+<div class="depth-card bg-surface-variant/20 p-8 asym-container border border-white/5 hover:bg-surface-variant/30 transition-all">
+<span class="material-symbols-outlined text-primary-fixed-dim text-4xl mb-4">monitoring</span>
+<h3 class="font-headline text-xl font-semibold mb-2">Execution</h3>
+<p class="text-on-surface-variant text-sm">Direct market access with zero slippage guarantees.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="px-8 max-w-[1440px] mx-auto py-32 space-y-24">
+<div class="flex flex-col md:flex-row gap-12 items-center">
+<div class="md:w-1/2 space-y-6">
+<div class="label-sm text-primary-fixed">CORE TECHNOLOGY</div>
+<h2 class="text-4xl font-headline font-bold">The <span class="text-primary-fixed-dim">Quantum Engine</span> Stack</h2>
+<p class="text-on-surface-variant text-lg">Our proprietary matching engine handles over 100,000 transactions per second with deterministic latency, ensuring your synthetic trades enter the pool exactly when you click.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-white font-medium">Asynchronous processing architecture</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-white font-medium">Zero-knowledge proof validation</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-white font-medium">Integrated liquidity aggregator</span>
+</li>
+</ul>
+</div>
+<div class="md:w-1/2">
+<div class="asym-container bg-surface-variant/20 p-1 border border-white/10 overflow-hidden">
+<img class="w-full h-auto opacity-70 asym-container" data-alt="close up of high tech server motherboard with glowing fiber optic cables and neon purple data streams" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk3OIrNUFX6t-vJcb_lyDVnifbJxtUlEki3DEQ_UtjgQNsrbL1b4CANMtnZ0JATArn8-HkzQ-A1aE2jjykFUMZGu14sMDGzzynrQ7gAl9-Or9r1WxAgcwP83EjHUWna-MrVS1JcGPzRyvDsepmS06OW51huDRZrc4nXrQC2UXkkAmUs2Xovj6QqCwQbDtUIHPFu5RG8K950qCBi4KCP7JHRgVZjfLc0LO88QsmfcuwVI_ZMPbgz-Pwy22SaVXY-qHEpow4FR-ym_A"/>
+</div>
+</div>
+</div>
+<div class="bg-surface-variant/10 asym-container p-12 relative overflow-hidden">
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 blur-[100px] rounded-full"></div>
+<div class="relative z-10 text-center max-w-3xl mx-auto space-y-6">
+<h2 class="text-4xl font-headline font-bold">Institutional Safety, Retail Ease.</h2>
+<p class="text-on-surface-variant">We bridge the gap between heavy institutional security and modern UI simplicity. Your assets are secured by the same protocols used by the world's leading banks.</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8">
+<div class="text-center">
+<div class="text-3xl font-headline font-bold text-white mb-2">99.9%</div>
+<div class="label-sm text-primary-fixed">UPTIME</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-headline font-bold text-white mb-2">$4.2B</div>
+<div class="label-sm text-primary-fixed">VOLUME</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-headline font-bold text-white mb-2">256-bit</div>
+<div class="label-sm text-primary-fixed">ENCRYPTION</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-headline font-bold text-white mb-2">24/7</div>
+<div class="label-sm text-primary-fixed">SUPPORT</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-8 max-w-[1440px] mx-auto py-32">
+<div class="mb-12">
+<h2 class="text-4xl font-headline font-bold mb-4">Luminous Dashboard</h2>
+<p class="text-on-surface-variant">Manage your portfolio with 3D depth and editorial clarity.</p>
+</div>
+<div class="grid grid-cols-12 gap-8 h-[600px]">
+<div class="col-span-12 md:col-span-8 bg-surface-variant/20 asym-container border border-white/5 p-8 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-12">
+<div>
+<div class="label-sm text-primary-fixed mb-1">TOTAL PORTFOLIO VALUE</div>
+<div class="text-5xl font-headline font-bold text-white">$142,504.22</div>
+</div>
+<div class="bg-primary/20 text-primary-fixed px-4 py-2 rounded-lg text-sm font-bold">+12.4% Today</div>
+</div>
+<img class="w-full h-[350px] object-cover opacity-40 mix-blend-screen grayscale group-hover:grayscale-0 transition-all duration-1000" data-alt="sleek financial chart with glowing violet and teal lines on a dark background showing steady upward growth" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv-6-mdjwd9Tm9VWxWaIo8LQNbbVFRchiYyvWAN_jt3XUCT40XMJVv9UAvZbPLha-dm3r0zGWmYziX8tRvnFtgbj1nLQ0eWy8Sy6NA1QHi6GhZjC6V6-OJ_MhoV_k1p3tYkpVahrniamR2NfNlCMlJh8UrqDxpxP276vm4U9Vttfzb9Lf_-8CkjiB3a9p7CDWN30Zf5wQBVKNCmL1pngnuIvbCJ0QkDT1AjDAxnPFPzmq7SdCO3jGwvf1Z_aZsFpo1s7sJZKzLt6c"/>
+<div class="absolute bottom-8 left-8 flex gap-4">
+<div class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-xs">1H</div>
+<div class="px-4 py-2 rounded-full bg-primary text-white text-xs font-bold">24H</div>
+<div class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-xs">7D</div>
+<div class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-xs">30D</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 flex flex-col gap-8">
+<div class="flex-1 bg-surface-variant/20 asym-container border border-white/5 p-6 flex flex-col justify-center">
+<div class="label-sm text-primary-fixed mb-2">ACTIVE TRADES</div>
+<div class="flex items-center justify-between">
+<span class="font-headline text-2xl font-bold">14</span>
+<span class="material-symbols-outlined text-primary text-3xl">trending_up</span>
+</div>
+</div>
+<div class="flex-1 bg-surface-variant/20 asym-container border border-white/5 p-6 flex flex-col justify-center">
+<div class="label-sm text-primary-fixed mb-2">RISK SCORE</div>
+<div class="flex items-center justify-between">
+<span class="font-headline text-2xl font-bold">LOW</span>
+<div class="w-24 h-2 bg-white/10 rounded-full overflow-hidden">
+<div class="w-1/3 h-full bg-primary"></div>
+</div>
+</div>
+</div>
+<div class="flex-1 bg-primary asym-container p-6 flex flex-col justify-center shadow-2xl shadow-primary/30">
+<div class="text-white font-headline font-bold text-xl">Upgrade to Pro</div>
+<p class="text-white/70 text-sm mb-4">Unlock advanced analytics and depth tools.</p>
+<button class="bg-white text-primary px-4 py-2 rounded-full font-bold text-xs self-start">Learn More</button>
+</div>
+</div>
+</div>
+</section>
+<section class="px-8 max-w-[1440px] mx-auto py-32">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-32 items-center">
+<div class="order-2 md:order-1">
+<div class="grid grid-cols-2 gap-6">
+<div class="asym-container bg-surface-variant/10 p-1 aspect-square border border-white/5">
+<img class="w-full h-full object-cover asym-container opacity-60" data-alt="3d render of an abstract violet sphere with liquid metal texture and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp-uXx0dDqLTOf8obp7I7Wi1bi25BfK9J_bjtQyktv5Ox5m88kqR3jE2pXrKcjIeGZCbZa8l1IIIORoQJuCdjP421k7MzuA53zOng_zzUXGtDKP6Dn-iViVd9r93t99bPJoWCxuFSl6iVINvNs6eFasWbuDVdGM2NBo_xfZfqvX5LSWrqahIoOu03bzpALtOfDZGhObonxNMo71nxF-t1t5d1CsXrmEcBUEnzeFStJ-HAJeY_JHjCuh7fP2n8wHMh9CM1xz8OlKXA"/>
+</div>
+<div class="asym-container bg-surface-variant/10 p-1 aspect-square border border-white/5 mt-12">
+<img class="w-full h-full object-cover asym-container opacity-60" data-alt="abstract flowing purple silk texture with deep shadows and highlights in a 3d rendered environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDvpJcr3dTS_StpICAAMgGXW73vAbGLNxfTKi625hl4I-CVezCuQa9XlWiamM7NG8c7s0InES81-jjyO5i41PVoDFnQGj6x_wjT8hKwGU_4OmYIY7_bT3fVB7MR3GRIAB8EZ8x4zTzRYiCprdTGCQHDggy7fqxKUND3vXSPrDu_nfJU22izIB0SluduzGhz2oRppXwTb-Cq0ufc4nTdWqFE4LmtckrE3HI41ek0E1Vs-c-vPA-bj_gIInMDzqdmCDtnl6lBQZnEIg"/>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2 space-y-8">
+<div class="label-sm text-primary-fixed">MARKET LIQUIDITY</div>
+<h2 class="text-4xl font-headline font-bold leading-tight">Deep Liquidity for <span class="text-primary-fixed-dim">Zero Slippage</span> Trading.</h2>
+<p class="text-on-surface-variant text-lg">Our synthetic pools are backed by deep institutional liquidity providers, ensuring that even large-scale trades execute at the exact price you see on the dashboard.</p>
+<div class="space-y-4">
+<div class="p-4 bg-surface-variant/20 rounded-xl border-l-4 border-primary">
+<div class="font-headline font-bold mb-1">Multi-Asset Pools</div>
+<p class="text-sm text-on-surface-variant">Trade indices, forex, and commodities from a single vault.</p>
+</div>
+<div class="p-4 bg-surface-variant/20 rounded-xl border-l-4 border-primary">
+<div class="font-headline font-bold mb-1">Instant Settlement</div>
+<p class="text-sm text-on-surface-variant">Funds are settled the moment the contract conditions are met.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-primary/5 py-32 overflow-hidden relative">
+<div class="px-8 max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="max-w-xl">
+<h2 class="text-[3rem] font-headline font-bold leading-none mb-8">Ready to evolve your strategy?</h2>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary px-8 py-4 rounded-full font-bold text-white shadow-xl shadow-primary/30">Get Started</button>
+<button class="bg-surface-variant/20 border border-white/10 px-8 py-4 rounded-full font-bold text-white backdrop-blur-md">View Documentation</button>
+</div>
+</div>
+<div class="relative">
+<div class="material-symbols-outlined text-[200px] text-primary/10 absolute -top-24 -right-12">rocket_launch</div>
+<div class="bg-surface-variant/40 p-8 asym-container border border-white/5 backdrop-blur-xl relative z-10">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white">support_agent</span>
+</div>
+<div>
+<div class="font-headline font-bold">Concierge Support</div>
+<div class="text-xs text-primary-fixed">Online now</div>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant mb-4">"Our team of experts is ready to help you migrate your portfolio today."</p>
+<button class="text-primary-fixed-dim text-sm font-bold flex items-center gap-2">Chat with an expert <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-slate-900 w-full rounded-tl-[80px] mt-20 font-['Inter'] text-sm tracking-wide">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 max-w-7xl mx-auto">
+<div class="mb-12 md:mb-0 space-y-4">
+<div class="font-['Plus_Jakarta_Sans'] font-bold text-2xl text-white">IB Portal</div>
+<p class="text-slate-500 max-w-xs">Precision in every trade. Empowering modern traders with institutional-grade synthetic instruments.</p>
+<div class="text-slate-500 mt-4">© 2024 IB Portal Luminous. Precision in Every Trade.</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-2 gap-x-16 gap-y-4">
+<a class="text-slate-500 hover:text-violet-500 transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors opacity-80 hover:opacity-100" href="#">Risk Disclosure</a>
+<a class="text-slate-500 hover:text-violet-500 transition-colors opacity-80 hover:opacity-100" href="#">Contact Support</a>
+</div>
+<div class="mt-12 md:mt-0 flex gap-6">
+<span class="material-symbols-outlined text-slate-500 hover:text-white cursor-pointer transition-all">public</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-white cursor-pointer transition-all">hub</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-white cursor-pointer transition-all">bolt</span>
+</div>
+</div>
+</footer>
+</body></html>
