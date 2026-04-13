@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name, email, whatsapp, landingSlug, partnerId } = body;
+        const { name, email, whatsapp, landingSlug, partnerId, clickId, countryCode, source } = body;
 
         if (!name || !email) {
             return NextResponse.json({ success: false, error: 'Name and email are required' }, { status: 400 });
@@ -18,7 +18,10 @@ export async function POST(request: Request) {
                 email,
                 whatsapp,
                 landing_slug: landingSlug,
-                partner_id: partnerId
+                partner_id: partnerId,
+                click_id: clickId || null,
+                country_code: countryCode || null,
+                source: source || 'direct'
             });
 
         if (error) {

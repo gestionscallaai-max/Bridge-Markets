@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Pencil, Eye, X, RefreshCw } from 'lucide-react';
+import { ChevronRight, Check, Globe, User, MapPin, MessageSquare, Mail, Loader2, Rocket, Target, Layout, Sparkles, Copy, ExternalLink, Pencil, Eye, X, RefreshCw, Download } from 'lucide-react';
 import { generateLandingHTML, downloadLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -31,7 +31,6 @@ const LANDING_TYPES = [
     { id: 'sinteticos', title: 'Índices Sintéticos', desc: 'Opera índices sintéticos 24/7 sin interrupciones', icon: Target, color: 'from-rose-500 to-red-600' },
     { id: 'bursatiles', title: 'Índices Bursátiles', desc: 'Los principales índices del mercado global', icon: Layout, color: 'from-indigo-500 to-purple-600' },
     { id: 'promociones', title: 'Promociones (General)', desc: 'Bonos y ofertas especiales para nuevos clientes', icon: Sparkles, color: 'from-pink-500 to-rose-500' },
-    { id: 'premium_chess', title: 'Premium Black (Ajedrez)', desc: 'Diseño exclusivo con piezas 3D y temática elite', icon: Sparkles, color: 'from-[#140633] via-[#865BFF] to-[#07020f]' },
 ];
 
 export default function LandingTypeform() {
@@ -52,28 +51,77 @@ export default function LandingTypeform() {
     const [copied, setCopied] = useState(false);
     const [deployedUrl, setDeployedUrl] = useState('');
     const [partnerId, setPartnerId] = useState('');
-    const [savedLandings, setSavedLandings] = useState<{name: string; date: string; type: string; language: string; slug?: string}[]>([]);
+    const [friendlyPartnerId, setFriendlyPartnerId] = useState('');
+    const [savedLandings, setSavedLandings] = useState<any[]>([]);
+    const [isLoadingLandings, setIsLoadingLandings] = useState(false);
     const [baseUrl, setBaseUrl] = useState('');
     const [copiedId, setCopiedId] = useState<number | null>(null);
 
+    const fetchLandings = async (uuid: string, friendlyId: string) => {
+        setIsLoadingLandings(true);
+        const { data, error } = await supabase
+            .from('landings')
+            .select('*')
+            .or(`partner_id.eq.${uuid},partner_id.eq.${friendlyId}`)
+            .order('created_at', { ascending: false });
+        
+        if (data) {
+            const mapped = data.map(l => ({
+                id: l.id,
+                name: l.full_name,
+                date: new Date(l.created_at).toLocaleString('es-ES'),
+                type: LANDING_TYPES.find(t => t.id === l.landing_type)?.title || l.landing_type,
+                language: l.language,
+                slug: l.slug,
+                rawData: {
+                    fullName: l.full_name,
+                    country: l.country,
+                    language: l.language,
+                    whatsapp: l.whatsapp,
+                    email: l.email,
+                    landingType: l.landing_type,
+                    googleAnalyticsId: l.google_analytics_id || '',
+                }
+            }));
+            setSavedLandings(mapped);
+        }
+        setIsLoadingLandings(false);
+    };
+
     useEffect(() => {
         setBaseUrl(window.location.origin);
-        const saved = localStorage.getItem('bridge_landings');
-        if (saved) {
-            setSavedLandings(JSON.parse(saved));
-        }
-
-        // Recuperar la ID real del Partner
-        supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) setPartnerId(user.id);
+        
+        supabase.auth.getUser().then(async ({ data: { user } }) => {
+            if (user) {
+                setPartnerId(user.id);
+                
+                // Fetch profile to get the friendly ID
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('partner_id')
+                    .eq('id', user.id)
+                    .single();
+                
+                const fId = profile?.partner_id || 'BM_' + user.id.substring(0, 8).toUpperCase();
+                setFriendlyPartnerId(fId);
+                fetchLandings(user.id, fId);
+            }
         });
     }, []);
+
+    const handleEditItem = (item: any) => {
+        setFormData(item.rawData);
+        setStep(1);
+        setGenerated(false);
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
     const previewUrl = formData.fullName
-        ? (baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + `/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
-        : (baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + '/l/tu-nombre';
+        ? `${baseUrl}/l/${formData.fullName.toLowerCase().replace(/\s+/g, '-')}`
+        : `${baseUrl}/l/tu-nombre`;
 
     const handleNext = () => setStep((s) => Math.min(s + 1, 3) as Step);
     const handlePrev = () => setStep((s) => Math.max(s - 1, 1) as Step);
@@ -97,15 +145,23 @@ export default function LandingTypeform() {
 
         const html = generateLandingHTML(landingData);
         
-        let deploySuccess = false;
         try {
             const response = await fetch('/api/landings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug, html, data: landingData })
+                body: JSON.stringify({ 
+                    slug, 
+                    html, 
+                    data: {
+                        ...landingData,
+                        userId: partnerId // explicit userId for API to resolve friendly ID
+                    } 
+                })
             });
-            const result = await response.json();
-            deploySuccess = result.success;
+            await response.json();
+            
+            // Refresh list from DB
+            if (partnerId) fetchLandings(partnerId, friendlyPartnerId);
         } catch (error) {
             console.error('Error deploying landing:', error);
         }
@@ -114,27 +170,17 @@ export default function LandingTypeform() {
         setDeployedUrl((baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')) + '/l/' + slug);
         setIsGenerating(false);
         setGenerated(true);
-
-        if (!deploySuccess) {
-            console.warn('Landing generated locally but not saved to DB. Download or Copy is still available.');
-        }
-
-        // Save to history
-        const newLanding = {
-            name: formData.fullName,
-            date: new Date().toLocaleString('es-ES'),
-            type: LANDING_TYPES.find(t => t.id === formData.landingType)?.title || formData.landingType,
-            language: formData.language,
-            slug,
-        };
-        const updated = [newLanding, ...savedLandings].slice(0, 10);
-        setSavedLandings(updated);
-        localStorage.setItem('bridge_landings', JSON.stringify(updated));
     };
 
     const handlePreview = () => {
         if (generatedHtml) {
             setShowPreview(true);
+        }
+    };
+
+    const handleDownload = () => {
+        if (generatedHtml) {
+            downloadLandingHTML(generatedHtml, `landing-${formData.fullName.toLowerCase().replace(/\s+/g, '-')}.html`);
         }
     };
 
@@ -446,6 +492,12 @@ export default function LandingTypeform() {
                                 >
                                     <Pencil className="w-4 h-4" /> Editar
                                 </button>
+                                <button
+                                    onClick={handleDownload}
+                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 font-semibold text-sm hover:bg-emerald-100 transition-all md:col-span-3 mt-2"
+                                >
+                                    <Download className="w-4 h-4" /> Descargar Código HTML (Uso Externo)
+                                </button>
                             </div>
 
 
@@ -464,9 +516,12 @@ export default function LandingTypeform() {
                 </div>
 
                 {/* Saved Landings History */}
-                {savedLandings.length > 0 && (
+                {(savedLandings.length > 0 || isLoadingLandings) && (
                     <div className="mt-6 bg-white rounded-xl border border-slate-200 shadow-card p-6">
-                        <h4 className="text-sm font-bold text-slate-800 mb-3">Landings generadas recientemente</h4>
+                        <div className="flex items-center justify-between mb-4">
+                            <h4 className="text-sm font-bold text-slate-800">Landings generadas recientemente</h4>
+                            {isLoadingLandings && <Loader2 className="w-4 h-4 text-[#865BFF] animate-spin" />}
+                        </div>
                         <div className="divide-y divide-slate-100">
                             {savedLandings.map((landing, i) => {
                                 const itemSlug = landing.slug || landing.name.toLowerCase().replace(/\s+/g, '-');
@@ -484,6 +539,13 @@ export default function LandingTypeform() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
+                                            <button 
+                                                onClick={() => handleEditItem(landing)}
+                                                className="p-1.5 text-slate-400 hover:text-[#865BFF] hover:bg-[#865BFF]/10 rounded-md transition-colors"
+                                                title="Editar Landing"
+                                            >
+                                                <Pencil className="w-4 h-4" />
+                                            </button>
                                             <button 
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(itemLink);

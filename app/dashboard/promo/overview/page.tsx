@@ -17,6 +17,7 @@ const PROMO_LANDINGS = [
         badgeColor: '#865BFF',
         gradient: 'linear-gradient(135deg,#0d0221,#1a0545,#865BFF)',
         accentColor: '#865BFF',
+        previewUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
     },
     {
         id: 'forex',
@@ -26,8 +27,9 @@ const PROMO_LANDINGS = [
         category: 'top',
         badge: 'Popular',
         badgeColor: '#3b82f6',
-        gradient: 'linear-gradient(135deg,#020b18,#0a2440,#1d6fa4)',
+        gradient: 'linear-gradient(135deg,#020b18,#0a2440,#3b82f6)',
         accentColor: '#38bdf8',
+        previewUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=800',
     },
     {
         id: 'cripto',
@@ -37,8 +39,9 @@ const PROMO_LANDINGS = [
         category: 'new',
         badge: 'Nuevo',
         badgeColor: '#f59e0b',
-        gradient: 'linear-gradient(135deg,#0f0a00,#2d1500,#f59e0b)',
-        accentColor: '#f59e0b',
+        gradient: 'linear-gradient(135deg,#000000,#2d1500,#f59e0b)',
+        accentColor: '#fbbf24',
+        previewUrl: 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&q=80&w=800',
     },
     {
         id: 'propfirm',
@@ -48,8 +51,9 @@ const PROMO_LANDINGS = [
         category: 'new',
         badge: 'Nuevo',
         badgeColor: '#10b981',
-        gradient: 'linear-gradient(135deg,#001a0f,#003320,#10b981)',
-        accentColor: '#10b981',
+        gradient: 'linear-gradient(135deg,#000000,#003320,#10b981)',
+        accentColor: '#34d399',
+        previewUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
     },
     {
         id: 'bursatiles',
@@ -59,8 +63,9 @@ const PROMO_LANDINGS = [
         category: 'all',
         badge: null,
         badgeColor: '#6366f1',
-        gradient: 'linear-gradient(135deg,#0a0a1a,#1e1b4b,#3730a3)',
+        gradient: 'linear-gradient(135deg,#0a0a1a,#1e1b4b,#6366f1)',
         accentColor: '#818cf8',
+        previewUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&q=80&w=800',
     },
     {
         id: 'sinteticos',
@@ -70,8 +75,9 @@ const PROMO_LANDINGS = [
         category: 'all',
         badge: null,
         badgeColor: '#e11d48',
-        gradient: 'linear-gradient(135deg,#1a000a,#3d0015,#e11d48)',
-        accentColor: '#e11d48',
+        gradient: 'linear-gradient(135deg,#000000,#3d0015,#e11d48)',
+        accentColor: '#f43f5e',
+        previewUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800',
     },
     {
         id: 'promociones',
@@ -81,19 +87,9 @@ const PROMO_LANDINGS = [
         category: 'new',
         badge: 'Nuevo',
         badgeColor: '#f43f5e',
-        gradient: 'linear-gradient(135deg,#1a0010,#4a0030,#f43f5e)',
-        accentColor: '#f43f5e',
-    },
-    {
-        id: 'premium_chess',
-        title: 'Premium Black — Ajedrez',
-        desc: 'Diseño exclusivo con piezas 3D y temática elite para captación VIP.',
-        type: 'premium_chess',
-        category: 'top',
-        badge: 'Exclusivo',
-        badgeColor: '#07020f',
-        gradient: 'linear-gradient(135deg,#07020f,#140633,#865BFF)',
-        accentColor: '#865BFF',
+        gradient: 'linear-gradient(135deg,#000000,#4a0030,#f43f5e)',
+        accentColor: '#fb7185',
+        previewUrl: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&q=80&w=800',
     },
 ];
 
@@ -155,9 +151,10 @@ const PROMO_BANNERS = [
 ];
 
 interface ModalState {
-    landing: typeof PROMO_LANDINGS[0];
+    type: 'landing' | 'banner';
+    item: any;
     selectedLang: string;
-    html: string;
+    html?: string;
     showPreview: boolean;
     langDropdownOpen: boolean;
 }
@@ -216,22 +213,38 @@ export default function PromoMaterialsPage() {
         const html = generateLandingHTML(data);
         setTimeout(() => {
             setModal({
-                landing,
+                type: 'landing',
+                item: landing,
                 selectedLang: defaultLang,
                 html,
                 showPreview: false,
                 langDropdownOpen: false,
             });
-            setIsEditingData(false); // reset on open
+            setIsEditingData(false); 
             setLoadingId(null);
         }, 350);
     };
 
+    const handleOpenBannerModal = (banner: typeof PROMO_BANNERS[0]) => {
+        setModal({
+            type: 'banner',
+            item: banner,
+            selectedLang: bannerLanguages[banner.id] || 'ES',
+            showPreview: true,
+            langDropdownOpen: false,
+        });
+    };
+
     const handleLangChange = (langCode: string) => {
         if (!modal) return;
-        const data = buildLandingData(modal.landing, langCode);
-        const html = generateLandingHTML(data);
-        setModal({ ...modal, selectedLang: langCode, html, langDropdownOpen: false });
+        if (modal.type === 'landing') {
+            const data = buildLandingData(modal.item, langCode);
+            const html = generateLandingHTML(data);
+            setModal({ ...modal, selectedLang: langCode, html, langDropdownOpen: false });
+        } else {
+            setModal({ ...modal, selectedLang: langCode, langDropdownOpen: false });
+            setBannerLanguages(prev => ({ ...prev, [modal.item.id]: langCode }));
+        }
     };
 
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -240,8 +253,8 @@ export default function PromoMaterialsPage() {
     };
 
     const handleApplyChanges = () => {
-        if (!modal) return;
-        const data = buildLandingData(modal.landing, modal.selectedLang);
+        if (!modal || modal.type !== 'landing') return;
+        const data = buildLandingData(modal.item, modal.selectedLang);
         const html = generateLandingHTML(data);
         setModal({ ...modal, html });
         setIsEditingData(false);
@@ -254,7 +267,7 @@ export default function PromoMaterialsPage() {
     };
 
     const currentLangObj = modal ? LANGUAGES.find(l => l.code === modal.selectedLang) : null;
-    const currentUrl = modal ? getLandingUrl(modal.landing, modal.selectedLang) : '';
+    const currentUrl = (modal && modal.type === 'landing') ? getLandingUrl(modal.item, modal.selectedLang) : '';
 
     return (
         <div className="space-y-6 pb-10">
@@ -313,88 +326,106 @@ export default function PromoMaterialsPage() {
                     </div>
 
             {/* Grid de landing cards - Larger cards! */}
-            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-8">
                 {filtered.map(landing => (
                     <div
                         key={landing.id}
-                        className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                        className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                     >
                         {/* Visual preview thumbnail */}
-                        <div className="relative h-48 overflow-hidden" style={{ background: landing.gradient }}>
-                            <div className="absolute top-3 left-3 right-3 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1.5 flex items-center gap-2 border border-white/15">
-                                <div className="flex gap-1">
-                                    <div className="w-2 h-2 rounded-full bg-red-400/80"></div>
-                                    <div className="w-2 h-2 rounded-full bg-yellow-400/80"></div>
-                                    <div className="w-2 h-2 rounded-full bg-green-400/80"></div>
+                        <div className="relative h-64 overflow-hidden bg-slate-900">
+                            {/* Background Image with Overlay */}
+                            <div className="absolute inset-0 z-0">
+                                <img 
+                                    src={landing.previewUrl} 
+                                    alt={landing.title}
+                                    className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000"
+                                />
+                                <div 
+                                    className="absolute inset-0 opacity-80"
+                                    style={{ background: landing.gradient }}
+                                />
+                            </div>
+
+                            <div className="absolute top-4 left-4 right-4 bg-white/10 backdrop-blur-md rounded-xl px-4 py-2 flex items-center gap-2 border border-white/15 z-10">
+                                <div className="flex gap-1.5">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
                                 </div>
-                                <div className="flex-1 bg-white/10 rounded px-2 py-0.5 text-white/60 text-[9px] font-mono truncate">
+                                <div className="flex-1 bg-white/10 rounded-md px-3 py-1 text-white/70 text-[10px] font-mono truncate">
                                     bridgemarkets.com/l/{landing.id}?ref={partnerId}
                                 </div>
                             </div>
-                            <div className="absolute bottom-4 left-4 right-4 space-y-1.5">
-                                <div className="text-[8px] font-bold uppercase tracking-wider" style={{ color: `${landing.accentColor}99` }}>Bridge Markets</div>
-                                <div className="text-white font-bold text-sm leading-tight">{landing.title.split('—')[1]?.trim() || landing.title}</div>
+
+                            <div className="absolute bottom-6 left-6 right-6 space-y-2 z-10">
+                                <div className="text-[10px] font-bold uppercase tracking-widest text-white/40">Bridge Markets</div>
+                                <div className="text-white font-black text-xl leading-tight drop-shadow-xl">
+                                    {landing.title.split('—')[1]?.trim() || landing.title}
+                                </div>
                                 <div className="h-1 rounded-full w-16" style={{ background: landing.accentColor }}></div>
                             </div>
+
                             {landing.badge && (
-                                <div className="absolute top-3 right-3 text-white text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ background: landing.badgeColor }}>
+                                <div className="absolute top-4 right-4 text-white text-[11px] font-black px-3.5 py-1.5 rounded-full z-10 shadow-lg" style={{ background: landing.badgeColor }}>
                                     {landing.badge}
                                 </div>
                             )}
+
                             {/* Quick preview hover */}
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-20">
                                 <button
                                     onClick={() => {
                                         const html = generateLandingHTML(buildLandingData(landing, 'ES'));
                                         openLandingPreview(html);
                                     }}
-                                    className="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-white/30 transition-all"
+                                    className="flex items-center gap-2 bg-white text-slate-900 text-sm font-black px-7 py-3.5 rounded-2xl shadow-2xl hover:scale-110 transition-all active:scale-95"
                                 >
-                                    <Eye className="w-3.5 h-3.5" /> Vista rápida
+                                    <Eye className="w-5 h-5" /> Vista rápida
                                 </button>
                             </div>
                         </div>
 
                         {/* Card body */}
-                        <div className="p-4">
-                            <div className="flex items-start justify-between mb-1">
-                                <h3 className="font-bold text-slate-800 text-sm leading-tight">{landing.title}</h3>
-                                <div className="flex gap-0.5 ml-2 flex-shrink-0">
+                        <div className="p-6">
+                            <div className="flex items-start justify-between mb-2">
+                                <h3 className="font-black text-slate-800 text-lg leading-tight">{landing.title}</h3>
+                                <div className="flex gap-1 ml-3 flex-shrink-0">
                                     {LANGUAGES.slice(0,4).map(l => (
-                                        <span key={l.code} className="text-xs" title={l.label}>{l.flag}</span>
+                                        <span key={l.code} className="text-sm" title={l.label}>{l.flag}</span>
                                     ))}
-                                    <span className="text-[10px] text-slate-400 font-semibold">+{LANGUAGES.length - 4}</span>
+                                    <span className="text-xs text-slate-400 font-bold">+{LANGUAGES.length - 4}</span>
                                 </div>
                             </div>
-                            <p className="text-xs text-slate-400 mb-4 leading-relaxed">{landing.desc}</p>
+                            <p className="text-sm text-slate-500 mb-6 leading-relaxed line-clamp-2">{landing.desc}</p>
 
                             {/* Link preview */}
-                            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 mb-3">
-                                <Globe className="w-3 h-3 text-slate-400 flex-shrink-0" />
-                                <span className="text-[10px] font-mono text-slate-500 truncate flex-1">
+                            <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 mb-4">
+                                <Globe className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                                <span className="text-xs font-mono text-slate-500 truncate flex-1">
                                     /l/{landing.id}?ref={partnerId}
                                 </span>
                             </div>
 
                             {/* Actions */}
-                            <div className="flex gap-2">
+                            <div className="flex gap-3">
                                 <button
                                     onClick={() => handleGetLink(landing)}
                                     disabled={loadingId === landing.id}
-                                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold transition-all"
+                                    className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-black transition-all shadow-sm hover:shadow-md active:scale-[0.98]"
                                     style={{ background: landing.accentColor, color: 'white' }}
                                 >
                                     {loadingId === landing.id ? (
                                         <span className="animate-pulse">Cargando...</span>
                                     ) : (
-                                        <><ExternalLink className="w-3.5 h-3.5" /> Obtener link</>
+                                        <><ExternalLink className="w-4 h-4" /> Obtener link</>
                                     )}
                                 </button>
                                 <button
                                     onClick={() => handleCopy(`${baseUrl}/l/${landing.id}-es?ref=${partnerId}`, landing.id)}
-                                    className="w-9 h-9 flex items-center justify-center border border-slate-200 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition-all flex-shrink-0"
+                                    className="w-12 h-12 flex items-center justify-center border border-slate-200 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition-all flex-shrink-0"
                                 >
-                                    {copied === landing.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                                    {copied === landing.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                                 </button>
                             </div>
                         </div>
@@ -435,17 +466,10 @@ export default function PromoMaterialsPage() {
                                     <img src={banner.url} alt={banner.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                                         <button 
-                                            onClick={() => {
-                                                const lang = bannerLanguages[banner.id] || 'ES';
-                                                console.log(`Iniciando descarga: ${banner.url}?lang=${lang}`);
-                                                handleCopy(`${banner.url}?lang=${lang}`, banner.id);
-                                                // Simulación visual en vez de descarga real
-                                                alert(`Descargando ${banner.title} en el idioma seleccionado: ${lang}`);
-                                            }}
+                                            onClick={() => handleOpenBannerModal(banner)}
                                             className="w-full flex items-center justify-center gap-2 bg-[#865BFF] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#6b3fd6] transition-colors shadow-lg"
                                         >
-                                            {copied === banner.id ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
-                                            {copied === banner.id ? 'Descargado' : 'Descargar Alta Calidad'}
+                                            <ExternalLink className="w-4 h-4" /> Configurar y Descargar
                                         </button>
                                     </div>
                                     <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 text-white text-[10px] font-bold rounded-md tracking-wider border border-white/20">
@@ -491,181 +515,236 @@ export default function PromoMaterialsPage() {
                 </div>
             )}
 
-            {/* ─── Modal "Obtener link" con selector de idioma ─── */}
+            {/* ─── Modal Unificado (Landings y Banners) ─── */}
             {modal && typeof document !== 'undefined' && createPortal(
                 <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-[680px] shadow-2xl overflow-hidden">
+                    <div className="bg-white rounded-3xl w-full max-w-[850px] shadow-2xl overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
 
                         {/* Modal header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                        <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100">
                             <div>
-                                <h2 className="font-bold text-slate-800">Obtener link</h2>
-                                <p className="text-xs text-slate-400 mt-0.5">{modal.landing.title}</p>
+                                <h2 className="font-black text-slate-800 text-xl tracking-tight">
+                                    {modal.type === 'landing' ? 'Obtener link' : 'Configurar Descarga'}
+                                </h2>
+                                <p className="text-sm text-slate-400 mt-0.5">{modal.item.title}</p>
                             </div>
                             <button
                                 onClick={() => setModal(null)}
-                                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500 transition-colors"
+                                className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-500 transition-all active:scale-95"
                             >
-                                <X className="w-4 h-4" />
+                                <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="flex gap-0">
+                        <div className="flex flex-col md:flex-row gap-0">
                             {/* Preview thumbnail left */}
                             <div
-                                className="relative w-[260px] shrink-0 cursor-pointer"
-                                style={{ background: modal.landing.gradient, minHeight: '320px' }}
+                                className="relative w-full md:w-[320px] shrink-0 cursor-pointer overflow-hidden group/modal"
+                                style={{ background: modal.type === 'landing' ? modal.item.gradient : '#0f172a', minHeight: '400px' }}
                                 onClick={() => setModal({ ...modal, showPreview: !modal.showPreview })}
                             >
-                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                                    <div className="text-white font-bold text-base mb-2 leading-tight">{modal.landing.title}</div>
-                                    <div className="text-white/40 text-xs mb-4">Haz clic para previsualizar</div>
-                                    <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur border border-white/20 text-white text-[10px] font-semibold px-3 py-1.5 rounded-lg">
-                                        <Eye className="w-3 h-3" /> Vista previa
-                                    </div>
+                                {/* Modal side image background */}
+                                <div className="absolute inset-0 z-0">
+                                    <img 
+                                        src={modal.type === 'landing' ? modal.item.previewUrl : modal.item.url} 
+                                        className={`w-full h-full object-cover ${modal.type === 'landing' ? 'opacity-30 blur-[2px] scale-125' : 'opacity-100'}`} 
+                                        alt="Preview"
+                                    />
+                                    {modal.type === 'landing' && <div className="absolute inset-0 bg-black/20" />}
                                 </div>
+                                
+                                {modal.type === 'landing' && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-10">
+                                        <div className="text-white font-black text-2xl mb-3 leading-tight drop-shadow-lg">
+                                            {modal.item.title.split('—')[1]?.trim() || modal.item.title}
+                                        </div>
+                                        <div className="text-white/60 text-sm mb-6 font-medium">Haz clic para previsualizar</div>
+                                        <div className="flex items-center gap-2.5 bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xl group-hover/modal:bg-white/30 transition-all">
+                                            <Eye className="w-4 h-4" /> Vista previa
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* Mini lang label */}
-                                <div className="absolute bottom-3 left-3 right-3 text-center">
-                                    <span className="text-white/50 text-[10px]">
+                                <div className="absolute bottom-6 left-6 right-6 text-center z-10">
+                                    <span className="text-white/70 text-xs font-bold px-3 py-1 bg-black/40 rounded-full backdrop-blur-md border border-white/10">
                                         {currentLangObj?.flag} {currentLangObj?.label}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Right panel */}
-                            <div className="flex-1 p-6 space-y-5 overflow-y-auto max-h-[85vh]">
-                                {/* Language selector — exactamente como Exness */}
+                            <div className="flex-1 p-8 space-y-6 overflow-y-auto max-h-[85vh] bg-slate-50/30">
+                                {/* Language selector */}
                                 <div>
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">
-                                        <Globe className="w-3 h-3 inline mr-1" />Idioma
+                                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em] block mb-2.5 px-1">
+                                        Idioma del Material
                                     </label>
                                     <div className="relative">
                                         <button
                                             onClick={() => setModal({ ...modal, langDropdownOpen: !modal.langDropdownOpen })}
-                                            className="w-full flex items-center justify-between px-4 py-3 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors"
+                                            className="w-full flex items-center justify-between px-5 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-800 hover:border-[#865BFF] hover:shadow-md transition-all group"
                                         >
-                                            <span className="flex items-center gap-2">
-                                                <span className="text-base">{currentLangObj?.flag}</span>
+                                            <span className="flex items-center gap-3">
+                                                <span className="text-xl filter drop-shadow-sm">{currentLangObj?.flag}</span>
                                                 {currentLangObj?.label}
                                             </span>
-                                            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${modal.langDropdownOpen ? 'rotate-180' : ''}`} />
+                                            <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${modal.langDropdownOpen ? 'rotate-180' : ''}`} />
                                         </button>
 
                                         {modal.langDropdownOpen && (
-                                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden">
-                                                {LANGUAGES.map(lang => (
-                                                    <button
-                                                        key={lang.code}
-                                                        onClick={() => handleLangChange(lang.code)}
-                                                        className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors text-left ${modal.selectedLang === lang.code
-                                                                ? 'bg-[#865BFF]/8 text-[#865BFF] font-semibold'
-                                                                : 'text-slate-700 hover:bg-slate-50'
-                                                            }`}
-                                                    >
-                                                        <span className="text-base">{lang.flag}</span>
-                                                        <span>{lang.label}</span>
-                                                        {modal.selectedLang === lang.code && (
-                                                            <Check className="w-3.5 h-3.5 ml-auto" />
-                                                        )}
-                                                    </button>
-                                                ))}
+                                            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                                                <div className="max-h-[280px] overflow-y-auto py-2">
+                                                    {LANGUAGES.map(lang => (
+                                                        <button
+                                                            key={lang.code}
+                                                            onClick={() => handleLangChange(lang.code)}
+                                                            className={`w-full flex items-center gap-4 px-5 py-3.5 text-sm transition-colors text-left ${modal.selectedLang === lang.code
+                                                                    ? 'bg-[#865BFF]/5 text-[#865BFF] font-bold'
+                                                                    : 'text-slate-600 hover:bg-slate-50'
+                                                                }`}
+                                                        >
+                                                            <span className="text-xl">{lang.flag}</span>
+                                                            <span className="flex-1">{lang.label}</span>
+                                                            {modal.selectedLang === lang.code && (
+                                                                <Check className="w-4 h-4" />
+                                                            )}
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* User Form Data Toggle */}
-                                <div className="border border-slate-200 rounded-xl overflow-hidden">
-                                    <button 
-                                        onClick={() => setIsEditingData(!isEditingData)}
-                                        className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors"
-                                    >
-                                        <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-                                            <User className="w-4 h-4 text-emerald-500" />
-                                            Datos del Partner (Formularios)
-                                        </span>
-                                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isEditingData ? 'rotate-180' : ''}`} />
-                                    </button>
-                                    
-                                    {isEditingData && (
-                                        <div className="p-4 bg-white border-t border-slate-200 space-y-3">
-                                            <div>
-                                                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Nombre Completo</label>
-                                                <input 
-                                                    type="text" 
-                                                    name="fullName"
-                                                    value={formData.fullName} 
-                                                    onChange={handleFormChange}
-                                                    className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]"
-                                                />
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-3">
-                                                <div>
-                                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">WhatsApp</label>
-                                                    <input 
-                                                        type="text" 
-                                                        name="whatsapp"
-                                                        value={formData.whatsapp} 
-                                                        onChange={handleFormChange}
-                                                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#865BFF]"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Email</label>
-                                                    <input 
-                                                        type="email" 
-                                                        name="email"
-                                                        value={formData.email} 
-                                                        onChange={handleFormChange}
-                                                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#865BFF]"
-                                                    />
-                                                </div>
-                                            </div>
+                                {modal.type === 'landing' ? (
+                                    <>
+                                        {/* User Form Data Toggle */}
+                                        <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                                             <button 
-                                                onClick={handleApplyChanges}
-                                                className="w-full mt-2 bg-[#865BFF] text-white font-semibold text-xs py-2.5 rounded-lg hover:bg-[#6b3fd6] transition-colors"
+                                                onClick={() => setIsEditingData(!isEditingData)}
+                                                className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-50 transition-colors"
                                             >
-                                                Aplicar y Actualizar Landing
+                                                <span className="text-[11px] font-black text-slate-700 uppercase tracking-widest flex items-center gap-2.5">
+                                                    <User className="w-4 h-4 text-[#865BFF]" />
+                                                    Personalización de Datos
+                                                </span>
+                                                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isEditingData ? 'rotate-180' : ''}`} />
+                                            </button>
+                                            
+                                            {isEditingData && (
+                                                <div className="p-5 border-t border-slate-100 space-y-4 animate-in fade-in slide-in-from-top-1">
+                                                    <div>
+                                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Nombre en la Landing</label>
+                                                        <input 
+                                                            type="text" 
+                                                            name="fullName"
+                                                            value={formData.fullName} 
+                                                            onChange={handleFormChange}
+                                                            className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#865BFF] focus:bg-white transition-all"
+                                                        />
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">WhatsApp</label>
+                                                            <input 
+                                                                type="text" 
+                                                                name="whatsapp"
+                                                                value={formData.whatsapp} 
+                                                                onChange={handleFormChange}
+                                                                className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#865BFF]"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Email</label>
+                                                            <input 
+                                                                type="email" 
+                                                                name="email"
+                                                                value={formData.email} 
+                                                                onChange={handleFormChange}
+                                                                className="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#865BFF]"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <button 
+                                                        onClick={handleApplyChanges}
+                                                        className="w-full mt-2 bg-slate-900 text-white font-bold text-xs py-3 rounded-xl hover:bg-[#865BFF] transition-all shadow-lg shadow-slate-200 active:scale-[0.98]"
+                                                    >
+                                                        Aplicar cambios al link
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Link personalizado */}
+                                        <div className="space-y-2.5">
+                                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest px-1">Tu link de Afiliado</label>
+                                            <div className="bg-white border border-slate-200 rounded-2xl px-5 py-4 font-mono text-xs text-[#865BFF] break-all leading-relaxed shadow-sm">
+                                                {currentUrl}
+                                            </div>
+                                        </div>
+
+                                        {/* Inline preview iframe */}
+                                        {modal.showPreview && (
+                                            <div className="border-2 border-slate-200 rounded-2xl overflow-hidden shadow-inner bg-slate-100" style={{ height: '220px' }}>
+                                                <iframe srcDoc={modal.html} className="w-full h-full border-0 scale-[0.6] origin-top-left" style={{ width: '167%', height: '367%' }} title="Preview" sandbox="allow-same-origin" />
+                                            </div>
+                                        )}
+
+                                        {/* Buttons Landing */}
+                                        <div className="flex gap-4 pt-2">
+                                            <button
+                                                onClick={() => openLandingPreview(modal.html!)}
+                                                className="flex-1 flex items-center justify-center gap-2.5 py-4 rounded-2xl border-2 border-slate-200 text-sm font-bold text-slate-700 hover:bg-white hover:border-slate-300 transition-all active:scale-95"
+                                            >
+                                                <Eye className="w-5 h-5" /> Ver en vivo
+                                            </button>
+                                            <button
+                                                onClick={() => handleCopy(currentUrl, 'modal')}
+                                                className="flex-2 flex-[2] flex items-center justify-center gap-2.5 py-4 rounded-2xl text-sm font-black text-white transition-all shadow-xl active:scale-95"
+                                                style={{ background: modal.item.accentColor }}
+                                            >
+                                                {copied === 'modal' ? (
+                                                    <><Check className="w-5 h-5" /> ¡Copiado!</>
+                                                ) : (
+                                                    <><Copy className="w-5 h-5" /> Copiar link de Afiliado</>
+                                                )}
                                             </button>
                                         </div>
-                                    )}
-                                </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Contenido para Banners */}
+                                        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center space-y-4">
+                                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center">
+                                                <ImageIcon className="w-8 h-8 text-emerald-500" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-black text-slate-800">Listo para descargar</h3>
+                                                <p className="text-sm text-slate-500 mt-1">
+                                                    El archivo se generará en formato **{modal.item.format}** con el idioma seleccionado: **{currentLangObj?.label}**.
+                                                </p>
+                                            </div>
+                                        </div>
 
-                                {/* Link personalizado */}
-                                <div>
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Tu link personalizado</label>
-                                    <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-mono text-xs text-slate-700 break-all leading-relaxed">
-                                        {currentUrl}
-                                    </div>
-                                </div>
-
-                        {/* Inline preview iframe */}
-                                {modal.showPreview && (
-                                    <div className="border border-slate-200 rounded-xl overflow-hidden" style={{ height: '180px' }}>
-                                        <iframe srcDoc={modal.html} className="w-full h-full border-0 scale-[0.6] origin-top-left" style={{ width: '167%', height: '167%' }} title="Preview" sandbox="allow-same-origin" />
-                                    </div>
+                                        <div className="space-y-4 pt-4">
+                                            <button
+                                                onClick={() => {
+                                                    handleCopy(`${modal.item.url}?lang=${modal.selectedLang}`, 'modal');
+                                                    alert(`Descargando banner en ${currentLangObj?.label}...`);
+                                                }}
+                                                className="w-full flex items-center justify-center gap-3 py-5 rounded-2xl text-lg font-black text-white shadow-2xl transition-all active:scale-[0.98]"
+                                                style={{ background: '#865BFF' }}
+                                            >
+                                                {copied === 'modal' ? <Check className="w-6 h-6" /> : <Download className="w-6 h-6" />}
+                                                {copied === 'modal' ? '¡Descargado!' : 'Descargar en Alta Definición'}
+                                            </button>
+                                            <p className="text-[11px] text-center text-slate-400 font-medium italic">
+                                                * Resolución recomendada para {modal.item.format.split(' ')[0]}
+                                            </p>
+                                        </div>
+                                    </>
                                 )}
-
-                                {/* Buttons */}
-                                <div className="flex gap-3 pt-1">
-                                    <button
-                                        onClick={() => openLandingPreview(modal.html)}
-                                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
-                                    >
-                                        <Eye className="w-4 h-4" /> Ver
-                                    </button>
-                                    <button
-                                        onClick={() => handleCopy(currentUrl, 'modal')}
-                                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all"
-                                        style={{ background: modal.landing.accentColor }}
-                                    >
-                                        {copied === 'modal' ? (
-                                            <><Check className="w-4 h-4" /> Copiado!</>
-                                        ) : (
-                                            <><Copy className="w-4 h-4" /> Copiar link</>
-                                        )}
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>

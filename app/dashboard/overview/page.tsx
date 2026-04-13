@@ -20,38 +20,71 @@ export default function OverviewPage() {
         leads: 0,
         clicks: 0,
         landings: 0,
+        commissions: 0,
+        weeklyData: [] as { day: string; count: number }[],
     });
 
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        setMounted(true);
         async function fetchStats() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) return;
 
             if (user) setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
 
-            let leadsCount = 0, clicksCount = 0, landingsCount = 0, totalCommissions = 0;
-
             try {
-                let queryLeads = supabase.from('leads').select('*', { count: 'exact', head: true });
-                if (!isAdmin) queryLeads = queryLeads.eq('partner_id', user.id);
-                const { count: lc } = await queryLeads;
-                leadsCount = lc || 0;
+                // 1. Counts
+                const [l, c, ln, com] = await Promise.all([
+                    supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
+                    supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
+                    supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
+                    supabase.from('commissions').select('amount').eq('partner_id', user.id).eq('status', 'approved'),
+                ]);
 
-                let queryClicks = supabase.from('clicks').select('*', { count: 'exact', head: true });
-                if (!isAdmin) queryClicks = queryClicks.eq('partner_id', user.id);
-                const { count: cc } = await queryClicks;
-                clicksCount = cc || 0;
+                const totalCommissions = com.data?.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0) || 0;
 
-                let queryLandings = supabase.from('landings').select('*', { count: 'exact', head: true });
-                if (!isAdmin) queryLandings = queryLandings.eq('partner_id', user.id);
-                const { count: lndc } = await queryLandings;
-                landingsCount = lndc || 0;
+                // 2. Weekly Activity (Last 7 days)
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                
+                const { data: weeklyLeads } = await supabase
+                    .from('leads')
+                    .select('created_at')
+                    .eq('partner_id', user.id)
+                    .gte('created_at', sevenDaysAgo.toISOString());
 
+                const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+                const activityMap: Record<string, number> = {};
+                
+                // Initialize last 7 days
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    activityMap[days[d.getDay()]] = 0;
+                }
+
+                weeklyLeads?.forEach(lead => {
+                    const d = new Date(lead.created_at);
+                    const dayName = days[d.getDay()];
+                    if (activityMap[dayName] !== undefined) {
+                        activityMap[dayName]++;
+                    }
+                });
+
+                const chartData = Object.entries(activityMap).map(([day, count]) => ({ day, count }));
+
+                setStats({
+                    leads: l.count || 0,
+                    clicks: c.count || 0,
+                    landings: ln.count || 0,
+                    commissions: totalCommissions,
+                    weeklyData: chartData,
+                });
             } catch (err) {
                 console.error('Error fetching stats:', err);
             }
-
-            setStats({ leads: leadsCount, clicks: clicksCount, landings: landingsCount });
             setLoading(false);
         }
         fetchStats();
@@ -65,6 +98,14 @@ export default function OverviewPage() {
             iconColor: 'text-[#865BFF]',
             iconBg: 'bg-[#865BFF]/10',
             accent: '#865BFF',
+        },
+        {
+            title: 'Comisiones (USD)',
+            value: `$${stats.commissions.toFixed(2)}`,
+            icon: DollarSign,
+            iconColor: 'text-emerald-500',
+            iconBg: 'bg-emerald-50',
+            accent: '#10b981',
         },
         {
             title: isAdmin ? 'Clics Totales' : 'Tráfico / Clics',
@@ -155,7 +196,7 @@ export default function OverviewPage() {
                     <div className="flex items-center gap-3 flex-wrap">
                         <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
                             <Clock className="w-3.5 h-3.5" />
-                            {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                            {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
                         </div>
                         <div className="flex items-center gap-1.5 bg-[#865BFF]/8 border border-[#865BFF]/20 rounded-lg px-3 py-2">
                             <Award className="w-3.5 h-3.5 text-[#865BFF]" />
@@ -241,11 +282,45 @@ export default function OverviewPage() {
                             Esta semana
                         </button>
                     </div>
-                    <div className="h-[220px] flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
-                        <div className="text-center">
-                            <Activity className="w-7 h-7 text-slate-300 mx-auto mb-2" />
-                            <span className="text-xs font-medium text-slate-400">Sin datos históricos aún</span>
-                        </div>
+                    <div className="h-[220px] flex items-end justify-between gap-2 px-2 pt-4">
+                        {stats.weeklyData.length > 0 ? (
+                            stats.weeklyData.map((d, i) => {
+                                // Calculate height relative to max count (min 4px for visibility if > 0)
+                                const maxCount = Math.max(...stats.weeklyData.map(x => x.count), 1);
+                                const heightPercentage = (d.count / maxCount) * 100;
+                                
+                                return (
+                                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group cursor-default">
+                                        <div className="relative w-full flex flex-col items-center justify-end h-full">
+                                            {/* Tooltip */}
+                                            <div className="absolute -top-6 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[10px] px-2 py-0.5 rounded pointer-events-none whitespace-nowrap z-20">
+                                                {d.count} leads
+                                            </div>
+                                            
+                                            {/* Bar */}
+                                            <motion.div 
+                                                initial={{ height: 0 }}
+                                                animate={{ height: `${Math.max(heightPercentage, d.count > 0 ? 5 : 0)}%` }}
+                                                transition={{ duration: 0.6, delay: 0.4 + (i * 0.05) }}
+                                                className={`w-full max-w-[32px] rounded-t-lg transition-colors shadow-sm ${
+                                                    d.count > 0 
+                                                        ? 'bg-gradient-to-t from-[#865BFF] to-[#a88bff] group-hover:from-[#6b3fd6] group-hover:to-[#865BFF]' 
+                                                        : 'bg-slate-100'
+                                                }`}
+                                            />
+                                        </div>
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{d.day}</span>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
+                                <div className="text-center">
+                                    <Activity className="w-7 h-7 text-slate-300 mx-auto mb-2" />
+                                    <span className="text-xs font-medium text-slate-400">Sin datos históricos aún</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </motion.div>
             </div>

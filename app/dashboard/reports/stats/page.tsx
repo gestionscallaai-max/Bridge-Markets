@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { BarChart2, Loader2, MousePointerClick, Users, Globe, DollarSign } from 'lucide-react';
 
 export default function ReportsStatsPage() {
-    const [stats, setStats] = useState({ leads: 0, clicks: 0, landings: 0 });
+    const [stats, setStats] = useState({ leads: 0, clicks: 0, landings: 0, conversionRate: '0%' });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -17,10 +17,16 @@ export default function ReportsStatsPage() {
                 supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
                 supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
             ]);
+            
+            const leadsCount = l.count || 0;
+            const clicksCount = c.count || 0;
+            const rate = clicksCount > 0 ? ((leadsCount / clicksCount) * 100).toFixed(1) + '%' : '0%';
+
             setStats({
-                leads: l.count || 0,
-                clicks: c.count || 0,
+                leads: leadsCount,
+                clicks: clicksCount,
                 landings: ln.count || 0,
+                conversionRate: rate,
             });
             setLoading(false);
         }
@@ -30,7 +36,8 @@ export default function ReportsStatsPage() {
     const cards = [
         { label: 'Clics Totales', value: stats.clicks, icon: MousePointerClick, color: 'text-blue-600', bg: 'bg-blue-50' },
         { label: 'Leads Registrados', value: stats.leads, icon: Users, color: 'text-purple-600', bg: 'bg-purple-50' },
-        { label: 'Landing Pages Activas', value: stats.landings, icon: Globe, color: 'text-amber-600', bg: 'bg-amber-50' },
+        { label: 'Tasa de Conversión', value: stats.conversionRate, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+        { label: 'Landing Pages', value: stats.landings, icon: Globe, color: 'text-amber-600', bg: 'bg-amber-50' },
     ];
 
     return (
