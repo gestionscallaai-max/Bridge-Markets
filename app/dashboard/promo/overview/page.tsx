@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Copy, Check, ExternalLink, Eye, X, Globe, Filter, Zap, Star, TrendingUp, ChevronDown, User, Layout, Download, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Copy, Check, ExternalLink, Eye, X, Globe, Filter, Zap, Star, TrendingUp, ChevronDown, User, Layout, Download, Image as ImageIcon, Loader2, Upload } from 'lucide-react';
 import { generateLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -164,6 +164,11 @@ export default function PromoMaterialsPage() {
     const [activeTab, setActiveTab] = useState<'top' | 'new' | 'all'>('top');
     const [bannerCategory, setBannerCategory] = useState<string>('all');
     const [bannerLanguages, setBannerLanguages] = useState<Record<string, string>>({});
+    
+    // Ad Localizer State
+    const [selectedAspectRatio, setSelectedAspectRatio] = useState('16:9');
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+
     const [modal, setModal] = useState<ModalState | null>(null);
     const [copied, setCopied] = useState<string | null>(null);
     const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -487,90 +492,134 @@ export default function PromoMaterialsPage() {
                 </>
             )}
 
-            {/* PIEZAS GRÁFICAS - BANNERS SECTION */}
+            {/* PIEZAS GRÁFICAS - BANNERS SECTION (AD LOCALIZER) */}
             {mainTab === 'banners' && (
-                <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-                            {['all', 'Promociones', 'Institucional', 'Prop Firm', 'Divisas', 'Cripto', 'Sintéticos'].map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setBannerCategory(cat)}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
-                                        bannerCategory === cat 
-                                            ? 'bg-slate-800 text-white' 
-                                            : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'
-                                    }`}
-                                >
-                                    {cat === 'all' ? 'Todas las Categorías' : cat}
-                                </button>
-                            ))}
+                <div className="flex flex-col xl:flex-row gap-0 border border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm min-h-[650px]">
+                    {/* LEFT PANEL: CONTROLS */}
+                    <div className="w-full xl:w-[480px] p-10 border-r border-slate-200 flex flex-col shrink-0 bg-slate-50/50">
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight mb-10">Ad Localizer</h2>
+                        
+                        <div className="space-y-10 flex-1">
+                            {/* Step 1 */}
+                            <div>
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 block">
+                                    1. UPLOAD YOUR AD
+                                </label>
+                                <div className="border border-dashed border-slate-300 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer group flex flex-col items-center justify-center py-12 relative overflow-hidden">
+                                    {uploadedImage ? (
+                                        <div className="absolute inset-0 bg-slate-900/5 backdrop-blur-sm flex items-center justify-center font-bold text-slate-600">
+                                            Image Uploaded
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                                <Upload className="w-6 h-6 text-slate-400" />
+                                            </div>
+                                            <span className="text-sm font-semibold text-slate-500">Click to upload your ad image</span>
+                                        </>
+                                    )}
+                                    <input 
+                                        type="file" 
+                                        className="absolute inset-0 opacity-0 cursor-pointer" 
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setUploadedImage(URL.createObjectURL(e.target.files[0]));
+                                            }
+                                        }}
+                                    />
+                                </div>
+                                <p className="text-[10px] text-slate-400 mt-4 leading-relaxed font-medium">
+                                    By using this feature, you confirm that you have the necessary rights to any content that you upload. Do not generate content that infringes on others' intellectual property.
+                                </p>
+                            </div>
+
+                            {/* Step 2 */}
+                            <div>
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 block">
+                                    2. TARGET MARKET
+                                </label>
+                                <div className="relative">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Type to search countries..." 
+                                        className="w-full bg-transparent border-b-2 border-slate-200 pb-3 text-slate-800 font-medium placeholder:text-slate-300 focus:outline-none focus:border-slate-800 transition-colors text-lg"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Step 3 */}
+                            <div>
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 block">
+                                    3. ASPECT RATIO
+                                </label>
+                                <div className="flex items-center gap-2.5 flex-wrap">
+                                    {['16:9', '1:1', '9:16', '4:3', '3:4'].map(ratio => (
+                                        <button 
+                                            key={ratio}
+                                            onClick={() => setSelectedAspectRatio(ratio)}
+                                            className={`px-5 py-2 rounded-full text-sm font-bold border transition-all ${
+                                                selectedAspectRatio === ratio 
+                                                    ? 'bg-slate-900 border-slate-900 text-white shadow-md' 
+                                                    : 'bg-white border-slate-300 text-slate-600 hover:border-slate-400'
+                                            }`}
+                                        >
+                                            {ratio}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-all">
-                            <Filter className="w-4 h-4" /> Filtros
+
+                        {/* Action Button */}
+                        <button 
+                            className={`w-full mt-10 flex items-center justify-center gap-2 py-4 rounded-xl font-black tracking-widest uppercase transition-all ${
+                                uploadedImage 
+                                    ? 'bg-[#865BFF] text-white hover:bg-[#7349e5] shadow-xl shadow-[#865BFF]/20 active:scale-[0.98]' 
+                                    : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                            }`}
+                        >
+                            <Globe className="w-5 h-5" /> LOCALIZE
                         </button>
                     </div>
 
-                    {isLoadingBanners ? (
-                        <div className="py-20 flex flex-col items-center justify-center">
-                            <Loader2 className="w-10 h-10 animate-spin text-[#865BFF] mb-4" />
-                            <p className="text-slate-400 font-medium">Cargando catálogo de materiales...</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {(dynamicBanners.length > 0 ? dynamicBanners : PROMO_BANNERS).filter(b => bannerCategory === 'all' || b.category === bannerCategory).map((banner) => (
-                                <div key={banner.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all duration-300">
-                                    <div className="aspect-[4/5] relative bg-slate-100 overflow-hidden flex items-center justify-center">
-                                        <img src={banner.url} alt={banner.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                                            <button 
-                                                onClick={() => handleOpenBannerModal(banner)}
-                                                className="w-full flex items-center justify-center gap-2 bg-[#865BFF] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#6b3fd6] transition-colors shadow-lg"
-                                            >
-                                                <ExternalLink className="w-4 h-4" /> Configurar y Descargar
-                                            </button>
-                                        </div>
-                                        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 text-white text-[10px] font-bold rounded-md tracking-wider border border-white/20">
-                                            {banner.category}
-                                        </div>
-                                    </div>
-                                    <div className="p-4">
-                                        <h3 className="font-bold text-slate-800 mb-2 truncate" title={banner.title}>{banner.title}</h3>
-                                        <div className="flex items-center justify-between mb-3">
-                                            <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">{banner.format}</span>
-                                            <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                                                <ImageIcon className="w-3 h-3" /> HD
-                                            </span>
-                                        </div>
-                                        <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
-                                            <div className="flex items-center gap-1.5 w-full">
-                                                <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                                <select
-                                                    value={bannerLanguages[banner.id] || 'ES'}
-                                                    onChange={(e) => setBannerLanguages(prev => ({ ...prev, [banner.id]: e.target.value }))}
-                                                    className="w-full text-xs font-bold text-slate-700 bg-transparent border-none appearance-none outline-none cursor-pointer hover:text-[#865BFF] transition-colors"
-                                                >
-                                                    {LANGUAGES.filter(l => (banner.languages || ['ES']).includes(l.code)).map(l => (
-                                                        <option key={l.code} value={l.code}>{l.flag} {l.label} ({l.code})</option>
-                                                    ))}
-                                                </select>
-                                                <ChevronDown className="w-3 h-3 text-slate-400 shrink-0 pointer-events-none" />
-                                            </div>
-                                        </div>
+                    {/* RIGHT PANEL: OUTPUT */}
+                    <div className="flex-1 bg-white flex flex-col items-center justify-center p-12 min-h-[500px] relative">
+                        {/* Dot Pattern Background similar to reference image */}
+                        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+                        
+                        {uploadedImage ? (
+                            <div className="relative z-10 flex flex-col items-center animate-in fade-in zoom-in duration-500">
+                                <span className="mb-4 text-xs font-bold text-[#865BFF] tracking-widest uppercase bg-[#865BFF]/10 px-4 py-1.5 rounded-full">Preview Mode</span>
+                                <div 
+                                    className="bg-slate-100 rounded-xl overflow-hidden shadow-2xl border border-slate-200"
+                                    style={{
+                                        width: selectedAspectRatio === '16:9' ? '400px' : selectedAspectRatio === '1:1' ? '300px' : selectedAspectRatio === '9:16' ? '225px' : '360px',
+                                        height: selectedAspectRatio === '16:9' ? '225px' : selectedAspectRatio === '1:1' ? '300px' : selectedAspectRatio === '9:16' ? '400px' : '270px',
+                                        backgroundImage: `url(${uploadedImage})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                    }}
+                                >
+                                    <div className="w-full h-full bg-slate-900/20 backdrop-blur-[1px] flex items-center justify-center">
+                                        <button className="bg-white/90 backdrop-blur font-bold text-slate-800 px-6 py-2.5 rounded-lg shadow-xl hover:scale-105 transition-transform flex items-center gap-2">
+                                            <Download className="w-4 h-4" /> Export {selectedAspectRatio}
+                                        </button>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                    
-                    {/* Placeholder when filtered but none match */}
-                    {!isLoadingBanners && (dynamicBanners.length > 0 ? dynamicBanners : PROMO_BANNERS).filter(b => bannerCategory === 'all' || b.category === bannerCategory).length === 0 && (
-                        <div className="py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
-                            <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                            <h3 className="text-slate-600 font-bold mb-1">No hay piezas en esta categoría</h3>
-                            <p className="text-slate-400 text-sm">Estamos agregando material publicitario. Vuelve pronto.</p>
-                        </div>
-                    )}
+                            </div>
+                        ) : (
+                            <div className="text-center max-w-sm relative z-10">
+                                <div className="w-24 h-24 border border-slate-200 rounded-full flex items-center justify-center mx-auto mb-8 bg-white shadow-sm">
+                                    <ImageIcon className="w-10 h-10 text-slate-800" />
+                                </div>
+                                <h3 className="text-2xl font-black text-slate-800 mb-4 tracking-tight">Ready to Scale</h3>
+                                <p className="text-slate-500 leading-relaxed">
+                                    Define your master concept and select target markets to generate localized assets instantly.
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 

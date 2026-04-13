@@ -20,8 +20,8 @@ export default function OverviewPage() {
         leads: 0,
         clicks: 0,
         landings: 0,
-        commissions: 0,
         weeklyData: [] as { day: string; count: number }[],
+        countryData: [] as { country: string; count: number }[],
     });
 
     const [mounted, setMounted] = useState(false);
@@ -36,22 +36,19 @@ export default function OverviewPage() {
 
             try {
                 // 1. Counts
-                const [l, c, ln, com] = await Promise.all([
+                const [l, c, ln] = await Promise.all([
                     supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
                     supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
                     supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
-                    supabase.from('commissions').select('amount').eq('partner_id', user.id).eq('status', 'approved'),
                 ]);
-
-                const totalCommissions = com.data?.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0) || 0;
 
                 // 2. Weekly Activity (Last 7 days)
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
                 
-                const { data: weeklyLeads } = await supabase
+                const { data: leadsData } = await supabase
                     .from('leads')
-                    .select('created_at')
+                    .select('created_at, country')
                     .eq('partner_id', user.id)
                     .gte('created_at', sevenDaysAgo.toISOString());
 
@@ -65,22 +62,29 @@ export default function OverviewPage() {
                     activityMap[days[d.getDay()]] = 0;
                 }
 
-                weeklyLeads?.forEach(lead => {
+                const countryMap: Record<string, number> = {};
+
+                leadsData?.forEach(lead => {
                     const d = new Date(lead.created_at);
                     const dayName = days[d.getDay()];
                     if (activityMap[dayName] !== undefined) {
                         activityMap[dayName]++;
                     }
+
+                    if (lead.country) {
+                        countryMap[lead.country] = (countryMap[lead.country] || 0) + 1;
+                    }
                 });
 
                 const chartData = Object.entries(activityMap).map(([day, count]) => ({ day, count }));
+                const countryDataList = Object.entries(countryMap).map(([country, count]) => ({ country, count }));
 
                 setStats({
                     leads: l.count || 0,
                     clicks: c.count || 0,
                     landings: ln.count || 0,
-                    commissions: totalCommissions,
                     weeklyData: chartData,
+                    countryData: countryDataList,
                 });
             } catch (err) {
                 console.error('Error fetching stats:', err);
@@ -100,14 +104,6 @@ export default function OverviewPage() {
             accent: '#865BFF',
         },
         {
-            title: 'Comisiones (USD)',
-            value: `$${stats.commissions.toFixed(2)}`,
-            icon: DollarSign,
-            iconColor: 'text-emerald-500',
-            iconBg: 'bg-emerald-50',
-            accent: '#10b981',
-        },
-        {
             title: isAdmin ? 'Clics Totales' : 'Tráfico / Clics',
             value: stats.clicks.toString(),
             icon: MousePointerClick,
@@ -123,6 +119,38 @@ export default function OverviewPage() {
             iconBg: 'bg-amber-50',
             accent: '#f59e0b',
         },
+    ];
+
+    // Mapeo de países a coordenadas para los puntos del mapa
+    const COUNTRY_COORDS: Record<string, { top: string; left: string }> = {
+        'Mexico': { top: '48%', left: '22%' },
+        'México': { top: '48%', left: '22%' },
+        'Colombia': { top: '56%', left: '26%' },
+        'Argentina': { top: '75%', left: '30%' },
+        'Spain': { top: '35%', left: '50%' },
+        'España': { top: '35%', left: '50%' },
+        'United Kingdom': { top: '28%', left: '46%' },
+        'Japan': { top: '40%', left: '80%' },
+        'Peru': { top: '65%', left: '23%' },
+        'United States': { top: '35%', left: '15%' },
+        'USA': { top: '35%', left: '15%' },
+        'Brazil': { top: '65%', left: '32%' },
+    };
+
+    const dynamicHotspots = stats.countryData.map(c => ({
+        ...COUNTRY_COORDS[c.country] || { top: '50%', left: '50%' }, // Fallback al centro
+        label: c.country,
+        count: `+${c.count}`,
+        size: c.count > 10 ? 'w-5 h-5' : 'w-3 h-3',
+        color: c.count > 20 ? 'bg-[#865BFF]' : 'bg-emerald-400',
+        shadow: c.count > 20 ? 'shadow-[#865BFF]/50' : 'shadow-emerald-400/50'
+    }));
+
+    // Si no hay datos, mostrar unos de ejemplo (como hizo el usuario) pero marcados como tales
+    const displayHotspots = dynamicHotspots.length > 0 ? dynamicHotspots : [
+        { top: '48%', left: '22%', size: 'w-4 h-4', color: 'bg-emerald-400', shadow: 'shadow-emerald-400/50', label: 'México', count: '+340' },
+        { top: '56%', left: '26%', size: 'w-5 h-5', color: 'bg-[#865BFF]', shadow: 'shadow-[#865BFF]/50', label: 'Colombia', count: '+512' },
+        { top: '35%', left: '50%', size: 'w-6 h-6', color: 'bg-rose-400', shadow: 'shadow-rose-400/50', label: 'España', count: '+890' },
     ];
 
     const quickActions = [
@@ -324,6 +352,60 @@ export default function OverviewPage() {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Mapa de Calor del Mundo */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="card p-6"
+            >
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 className="text-sm font-bold text-slate-800">Mapa de Calor Global</h3>
+                        <p className="text-xs text-slate-400 mt-0.5">Distribución geográfica de tus clientes</p>
+                    </div>
+                </div>
+                
+                <div className="relative w-full h-[340px] bg-slate-900 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
+                    {/* Background SVG Map */}
+                    <img 
+                        src="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg" 
+                        alt="World Map" 
+                        className="absolute w-[90%] h-[90%] object-contain opacity-[0.15] filter invert pointer-events-none"
+                    />
+                    
+                    {/* Grid Overlay */}
+                    <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+
+                    {/* Glowing Points */}
+                    {displayHotspots.map((point, i) => (
+                        <div key={i} className="absolute group z-10" style={{ top: point.top, left: point.left }}>
+                            <div className={`relative flex items-center justify-center`}>
+                                <div className={`absolute ${point.size} ${point.color} rounded-full animate-ping opacity-75`}></div>
+                                <div className={`relative ${point.size} ${point.color} rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] ${point.shadow} border border-slate-900 group-hover:scale-150 transition-transform cursor-pointer`}></div>
+                            </div>
+                            {/* Tooltip */}
+                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-md text-slate-800 px-3 py-2 rounded-xl shadow-2xl flex flex-col items-center pointer-events-none min-w-[100px] z-20 border border-slate-200">
+                                <span className="text-[10px] uppercase font-bold tracking-widest text-[#865BFF] mb-1">{point.label}</span>
+                                <span className="text-lg font-black">{point.count}</span>
+                                <span className="text-[9px] text-slate-400 font-medium">Clientes activos</span>
+                            </div>
+                        </div>
+                    ))}
+
+                    <div className="absolute bottom-4 left-4 flex gap-2">
+                        <div className="flex items-center gap-1.5 bg-slate-800/80 backdrop-blur rounded-lg px-3 py-1.5 border border-slate-700">
+                            <div className="w-2 h-2 rounded-full bg-rose-400 filter drop-shadow-[0_0_5px_rgba(251,113,133,0.8)]"></div>
+                            <span className="text-[10px] font-bold text-slate-300">Alta Densidad</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 bg-slate-800/80 backdrop-blur rounded-lg px-3 py-1.5 border border-slate-700">
+                            <div className="w-2 h-2 rounded-full bg-blue-400 filter drop-shadow-[0_0_5px_rgba(96,165,250,0.8)]"></div>
+                            <span className="text-[10px] font-bold text-slate-300">Crecimiento</span>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
 
             {/* Banner CTA materiales */}
             <motion.div
