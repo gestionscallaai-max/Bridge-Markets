@@ -46,7 +46,7 @@ export async function POST(request: Request) {
             throw error;
         }
 
-        return NextResponse.json({ success: true, url: `/l/${slug}` });
+        return NextResponse.json({ success: true, url: `/l/${slug}`, partner_id: realPartnerId });
     } catch (e: any) {
         console.error('Critical API Error:', e.message || e);
         return NextResponse.json({ 

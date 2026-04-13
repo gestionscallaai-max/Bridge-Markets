@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Copy, Check, ExternalLink, Eye, X, Globe, Filter, Zap, Star, TrendingUp, ChevronDown, User, Layout, Download, Image as ImageIcon } from 'lucide-react';
+import { Copy, Check, ExternalLink, Eye, X, Globe, Filter, Zap, Star, TrendingUp, ChevronDown, User, Layout, Download, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { generateLandingHTML, openLandingPreview, type LandingData } from '@/lib/landing-generator';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -167,7 +167,10 @@ export default function PromoMaterialsPage() {
     const [modal, setModal] = useState<ModalState | null>(null);
     const [copied, setCopied] = useState<string | null>(null);
     const [loadingId, setLoadingId] = useState<string | null>(null);
-    const [partnerId, setPartnerId] = useState('BM_PARTNER_01');
+    const [partnerId, setPartnerId] = useState('');
+    const [friendlyPartnerId, setFriendlyPartnerId] = useState('');
+    const [dynamicBanners, setDynamicBanners] = useState<any[]>([]);
+    const [isLoadingBanners, setIsLoadingBanners] = useState(false);
     const [baseUrl, setBaseUrl] = useState('');
     
     // Default form data for the modal
@@ -180,11 +183,60 @@ export default function PromoMaterialsPage() {
     // Custom toggle for edit section in modal
     const [isEditingData, setIsEditingData] = useState(false);
 
+    const fetchMaterials = async () => {
+        setIsLoadingBanners(true);
+        const { data, error } = await supabase
+            .from('materials')
+            .select('*')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false });
+        
+        if (data) {
+            const mapped = data.map(m => ({
+                id: m.id,
+                title: m.name, // Fixed: Database uses 'name' column
+                format: m.type === 'Banner' ? (m.sizes?.[0] || '1080x1080') : m.type,
+                url: m.image_url,
+                category: m.category,
+                languages: m.languages || ['ES']
+            }));
+            setDynamicBanners(mapped);
+        }
+        setIsLoadingBanners(false);
+    };
+
     useEffect(() => {
         setBaseUrl(window.location.origin);
-        supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
-        });
+        
+        const loadInitialData = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                setPartnerId(user.id);
+                
+                // Fetch profile for friendly ID synchronization
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('partner_id, full_name, email')
+                    .eq('id', user.id)
+                    .single();
+                
+                const fId = profile?.partner_id || 'BM_' + user.id.substring(0, 8).toUpperCase();
+                setFriendlyPartnerId(fId);
+                
+                if (profile) {
+                    setFormData(prev => ({
+                        ...prev,
+                        fullName: profile.full_name || prev.fullName,
+                        email: profile.email || prev.email,
+                    }));
+                }
+
+                // Initial fetch
+                fetchMaterials();
+            }
+        };
+
+        loadInitialData();
     }, []);
 
     const filtered = PROMO_LANDINGS.filter(l => {
@@ -199,12 +251,12 @@ export default function PromoMaterialsPage() {
         whatsapp: formData.whatsapp,
         email: formData.email,
         landingType: landing.type,
-        partnerId,
+        partnerId: friendlyPartnerId || partnerId,
         slug: `${landing.id}-${langCode.toLowerCase()}`,
     });
 
     const getLandingUrl = (landing: typeof PROMO_LANDINGS[0], langCode: string) =>
-        `${baseUrl}/l/${landing.id}-${langCode.toLowerCase()}?ref=${partnerId}`;
+        `${baseUrl}/l/${landing.id}-${langCode.toLowerCase()}?ref=${friendlyPartnerId || partnerId}`;
 
     const handleGetLink = (landing: typeof PROMO_LANDINGS[0]) => {
         setLoadingId(landing.id);
@@ -225,7 +277,7 @@ export default function PromoMaterialsPage() {
         }, 350);
     };
 
-    const handleOpenBannerModal = (banner: typeof PROMO_BANNERS[0]) => {
+    const handleOpenBannerModal = (banner: any) => {
         setModal({
             type: 'banner',
             item: banner,
@@ -459,53 +511,60 @@ export default function PromoMaterialsPage() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {PROMO_BANNERS.filter(b => bannerCategory === 'all' || b.category === bannerCategory).map((banner) => (
-                            <div key={banner.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all duration-300">
-                                <div className="aspect-[4/5] relative bg-slate-100 overflow-hidden flex items-center justify-center">
-                                    <img src={banner.url} alt={banner.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                                        <button 
-                                            onClick={() => handleOpenBannerModal(banner)}
-                                            className="w-full flex items-center justify-center gap-2 bg-[#865BFF] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#6b3fd6] transition-colors shadow-lg"
-                                        >
-                                            <ExternalLink className="w-4 h-4" /> Configurar y Descargar
-                                        </button>
-                                    </div>
-                                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 text-white text-[10px] font-bold rounded-md tracking-wider border border-white/20">
-                                        {banner.category}
-                                    </div>
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="font-bold text-slate-800 mb-2 truncate" title={banner.title}>{banner.title}</h3>
-                                    <div className="flex items-center justify-between mb-3">
-                                        <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">{banner.format}</span>
-                                        <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                                            <ImageIcon className="w-3 h-3" /> HD
-                                        </span>
-                                    </div>
-                                    <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
-                                        <div className="flex items-center gap-1.5 w-full">
-                                            <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                            <select
-                                                value={bannerLanguages[banner.id] || 'ES'}
-                                                onChange={(e) => setBannerLanguages(prev => ({ ...prev, [banner.id]: e.target.value }))}
-                                                className="w-full text-xs font-bold text-slate-700 bg-transparent border-none appearance-none outline-none cursor-pointer hover:text-[#865BFF] transition-colors"
+                    {isLoadingBanners ? (
+                        <div className="py-20 flex flex-col items-center justify-center">
+                            <Loader2 className="w-10 h-10 animate-spin text-[#865BFF] mb-4" />
+                            <p className="text-slate-400 font-medium">Cargando catálogo de materiales...</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {(dynamicBanners.length > 0 ? dynamicBanners : PROMO_BANNERS).filter(b => bannerCategory === 'all' || b.category === bannerCategory).map((banner) => (
+                                <div key={banner.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all duration-300">
+                                    <div className="aspect-[4/5] relative bg-slate-100 overflow-hidden flex items-center justify-center">
+                                        <img src={banner.url} alt={banner.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                                            <button 
+                                                onClick={() => handleOpenBannerModal(banner)}
+                                                className="w-full flex items-center justify-center gap-2 bg-[#865BFF] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#6b3fd6] transition-colors shadow-lg"
                                             >
-                                                {LANGUAGES.map(l => (
-                                                    <option key={l.code} value={l.code}>{l.flag} {l.label} ({l.code})</option>
-                                                ))}
-                                            </select>
-                                            <ChevronDown className="w-3 h-3 text-slate-400 shrink-0 pointer-events-none" />
+                                                <ExternalLink className="w-4 h-4" /> Configurar y Descargar
+                                            </button>
+                                        </div>
+                                        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 text-white text-[10px] font-bold rounded-md tracking-wider border border-white/20">
+                                            {banner.category}
+                                        </div>
+                                    </div>
+                                    <div className="p-4">
+                                        <h3 className="font-bold text-slate-800 mb-2 truncate" title={banner.title}>{banner.title}</h3>
+                                        <div className="flex items-center justify-between mb-3">
+                                            <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">{banner.format}</span>
+                                            <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
+                                                <ImageIcon className="w-3 h-3" /> HD
+                                            </span>
+                                        </div>
+                                        <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
+                                            <div className="flex items-center gap-1.5 w-full">
+                                                <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                <select
+                                                    value={bannerLanguages[banner.id] || 'ES'}
+                                                    onChange={(e) => setBannerLanguages(prev => ({ ...prev, [banner.id]: e.target.value }))}
+                                                    className="w-full text-xs font-bold text-slate-700 bg-transparent border-none appearance-none outline-none cursor-pointer hover:text-[#865BFF] transition-colors"
+                                                >
+                                                    {LANGUAGES.filter(l => (banner.languages || ['ES']).includes(l.code)).map(l => (
+                                                        <option key={l.code} value={l.code}>{l.flag} {l.label} ({l.code})</option>
+                                                    ))}
+                                                </select>
+                                                <ChevronDown className="w-3 h-3 text-slate-400 shrink-0 pointer-events-none" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                     
                     {/* Placeholder when filtered but none match */}
-                    {PROMO_BANNERS.filter(b => bannerCategory === 'all' || b.category === bannerCategory).length === 0 && (
+                    {!isLoadingBanners && (dynamicBanners.length > 0 ? dynamicBanners : PROMO_BANNERS).filter(b => bannerCategory === 'all' || b.category === bannerCategory).length === 0 && (
                         <div className="py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
                             <ImageIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                             <h3 className="text-slate-600 font-bold mb-1">No hay piezas en esta categoría</h3>

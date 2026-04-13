@@ -91,22 +91,28 @@ export default function LandingTypeform() {
     useEffect(() => {
         setBaseUrl(window.location.origin);
         
-        supabase.auth.getUser().then(async ({ data: { user } }) => {
+        const loadInitialData = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 setPartnerId(user.id);
                 
-                // Fetch profile to get the friendly ID
+                // Fetch profile to get THE truth about the partner_id
                 const { data: profile } = await supabase
                     .from('profiles')
                     .select('partner_id')
                     .eq('id', user.id)
                     .single();
                 
-                const fId = profile?.partner_id || 'BM_' + user.id.substring(0, 8).toUpperCase();
+                // Fallback robusto que no dependa de cálculos manuales si ya existe en DB
+                const fId = profile?.partner_id || ''; 
                 setFriendlyPartnerId(fId);
-                fetchLandings(user.id, fId);
+                
+                // Fetch using BOTH to ensure we find old and new records
+                await fetchLandings(user.id, fId);
             }
-        });
+        };
+
+        loadInitialData();
     }, []);
 
     const handleEditItem = (item: any) => {
@@ -129,7 +135,10 @@ export default function LandingTypeform() {
     const handleGenerate = async () => {
         setIsGenerating(true);
 
-        const slug = formData.fullName.toLowerCase().replace(/\s+/g, '-');
+        // Generar un slug más único combinando nombre y parte del ID de socio
+        const namePart = formData.fullName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const partnerPart = (friendlyPartnerId || partnerId).substring(0, 5).toLowerCase();
+        const slug = `${namePart}-${partnerPart}`;
 
         const landingData: LandingData = {
             fullName: formData.fullName,
@@ -158,10 +167,18 @@ export default function LandingTypeform() {
                     } 
                 })
             });
-            await response.json();
             
-            // Refresh list from DB
-            if (partnerId) fetchLandings(partnerId, friendlyPartnerId);
+            if (!response.ok) throw new Error('Failed to save');
+            
+            const resData = await response.json();
+            
+            // Si la API nos devolvió el partner_id real, actualizamos el estado para futuras peticiones
+            if (resData.partner_id && resData.partner_id !== friendlyPartnerId) {
+                setFriendlyPartnerId(resData.partner_id);
+            }
+
+            // Refresh list from DB using the most up to date IDs
+            await fetchLandings(partnerId, resData.partner_id || friendlyPartnerId);
         } catch (error) {
             console.error('Error deploying landing:', error);
         }
@@ -492,15 +509,7 @@ export default function LandingTypeform() {
                                 >
                                     <Pencil className="w-4 h-4" /> Editar
                                 </button>
-                                <button
-                                    onClick={handleDownload}
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 font-semibold text-sm hover:bg-emerald-100 transition-all md:col-span-3 mt-2"
-                                >
-                                    <Download className="w-4 h-4" /> Descargar Código HTML (Uso Externo)
-                                </button>
                             </div>
-
-
 
                             {/* Create another */}
                             <div className="flex items-center justify-center mt-6 pt-6 border-t border-slate-100">
@@ -515,64 +524,85 @@ export default function LandingTypeform() {
                     )}
                 </div>
 
-                {/* Saved Landings History */}
-                {(savedLandings.length > 0 || isLoadingLandings) && (
-                    <div className="mt-6 bg-white rounded-xl border border-slate-200 shadow-card p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-sm font-bold text-slate-800">Landings generadas recientemente</h4>
-                            {isLoadingLandings && <Loader2 className="w-4 h-4 text-[#865BFF] animate-spin" />}
-                        </div>
-                        <div className="divide-y divide-slate-100">
-                            {savedLandings.map((landing, i) => {
-                                const itemSlug = landing.slug || landing.name.toLowerCase().replace(/\s+/g, '-');
-                                const itemLink = `${baseUrl || (typeof window !== 'undefined' ? window.location.origin : '')}/l/${itemSlug}`;
-                                
-                                return (
-                                    <div key={i} className="flex items-center justify-between py-2.5 text-sm">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-[#865BFF]/10 flex items-center justify-center text-xs font-bold text-[#865BFF]">
-                                                {landing.language}
+                {/* Historial de Landings — Siempre visible para confirmar funcionamiento */}
+                <div className="mt-12 space-y-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                            <Rocket className="w-4 h-4" />
+                            Tus Landing Pages Recientes
+                        </h3>
+                        {isLoadingLandings && <Loader2 className="w-4 h-4 animate-spin text-[#865BFF]" />}
+                    </div>
+
+                    {savedLandings.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {savedLandings.map((l) => (
+                                <div key={l.id} className="card p-4 hover:shadow-md transition-all group border-slate-100">
+                                    <div className="flex flex-col h-full">
+                                        <div className="flex items-start justify-between mb-3">
+                                            <div className="w-10 h-10 rounded-lg bg-[#865BFF]/10 flex items-center justify-center text-[#865BFF]">
+                                                <Globe className="w-5 h-5" />
                                             </div>
-                                            <div>
-                                                <div className="font-semibold text-slate-800">{landing.name}</div>
-                                                <div className="text-xs text-slate-400">{landing.type} · {landing.date}</div>
+                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button 
+                                                    onClick={() => handleEditItem(l)}
+                                                    className="p-1.5 hover:bg-slate-100 rounded-md text-slate-400 hover:text-[#865BFF] transition-colors"
+                                                    title="Editar"
+                                                >
+                                                    <Pencil className="w-3.5 h-3.5" />
+                                                </button>
+                                                <button 
+                                                    onClick={() => {
+                                                        const url = (baseUrl || window.location.origin) + '/l/' + l.slug;
+                                                        window.open(url, '_blank');
+                                                    }}
+                                                    className="p-1.5 hover:bg-slate-100 rounded-md text-slate-400 hover:text-blue-500 transition-colors"
+                                                    title="Ver Link"
+                                                >
+                                                    <Eye className="w-3.5 h-3.5" />
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <button 
-                                                onClick={() => handleEditItem(landing)}
-                                                className="p-1.5 text-slate-400 hover:text-[#865BFF] hover:bg-[#865BFF]/10 rounded-md transition-colors"
-                                                title="Editar Landing"
-                                            >
-                                                <Pencil className="w-4 h-4" />
-                                            </button>
+                                        <h4 className="font-bold text-slate-800 text-sm mb-1 truncate">{l.name}</h4>
+                                        <div className="text-[10px] text-slate-400 font-medium mb-3">{l.type} · {l.date}</div>
+                                        
+                                        <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-slate-50">
                                             <button 
                                                 onClick={() => {
-                                                    navigator.clipboard.writeText(itemLink);
-                                                    setCopiedId(i);
+                                                    const url = (baseUrl || window.location.origin) + '/l/' + l.slug;
+                                                    navigator.clipboard.writeText(url);
+                                                    setCopiedId(l.id);
                                                     setTimeout(() => setCopiedId(null), 2000);
                                                 }}
-                                                className="p-1.5 text-slate-400 hover:text-[#865BFF] hover:bg-[#865BFF]/10 rounded-md transition-colors"
-                                                title="Copiar Link"
+                                                className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md bg-slate-50 hover:bg-[#865BFF]/5 text-slate-500 hover:text-[#865BFF] transition-all text-[10px] font-bold"
                                             >
-                                                {copiedId === i ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                                                {copiedId === l.id ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                                                {copiedId === l.id ? 'Copiado' : 'Copiar Link'}
                                             </button>
-                                            <a 
-                                                href={itemLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors"
-                                                title="Ver Landing"
-                                            >
-                                                <ExternalLink className="w-4 h-4" />
-                                            </a>
                                         </div>
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        <div className="card p-12 border-dashed border-2 bg-slate-50/30 flex flex-col items-center justify-center text-center">
+                            {!isLoadingLandings ? (
+                                <>
+                                    <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                                        <Rocket className="w-8 h-8 text-slate-300" />
+                                    </div>
+                                    <h4 className="text-slate-800 font-bold mb-1">Aún no tienes landings generadas</h4>
+                                    <p className="text-slate-400 text-xs max-w-xs">Usa el formulario de arriba para crear tu primera landing page personalizada en segundos.</p>
+                                </>
+                            ) : (
+                                <div className="flex flex-col items-center">
+                                    <Loader2 className="w-8 h-8 animate-spin text-[#865BFF] mb-4" />
+                                    <p className="text-slate-400 text-xs text-center">Buscando tus landings...</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Preview Modal */}

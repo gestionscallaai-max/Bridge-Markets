@@ -321,12 +321,17 @@ export function generateLandingHTML(data: LandingData): string {
         }
         .btn-purple { background: linear-gradient(90deg, #6D28D9 0%, #8B5CF6 100%); transition: all 0.4s; }
         .btn-purple:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3); }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        
+        /* Mejorada la visibilidad para evitar página en blanco en la vista previa */
+        .reveal { transition: all 0.8s ease-out; }
+        .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(30px); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body class="font-sans text-gray-800 antialiased">
+    <script>document.body.classList.add('js-enabled');</script>
     <header class="fixed top-0 w-full z-50 px-6 py-4 glass border-b border-purple-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
