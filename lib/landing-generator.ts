@@ -678,19 +678,21 @@ export function generateModularLandingHTML(data: LandingData): string {
         language: data.language,
     };
 
-    // Render each section
+    // Render each section with alternating slants
     const sectionsHtml = sectionIds
-        .map(sId => {
+        .map((sId, idx) => {
             const renderer = SECTION_RENDERERS[sId];
             if (!renderer) return `<!-- Section "${sId}" not found -->`;
             const overrides = modConf.sectionOverrides[sId] || {};
-            return renderer(overrides, brand);
+            const sectionHtml = renderer(overrides, brand);
+            const slantClass = idx % 2 === 0 ? 'slant-down' : 'slant-up';
+            return `<div class="${slantClass}">${sectionHtml}</div>`;
         })
         .join('\n');
 
     // Registration form
     const formHtml = `
-    <section id="register" class="py-24 px-8 relative" style="background: linear-gradient(135deg, #0f081d 0%, #6635de 100%);">
+    <section id="register" class="py-24 px-8 relative slant-down" style="background: linear-gradient(135deg, #0f081d 0%, #6635de 100%);">
         <div class="max-w-xl mx-auto glass-panel asym-card p-12 md:p-16 relative section-reveal">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-extrabold font-headline text-white mb-3">Open Account</h2>
@@ -743,7 +745,6 @@ export function generateModularLandingHTML(data: LandingData): string {
                 <div class="flex flex-col gap-4">
                     <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Legal</p>
                     <a class="text-white/60 hover:text-accent transition-colors" href="#">Privacy</a>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Terms</a>
                 </div>
             </div>
         </div>
@@ -761,19 +762,19 @@ export function generateModularLandingHTML(data: LandingData): string {
     <title>Bridge Markets | ${template?.name || 'Trading Platform'}</title>
     ${getSharedHead()}
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background: #080411; }
         ${getSharedStyles()}
     </style>
 </head>
-<body class="bg-[#fef7ff] text-[#211635]">
+<body class="bg-[#080411] text-[#211635]">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-[100] px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/60 backdrop-blur-xl border border-white/20 rounded-full px-8 h-16 shadow-[0_25px_50px_-12px_rgba(102,53,222,0.15)]">
-            <div class="text-2xl font-bold tracking-tighter text-primary font-headline">Bridge Markets</div>
+        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full px-8 h-16 shadow-2xl">
+            <div class="text-2xl font-bold tracking-tighter text-white font-headline">Bridge <span class="text-primary">Markets</span></div>
             <div class="hidden md:flex items-center gap-10 text-sm font-semibold">
-                <a class="text-[#494455] hover:text-primary transition-all" href="#">Platform</a>
-                <a class="text-[#494455] hover:text-primary transition-all" href="#">Security</a>
-                <a class="text-[#494455] hover:text-primary transition-all" href="#">Pricing</a>
+                <a class="text-white/60 hover:text-primary transition-all" href="#">Platform</a>
+                <a class="text-white/60 hover:text-primary transition-all" href="#">Security</a>
+                <a class="text-white/60 hover:text-primary transition-all" href="#">Pricing</a>
             </div>
             <div class="flex items-center gap-4">
                 <a href="#register" class="bg-primary px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg hover:shadow-primary/40 active:scale-95 transition-all">Get Started</a>
@@ -781,7 +782,7 @@ export function generateModularLandingHTML(data: LandingData): string {
         </div>
     </nav>
 
-    <main class="pt-20">
+    <main class="">
         ${sectionsHtml}
         ${formHtml}
     </main>
@@ -790,32 +791,102 @@ export function generateModularLandingHTML(data: LandingData): string {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // ─── Reveal System ───
             const reveals = document.querySelectorAll('.section-reveal');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target);
+                        entry.target.classList.add('visible');
                     }
                 });
             }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-            reveals.forEach(r => observer.observe(r));
+            reveals.forEach(el => observer.observe(el));
 
-            // Form handler
+            // ─── Enhanced Parallax Engine ───
+            const sections = document.querySelectorAll('section, div.slant-down, div.slant-up');
+            const assetsCatalog = [
+                '/images/landing/rey.png',
+                '/images/landing/peones.png',
+                '/images/landing/alfil.png',
+                '/images/landing/reyna.png',
+                '/images/landing/caballo.png'
+            ];
+
+            // Inject Floating Chess Assets
+            sections.forEach((section, index) => {
+                if (index % 1 === 0) { // All sections
+                    const assetUrl = assetsCatalog[index % assetsCatalog.length];
+                    const asset = document.createElement('img');
+                    asset.src = assetUrl;
+                    asset.className = 'floating-asset';
+                    const size = 150 + Math.random() * 200;
+                    asset.style.width = size + 'px';
+                    asset.style.top = (20 + Math.random() * 60) + '%';
+                    asset.style.left = (index % 2 === 0 ? '-5%' : '85%');
+                    asset.dataset.speed = (0.05 + Math.random() * 0.1).toString();
+                    section.appendChild(asset);
+                }
+            });
+
+            window.addEventListener('scroll', () => {
+                const scrolled = window.scrollY;
+                
+                // Parallax for assets and elements
+                document.querySelectorAll('.floating-asset').forEach(asset => {
+                    const speed = parseFloat(asset.dataset.speed || '0.1');
+                    const rect = asset.parentElement.getBoundingClientRect();
+                    const offset = (window.innerHeight / 2 - rect.top) * speed;
+                    asset.style.transform = 'translateY(' + offset + 'px) rotate(' + (offset * 0.05) + 'deg)';
+                });
+
+                // Parallax for titles and cards
+                document.querySelectorAll('.section-reveal').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        const speed = 0.05;
+                        const offset = (window.innerHeight / 2 - rect.top) * speed;
+                        const title = el.querySelector('h1, h2');
+                        if (title) title.style.transform = 'translateY(' + offset + 'px)';
+                    }
+                });
+            });
+            
+            // ─── Form Submission ───
             const form = document.getElementById('landing-form');
             if (form) {
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const fd = new FormData(form);
-                    const btn = form.querySelector('button[type=submit]');
-                    if (btn) { btn.textContent = 'Processing...'; btn.disabled = true; }
+                    const btn = form.querySelector('button');
+                    const originalText = btn.innerText;
+                    btn.disabled = true;
+                    btn.innerText = 'Processing...';
+                    
+                    const formData = new FormData(form);
+                    const data = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        partnerId: formData.get('partner_id'),
+                        landingSlug: "${data.slug}"
+                    };
+
                     try {
-                        // In production, replace with actual API endpoint
-                        console.log('Form submitted:', Object.fromEntries(fd));
-                        if (btn) { btn.textContent = 'Account Created!'; btn.style.background = '#10b981'; }
+                        const res = await fetch('/api/leads', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        if (res.ok) {
+                            btn.innerText = 'Success!';
+                            btn.style.background = '#10b981';
+                            form.reset();
+                        } else {
+                            btn.innerText = 'Error. Try again';
+                            btn.disabled = false;
+                        }
                     } catch (err) {
-                        if (btn) { btn.textContent = 'Error — Try Again'; btn.disabled = false; }
+                        btn.innerText = 'Error. Try again';
+                        btn.disabled = false;
                     }
                 });
             }
@@ -824,4 +895,3 @@ export function generateModularLandingHTML(data: LandingData): string {
 </body>
 </html>`;
 }
-

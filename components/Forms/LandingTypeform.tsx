@@ -5,7 +5,8 @@ import {
     ChevronRight, ChevronDown, ChevronUp, Check, Globe, User,
     Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
     Pencil, Eye, X, Download, ToggleLeft, ToggleRight,
-    Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play
+    Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play,
+    History as HistoryIcon
 } from 'lucide-react';
 import {
     generateLandingHTML, generateModularLandingHTML, openLandingPreview,
@@ -261,11 +262,12 @@ function PhoneMockup({ html }: { html: string }) {
 
 // ─── Main Component ─────────────────────────────────────────
 interface LandingTypeformProps {
-    initialTemplateId?: string; // Pre-select a template
+    initialTemplate?: string;
+    onGoToHistory?: () => void;
 }
 
-export default function LandingTypeform({ initialTemplateId }: LandingTypeformProps) {
-    const [step, setStep] = useState<Step>(initialTemplateId ? 2 : 1);
+export default function LandingTypeform({ initialTemplate, onGoToHistory }: LandingTypeformProps) {
+    const [step, setStep] = useState<Step>(initialTemplate ? 2 : 1);
     const [userId, setUserId] = useState('');
     const [partnerId, setPartnerId] = useState('');
 
@@ -277,7 +279,7 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
     const [email, setEmail] = useState('');
 
     // Step 2: Template Selection
-    const [selectedTemplate, setSelectedTemplate] = useState<string>(initialTemplateId || '');
+    const [selectedTemplate, setSelectedTemplate] = useState<string>(initialTemplate || '');
     const [templateFilter, setTemplateFilter] = useState<string>('all');
 
     // Step 3: Section Editor
@@ -296,17 +298,21 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 setUserId(user.id);
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('partner_id, full_name, email, whatsapp, country')
+                // Querying 'partners' table as defined in init_production.sql
+                const { data: partnerData } = await supabase
+                    .from('partners')
+                    .select('id, name, email')
                     .eq('id', user.id)
                     .single();
-                if (profile) {
-                    setPartnerId(profile.partner_id || 'BM_' + user.id.substring(0, 8).toUpperCase());
-                    if (profile.full_name) setFullName(profile.full_name);
-                    if (profile.email) setEmail(profile.email);
-                    if (profile.whatsapp) setWhatsapp(profile.whatsapp);
-                    if (profile.country) setCountry(profile.country);
+                
+                if (partnerData) {
+                    // In the partners table, 'id' is used as the link to landings
+                    setPartnerId(partnerData.id);
+                    if (partnerData.name) setFullName(partnerData.name);
+                    if (partnerData.email) setEmail(partnerData.email);
+                } else {
+                    // Fallback to BM_ ID if partner record doesn't exist
+                    setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
                 }
             }
         };
@@ -324,12 +330,12 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
         }
     }, [selectedTemplate]);
 
-    // Pre-select if initialTemplateId passed
+    // Pre-select if initialTemplate passed
     useEffect(() => {
-        if (initialTemplateId) {
-            setSelectedTemplate(initialTemplateId);
+        if (initialTemplate) {
+            setSelectedTemplate(initialTemplate);
         }
-    }, [initialTemplateId]);
+    }, [initialTemplate]);
 
     const toggleSection = useCallback((sectionId: string) => {
         setSelectedSections(prev =>
@@ -412,9 +418,14 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
                 }),
             });
 
-            if (!res.ok) console.error('Failed to save landing');
-
-            setStep(5);
+            if (!res.ok) {
+                const errorData = await res.json();
+                console.error('Failed to save landing:', errorData.details || errorData.error);
+                // Also show an alert to the user for immediate feedback if they are looking
+                alert("Error al guardar: " + (errorData.details || errorData.error));
+            } else {
+                setStep(5);
+            }
         } catch (err) {
             console.error('Error generating:', err);
         } finally {
@@ -456,7 +467,26 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
     }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId]);
 
     return (
-        <div className="max-w-5xl mx-auto pb-12">
+        <div className="max-w-6xl mx-auto pb-12">
+            {/* Header with History Link */}
+            <div className="flex justify-between items-center mb-6 px-2">
+                <div>
+                    <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-[#865BFF]" />
+                        Crear Nueva Herramienta
+                    </h2>
+                </div>
+                {onGoToHistory && (
+                    <button 
+                        onClick={onGoToHistory}
+                        className="flex items-center gap-2 px-4 py-2 text-xs font-black text-[#865BFF] bg-[#865BFF]/5 hover:bg-[#865BFF]/10 rounded-xl transition-all"
+                    >
+                        <HistoryIcon className="w-4 h-4" />
+                        Ver mis guardadas
+                    </button>
+                )}
+            </div>
+
             {/* Step Indicator */}
             <div className="flex items-center justify-center gap-2 mb-8">
                 {STEPS.map((s, i) => {
@@ -883,18 +913,28 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
                         </button>
                         <button
                             onClick={() => {
-                                const blob = new Blob([generatedHTML], { type: 'text/html' });
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `landing-${selectedTemplate}-${language.toLowerCase()}.html`;
-                                a.click();
-                                URL.revokeObjectURL(url);
+                                navigator.clipboard.writeText(`${window.location.origin}/l/${selectedTemplate}-${language.toLowerCase()}`);
+                                setCopied(true);
+                                setTimeout(() => setCopied(false), 2000);
                             }}
                             className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
                         >
-                            <Download className="w-4 h-4" /> Descargar HTML
+                            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                            {copied ? '¡Copiado!' : 'Copiar Link'}
                         </button>
+
+                        {onGoToHistory && (
+                            <button
+                                onClick={onGoToHistory}
+                                className="flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] transition-all shadow-lg shadow-[#865BFF]/20"
+                            >
+                                <HistoryIcon className="w-4 h-4" />
+                                Ver mi Historial
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="mt-8 pt-8 border-t border-slate-100 flex justify-center">
                         <button
                             onClick={() => {
                                 setStep(1);
@@ -903,9 +943,9 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
                                 setSectionOverrides({});
                                 setGeneratedHTML('');
                             }}
-                            className="flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] transition-all shadow-lg shadow-[#865BFF]/20"
+                            className="text-slate-400 hover:text-[#865BFF] text-sm font-black uppercase tracking-wider transition-all"
                         >
-                            <Plus className="w-4 h-4" /> Crear Otra
+                            + Crear otra herramienta
                         </button>
                     </div>
                 </div>

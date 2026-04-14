@@ -121,7 +121,7 @@ export default function OverviewPage() {
         },
     ];
 
-    // Mapeo de países a coordenadas para los puntos del mapa
+    // Mapeo de países a coordenadas optimizadas
     const COUNTRY_COORDS: Record<string, { top: string; left: string }> = {
         'Mexico': { top: '48%', left: '22%' },
         'México': { top: '48%', left: '22%' },
@@ -135,27 +135,31 @@ export default function OverviewPage() {
         'United States': { top: '35%', left: '15%' },
         'USA': { top: '35%', left: '15%' },
         'Brazil': { top: '65%', left: '32%' },
+        'Chile': { top: '75%', left: '22%' },
     };
 
     const dynamicHotspots = stats.countryData.map(c => ({
-        ...COUNTRY_COORDS[c.country] || { top: '50%', left: '50%' }, // Fallback al centro
+        ...COUNTRY_COORDS[c.country] || { top: '50%', left: '50%' }, 
         label: c.country,
-        count: `+${c.count}`,
+        count: c.count,
         size: c.count > 10 ? 'w-5 h-5' : 'w-3 h-3',
         color: c.count > 20 ? 'bg-[#865BFF]' : 'bg-emerald-400',
-        shadow: c.count > 20 ? 'shadow-[#865BFF]/50' : 'shadow-emerald-400/50'
+        shadow: c.count > 20 ? 'shadow-[#865BFF]/50' : 'shadow-emerald-400/50',
+        conversion: '12.4%', // Mockup conversion
     }));
 
-    // Si no hay datos, mostrar unos de ejemplo (como hizo el usuario) pero marcados como tales
+    // Datos demo premium para impresionar si no hay datos reales
     const displayHotspots = dynamicHotspots.length > 0 ? dynamicHotspots : [
-        { top: '48%', left: '22%', size: 'w-4 h-4', color: 'bg-emerald-400', shadow: 'shadow-emerald-400/50', label: 'México', count: '+340' },
-        { top: '56%', left: '26%', size: 'w-5 h-5', color: 'bg-[#865BFF]', shadow: 'shadow-[#865BFF]/50', label: 'Colombia', count: '+512' },
-        { top: '35%', left: '50%', size: 'w-6 h-6', color: 'bg-rose-400', shadow: 'shadow-rose-400/50', label: 'España', count: '+890' },
+        { top: '48%', left: '22%', size: 'w-4 h-4', color: 'bg-emerald-400', shadow: 'shadow-emerald-400/50', label: 'México', count: 340, conversion: '15.2%', density: 'Media' },
+        { top: '56%', left: '26%', size: 'w-5 h-5', color: 'bg-[#865BFF]', shadow: 'shadow-[#865BFF]/50', label: 'Colombia', count: 512, conversion: '22.8%', density: 'Alta' },
+        { top: '35%', left: '50%', size: 'w-6 h-6', color: 'bg-rose-400', shadow: 'shadow-rose-400/50', label: 'España', count: 890, conversion: '18.5%', density: 'Muy Alta' },
+        { top: '35%', left: '15%', size: 'w-4 h-4', color: 'bg-blue-400', shadow: 'shadow-blue-400/50', label: 'USA', count: 120, conversion: '9.2%', density: 'Baja' },
+        { top: '40%', left: '80%', size: 'w-3 h-3', color: 'bg-emerald-400', shadow: 'shadow-emerald-400/50', label: 'Japón', count: 45, conversion: '14.1%', density: 'Baja' },
     ];
 
     const quickActions = [
         {
-            label: 'Materiales Promocionales',
+            label: 'Material Post',
             desc: 'Landings y links en 8 idiomas',
             icon: Globe,
             color: '#865BFF',
@@ -385,23 +389,42 @@ export default function OverviewPage() {
                                 <div className={`absolute ${point.size} ${point.color} rounded-full animate-ping opacity-75`}></div>
                                 <div className={`relative ${point.size} ${point.color} rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] ${point.shadow} border border-slate-900 group-hover:scale-150 transition-transform cursor-pointer`}></div>
                             </div>
-                            {/* Tooltip */}
-                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-md text-slate-800 px-3 py-2 rounded-xl shadow-2xl flex flex-col items-center pointer-events-none min-w-[100px] z-20 border border-slate-200">
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-[#865BFF] mb-1">{point.label}</span>
-                                <span className="text-lg font-black">{point.count}</span>
-                                <span className="text-[9px] text-slate-400 font-medium">Clientes activos</span>
+                            {/* Tooltip Detallado */}
+                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 backdrop-blur-md text-slate-800 px-4 py-3 rounded-2xl shadow-2xl flex flex-col items-center pointer-events-none min-w-[140px] z-20 border border-slate-200 translate-y-2 group-hover:translate-y-0">
+                                <div className="w-full flex justify-between items-center mb-2 border-b border-slate-100 pb-1.5">
+                                    <span className="text-[10px] uppercase font-black tracking-widest text-[#865BFF]">{point.label}</span>
+                                    <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 uppercase">{point.density || 'Media'}</span>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <span className="text-2xl font-black text-slate-800 leading-none">+{point.count}</span>
+                                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight mt-1">Leads Totales</span>
+                                </div>
+                                <div className="mt-2 pt-2 border-t border-slate-100 w-full flex justify-around">
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-xs font-bold text-emerald-500">{(point as any).conversion || '12%'}</span>
+                                        <span className="text-[8px] text-slate-400 font-bold uppercase">ROI</span>
+                                    </div>
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-xs font-bold text-blue-500">{(point as any).growth || '↑ 5%'}</span>
+                                        <span className="text-[8px] text-slate-400 font-bold uppercase">CREC.</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))}
 
-                    <div className="absolute bottom-4 left-4 flex gap-2">
+                    <div className="absolute bottom-4 left-4 flex flex-col gap-2">
                         <div className="flex items-center gap-1.5 bg-slate-800/80 backdrop-blur rounded-lg px-3 py-1.5 border border-slate-700">
                             <div className="w-2 h-2 rounded-full bg-rose-400 filter drop-shadow-[0_0_5px_rgba(251,113,133,0.8)]"></div>
-                            <span className="text-[10px] font-bold text-slate-300">Alta Densidad</span>
+                            <span className="text-[10px] font-bold text-slate-300">Densidad Muy Alta (>800)</span>
                         </div>
                         <div className="flex items-center gap-1.5 bg-slate-800/80 backdrop-blur rounded-lg px-3 py-1.5 border border-slate-700">
-                            <div className="w-2 h-2 rounded-full bg-blue-400 filter drop-shadow-[0_0_5px_rgba(96,165,250,0.8)]"></div>
-                            <span className="text-[10px] font-bold text-slate-300">Crecimiento</span>
+                            <div className="w-2 h-2 rounded-full bg-[#865BFF] filter drop-shadow-[0_0_5px_rgba(134,91,255,0.8)]"></div>
+                            <span className="text-[10px] font-bold text-slate-300">Densidad Alta (>500)</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 bg-slate-800/80 backdrop-blur rounded-lg px-3 py-1.5 border border-slate-700">
+                            <div className="w-2 h-2 rounded-full bg-emerald-400 filter drop-shadow-[0_0_5px_rgba(52,211,153,0.8)]"></div>
+                            <span className="text-[10px] font-bold text-slate-300">Crecimiento Constante</span>
                         </div>
                     </div>
                 </div>

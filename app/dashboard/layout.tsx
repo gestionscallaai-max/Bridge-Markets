@@ -22,29 +22,44 @@ export default function DashboardUILayout({
     const pathname = usePathname();
     const router = useRouter();
     const [isAdmin, setIsAdmin] = useState(false);
+    const [userRole, setUserRole] = useState('partner');
     const [partnerId, setPartnerId] = useState('Cargando...');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     
+    // ─── Role & Data Loading ───
+    React.useEffect(() => {
+        const loadUserData = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+                
+                // Fetch role from database
+                const { data: profile } = await supabase
+                    .from('partners')
+                    .select('role')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    setUserRole(profile.role || 'partner');
+                    setIsAdmin(profile.role === 'admin');
+                }
+            }
+        };
+        loadUserData();
+    }, []);
+
     // Auto-open accordions based on the current path
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => ({
         'Informes': !!(pathname?.startsWith('/dashboard/reports')),
         'Promo': !!(pathname?.startsWith('/dashboard/promo') || pathname?.startsWith('/dashboard/landing')),
     }));
 
-    React.useEffect(() => {
-        supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) {
-                setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
-            }
-        });
-    }, []);
-
-    // Close mobile menu on navigation
+    // ... (rest of the effects)
     React.useEffect(() => {
         setIsMobileMenuOpen(false);
     }, [pathname]);
 
-    // Re-open accordion when navigating directly via URL
     React.useEffect(() => {
         setOpenMenus(prev => ({
             ...prev,
@@ -63,9 +78,9 @@ export default function DashboardUILayout({
     };
 
     const menuStructure = [
-        { href: '/dashboard/overview', label: 'Panel de control', icon: LayoutDashboard, isSubmenu: false },
+        { href: '/dashboard/overview', label: 'Panel de control', icon: LayoutDashboard, isSubmenu: false, roles: ['admin', 'partner'] },
         {
-            label: 'Informes', icon: FileBarChart, isSubmenu: true,
+            label: 'Informes', icon: FileBarChart, isSubmenu: true, roles: ['admin', 'partner'],
             children: [
                 { href: '/dashboard/reports/clients', label: 'Clientes' },
                 { href: '/dashboard/reports/accounts', label: 'Cuentas del cliente' },
@@ -73,17 +88,20 @@ export default function DashboardUILayout({
             ]
         },
         {
-            label: 'Promo', icon: Megaphone, isSubmenu: true,
+            label: 'Promo', icon: Megaphone, isSubmenu: true, roles: ['admin', 'partner'],
             children: [
-                { href: '/dashboard/promo/overview', label: 'Materiales promocionales' }, 
+                { href: '/dashboard/promo/overview', label: 'Material Post' }, 
                 { href: '/dashboard/landing', label: 'Herramientas de registro' },
                 { href: '/dashboard/links', label: 'Links de Referido' },
                 { href: '/dashboard/promo/guidelines', label: 'Directrices publicitarias' },
             ]
         },
-        { href: '/dashboard/support', label: 'Asistencia', icon: Headphones, isSubmenu: false },
-        { href: '/dashboard/settings', label: 'Configuración', icon: Settings, isSubmenu: false },
+        { href: '/dashboard/support', label: 'Asistencia', icon: Headphones, isSubmenu: false, roles: ['admin', 'partner'] },
+        { href: '/dashboard/settings', label: 'Configuración', icon: Settings, isSubmenu: false, roles: ['admin', 'partner'] },
     ];
+
+    // Filter menu based on roles (if we want to hide specific items for partners later)
+    const filteredMenu = menuStructure.filter(item => item.roles.includes(userRole));
 
     const getPageTitle = () => {
         if (pathname === '/dashboard/overview') return { main: 'Panel', accent: 'de Control' };
@@ -94,7 +112,7 @@ export default function DashboardUILayout({
         if (pathname?.startsWith('/dashboard/support')) return { main: 'Centro', accent: 'de Asistencia' };
         if (pathname?.startsWith('/dashboard/promo/guidelines')) return { main: 'Directrices', accent: 'Publicitarias' };
         if (pathname?.startsWith('/dashboard/links')) return { main: 'Links', accent: 'de Referido' };
-        if (pathname?.startsWith('/dashboard/promo/overview')) return { main: 'Materiales', accent: 'Promocionales' };
+        if (pathname?.startsWith('/dashboard/promo/overview')) return { main: 'Material', accent: 'Post' };
         if (pathname?.startsWith('/dashboard/landing')) return { main: 'Generador de', accent: 'Landing Pages' };
         return { main: isAdmin ? 'Panel' : 'Dashboard', accent: isAdmin ? 'Administrador' : 'Overview' };
     };
@@ -149,7 +167,7 @@ export default function DashboardUILayout({
                     {/* Navigation */}
                     <div className="relative z-10 flex-1 overflow-y-auto py-5 px-3" style={{ scrollbarWidth: 'none' }}>
                         <nav className="space-y-0.5">
-                            {menuStructure.map((item) => {
+                            {filteredMenu.map((item) => {
                                 const Icon = item.icon;
 
                                 if (item.isSubmenu) {

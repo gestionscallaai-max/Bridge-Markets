@@ -343,8 +343,25 @@ const sharedStyles = `
     .asym-card { border-radius: 3rem 0.75rem 3rem 0.75rem; overflow: hidden; }
     .asym-card-sm { border-radius: 1.5rem 0.4rem 1.5rem 0.4rem; }
     .asym-card-rev { border-radius: 0.75rem 3rem 0.75rem 3rem; }
-    .section-reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+    .section-reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
     .section-reveal.visible { opacity: 1; transform: translateY(0); }
+    
+    /* Parallax & Flow */
+    .parallax-wrapper { position: relative; overflow: hidden; }
+    .parallax-bg { position: absolute; inset: -15%; z-index: -1; pointer-events: none; opacity: 0.15; filter: blur(40px); }
+    .floating-orb { position: absolute; border-radius: 50%; pointer-events: none; mix-blend-mode: plus-lighter; z-index: -1; }
+    .floating-asset { position: absolute; pointer-events: none; z-index: 10; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5)); transition: transform 0.1s ease-out; }
+    
+    section { position: relative; z-index: 1; transition: background 0.5s ease; width: 100% !important; max-width: 100vw !important; box-sizing: border-box !important; }
+    
+    /* Subtle Slants (2-3 degrees) */
+    .slant-down { clip-path: polygon(0 0, 100% 3%, 100% 100%, 0 97%); margin-top: -4vw; margin-bottom: -4vw; padding-top: 6vw !important; padding-bottom: 6vw !important; }
+    .slant-up { clip-path: polygon(0 3%, 100% 0, 100% 97%, 0 100%); margin-top: -4vw; margin-bottom: -4vw; padding-top: 6vw !important; padding-bottom: 6vw !important; }
+    
+    /* Smooth Joiners */
+    .section-joiner { position: absolute; left: 0; right: 0; height: 120px; z-index: 5; pointer-events: none; }
+    .joiner-top { top: -60px; background: linear-gradient(to bottom, transparent, currentColor); }
+    .joiner-bottom { bottom: -60px; background: linear-gradient(to top, transparent, currentColor); }
 `;
 
 export function getSharedStyles(): string {

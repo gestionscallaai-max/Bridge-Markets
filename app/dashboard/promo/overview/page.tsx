@@ -194,7 +194,7 @@ export default function PromoMaterialsPage() {
                                         : 'bg-white/[0.07] text-white/60 hover:bg-white/[0.12] hover:text-white border border-white/[0.08]'
                                 }`}
                             >
-                                <ImageIcon className="w-4 h-4" /> Ad Localizer
+                                <ImageIcon className="w-4 h-4" /> Material Post
                             </button>
                         </div>
                         <button
@@ -429,7 +429,7 @@ export default function PromoMaterialsPage() {
             {mainTab === 'banners' && (
                 <div className="flex flex-col xl:flex-row gap-0 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm min-h-[600px]">
                     <div className="w-full xl:w-[440px] p-8 border-r border-slate-200 flex flex-col shrink-0 bg-slate-50/50">
-                        <h2 className="text-2xl font-black text-slate-800 tracking-tight mb-1">Ad Localizer</h2>
+                        <h2 className="text-2xl font-black text-slate-800 tracking-tight mb-1">Material Post</h2>
                         <p className="text-sm text-slate-400 mb-8">Localiza y adapta tus piezas gráficas</p>
 
                         <div className="space-y-8 flex-1">

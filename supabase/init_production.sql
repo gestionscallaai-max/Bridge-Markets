@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.partners (
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     tier TEXT DEFAULT 'Silver',
+    role TEXT DEFAULT 'partner', -- 'admin', 'partner'
     wallet_balance NUMERIC DEFAULT 0.00,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS public.referral_links (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 6. Table: localized_assets (Banners History - Ad Localizer)
+-- 6. Table: localized_assets (Banners History - Material Post)
 CREATE TABLE IF NOT EXISTS public.localized_assets (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     partner_id UUID REFERENCES public.partners(id) ON DELETE CASCADE,
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS public.localized_assets (
 );
 
 -- ==========================================
--- RECORD LEVEL SECURITY (RLS)
+-- RECORD LEVEL SECURITY (RLS) - UPDATED FOR ROLES
 -- ==========================================
 
 ALTER TABLE public.partners ENABLE ROW LEVEL SECURITY;
@@ -84,41 +85,52 @@ ALTER TABLE public.clicks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.referral_links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.localized_assets ENABLE ROW LEVEL SECURITY;
 
--- Partners: Sólo ven y editan su perfil
+-- Helper function to check if user is admin
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.partners 
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Partners: Sólo ven y editan su perfil (Admins ven todo)
 DROP POLICY IF EXISTS "Users can view their own partner profile" ON public.partners;
-CREATE POLICY "Users can view their own partner profile" ON public.partners FOR SELECT USING (auth.uid()::text = id::text);
+CREATE POLICY "Users can view their own partner profile" ON public.partners FOR SELECT USING (auth.uid() = id OR public.is_admin());
 
 DROP POLICY IF EXISTS "Users can update their own partner profile" ON public.partners;
-CREATE POLICY "Users can update their own partner profile" ON public.partners FOR UPDATE USING (auth.uid()::text = id::text);
+CREATE POLICY "Users can update their own partner profile" ON public.partners FOR UPDATE USING (auth.uid() = id OR public.is_admin());
 
--- Landings: Todo el mundo puede accederla por URL (SELECT), pero sólo el owner la administra.
+-- Landings: Público SELECT, Owner admin (Admins ven todo)
 DROP POLICY IF EXISTS "Public can read landings by slug" ON public.landings;
 CREATE POLICY "Public can read landings by slug" ON public.landings FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Partners manage their own landings" ON public.landings;
-CREATE POLICY "Partners manage their own landings" ON public.landings FOR ALL USING (auth.uid()::text = partner_id::text);
+CREATE POLICY "Partners manage their own landings" ON public.landings FOR ALL USING (auth.uid() = partner_id OR public.is_admin());
 
--- Leads: Owner ve los suyos, Cualquiera (API Service/anon) puede insertar desde las landings.
+-- Leads: Owner ve los suyos, Público inserta (Admins ven todo)
 DROP POLICY IF EXISTS "Partners view their own leads" ON public.leads;
-CREATE POLICY "Partners view their own leads" ON public.leads FOR SELECT USING (auth.uid()::text = partner_id::text);
+CREATE POLICY "Partners view their own leads" ON public.leads FOR SELECT USING (auth.uid() = partner_id OR public.is_admin());
 
 DROP POLICY IF EXISTS "Public can insert leads" ON public.leads;
 CREATE POLICY "Public can insert leads" ON public.leads FOR INSERT WITH CHECK (true);
 
--- Clicks: Owner tracking, Público puede disparar clics
+-- Clicks: Owner tracking, Público inserta (Admins ven todo)
 DROP POLICY IF EXISTS "Partners view their own clicks" ON public.clicks;
-CREATE POLICY "Partners view their own clicks" ON public.clicks FOR SELECT USING (auth.uid()::text = partner_id::text);
+CREATE POLICY "Partners view their own clicks" ON public.clicks FOR SELECT USING (auth.uid() = partner_id OR public.is_admin());
 
 DROP POLICY IF EXISTS "Public can insert clicks" ON public.clicks;
 CREATE POLICY "Public can insert clicks" ON public.clicks FOR INSERT WITH CHECK (true);
 
--- Referral Links: Propios del Owner
+-- Referral Links: Propios del Owner (Admins ven todo)
 DROP POLICY IF EXISTS "Partners manage their own referral links" ON public.referral_links;
-CREATE POLICY "Partners manage their own referral links" ON public.referral_links FOR ALL USING (auth.uid()::text = partner_id::text);
+CREATE POLICY "Partners manage their own referral links" ON public.referral_links FOR ALL USING (auth.uid() = partner_id OR public.is_admin());
 
--- Localized Assets: Propios del Owner
+-- Localized Assets: Propios del Owner (Admins ven todo)
 DROP POLICY IF EXISTS "Partners manage their own localized assets" ON public.localized_assets;
-CREATE POLICY "Partners manage their own localized assets" ON public.localized_assets FOR ALL USING (auth.uid()::text = partner_id::text);
+CREATE POLICY "Partners manage their own localized assets" ON public.localized_assets FOR ALL USING (auth.uid() = partner_id OR public.is_admin());
 
 -- ==========================================
 -- AUTO CREACIÓN DE PERFIL PARTNER AL REGISTRAR (TRIGGER)

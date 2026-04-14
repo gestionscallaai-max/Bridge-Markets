@@ -1,29 +1,97 @@
-"use client";
+'use client';
 
-import React from 'react';
-import { Globe } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import LandingTypeform from "@/components/Forms/LandingTypeform";
+import LandingHistory from "@/components/Promo/LandingHistory";
 import { useSearchParams } from 'next/navigation';
-import LandingTypeform from '@/components/Forms/LandingTypeform';
+import { History as HistoryIcon, Layout } from 'lucide-react';
+import { supabase } from "@/lib/supabaseClient";
 
 export default function LandingPageGenerator() {
     const searchParams = useSearchParams();
     const templateId = searchParams.get('template') || undefined;
+    
+    const [activeTab, setActiveTab] = useState<'generator' | 'history'>('generator');
+    const [partnerId, setPartnerId] = useState<string>('');
+
+    useEffect(() => {
+        const loadPartner = async () => {
+            // First try localStorage for speed
+            const userDataStr = localStorage.getItem('user_data');
+            if (userDataStr) {
+                try {
+                    const userData = JSON.parse(userDataStr);
+                    const id = userData.partner_id || userData.id;
+                    if (id) {
+                        setPartnerId(id);
+                        return; // Found in localStorage
+                    }
+                } catch (e) {
+                    console.error("Error parsing user data", e);
+                }
+            }
+
+            // Fallback: Fetch directly from Supabase
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data: partnerData } = await supabase
+                    .from('partners')
+                    .select('id')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (partnerData) {
+                    setPartnerId(partnerData.id);
+                } else {
+                    setPartnerId(user.id); // Ultimate fallback
+                }
+            }
+        };
+        
+        loadPartner();
+    }, []);
 
     return (
-        <div className="space-y-6 pb-10">
-            {/* Header */}
-            <div className="card px-6 py-5 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-[#f3efff] flex items-center justify-center shrink-0">
-                    <Globe className="w-5 h-5 text-[#865BFF]" />
-                </div>
-                <div>
-                    <h2 className="text-lg font-bold text-slate-800">Generador Modular de Landing Pages</h2>
-                    <p className="text-sm text-slate-400 mt-0.5">Elige un template, personaliza las secciones y genera tu landing</p>
-                </div>
+        <div className="flex flex-col gap-8 pb-20">
+            {/* Tabs Header */}
+            <div className="flex items-center gap-2 bg-white/50 p-1.5 rounded-2xl border border-slate-200 w-fit">
+                <button
+                    onClick={() => setActiveTab('generator')}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${
+                        activeTab === 'generator' 
+                        ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
+                        : 'text-slate-500 hover:bg-white hover:text-[#865BFF]'
+                    }`}
+                >
+                    <Layout className="w-4 h-4" />
+                    Generador
+                </button>
+                <button
+                    onClick={() => setActiveTab('history')}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${
+                        activeTab === 'history' 
+                        ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
+                        : 'text-slate-500 hover:bg-white hover:text-[#865BFF]'
+                    }`}
+                >
+                    <HistoryIcon className="w-4 h-4" />
+                    Mis Landings
+                </button>
             </div>
 
-            {/* Wizard */}
-            <LandingTypeform initialTemplateId={templateId} />
+            {/* Content */}
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {activeTab === 'generator' ? (
+                    <div className="space-y-6">
+                        <LandingTypeform 
+                            initialTemplate={templateId} 
+                            onGoToHistory={() => setActiveTab('history')} 
+                        />
+                    </div>
+                ) : (
+                    <LandingHistory partnerId={partnerId} />
+                )}
+            </div>
         </div>
     );
 }
