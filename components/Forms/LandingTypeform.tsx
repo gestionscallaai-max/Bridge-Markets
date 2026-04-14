@@ -66,7 +66,7 @@ function SectionCard({
         }`}>
             <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <span className="text-lg flex-shrink-0">{section.icon}</span>
+                    <span className="material-symbols-outlined text-lg flex-shrink-0 text-[#865BFF]">{section.icon}</span>
                     <div className="min-w-0">
                         <div className="flex items-center gap-2">
                             <h4 className={`font-bold text-[13px] truncate ${isEnabled ? 'text-slate-800' : 'text-slate-400'}`}>
@@ -181,7 +181,7 @@ function SectionPicker({
                                     ? 'bg-[#865BFF] text-white'
                                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                             }`}
-                        >{val.icon} {val.label}</button>
+                        ><span className="material-symbols-outlined text-[14px]">{val.icon}</span> {val.label}</button>
                     ))}
                 </div>
 
@@ -200,7 +200,7 @@ function SectionPicker({
                                 onClick={() => !isAlready && onAdd(section.id)}
                             >
                                 <div className="flex items-center gap-3">
-                                    <span className="text-lg">{section.icon}</span>
+                                    <span className="material-symbols-outlined text-lg text-[#865BFF]">{section.icon}</span>
                                     <div>
                                         <h4 className="text-sm font-bold text-slate-800">{section.name}</h4>
                                         <p className="text-[10px] text-slate-400">{section.description}</p>
@@ -217,6 +217,43 @@ function SectionPicker({
                         );
                     })}
                 </div>
+            </div>
+        </div>
+    );
+}
+
+// ─── Live Preview Component ───────────────────────────────
+function PhoneMockup({ html }: { html: string }) {
+    return (
+        <div className="sticky top-10 w-full max-w-[320px] mx-auto">
+            <div className="relative w-full aspect-[9/18.5] bg-[#0d0221] rounded-[40px] border-[8px] border-[#1a0545] shadow-2xl overflow-hidden group">
+                {/* Speaker/Camera notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#1a0545] rounded-b-2xl z-30 flex items-center justify-center">
+                    <div className="w-10 h-1 bg-white/10 rounded-full" />
+                </div>
+                
+                {/* Iframe Content */}
+                <div className="absolute inset-0 z-10 bg-white">
+                    <iframe 
+                        srcDoc={html} 
+                        className="w-[300%] h-[300%] origin-top-left scale-[0.333]" 
+                        style={{ border: 'none' }}
+                        title="Live Mobile Preview"
+                        sandbox="allow-same-origin allow-scripts"
+                    />
+                </div>
+
+                {/* Glass overlay/reflection */}
+                <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-tr from-white/5 to-transparent opacity-30" />
+                
+                {/* Bottom Bar */}
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-white/20 rounded-full z-30" />
+            </div>
+            <div className="mt-4 text-center">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-1.5 line-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Vista Previa en Vivo
+                </span>
             </div>
         </div>
     );
@@ -406,6 +443,18 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
         { num: 4, label: 'Generar', icon: Rocket },
     ];
 
+    // Live Preview HTML
+    const livePreviewHtml = React.useMemo(() => {
+        if (!selectedTemplate || selectedSections.length === 0) return '';
+        const data: LandingData = {
+            fullName, country, language, whatsapp, email,
+            landingType: selectedTemplate, partnerId,
+            slug: 'live-preview',
+            modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
+        };
+        return generateModularLandingHTML(data);
+    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId]);
+
     return (
         <div className="max-w-5xl mx-auto pb-12">
             {/* Step Indicator */}
@@ -534,7 +583,7 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
                                         : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
                                 }`}
                             >
-                                {cat === 'all' ? '🌐 Todas' : cat}
+                                {cat === 'all' ? 'Todas' : cat}
                             </button>
                         ))}
                     </div>
@@ -587,7 +636,7 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
                                                 const sec = SECTION_CATALOG.find(s => s.id === sId);
                                                 return sec ? (
                                                     <span key={sId} className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">
-                                                        {sec.icon} {sec.name.split(' ')[0]}
+                                                        <span className="material-symbols-outlined text-[10px]">{sec.icon}</span> {sec.name.split(' ')[0]}
                                                     </span>
                                                 ) : null;
                                             })}
@@ -622,97 +671,105 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
 
             {/* ─── STEP 3: Section Editor ─── */}
             {step === 3 && (
-                <div>
-                    <div className="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 className="text-2xl font-black text-slate-800 mb-1">Editor de Secciones</h2>
-                            <p className="text-sm text-slate-400">
-                                Activa/desactiva, reordena y edita el contenido de cada sección.
-                                <span className="font-bold text-[#865BFF] ml-1">{selectedSections.length} activas</span>
-                            </p>
-                        </div>
-                        <button
-                            onClick={() => setShowSectionPicker(true)}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-[#865BFF]/10 text-[#865BFF] font-bold rounded-xl hover:bg-[#865BFF]/20 transition-all text-sm border border-[#865BFF]/20"
-                        >
-                            <Plus className="w-4 h-4" /> Agregar Sección
-                        </button>
-                    </div>
-
-                    {/* Active sections */}
-                    <div className="space-y-3 mb-6">
-                        {selectedSections.map((sId, index) => {
-                            const section = SECTION_CATALOG.find(s => s.id === sId);
-                            if (!section) return null;
-                            return (
-                                <div key={`${sId}-${index}`} className="flex items-start gap-2">
-                                    {/* Reorder controls */}
-                                    <div className="flex flex-col gap-0.5 pt-3">
-                                        <button
-                                            onClick={() => moveSectionUp(index)}
-                                            className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
-                                            disabled={index === 0}
-                                        >
-                                            <ChevronUp className="w-4 h-4" />
-                                        </button>
-                                        <button
-                                            onClick={() => moveSectionDown(index)}
-                                            className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
-                                            disabled={index === selectedSections.length - 1}
-                                        >
-                                            <ChevronDown className="w-4 h-4" />
-                                        </button>
-                                    </div>
-
-                                    {/* Section card */}
-                                    <div className="flex-1">
-                                        <SectionCard
-                                            section={section}
-                                            isEnabled={true}
-                                            onToggle={() => removeSection(sId)}
-                                            overrides={sectionOverrides[sId] || {}}
-                                            onUpdateOverride={(key, val) => updateOverride(sId, key, val)}
-                                        />
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Available sections not yet added */}
-                    {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).length > 0 && (
-                        <div className="border-t border-slate-200 pt-6">
-                            <h3 className="text-sm font-bold text-slate-400 mb-3">Secciones Disponibles</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).map(section => (
-                                    <SectionCard
-                                        key={section.id}
-                                        section={section}
-                                        isEnabled={false}
-                                        onToggle={() => addSection(section.id)}
-                                        overrides={{}}
-                                        onUpdateOverride={() => {}}
-                                    />
-                                ))}
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr,350px] gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h2 className="text-2xl font-black text-slate-800 mb-1">Editor de Secciones</h2>
+                                <p className="text-sm text-slate-400">
+                                    Activa/desactiva, reordena y edita el contenido.
+                                    <span className="font-bold text-[#865BFF] ml-1">{selectedSections.length} activas</span>
+                                </p>
                             </div>
+                            <button
+                                onClick={() => setShowSectionPicker(true)}
+                                className="flex items-center gap-2 px-4 py-2.5 bg-[#865BFF]/10 text-[#865BFF] font-bold rounded-xl hover:bg-[#865BFF]/20 transition-all text-sm border border-[#865BFF]/20"
+                            >
+                                <Plus className="w-4 h-4" /> Agregar Sección
+                            </button>
                         </div>
-                    )}
 
-                    {/* Nav */}
-                    <div className="mt-8 flex justify-between">
-                        <button
-                            onClick={() => setStep(2)}
-                            className="flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
-                        >
-                            <ArrowLeft className="w-4 h-4" /> Cambiar Template
-                        </button>
-                        <button
-                            onClick={() => setStep(4)}
-                            disabled={!canAdvance(3)}
-                            className="flex items-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#865BFF]/20"
-                        >
-                            Preview y Generar <ArrowRight className="w-4 h-4" />
-                        </button>
+                        {/* Active sections */}
+                        <div className="space-y-3">
+                            {selectedSections.map((sId, index) => {
+                                const section = SECTION_CATALOG.find(s => s.id === sId);
+                                if (!section) return null;
+                                return (
+                                    <div key={`${sId}-${index}`} className="flex items-start gap-2">
+                                        {/* Reorder controls */}
+                                        <div className="flex flex-col gap-0.5 pt-3">
+                                            <button
+                                                onClick={() => moveSectionUp(index)}
+                                                className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
+                                                disabled={index === 0}
+                                            >
+                                                <ChevronUp className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => moveSectionDown(index)}
+                                                className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
+                                                disabled={index === selectedSections.length - 1}
+                                            >
+                                                <ChevronDown className="w-4 h-4" />
+                                            </button>
+                                        </div>
+
+                                        {/* Section card */}
+                                        <div className="flex-1">
+                                            <SectionCard
+                                                section={section}
+                                                isEnabled={true}
+                                                onToggle={() => removeSection(sId)}
+                                                overrides={sectionOverrides[sId] || {}}
+                                                onUpdateOverride={(key, val) => updateOverride(sId, key, val)}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Available sections not yet added (Horizontal Scroll or Grid) */}
+                        {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).length > 0 && (
+                            <div className="border-t border-slate-200 pt-6">
+                                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Secciones Recomendadas</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).slice(0, 4).map(section => (
+                                        <div key={section.id} className="opacity-80 hover:opacity-100 transition-opacity">
+                                            <SectionCard
+                                                section={section}
+                                                isEnabled={false}
+                                                onToggle={() => addSection(section.id)}
+                                                overrides={{}}
+                                                onUpdateOverride={() => {}}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Nav */}
+                        <div className="mt-10 flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <button
+                                onClick={() => setStep(2)}
+                                className="flex items-center gap-2 px-6 py-3 text-slate-500 font-bold rounded-xl hover:text-slate-800 transition-all text-sm"
+                            >
+                                <ArrowLeft className="w-4 h-4" /> Cambiar Template
+                            </button>
+                            <button
+                                onClick={() => setStep(4)}
+                                disabled={!canAdvance(3)}
+                                className="flex items-center gap-2 px-10 py-4 bg-[#865BFF] text-white font-bold rounded-2xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#865BFF]/30 active:scale-[0.98]"
+                            >
+                                Siguiente Paso <ArrowRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Desktop Sidebar: Live Preview */}
+                    <div className="hidden lg:block">
+                        <PhoneMockup html={livePreviewHtml} />
                     </div>
 
                     {/* Section Picker Modal */}
@@ -763,7 +820,7 @@ export default function LandingTypeform({ initialTemplateId }: LandingTypeformPr
                                 const sec = SECTION_CATALOG.find(s => s.id === sId);
                                 return sec ? (
                                     <span key={sId} className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2.5 py-1 rounded-lg font-semibold">
-                                        {sec.icon} {sec.name}
+                                        <span className="material-symbols-outlined text-[12px]">{sec.icon}</span> {sec.name}
                                     </span>
                                 ) : null;
                             })}

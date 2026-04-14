@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { Link2, Copy, Plus, Search, Check, ExternalLink, Loader2, Trash2, X } from 'lucide-react';
+import { Link2, Copy, Plus, Search, Check, ExternalLink, Loader2, Trash2, X, MousePointer2, TrendingUp, Calendar, Hash } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ReferralLinksPage() {
     const [links, setLinks] = useState<any[]>([]);
@@ -20,7 +21,6 @@ export default function ReferralLinksPage() {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) { setLoading(false); return; }
 
-        // Get real partner_id from profiles
         const { data: profile } = await supabase
             .from('profiles')
             .select('partner_id')
@@ -29,7 +29,6 @@ export default function ReferralLinksPage() {
         const pid = profile?.partner_id || user.id.substring(0, 8).toUpperCase();
         setPartnerId(pid);
 
-        // Fetch links with click counts
         const { data } = await supabase
             .from('referral_links')
             .select('*, clicks(count)')
@@ -86,137 +85,200 @@ export default function ReferralLinksPage() {
     );
 
     return (
-        <div className="space-y-5 pb-10">
-            {/* Header */}
-            <div className="card p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-brand-500/10 flex items-center justify-center text-brand-500">
-                        <Link2 className="w-5 h-5" />
+        <div className="space-y-6 pb-20">
+            {/* Page Header */}
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-[#0d0221] p-8 text-white shadow-2xl border border-white/5">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#865BFF] opacity-10 blur-[100px] -mr-48 -mt-48"></div>
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-5">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#865BFF] to-[#6335f8] flex items-center justify-center shadow-lg shadow-[#865BFF]/30">
+                            <Link2 className="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-black tracking-tight mb-1">Links de Referido</h1>
+                            <p className="text-white/60 text-sm font-medium">Gestiona tus campañas y maximiza tus conversiones.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 className="text-lg font-bold text-slate-800">Links de Referido</h2>
-                        <p className="text-slate-500 text-sm">Crea y gestiona tus enlaces de tracking personalizados.</p>
-                    </div>
+                    <button
+                        onClick={() => setShowForm(true)}
+                        className="flex items-center justify-center gap-2 px-6 py-4 bg-white text-[#0d0221] rounded-2xl text-sm font-bold hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl"
+                    >
+                        <Plus className="w-4 h-4" /> Crear Nuevo Enlace
+                    </button>
                 </div>
-                <button
-                    onClick={() => setShowForm(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition-colors shadow-sm shadow-brand-500/20 shrink-0"
-                >
-                    <Plus className="w-4 h-4" /> Nuevo Link
-                </button>
             </div>
 
-            {/* Create Form */}
-            {showForm && (
-                <div className="card p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-bold text-slate-800">Crear Nuevo Link de Referido</h3>
-                        <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-slate-700"><X className="w-5 h-5" /></button>
-                    </div>
-                    <form onSubmit={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-xs font-semibold text-slate-500 block mb-1.5">Nombre del Link *</label>
-                            <input
-                                required value={form.name}
-                                onChange={e => setForm({ ...form, name: e.target.value })}
-                                placeholder="Ej. Campaña Facebook Diciembre"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
-                            />
-                        </div>
-                        <div>
-                            <label className="text-xs font-semibold text-slate-500 block mb-1.5">Nombre de Campaña (UTM)</label>
-                            <input
-                                value={form.campaign}
-                                onChange={e => setForm({ ...form, campaign: e.target.value })}
-                                placeholder="Ej. fb-ads-q1"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
-                            />
-                        </div>
-                        <div className="sm:col-span-2 flex items-center justify-between pt-1">
-                            <p className="text-xs text-slate-400">Se generará una URL única: <span className="font-mono text-brand-500">{baseUrl}/r/{form.campaign ? form.campaign.toLowerCase().replace(/\s/g,'-') : 'tu-campana-xxxx'}</span></p>
-                            <button type="submit" disabled={creating}
-                                className="flex items-center gap-2 px-5 py-2.5 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition-all disabled:opacity-60">
-                                {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                                {creating ? 'Creando...' : 'Crear Link'}
-                            </button>
-                        </div>
-                    </form>
+            {/* Filter & Stats Row */}
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between px-2">
+                <div className="relative w-full md:w-96 group">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-[#865BFF] transition-colors" />
+                    <input
+                        type="text"
+                        placeholder="Buscar por nombre o campaña..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        className="w-full pl-12 pr-4 py-4 bg-white/60 backdrop-blur-md border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-[#865BFF]/30 focus:ring-4 focus:ring-[#865BFF]/5 transition-all shadow-sm"
+                    />
                 </div>
-            )}
+                <div className="flex items-center gap-2">
+                    <div className="px-5 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#865BFF]"></span>
+                        {links.length} Enlaces Totales
+                    </div>
+                </div>
+            </div>
 
-            {/* Table */}
-            <div className="card overflow-hidden">
-                <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
-                    <div className="relative flex-1 max-w-xs">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <input type="text" placeholder="Buscar links..." value={search} onChange={e => setSearch(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/10 transition-all" />
+            {/* Modal Form */}
+            <AnimatePresence>
+                {showForm && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowForm(false)}
+                            className="absolute inset-0 bg-[#0d0221]/80 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-white rounded-[2.5rem] w-full max-w-xl overflow-hidden shadow-2xl relative z-10 border border-white/20"
+                        >
+                            <div className="bg-[#0d0221] p-8 text-white relative">
+                                <button onClick={() => setShowForm(false)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
+                                    <X className="w-6 h-6" />
+                                </button>
+                                <h3 className="text-xl font-bold mb-2">Nuevo Link de Tracking</h3>
+                                <p className="text-white/60 text-xs">Personaliza tu enlace para medir el éxito de tus campañas.</p>
+                            </div>
+                            <form onSubmit={handleCreate} className="p-8 space-y-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Nombre del Link</label>
+                                        <input
+                                            required value={form.name}
+                                            onChange={e => setForm({ ...form, name: e.target.value })}
+                                            placeholder="Ej. Facebook Ads - Diciembre"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-medium text-slate-800 focus:outline-none focus:border-[#865BFF] transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Nombre de Campaña (UTM)</label>
+                                        <input
+                                            value={form.campaign}
+                                            onChange={e => setForm({ ...form, campaign: e.target.value })}
+                                            placeholder="Ej. fb_ads_winter"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-medium text-slate-800 focus:outline-none focus:border-[#865BFF] transition-all"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                                    <p className="text-[11px] text-slate-400 font-medium mb-1 uppercase tracking-wider">Previsualización de URL</p>
+                                    <p className="text-xs font-mono text-[#865BFF] break-all">
+                                        {baseUrl}/r/{form.campaign ? form.campaign.toLowerCase().replace(/\s/g, '-') : 'tu-campana'}
+                                    </p>
+                                </div>
+                                <button type="submit" disabled={creating}
+                                    className="w-full flex items-center justify-center gap-2 py-4 bg-[#865BFF] text-white rounded-2xl text-sm font-bold hover:bg-[#7444ff] transition-all disabled:opacity-60 shadow-lg shadow-[#865BFF]/20">
+                                    {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                                    {creating ? 'Creando...' : 'Generar Link'}
+                                </button>
+                            </form>
+                        </motion.div>
                     </div>
-                    <span className="text-xs text-slate-400 font-semibold">{filtered.length} link{filtered.length !== 1 ? 's' : ''}</span>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left min-w-[780px]">
-                        <thead>
-                            <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                <th className="px-6 py-4">Nombre</th>
-                                <th className="px-6 py-4">URL de Tracking</th>
-                                <th className="px-6 py-4 text-center">Clics</th>
-                                <th className="px-6 py-4">Campaña</th>
-                                <th className="px-6 py-4">Creado</th>
-                                <th className="px-6 py-4 text-right">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                            {loading ? (
-                                <tr><td colSpan={6} className="py-16 text-center"><Loader2 className="w-6 h-6 animate-spin text-brand-500 mx-auto" /></td></tr>
-                            ) : filtered.length === 0 ? (
-                                <tr><td colSpan={6} className="py-16 text-center">
-                                    <Link2 className="w-8 h-8 text-slate-200 mx-auto mb-2" />
-                                    <span className="text-slate-400 text-sm font-medium block">No tienes links de referido aún.</span>
-                                    <button onClick={() => setShowForm(true)} className="mt-3 text-sm font-semibold text-brand-500 hover:text-brand-600">+ Crear tu primer link</button>
-                                </td></tr>
-                            ) : filtered.map(link => (
-                                <tr key={link.id} className="hover:bg-slate-50/50 transition-colors">
-                                    <td className="px-6 py-4">
-                                        <div className="font-bold text-slate-800 text-sm">{link.name}</div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2 max-w-[240px]">
-                                            <div className="truncate text-xs font-mono text-brand-600 bg-brand-50 px-2.5 py-1.5 rounded border border-brand-200/50 flex-1">
-                                                {link.url}
-                                            </div>
-                                            <button onClick={() => handleCopy(link.id, link.url)}
-                                                className="p-1.5 text-slate-400 hover:text-brand-500 hover:bg-brand-50 rounded transition-colors shrink-0">
-                                                {copiedId === link.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                                            </button>
+                )}
+            </AnimatePresence>
+
+            {/* Grid View */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {loading ? (
+                    Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className="card h-64 bg-slate-50 animate-pulse rounded-[2rem]"></div>
+                    ))
+                ) : filtered.length === 0 ? (
+                    <div className="col-span-full py-20 text-center bg-white/50 backdrop-blur-sm border border-dashed border-slate-300 rounded-[2.5rem]">
+                        <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
+                            <Link2 className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800">No hay enlaces</h3>
+                        <p className="text-slate-500 text-sm mb-6">Empieza creando tu primer link para trackear tus leads.</p>
+                        <button onClick={() => setShowForm(true)} className="text-[#865BFF] font-bold text-sm hover:underline">+ Crear Link</button>
+                    </div>
+                ) : (
+                    filtered.map((link, idx) => (
+                        <motion.div
+                            key={link.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.05 }}
+                            className="group relative bg-white rounded-[2rem] border border-slate-100 p-6 hover:shadow-2xl hover:shadow-[#865BFF]/5 hover:border-[#865BFF]/20 transition-all duration-300"
+                        >
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 rounded-2xl bg-[#865BFF]/5 flex items-center justify-center text-[#865BFF] group-hover:bg-[#865BFF] group-hover:text-white transition-all duration-300">
+                                        <Link2 className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-slate-800 line-clamp-1">{link.name}</h4>
+                                        <div className="flex items-center gap-2 mt-0.5">
+                                            {link.campaign && (
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-[#865BFF]/60 bg-[#865BFF]/5 px-2 py-0.5 rounded">
+                                                    {link.campaign}
+                                                </span>
+                                            )}
+                                            <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                                <Calendar className="w-3 h-3" />
+                                                {new Date(link.created_at).toLocaleDateString()}
+                                            </span>
                                         </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <span className="font-bold text-slate-700">{link.clicks?.[0]?.count ?? 0}</span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {link.campaign ? (
-                                            <span className="px-2 py-1 text-xs font-bold bg-slate-100 text-slate-600 rounded font-mono">{link.campaign}</span>
-                                        ) : <span className="text-slate-300">—</span>}
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-slate-400">
-                                        {new Date(link.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                    </td>
-                                    <td className="px-6 py-4 text-right flex items-center justify-end gap-1">
-                                        <a href={link.url} target="_blank" rel="noreferrer"
-                                            className="p-1.5 text-slate-400 hover:text-brand-500 hover:bg-brand-50 rounded transition-colors">
-                                            <ExternalLink className="w-4 h-4" />
-                                        </a>
-                                        <button onClick={() => handleDelete(link.id)}
-                                            className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                    </div>
+                                </div>
+                                <div className="flex gap-1 group-hover:opacity-100 opacity-0 transition-opacity">
+                                    <button onClick={() => handleDelete(link.id)} className="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 rounded-2xl p-4 mb-6 relative group/url min-h-[80px] flex flex-col justify-center border border-slate-100">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">URL de Referido</p>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-mono text-slate-500 truncate flex-1">{link.url}</span>
+                                    <button
+                                        onClick={() => handleCopy(link.id, link.url)}
+                                        className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                                            copiedId === link.id ? 'bg-emerald-500 text-white' : 'bg-white text-slate-400 border border-slate-200 hover:border-[#865BFF] hover:text-[#865BFF]'
+                                        }`}
+                                    >
+                                        {copiedId === link.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                    </button>
+                                </div>
+                                {copiedId === link.id && (
+                                    <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute -bottom-2 right-4 text-[9px] font-bold text-emerald-600 bg-white px-2 py-0.5 rounded shadow-sm">
+                                        ¡Copiado!
+                                    </motion.span>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-slate-50 rounded-[1.25rem] p-4 flex flex-col items-center justify-center border border-slate-100 transition-colors hover:bg-white hover:border-[#865BFF]/20">
+                                    <MousePointer2 className="w-4 h-4 text-[#865BFF] mb-1" />
+                                    <div className="text-xl font-black text-slate-800 leading-none">{link.clicks?.[0]?.count ?? 0}</div>
+                                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1">Clics</div>
+                                </div>
+                                <a
+                                    href={link.url} target="_blank" rel="noreferrer"
+                                    className="bg-slate-50 rounded-[1.25rem] p-4 flex flex-col items-center justify-center border border-slate-100 transition-all hover:bg-[#865BFF] hover:text-white group/btn"
+                                >
+                                    <ExternalLink className="w-4 h-4 text-[#865BFF] group-hover/btn:text-white mb-1" />
+                                    <div className="text-xl font-black leading-none">Abrir</div>
+                                    <div className="text-[10px] font-bold uppercase mt-1 group-hover/btn:text-white text-slate-400">Enlace</div>
+                                </a>
+                            </div>
+                        </motion.div>
+                    ))
+                )}
             </div>
         </div>
     );

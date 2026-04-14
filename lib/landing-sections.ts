@@ -30,7 +30,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'hero_dark',
         name: 'Hero Oscuro Premium',
-        icon: '🌑',
+        icon: 'dark_mode',
         category: 'hero',
         description: 'Hero elegante con fondo oscuro, gradientes y CTA prominente',
         sourceTemplate: 1,
@@ -48,7 +48,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'hero_light',
         name: 'Hero Claro Corporativo',
-        icon: '☀️',
+        icon: 'light_mode',
         category: 'hero',
         description: 'Hero con fondo claro, tipografía bold premium y estilo institucional',
         sourceTemplate: 4,
@@ -66,7 +66,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'hero_gradient',
         name: 'Hero Gradiente Dinámico',
-        icon: '🌈',
+        icon: 'gradient',
         category: 'hero',
         description: 'Hero con gradiente animado y diseño ultra-moderno',
         sourceTemplate: 6,
@@ -86,7 +86,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'bento_grid',
         name: 'Bento Grid de Servicios',
-        icon: '🧩',
+        icon: 'dashboard',
         category: 'content',
         description: 'Grid asimétrico estilo Bento con tarjetas de diferentes tamaños',
         sourceTemplate: 4,
@@ -104,7 +104,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'feature_split',
         name: 'Características (Imagen + Texto)',
-        icon: '📐',
+        icon: 'view_column',
         category: 'content',
         description: 'Dos columnas con imagen a un lado y texto descriptivo al otro',
         sourceTemplate: 1,
@@ -121,7 +121,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'risk_grid',
         name: 'Grid de Seguridad / Riesgo',
-        icon: '🛡️',
+        icon: 'shield',
         category: 'content',
         description: 'Grid de 4 columnas con iconos de seguridad y protección',
         sourceTemplate: 1,
@@ -139,7 +139,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'multi_asset',
         name: 'Grid Multi-Activos',
-        icon: '💎',
+        icon: 'diamond',
         category: 'content',
         description: 'Grid de iconos representando activos disponibles',
         sourceTemplate: 4,
@@ -162,7 +162,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'workflow_steps',
         name: 'Pasos / Cómo Funciona',
-        icon: '🔢',
+        icon: 'format_list_numbered',
         category: 'content',
         description: 'Sección de pasos numerados con dual track (inversionista / manager)',
         sourceTemplate: 1,
@@ -192,7 +192,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'security_fees',
         name: 'Seguridad y Tarifas',
-        icon: '🔐',
+        icon: 'lock',
         category: 'content',
         description: 'Panel dual: arquitectura de seguridad + estructura de tarifas',
         sourceTemplate: 1,
@@ -216,7 +216,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'stats_row',
         name: 'Métricas Destacadas',
-        icon: '📊',
+        icon: 'bar_chart',
         category: 'social_proof',
         description: 'Fila de métricas KPI grandes y llamativas',
         sourceTemplate: 4,
@@ -232,7 +232,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'leaderboard',
         name: 'Top Traders Leaderboard',
-        icon: '🏆',
+        icon: 'emoji_events',
         category: 'social_proof',
         description: 'Tarjetas de traders destacados con métricas de rendimiento',
         sourceTemplate: 1,
@@ -250,7 +250,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'testimonials',
         name: 'Testimonios',
-        icon: '💬',
+        icon: 'chat_bubble',
         category: 'social_proof',
         description: 'Carousel horizontal de testimonios con fotos y estrellas',
         sourceTemplate: 4,
@@ -267,7 +267,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'trust_badges',
         name: 'Sellos de Confianza',
-        icon: '✅',
+        icon: 'verified',
         category: 'social_proof',
         description: 'Grid de iconos de regulación y certificaciones de seguridad',
         sourceTemplate: 4,
@@ -289,7 +289,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'cta_community',
         name: 'CTA Comunidad',
-        icon: '🚀',
+        icon: 'rocket_launch',
         category: 'cta',
         description: 'Franja de color con estadísticas de comunidad y botón de acción',
         sourceTemplate: 4,
@@ -307,7 +307,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     {
         id: 'calculator',
         name: 'Calculadora de Rendimiento',
-        icon: '🧮',
+        icon: 'calculate',
         category: 'cta',
         description: 'Calculadora interactiva de proyección de ganancias',
         sourceTemplate: 1,
@@ -326,11 +326,11 @@ export const SECTION_CATALOG: SectionMeta[] = [
 
 // Category labels for UI grouping
 export const SECTION_CATEGORIES: Record<SectionCategory, { label: string; icon: string }> = {
-    hero: { label: 'Heroes', icon: '🎯' },
-    content: { label: 'Contenido', icon: '📋' },
-    social_proof: { label: 'Social Proof', icon: '⭐' },
-    cta: { label: 'Llamadas a Acción', icon: '🚀' },
-    layout: { label: 'Estructura', icon: '🏗️' },
+    hero: { label: 'Heroes', icon: 'ads_click' },
+    content: { label: 'Contenido', icon: 'article' },
+    social_proof: { label: 'Social Proof', icon: 'star' },
+    cta: { label: 'Llamadas a Acción', icon: 'rocket_launch' },
+    layout: { label: 'Estructura', icon: 'view_quilt' },
 };
 
 // ─── RENDER FUNCTIONS ────────────────────────────────────────

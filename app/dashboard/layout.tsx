@@ -23,7 +23,8 @@ export default function DashboardUILayout({
     const router = useRouter();
     const [isAdmin, setIsAdmin] = useState(false);
     const [partnerId, setPartnerId] = useState('Cargando...');
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    
     // Auto-open accordions based on the current path
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => ({
         'Informes': !!(pathname?.startsWith('/dashboard/reports')),
@@ -33,11 +34,15 @@ export default function DashboardUILayout({
     React.useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
             if (user) {
-                // Generamos un "ID de afiliado" corto apartir del UUID real para mostrarlo de forma estética
                 setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
             }
         });
     }, []);
+
+    // Close mobile menu on navigation
+    React.useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [pathname]);
 
     // Re-open accordion when navigating directly via URL
     React.useEffect(() => {
@@ -98,10 +103,26 @@ export default function DashboardUILayout({
 
     return (
         <AdminContext.Provider value={{ isAdmin, setIsAdmin }}>
-            <div className="flex h-screen bg-[#f8fafc] text-slate-800 overflow-hidden">
+            <div className="flex h-screen bg-[#f8fafc] text-slate-800 overflow-hidden relative">
+
+                {/* ─── Mobile Backdrop ─── */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="fixed inset-0 bg-[#0d0221]/60 backdrop-blur-sm z-40 lg:hidden"
+                        />
+                    )}
+                </AnimatePresence>
 
                 {/* ─── Sidebar ─── Premium Glassmorphism Dark */}
-                <aside className="w-[260px] flex flex-col shrink-0 relative overflow-hidden">
+                <aside className={`
+                    fixed inset-y-0 left-0 w-[280px] z-50 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col shrink-0 overflow-hidden
+                    ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+                `}>
                     {/* Background layers */}
                     <div className="absolute inset-0 bg-gradient-to-b from-[#0d0221] via-[#140633] to-[#0d0221]" />
                     <div className="absolute inset-0 opacity-[0.04]" style={{
@@ -113,10 +134,11 @@ export default function DashboardUILayout({
                     <div className="absolute bottom-20 left-0 w-[200px] h-[200px] bg-indigo-500/5 rounded-full blur-[80px]" />
 
                     {/* Logo area */}
-                    <div className="relative z-10 flex items-center gap-3 px-6 h-[72px]">
-                        <div className="relative">
-                            <img src="/images/logo.png" alt="Bridge Markets" className="h-9 object-contain" />
-                        </div>
+                    <div className="relative z-10 flex items-center justify-between px-6 h-[72px]">
+                        <img src="/images/logo.png" alt="Bridge Markets" className="h-9 object-contain" />
+                        <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden text-white/50 hover:text-white">
+                            <X className="w-6 h-6" />
+                        </button>
                     </div>
 
                     {/* Separator */}
@@ -266,14 +288,20 @@ export default function DashboardUILayout({
                 <main className="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
 
                     {/* ─── Header / Topbar ─── Premium Frosted */}
-                    <header className="flex items-center justify-between px-8 h-[64px] bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shrink-0 relative">
+                    <header className="flex items-center justify-between px-4 lg:px-8 h-[64px] bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shrink-0 relative">
                         {/* Subtle gradient accent line on top */}
                         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#865BFF]/40 to-transparent" />
 
-                        {/* Title */}
-                        <div className="flex items-center gap-4">
+                        {/* Title & Mobile Toggle */}
+                        <div className="flex items-center gap-3 lg:gap-4">
+                            <button 
+                                onClick={() => setIsMobileMenuOpen(true)}
+                                className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"
+                            >
+                                <Menu className="w-5 h-5" />
+                            </button>
                             <div>
-                                <h1 className="text-lg font-black tracking-tight text-slate-800 leading-tight">
+                                <h1 className="text-sm lg:text-lg font-black tracking-tight text-slate-800 leading-tight">
                                     {title.main}{' '}
                                     <span className="bg-gradient-to-r from-[#865BFF] to-[#6635de] bg-clip-text text-transparent font-black">{title.accent}</span>
                                 </h1>
@@ -281,41 +309,27 @@ export default function DashboardUILayout({
                         </div>
 
                         {/* Right side actions */}
-                        <div className="flex items-center gap-2.5">
-                            {/* Admin Toggle */}
+                        <div className="flex items-center gap-1.5 lg:gap-2.5">
+                            {/* Admin Toggle - Hidden on extra small mobile */}
                             <button
                                 onClick={() => setIsAdmin(!isAdmin)}
-                                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-bold transition-all ${isAdmin
+                                className={`hidden sm:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-xl text-[10px] lg:text-[11px] font-bold transition-all ${isAdmin
                                     ? 'bg-slate-800 text-white shadow-md hover:bg-slate-700'
                                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700'
                                 }`}
                             >
-                                <Sparkles className="w-3.5 h-3.5" />
-                                {isAdmin ? '← Partner View' : 'Admin View'}
+                                <Sparkles className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
+                                <span className="hidden lg:inline">{isAdmin ? '← Partner View' : 'Admin View'}</span>
+                                <span className="lg:hidden">{isAdmin ? 'Partner' : 'Admin'}</span>
                             </button>
 
                             {/* Divider */}
-                            <div className="h-6 w-px bg-slate-200" />
-
-                            {/* Language Switcher */}
-                            <div className="flex items-center bg-slate-100 rounded-xl p-0.5">
-                                {['ES', 'EN', 'PT'].map((lang) => (
-                                    <button
-                                        key={lang}
-                                        className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-all ${lang === 'ES'
-                                            ? 'bg-white text-slate-800 shadow-sm'
-                                            : 'text-slate-400 hover:text-slate-600'
-                                        }`}
-                                    >
-                                        {lang}
-                                    </button>
-                                ))}
-                            </div>
+                            <div className="hidden sm:block h-6 w-px bg-slate-200" />
 
                             {/* Notifications */}
                             <button className="relative w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-all">
                                 <Bell className="w-4 h-4" />
-                                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#865BFF] rounded-full border-2 border-white" />
+                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#865BFF] rounded-full border-2 border-white" />
                             </button>
 
                             {/* Avatar */}
@@ -333,7 +347,7 @@ export default function DashboardUILayout({
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                            className="px-8 py-6 max-w-[1400px] mx-auto w-full"
+                            className="px-4 lg:px-8 py-6 max-w-[1400px] mx-auto w-full"
                         >
                             {children}
                         </motion.div>

@@ -6,7 +6,7 @@ import {
     ChevronRight, Layout, Download,
     Image as ImageIcon, Upload, Sparkles, Search,
     ArrowRight, Languages, Link2, TrendingUp, Rocket, Play,
-    Pencil, Plus
+    Pencil, Plus, BarChart3, Shield, Zap, Briefcase, Cpu, Coins, Crown, Sparkle
 } from 'lucide-react';
 import {
     generateModularLandingHTML, openLandingPreview,
@@ -235,7 +235,7 @@ export default function PromoMaterialsPage() {
                                                     : 'text-white/40 hover:text-white/70 hover:bg-white/[0.07]'
                                             }`}
                                         >
-                                            {cat === 'all' ? '🌐 Todas' : cat}
+                                            {cat === 'all' ? 'Todas' : cat}
                                         </button>
                                     ))}
                                 </div>
@@ -294,29 +294,44 @@ export default function PromoMaterialsPage() {
                                             : 'border-slate-200 hover:border-slate-300 hover:shadow-lg hover:-translate-y-0.5'
                                     }`}
                                 >
-                                    {/* Gradient Header */}
+                                    {/* Thumbnail Header */}
                                     <div
-                                        className="relative h-36 overflow-hidden cursor-pointer"
+                                        className="relative h-40 overflow-hidden cursor-pointer"
                                         onClick={() => setSelectedLanding(isSelected ? null : template.id)}
                                         style={{ background: template.gradient }}
                                     >
-                                        <div className="absolute inset-0 opacity-20" style={{
-                                            backgroundImage: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.2) 0%, transparent 50%)',
-                                        }} />
+                                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+                                        
+                                        {/* Glassmorphism Icon Overlay */}
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="p-4 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl transition-transform duration-500 group-hover:scale-110">
+                                                {template.category === 'Analytics' ? <BarChart3 className="w-10 h-10 text-white" /> :
+                                                 template.category === 'Institutional' ? <Shield className="w-10 h-10 text-white" /> :
+                                                 template.category === 'High Conversion' ? <Zap className="w-10 h-10 text-white" /> :
+                                                 template.category === 'Corporate' ? <Briefcase className="w-10 h-10 text-white" /> :
+                                                 template.category === 'Tech' ? <Cpu className="w-10 h-10 text-white" /> :
+                                                 template.category === 'Crypto' ? <Coins className="w-10 h-10 text-white" /> :
+                                                 template.category === 'VIP' ? <Crown className="w-10 h-10 text-white" /> :
+                                                 <Layout className="w-10 h-10 text-white" />}
+                                            </div>
+                                        </div>
 
                                         {template.badge && (
-                                            <div className="absolute top-3 right-3 z-10">
+                                            <div className="absolute top-4 right-4 z-10">
                                                 <span
-                                                    className="text-white text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider"
-                                                    style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}
+                                                    className="text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
+                                                    style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}
                                                 >{template.badge}</span>
                                             </div>
                                         )}
 
-                                        <div className="absolute bottom-0 left-0 right-0 p-5">
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/40 mb-1">Bridge Markets</div>
-                                            <h3 className="text-xl font-black text-white leading-tight">{template.name}</h3>
-                                            <div className="text-xs font-medium text-white/60 mt-0.5">{template.category}</div>
+                                        <div className="absolute bottom-4 left-5 right-5 z-10">
+                                            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">Bridge Markets</div>
+                                            <h3 className="text-xl font-black text-white leading-tight drop-shadow-md">{template.name}</h3>
+                                            <div className="text-xs font-semibold text-white/70 mt-1 flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                                                {template.category}
+                                            </div>
                                         </div>
 
                                         {/* Hover overlay */}
@@ -346,7 +361,7 @@ export default function PromoMaterialsPage() {
                                                 const sec = SECTION_CATALOG.find(s => s.id === sId);
                                                 return sec ? (
                                                     <span key={sId} className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">
-                                                        {sec.icon} {sec.name.split(' ')[0]}
+                                                        <span className="material-symbols-outlined text-[10px]">{sec.icon}</span> {sec.name.split(' ')[0]}
                                                     </span>
                                                 ) : null;
                                             })}
@@ -544,7 +559,7 @@ export default function PromoMaterialsPage() {
                                 </button>
                             </div>
                         </div>
-                        <iframe srcDoc={previewHtml} className="flex-1 w-full border-0" title="Landing Preview" sandbox="allow-same-origin" />
+                        <iframe srcDoc={previewHtml} className="flex-1 w-full border-0" title="Landing Preview" sandbox="allow-same-origin allow-scripts" />
                     </div>
                 </div>,
                 document.body

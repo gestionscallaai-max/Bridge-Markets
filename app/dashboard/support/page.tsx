@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
-import { Headphones, MessageSquare, Mail, BookOpen, Clock } from 'lucide-react';
+import { Headphones, MessageSquare, Mail, BookOpen, Clock, ChevronRight, HelpCircle, ArrowRight, Zap, ExternalLink, Plus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const FAQ = [
     { q: '¿Cuándo se pagan las comisiones?', a: 'Las comisiones aprobadas se pagan dentro de los primeros 5 días hábiles del mes siguiente a su aprobación.' },
@@ -11,59 +12,125 @@ const FAQ = [
 
 export default function DashboardSupportPage() {
     return (
-        <div className="space-y-5 pb-10">
-            <div className="card p-5 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-brand-500/10 flex items-center justify-center text-brand-500">
-                    <Headphones className="w-5 h-5" />
-                </div>
-                <div>
-                    <h2 className="text-lg font-bold text-slate-800">Asistencia</h2>
-                    <p className="text-slate-500 text-sm">Contacta al equipo de soporte dedicado a Partners de Bridge Markets.</p>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="https://wa.me/1234567890" target="_blank" rel="noreferrer" className="card p-6 hover:shadow-card-hover transition-all duration-300 group cursor-pointer">
-                    <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 transition-transform">
-                        <MessageSquare className="w-6 h-6" />
+        <div className="max-w-6xl mx-auto space-y-10 pb-20">
+            {/* Hero Section */}
+            <div className="relative overflow-hidden rounded-[3rem] bg-[#0d0221] p-12 text-white shadow-2xl border border-white/5">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#865BFF] opacity-10 blur-[120px] -mr-64 -mt-64"></div>
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#865BFF]/20 text-[#865BFF] text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-[#865BFF]/30">
+                            <Zap className="w-3 h-3 fill-current" /> Soporte Premium
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-tight">
+                            ¿Cómo podemos <span className="text-[#865BFF]">ayudarte</span> hoy?
+                        </h1>
+                        <p className="text-white/50 text-base font-medium max-w-md leading-relaxed">
+                            Nuestro equipo especializado en Partners está disponible para resolver cualquier duda sobre comisiones, herramientas o estrategia.
+                        </p>
                     </div>
-                    <div className="font-bold text-slate-800 text-sm mb-1">WhatsApp Soporte</div>
-                    <div className="text-xs text-slate-400 leading-relaxed">Escríbenos directamente. Respuesta en menos de 1 hora en horario de atención.</div>
-                    <div className="mt-4 text-xs font-semibold text-emerald-600">Abrir WhatsApp →</div>
-                </a>
-                <a href="mailto:partners@bridgemarkets.com" className="card p-6 hover:shadow-card-hover transition-all duration-300 group cursor-pointer">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
-                        <Mail className="w-6 h-6" />
-                    </div>
-                    <div className="font-bold text-slate-800 text-sm mb-1">Correo Electrónico</div>
-                    <div className="text-xs text-slate-400 leading-relaxed">Para consultas detalladas o documentos. Respondemos en máximo 24 horas hábiles.</div>
-                    <div className="mt-4 text-xs font-semibold text-blue-600">partners@bridgemarkets.com →</div>
-                </a>
-                <div className="card p-6">
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 mb-4">
-                        <Clock className="w-6 h-6" />
-                    </div>
-                    <div className="font-bold text-slate-800 text-sm mb-1">Horario de Atención</div>
-                    <div className="text-xs text-slate-400 leading-relaxed">
-                        <div className="flex justify-between py-1 border-b border-slate-100"><span>Lunes - Viernes</span><span className="font-semibold text-slate-600">9:00 - 18:00 EST</span></div>
-                        <div className="flex justify-between py-1"><span>Sábados</span><span className="font-semibold text-slate-600">10:00 - 14:00 EST</span></div>
+                    <div className="hidden md:flex justify-end">
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-[#865BFF] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                            <div className="w-48 h-48 rounded-[2.5rem] bg-gradient-to-br from-[#865BFF] to-[#6335f8] flex items-center justify-center relative z-10">
+                                <Headphones className="w-20 h-20 text-white" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="card p-6">
-                <div className="flex items-center gap-2 mb-5">
-                    <BookOpen className="w-5 h-5 text-brand-500" />
-                    <h3 className="font-bold text-slate-800">Preguntas Frecuentes</h3>
+            {/* Contact Channels */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                    { 
+                        title: 'WhatsApp Directo', 
+                        desc: 'Consultas rápidas y soporte técnico inmediato.', 
+                        action: 'Abrir Chat', 
+                        link: 'https://wa.me/1234567890', 
+                        icon: MessageSquare, 
+                        color: 'bg-emerald-500',
+                        light: 'bg-emerald-50 text-emerald-600'
+                    },
+                    { 
+                        title: 'Email de Soporte', 
+                        desc: 'Para revisiones detalladas o envío de documentos.', 
+                        action: 'Enviar Email', 
+                        link: 'mailto:partners@bridgemarkets.com', 
+                        icon: Mail, 
+                        color: 'bg-[#865BFF]',
+                        light: 'bg-purple-50 text-[#865BFF]'
+                    },
+                    { 
+                        title: 'Horario Operativo', 
+                        desc: 'Lun-Vie 9:00 - 18:00 EST / Sáb 10:00 - 14:00 EST', 
+                        action: 'Ver Calendario', 
+                        link: '#', 
+                        icon: Clock, 
+                        color: 'bg-slate-800',
+                        light: 'bg-slate-100 text-slate-600'
+                    }
+                ].map((item, i) => (
+                    <motion.a
+                        key={i}
+                        href={item.link}
+                        target={item.link.startsWith('http') ? "_blank" : undefined}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="group relative bg-white rounded-[2.5rem] p-8 border border-slate-100 hover:shadow-2xl hover:shadow-[#865BFF]/5 hover:border-[#865BFF]/20 transition-all duration-300 overflow-hidden"
+                    >
+                        <div className={`w-14 h-14 rounded-2xl ${item.light} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                            <item.icon className="w-7 h-7" />
+                        </div>
+                        <h3 className="text-xl font-black text-slate-800 mb-2">{item.title}</h3>
+                        <p className="text-sm text-slate-500 font-medium leading-relaxed mb-6">{item.desc}</p>
+                        <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest group-hover:text-[#865BFF] transition-colors">
+                            {item.action} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </motion.a>
+                ))}
+            </div>
+
+            {/* FAQ Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div className="lg:col-span-1">
+                    <div className="sticky top-6">
+                        <div className="w-12 h-12 rounded-2xl bg-[#865BFF]/10 flex items-center justify-center text-[#865BFF] mb-6">
+                            <BookOpen className="w-6 h-6" />
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight leading-tight mb-4">Preguntas Frecuentes</h2>
+                        <p className="text-slate-500 font-medium text-base mb-8 italic border-l-4 border-[#865BFF]/20 pl-4">
+                            "Encuentra respuestas inmediatas a las dudas más comunes de nuestra red de partners."
+                        </p>
+                        <div className="bg-[#0d0221] rounded-2xl p-6 text-white group cursor-pointer relative overflow-hidden">
+                            <div className="absolute inset-0 bg-brand-purple opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                            <h4 className="font-bold text-sm mb-2 relative z-10 flex items-center gap-2">
+                                <HelpCircle className="w-4 h-4 text-[#865BFF]" /> ¿No encuentras tu duda?
+                            </h4>
+                            <p className="text-[11px] text-white/40 mb-4 relative z-10 leading-relaxed">Nuestro centro de ayuda completo tiene más de 100 artículos para ti.</p>
+                            <span className="text-[#865BFF] text-[10px] font-black uppercase tracking-widest flex items-center gap-1 relative z-10">
+                                Visitar Centro de Ayuda <ExternalLink className="w-3 h-3" />
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div className="space-y-3">
+
+                <div className="lg:col-span-2 space-y-4">
                     {FAQ.map((faq, i) => (
-                        <details key={i} className="group border border-slate-200 rounded-xl overflow-hidden">
-                            <summary className="flex justify-between items-center px-5 py-4 cursor-pointer font-semibold text-slate-700 text-sm hover:bg-slate-50 transition-colors list-none">
-                                {faq.q}
-                                <span className="text-slate-400 group-open:rotate-45 transition-transform text-lg font-light">+</span>
+                        <details key={i} className="group overflow-hidden">
+                            <summary className="flex justify-between items-center px-8 py-6 cursor-pointer bg-white border border-slate-100 rounded-2xl hover:border-[#865BFF]/30 transition-all duration-300 list-none">
+                                <span className="font-black text-slate-700 text-sm">{faq.q}</span>
+                                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-open:bg-[#865BFF] group-open:text-white transition-all">
+                                    <Plus className="w-4 h-4 group-open:rotate-45 transition-transform" />
+                                </div>
                             </summary>
-                            <div className="px-5 pb-4 text-sm text-slate-500 leading-relaxed border-t border-slate-100">{faq.a}</div>
+                            <motion.div 
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="px-8 py-6 text-sm text-slate-500 font-medium leading-relaxed bg-slate-50/50 border-x border-b border-slate-100 rounded-b-2xl -mt-4 pt-10"
+                            >
+                                {faq.a}
+                            </motion.div>
                         </details>
                     ))}
                 </div>
