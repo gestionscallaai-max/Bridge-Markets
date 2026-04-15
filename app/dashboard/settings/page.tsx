@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { Settings, Loader2, Save, User, Mail, Globe, Phone, Check, Shield, BadgeCheck, Camera } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/lib/i18n/context';
 
 export default function AccountSettingsPage() {
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -75,7 +77,7 @@ export default function AccountSettingsPage() {
                         <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
                             <h1 className="text-3xl font-black tracking-tight">{profile.full_name || 'Partner'}</h1>
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">
-                                <BadgeCheck className="w-3 h-3" /> Verificado
+                                <BadgeCheck className="w-3 h-3" /> {t.settings.verified}
                             </span>
                         </div>
                         <p className="text-white/50 text-sm font-medium flex items-center justify-center md:justify-start gap-2">
@@ -92,11 +94,11 @@ export default function AccountSettingsPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Navigation / Sidebar Settings */}
                 <div className="space-y-2">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest px-4 mb-4">Menú de Configuración</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest px-4 mb-4">{t.settings.menuTitle}</h3>
                     {[
-                        { icon: User, label: 'Perfil Personal', active: true },
-                        { icon: Shield, label: 'Seguridad', active: false },
-                        { icon: Settings, label: 'Preferencias', active: false },
+                        { icon: User, label: t.settings.profile, active: true },
+                        { icon: Shield, label: t.settings.security, active: false },
+                        { icon: Settings, label: t.settings.preferences, active: false },
                     ].map((item, i) => (
                         <button
                             key={i}
@@ -116,41 +118,41 @@ export default function AccountSettingsPage() {
                 <div className="md:col-span-2 space-y-6">
                     <form onSubmit={handleSave} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
                         <div className="p-8 border-b border-slate-50">
-                            <h3 className="text-lg font-bold text-slate-800">Información del Perfil</h3>
-                            <p className="text-slate-400 text-xs">Actualiza tus datos públicos y de contacto.</p>
+                            <h3 className="text-lg font-bold text-slate-800">{t.settings.profileInfo}</h3>
+                            <p className="text-slate-400 text-xs">{t.settings.profileInfoDesc}</p>
                         </div>
                         
                         <div className="p-8 space-y-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 ml-1">
-                                        <User className="w-3 h-3" /> Nombre Completo
+                                        <User className="w-3 h-3" /> {t.settings.fullName}
                                     </label>
                                     <input
                                         type="text"
                                         value={profile.full_name || ''}
                                         onChange={e => setProfile({ ...profile, full_name: e.target.value })}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-semibold text-slate-800 focus:outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
-                                        placeholder="Tu nombre completo"
+                                        placeholder={t.settings.fullName}
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 ml-1">
-                                        <Globe className="w-3 h-3" /> País / Región
+                                        <Globe className="w-3 h-3" /> {t.settings.country}
                                     </label>
                                     <input
                                         type="text"
                                         value={profile.country || ''}
                                         onChange={e => setProfile({ ...profile, country: e.target.value })}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-semibold text-slate-800 focus:outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
-                                        placeholder="Ej. España"
+                                        placeholder={t.settings.country}
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-2 opacity-60">
                                 <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 ml-1">
-                                    <Mail className="w-3 h-3" /> Correo Electrónico
+                                    <Mail className="w-3 h-3" /> {t.settings.emailLabel}
                                 </label>
                                 <input
                                     type="email"
@@ -160,7 +162,7 @@ export default function AccountSettingsPage() {
                                 />
                                 <div className="flex items-start gap-2 mt-2 px-2">
                                     <Shield className="w-3 h-3 text-slate-400 mt-0.5" />
-                                    <p className="text-[10px] text-slate-400 leading-normal">El email está vinculado a tu cuenta principal y no puede cambiarse desde este panel por razones de seguridad.</p>
+                                    <p className="text-[10px] text-slate-400 leading-normal">{t.settings.emailSecurityNote}</p>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +178,7 @@ export default function AccountSettingsPage() {
                                         <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
                                             <Check className="w-3 h-3" />
                                         </div>
-                                        Cambios guardados con éxito
+                                        {t.settings.savedSuccess}
                                     </motion.div>
                                 )}
                             </div>
@@ -186,16 +188,16 @@ export default function AccountSettingsPage() {
                                 className="inline-flex items-center gap-3 px-8 py-4 bg-[#865BFF] text-white rounded-2xl text-sm font-black hover:bg-[#7444ff] transition-all hover:scale-105 active:scale-95 disabled:opacity-60 shadow-xl shadow-[#865BFF]/20"
                             >
                                 {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                                {saving ? 'Guardando...' : 'Guardar Perfil'}
+                                {saving ? t.settings.saving : t.settings.saveProfile}
                             </button>
                         </div>
                     </form>
 
                     {/* Danger Zone */}
                     <div className="bg-red-50/50 border border-red-100 rounded-[2.5rem] p-8">
-                        <h4 className="text-sm font-black text-red-600 uppercase tracking-widest mb-1">Zona de Peligro</h4>
-                        <p className="text-xs text-red-500 opacity-60 mb-4 font-medium">Acciones irreversibles sobre tu cuenta de Partner.</p>
-                        <button className="text-red-600 text-sm font-bold hover:underline">Solicitar desactivación de cuenta</button>
+                        <h4 className="text-sm font-black text-red-600 uppercase tracking-widest mb-1">{t.settings.dangerZone}</h4>
+                        <p className="text-xs text-red-500 opacity-60 mb-4 font-medium">{t.settings.dangerDesc}</p>
+                        <button className="text-red-600 text-sm font-bold hover:underline">{t.settings.deactivate}</button>
                     </div>
                 </div>
             </div>

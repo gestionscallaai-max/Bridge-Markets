@@ -16,6 +16,8 @@ import { LANDING_TEMPLATES, type LandingTemplate } from '@/lib/landing-templates
 import { SECTION_CATALOG } from '@/lib/landing-sections';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/lib/i18n/context';
+import { getTemplateDescription, getTemplateBadge, getSectionName } from '@/lib/i18n/template-translations';
 
 // ─── Idiomas ─────────────────────────────────────
 const LANGUAGES = [
@@ -32,6 +34,7 @@ const LANGUAGES = [
 
 export default function PromoMaterialsPage() {
     const router = useRouter();
+    const { t, lang } = useLanguage();
     const [mainTab, setMainTab] = useState<'landings' | 'banners'>('landings');
     const [activeFilter, setActiveFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -85,9 +88,10 @@ export default function PromoMaterialsPage() {
 
     const filtered = LANDING_TEMPLATES.filter(t => {
         const matchesFilter = activeFilter === 'all' || t.category === activeFilter;
+        const desc = getTemplateDescription(t.id, lang);
         const matchesSearch = searchQuery === '' ||
             t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            t.description.toLowerCase().includes(searchQuery.toLowerCase());
+            desc.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesFilter && matchesSearch;
     });
 
@@ -148,8 +152,8 @@ export default function PromoMaterialsPage() {
                                     <Rocket className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-black text-white tracking-tight leading-tight">Centro de Marketing</h2>
-                                    <p className="text-sm text-purple-200/50 font-medium">Templates modulares con secciones intercambiables</p>
+                                    <h2 className="text-2xl font-black text-white tracking-tight leading-tight">{t.overview.materialPost}</h2>
+                                    <p className="text-sm text-purple-200/50 font-medium">{t.overview.materialPostDesc}</p>
                                 </div>
                             </div>
                         </div>
@@ -158,17 +162,17 @@ export default function PromoMaterialsPage() {
                         <div className="hidden lg:flex items-center gap-1 bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3">
                             <div className="text-center px-4">
                                 <div className="text-2xl font-black text-white leading-none">{LANDING_TEMPLATES.length}</div>
-                                <div className="text-[9px] font-bold text-purple-300/50 uppercase tracking-widest mt-1">Templates</div>
+                                <div className="text-[9px] font-bold text-purple-300/50 uppercase tracking-widest mt-1">{t.nav.landingTools}</div>
                             </div>
                             <div className="w-px h-8 bg-white/10" />
                             <div className="text-center px-4">
                                 <div className="text-2xl font-black text-white leading-none">{SECTION_CATALOG.length}</div>
-                                <div className="text-[9px] font-bold text-purple-300/50 uppercase tracking-widest mt-1">Secciones</div>
+                                <div className="text-[9px] font-bold text-purple-300/50 uppercase tracking-widest mt-1">{t.promo.sections}</div>
                             </div>
                             <div className="w-px h-8 bg-white/10" />
                             <div className="text-center px-4">
                                 <div className="text-2xl font-black text-white leading-none">{LANGUAGES.length}</div>
-                                <div className="text-[9px] font-bold text-purple-300/50 uppercase tracking-widest mt-1">Idiomas</div>
+                                <div className="text-[9px] font-bold text-purple-300/50 uppercase tracking-widest mt-1">{t.promo.languages}</div>
                             </div>
                         </div>
                     </div>
@@ -184,7 +188,7 @@ export default function PromoMaterialsPage() {
                                         : 'bg-white/[0.07] text-white/60 hover:bg-white/[0.12] hover:text-white border border-white/[0.08]'
                                 }`}
                             >
-                                <Globe className="w-4 h-4" /> Landings Modulares
+                                <Globe className="w-4 h-4" /> {t.nav.landingTools}
                             </button>
                             <button
                                 onClick={() => setMainTab('banners')}
@@ -194,7 +198,7 @@ export default function PromoMaterialsPage() {
                                         : 'bg-white/[0.07] text-white/60 hover:bg-white/[0.12] hover:text-white border border-white/[0.08]'
                                 }`}
                             >
-                                <ImageIcon className="w-4 h-4" /> Material Post
+                                <ImageIcon className="w-4 h-4" /> {t.nav.materialPost}
                             </button>
                         </div>
                         <button
@@ -202,7 +206,7 @@ export default function PromoMaterialsPage() {
                             className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[#865BFF] to-[#6635de] text-white shadow-lg shadow-[#865BFF]/30 hover:shadow-[#865BFF]/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
                         >
                             <Plus className="w-4 h-4" />
-                            <span>Crear Personalizada</span>
+                            <span>{t.landing.title} +</span>
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                         </button>
                     </div>
@@ -218,7 +222,7 @@ export default function PromoMaterialsPage() {
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
                                     <input
                                         type="text"
-                                        placeholder="Buscar template..."
+                                        placeholder={t.topbar.search}
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         className="w-full pl-9 pr-4 py-2 bg-white/[0.07] border border-white/[0.08] rounded-xl text-sm text-white/90 placeholder:text-white/25 focus:outline-none focus:bg-white/[0.1] focus:border-[#865BFF]/50 transition-all"
@@ -235,7 +239,7 @@ export default function PromoMaterialsPage() {
                                                     : 'text-white/40 hover:text-white/70 hover:bg-white/[0.07]'
                                             }`}
                                         >
-                                            {cat === 'all' ? 'Todas' : cat}
+                                            {cat === 'all' ? t.promo.all : cat}
                                         </button>
                                     ))}
                                 </div>
@@ -274,7 +278,7 @@ export default function PromoMaterialsPage() {
                             className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl border-2 border-dashed border-[#865BFF]/30 bg-[#865BFF]/5 text-[#865BFF] font-bold hover:bg-[#865BFF]/10 hover:border-[#865BFF]/50 transition-all group"
                         >
                             <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            <span>Crear Landing Personalizada</span>
+                            <span>{t.promo.createCustom}</span>
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </button>
                     </div>
@@ -321,7 +325,7 @@ export default function PromoMaterialsPage() {
                                                 <span
                                                     className="text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
                                                     style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}
-                                                >{template.badge}</span>
+                                                >{getTemplateBadge(template.badge, lang)}</span>
                                             </div>
                                         )}
 
@@ -340,20 +344,20 @@ export default function PromoMaterialsPage() {
                                                 onClick={(e) => { e.stopPropagation(); handlePreview(template); }}
                                                 className="flex items-center gap-2 bg-white text-slate-900 text-xs font-bold px-4 py-2.5 rounded-xl shadow-xl hover:scale-105 transition-transform"
                                             >
-                                                <Play className="w-3.5 h-3.5" /> Preview
+                                                <Play className="w-3.5 h-3.5" /> {t.common.preview}
                                             </button>
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); handleCustomize(template.id); }}
                                                 className="flex items-center gap-2 bg-[#865BFF] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xl hover:scale-105 transition-transform"
                                             >
-                                                <Pencil className="w-3.5 h-3.5" /> Personalizar
+                                                <Pencil className="w-3.5 h-3.5" /> {t.promo.customize}
                                             </button>
                                         </div>
                                     </div>
 
                                     {/* Card body */}
                                     <div className="p-4">
-                                        <p className="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-2">{template.description}</p>
+                                        <p className="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-2">{getTemplateDescription(template.id, lang)}</p>
 
                                         {/* Section pills */}
                                         <div className="flex items-center gap-1 flex-wrap mb-4">
@@ -361,12 +365,12 @@ export default function PromoMaterialsPage() {
                                                 const sec = SECTION_CATALOG.find(s => s.id === sId);
                                                 return sec ? (
                                                     <span key={sId} className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">
-                                                        <span className="material-symbols-outlined text-[10px]">{sec.icon}</span> {sec.name.split(' ')[0]}
+                                                        <span className="material-symbols-outlined text-[10px]">{sec.icon}</span> {getSectionName(sId, lang)}
                                                     </span>
                                                 ) : null;
                                             })}
                                             {template.sections.length > 3 && (
-                                                <span className="text-[9px] text-slate-400 font-bold">+{template.sections.length - 3} más</span>
+                                                <span className="text-[9px] text-slate-400 font-bold">+{template.sections.length - 3} {t.promo.more}</span>
                                             )}
                                         </div>
 
@@ -393,7 +397,7 @@ export default function PromoMaterialsPage() {
                                                     onClick={(e) => { e.stopPropagation(); handleCustomize(template.id); }}
                                                     className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg border border-[#865BFF]/30 text-xs font-bold text-[#865BFF] hover:bg-[#865BFF]/5 transition-all"
                                                 >
-                                                    <Pencil className="w-3.5 h-3.5" /> Editar
+                                                    <Pencil className="w-3.5 h-3.5" /> {t.common.edit}
                                                 </button>
                                                 <button
                                                     onClick={(e) => {
@@ -403,7 +407,7 @@ export default function PromoMaterialsPage() {
                                                     className="flex-[2] flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-white transition-all shadow-sm hover:shadow-md"
                                                     style={{ background: template.accentColor }}
                                                 >
-                                                    {copied === `${template.id}-btn` ? <><Check className="w-3.5 h-3.5" /> ¡Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar Link</>}
+                                                    {copied === `${template.id}-btn` ? <><Check className="w-3.5 h-3.5" /> {t.common.success}!</> : <><Copy className="w-3.5 h-3.5" /> {t.common.copy} Link</>}
                                                 </button>
                                             </div>
                                         </div>
@@ -414,7 +418,7 @@ export default function PromoMaterialsPage() {
                                                 onClick={() => setSelectedLanding(template.id)}
                                                 className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-[#865BFF] bg-[#865BFF]/5 hover:bg-[#865BFF]/10 transition-all border border-[#865BFF]/10"
                                             >
-                                                <Link2 className="w-3.5 h-3.5" /> Obtener Link <ArrowRight className="w-3 h-3 ml-0.5" />
+                                                <Link2 className="w-3.5 h-3.5" /> {t.common.copy} Link <ArrowRight className="w-3 h-3 ml-0.5" />
                                             </button>
                                         )}
                                     </div>
@@ -429,14 +433,14 @@ export default function PromoMaterialsPage() {
             {mainTab === 'banners' && (
                 <div className="flex flex-col xl:flex-row gap-0 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm min-h-[600px]">
                     <div className="w-full xl:w-[440px] p-8 border-r border-slate-200 flex flex-col shrink-0 bg-slate-50/50">
-                        <h2 className="text-2xl font-black text-slate-800 tracking-tight mb-1">Material Post</h2>
-                        <p className="text-sm text-slate-400 mb-8">Localiza y adapta tus piezas gráficas</p>
+                        <h2 className="text-2xl font-black text-slate-800 tracking-tight mb-1">{t.nav.materialPost}</h2>
+                        <p className="text-sm text-slate-400 mb-8">{t.overview.materialsSubtitle}</p>
 
                         <div className="space-y-8 flex-1">
                             <div>
                                 <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 block flex items-center gap-2">
                                     <span className="w-5 h-5 rounded-md bg-[#865BFF] text-white text-[10px] font-black flex items-center justify-center">1</span>
-                                    Sube tu pieza
+                                    {t.promo.uploadPiece}
                                 </label>
                                 <div className="border-2 border-dashed border-slate-300 rounded-xl bg-white hover:bg-slate-50 hover:border-[#865BFF]/30 transition-all cursor-pointer group flex flex-col items-center justify-center py-10 relative overflow-hidden">
                                     {uploadedImage ? (
@@ -444,14 +448,14 @@ export default function PromoMaterialsPage() {
                                             <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
                                                 <Check className="w-6 h-6 text-emerald-500" />
                                             </div>
-                                            <span className="text-sm font-semibold text-emerald-600">Imagen cargada</span>
+                                            <span className="text-sm font-semibold text-emerald-600">{t.promo.imageUploaded}</span>
                                         </div>
                                     ) : (
                                         <>
                                             <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform group-hover:bg-[#865BFF]/10">
                                                 <Upload className="w-5 h-5 text-slate-400 group-hover:text-[#865BFF]" />
                                             </div>
-                                            <span className="text-sm font-semibold text-slate-500">Arrastra o haz clic para subir</span>
+                                            <span className="text-sm font-semibold text-slate-500">{t.promo.dragOrClick}</span>
                                             <span className="text-[10px] text-slate-400 mt-1">PNG, JPG, WebP — Max 10MB</span>
                                         </>
                                     )}
@@ -467,7 +471,7 @@ export default function PromoMaterialsPage() {
                             <div>
                                 <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 block flex items-center gap-2">
                                     <span className="w-5 h-5 rounded-md bg-[#865BFF] text-white text-[10px] font-black flex items-center justify-center">2</span>
-                                    Ratio de aspecto
+                                    {t.promo.aspectRatio}
                                 </label>
                                 <div className="grid grid-cols-5 gap-2">
                                     {['16:9', '1:1', '9:16', '4:3', '3:4'].map(ratio => (
@@ -490,7 +494,7 @@ export default function PromoMaterialsPage() {
                                 ? 'bg-[#865BFF] text-white hover:bg-[#7349e5] shadow-xl shadow-[#865BFF]/20 active:scale-[0.98]'
                                 : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                         }`}>
-                            <Globe className="w-4 h-4" /> Localizar Pieza
+                            <Globe className="w-4 h-4" /> {t.common.generate}
                         </button>
                     </div>
 
@@ -511,7 +515,7 @@ export default function PromoMaterialsPage() {
                                 >
                                     <div className="w-full h-full bg-black/10 flex items-end justify-center pb-4">
                                         <button className="bg-white/90 backdrop-blur font-bold text-slate-800 px-5 py-2 rounded-lg shadow-xl hover:scale-105 transition-transform flex items-center gap-2 text-sm">
-                                            <Download className="w-4 h-4" /> Exportar {selectedAspectRatio}
+                                            <Download className="w-4 h-4" /> {t.promo.export} {selectedAspectRatio}
                                         </button>
                                     </div>
                                 </div>
@@ -521,9 +525,9 @@ export default function PromoMaterialsPage() {
                                 <div className="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-6">
                                     <ImageIcon className="w-9 h-9 text-slate-300" />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-800 mb-2">Listo para Crear</h3>
+                                <h3 className="text-xl font-black text-slate-800 mb-2">{t.landing.generatedTitle}</h3>
                                 <p className="text-sm text-slate-400 leading-relaxed">
-                                    Sube tu pieza gráfica y selecciona el mercado objetivo para generar versiones localizadas.
+                                    {t.landing.generatedSubtitle}
                                 </p>
                             </div>
                         )}
@@ -549,7 +553,7 @@ export default function PromoMaterialsPage() {
                                     onClick={() => openLandingPreview(previewHtml)}
                                     className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-200"
                                 >
-                                    <ExternalLink className="w-3.5 h-3.5" /> Abrir
+                                    <ExternalLink className="w-3.5 h-3.5" /> {t.common.preview}
                                 </button>
                                 <button
                                     onClick={() => setShowPreviewModal(false)}

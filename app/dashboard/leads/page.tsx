@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { Users, Filter, Download, ExternalLink } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/context';
 
 export default function LeadsPage() {
+    const { t, lang } = useLanguage();
     const [leads, setLeads] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -34,6 +36,13 @@ export default function LeadsPage() {
         setLoading(false);
     };
 
+    // Map lang code to locale for date formatting
+    const localeMap: Record<string, string> = {
+        es: 'es-ES', en: 'en-US', zh: 'zh-CN', hi: 'hi-IN',
+        fr: 'fr-FR', ar: 'ar-SA', bn: 'bn-BD', pt: 'pt-BR',
+        ru: 'ru-RU', ja: 'ja-JP',
+    };
+
     return (
         <div className="space-y-5 pb-10">
             {/* Header */}
@@ -44,16 +53,16 @@ export default function LeadsPage() {
                             <Users className="w-5 h-5" />
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold text-slate-800">Tus Leads</h2>
-                            <p className="text-slate-500 text-sm mt-0.5">Contactos registrados a través de tus landing pages.</p>
+                            <h2 className="text-lg font-bold text-slate-800">{t.leads.title}</h2>
+                            <p className="text-slate-500 text-sm mt-0.5">{t.leads.subtitle}</p>
                         </div>
                     </div>
                     <div className="flex gap-2">
                         <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
-                            <Filter className="w-4 h-4" /> Filtros
+                            <Filter className="w-4 h-4" /> {t.leads.filters}
                         </button>
                         <button className="flex items-center gap-2 px-4 py-2 bg-[#865BFF] text-white rounded-lg text-sm font-semibold shadow-md hover:bg-[#7344ff] transition-colors">
-                            <Download className="w-4 h-4" /> Exportar CSV
+                            <Download className="w-4 h-4" /> {t.leads.exportCsv}
                         </button>
                     </div>
                 </div>
@@ -65,23 +74,23 @@ export default function LeadsPage() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                <th className="px-6 py-4">Nombre</th>
-                                <th className="px-6 py-4">Contacto</th>
-                                <th className="px-6 py-4">Origen (Landing)</th>
-                                <th className="px-6 py-4">Fecha de Registro</th>
+                                <th className="px-6 py-4">{t.leads.colName}</th>
+                                <th className="px-6 py-4">{t.leads.colContact}</th>
+                                <th className="px-6 py-4">{t.leads.colOrigin}</th>
+                                <th className="px-6 py-4">{t.leads.colDate}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {loading ? (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-10 text-center text-slate-500 font-medium">
-                                        Cargando leads...
+                                        {t.leads.loading}
                                     </td>
                                 </tr>
                             ) : leads.length === 0 ? (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-10 text-center text-slate-500 font-medium">
-                                        No hay leads registrados aún. Empieza a compartir tus landings.
+                                        {t.leads.empty}
                                     </td>
                                 </tr>
                             ) : (
@@ -101,7 +110,7 @@ export default function LeadsPage() {
                                             </a>
                                         </td>
                                         <td className="px-6 py-4 text-sm text-slate-500 font-medium">
-                                            {new Date(lead.created_at).toLocaleString('es-ES', { 
+                                            {new Date(lead.created_at).toLocaleString(localeMap[lang] || 'es-ES', { 
                                                 day: '2-digit', month: 'short', year: 'numeric',
                                                 hour: '2-digit', minute: '2-digit'
                                             })}

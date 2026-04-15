@@ -2,15 +2,41 @@
 import React from 'react';
 import { Headphones, MessageSquare, Mail, BookOpen, Clock, ChevronRight, HelpCircle, ArrowRight, Zap, ExternalLink, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const FAQ = [
-    { q: '¿Cuándo se pagan las comisiones?', a: 'Las comisiones aprobadas se pagan dentro de los primeros 5 días hábiles del mes siguiente a su aprobación.' },
-    { q: '¿Cuál es el mínimo para solicitar un retiro?', a: 'El monto mínimo para solicitar un reembolso es de $10 USD.' },
-    { q: '¿Cómo puedo ver si mis leads se registraron?', a: 'Ve a Informes > Clientes para ver todos los leads registrados vinculados a tu cuenta.' },
-    { q: '¿Puedo tener varias Landing Pages activas?', a: 'Sí, puedes crear múltiples landing pages desde Promo > Herramientas de Registro, cada una con un slug único.' },
-];
+import { useLanguage } from '@/lib/i18n/context';
 
 export default function DashboardSupportPage() {
+    const { t } = useLanguage();
+
+    const channels = [
+        { 
+            title: t.support.whatsappTitle, 
+            desc: t.support.whatsappDesc, 
+            action: t.support.whatsappAction, 
+            link: 'https://wa.me/1234567890', 
+            icon: MessageSquare, 
+            color: 'bg-emerald-500',
+            light: 'bg-emerald-50 text-emerald-600'
+        },
+        { 
+            title: t.support.emailTitle, 
+            desc: t.support.emailDesc, 
+            action: t.support.emailAction, 
+            link: 'mailto:partners@bridgemarkets.com', 
+            icon: Mail, 
+            color: 'bg-[#865BFF]',
+            light: 'bg-purple-50 text-[#865BFF]'
+        },
+        { 
+            title: t.support.scheduleTitle, 
+            desc: t.support.scheduleDesc, 
+            action: t.support.scheduleAction, 
+            link: '#', 
+            icon: Clock, 
+            color: 'bg-slate-800',
+            light: 'bg-slate-100 text-slate-600'
+        }
+    ];
+
     return (
         <div className="max-w-6xl mx-auto space-y-10 pb-20">
             {/* Hero Section */}
@@ -19,13 +45,13 @@ export default function DashboardSupportPage() {
                 <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                     <div>
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#865BFF]/20 text-[#865BFF] text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-[#865BFF]/30">
-                            <Zap className="w-3 h-3 fill-current" /> Soporte Premium
+                            <Zap className="w-3 h-3 fill-current" /> {t.support.badge}
                         </div>
                         <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 leading-tight">
-                            ¿Cómo podemos <span className="text-[#865BFF]">ayudarte</span> hoy?
+                            {t.support.title} <span className="text-[#865BFF]">{t.support.titleHighlight}</span>?
                         </h1>
                         <p className="text-white/50 text-base font-medium max-w-md leading-relaxed">
-                            Nuestro equipo especializado en Partners está disponible para resolver cualquier duda sobre comisiones, herramientas o estrategia.
+                            {t.support.subtitle}
                         </p>
                     </div>
                     <div className="hidden md:flex justify-end">
@@ -41,35 +67,7 @@ export default function DashboardSupportPage() {
 
             {/* Contact Channels */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                    { 
-                        title: 'WhatsApp Directo', 
-                        desc: 'Consultas rápidas y soporte técnico inmediato.', 
-                        action: 'Abrir Chat', 
-                        link: 'https://wa.me/1234567890', 
-                        icon: MessageSquare, 
-                        color: 'bg-emerald-500',
-                        light: 'bg-emerald-50 text-emerald-600'
-                    },
-                    { 
-                        title: 'Email de Soporte', 
-                        desc: 'Para revisiones detalladas o envío de documentos.', 
-                        action: 'Enviar Email', 
-                        link: 'mailto:partners@bridgemarkets.com', 
-                        icon: Mail, 
-                        color: 'bg-[#865BFF]',
-                        light: 'bg-purple-50 text-[#865BFF]'
-                    },
-                    { 
-                        title: 'Horario Operativo', 
-                        desc: 'Lun-Vie 9:00 - 18:00 EST / Sáb 10:00 - 14:00 EST', 
-                        action: 'Ver Calendario', 
-                        link: '#', 
-                        icon: Clock, 
-                        color: 'bg-slate-800',
-                        light: 'bg-slate-100 text-slate-600'
-                    }
-                ].map((item, i) => (
+                {channels.map((item, i) => (
                     <motion.a
                         key={i}
                         href={item.link}
@@ -98,25 +96,25 @@ export default function DashboardSupportPage() {
                         <div className="w-12 h-12 rounded-2xl bg-[#865BFF]/10 flex items-center justify-center text-[#865BFF] mb-6">
                             <BookOpen className="w-6 h-6" />
                         </div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight leading-tight mb-4">Preguntas Frecuentes</h2>
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight leading-tight mb-4">{t.support.faqTitle}</h2>
                         <p className="text-slate-500 font-medium text-base mb-8 italic border-l-4 border-[#865BFF]/20 pl-4">
-                            "Encuentra respuestas inmediatas a las dudas más comunes de nuestra red de partners."
+                            &ldquo;{t.support.faqSubtitle}&rdquo;
                         </p>
                         <div className="bg-[#0d0221] rounded-2xl p-6 text-white group cursor-pointer relative overflow-hidden">
                             <div className="absolute inset-0 bg-brand-purple opacity-0 group-hover:opacity-20 transition-opacity"></div>
                             <h4 className="font-bold text-sm mb-2 relative z-10 flex items-center gap-2">
-                                <HelpCircle className="w-4 h-4 text-[#865BFF]" /> ¿No encuentras tu duda?
+                                <HelpCircle className="w-4 h-4 text-[#865BFF]" /> {t.support.faqNotFound}
                             </h4>
-                            <p className="text-[11px] text-white/40 mb-4 relative z-10 leading-relaxed">Nuestro centro de ayuda completo tiene más de 100 artículos para ti.</p>
+                            <p className="text-[11px] text-white/40 mb-4 relative z-10 leading-relaxed">{t.support.faqNotFoundDesc}</p>
                             <span className="text-[#865BFF] text-[10px] font-black uppercase tracking-widest flex items-center gap-1 relative z-10">
-                                Visitar Centro de Ayuda <ExternalLink className="w-3 h-3" />
+                                {t.support.faqHelpCenter} <ExternalLink className="w-3 h-3" />
                             </span>
                         </div>
                     </div>
                 </div>
 
                 <div className="lg:col-span-2 space-y-4">
-                    {FAQ.map((faq, i) => (
+                    {t.support.faq.map((faq, i) => (
                         <details key={i} className="group overflow-hidden">
                             <summary className="flex justify-between items-center px-8 py-6 cursor-pointer bg-white border border-slate-100 rounded-2xl hover:border-[#865BFF]/30 transition-all duration-300 list-none">
                                 <span className="font-black text-slate-700 text-sm">{faq.q}</span>

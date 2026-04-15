@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from '@/lib/i18n/context';
 import {
     ChevronRight, ChevronDown, ChevronUp, Check, Globe, User,
     Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
@@ -22,19 +23,29 @@ import { supabase } from '@/lib/supabaseClient';
 type Step = 1 | 2 | 3 | 4 | 5;
 
 const LANGUAGES = [
+    // The 10 main languages
     { code: 'ES', flag: '🇪🇸', label: 'Español' },
     { code: 'GB', flag: '🇬🇧', label: 'English' },
-    { code: 'BR', flag: '🇧🇷', label: 'Português' },
+    { code: 'ZH', flag: '🇨🇳', label: '中文 (Chino Mandarín)' },
+    { code: 'HI', flag: '🇮🇳', label: 'हिन्दी (Hindi)' },
     { code: 'FR', flag: '🇫🇷', label: 'Français' },
-    { code: 'AR', flag: '🇸🇦', label: 'العربية' },
-    { code: 'JP', flag: '🇯🇵', label: '日本語' },
-    { code: 'ZH', flag: '🇨🇳', label: '中文' },
+    { code: 'AR', flag: '🇸🇦', label: 'العربية (Árabe)' },
+    { code: 'BN', flag: '🇧🇩', label: 'বাংলা (Bengalí)' },
+    { code: 'BR', flag: '🇧🇷', label: 'Português' },
+    { code: 'RU', flag: '🇷🇺', label: 'Русский (Ruso)' },
+    { code: 'JP', flag: '🇯🇵', label: '日本語 (Japonés)' },
+    // Existing extras
+    { code: 'ID', flag: '🇮🇩', label: 'Bahasa Indonesia' },
     { code: 'VI', flag: '🇻🇳', label: 'Tiếng Việt' },
+    // Coming soon placeholder
+    { code: 'SOON', flag: '✨', label: 'Próximamente', disabled: true },
 ];
 
 const COUNTRIES = [
     'España', 'México', 'Colombia', 'Argentina', 'Chile', 'Perú',
-    'Ecuador', 'Venezuela', 'Uruguay', 'Brasil', 'Estados Unidos', 'Otro'
+    'Ecuador', 'Venezuela', 'Uruguay', 'Brasil', 'India', 'China',
+    'Francia', 'Arabia Saudita', 'Bangladesh', 'Rusia', 'Japón',
+    'Indonesia', 'Vietnam', 'Estados Unidos', 'Otro'
 ];
 
 // ─── Section Editor Component ───────────────────────────────
@@ -267,6 +278,13 @@ interface LandingTypeformProps {
 }
 
 export default function LandingTypeform({ initialTemplate, onGoToHistory }: LandingTypeformProps) {
+    const { t } = useLanguage();
+
+    // Dynamic languages: keep static list but translate the SOON label
+    const DYNAMIC_LANGUAGES = LANGUAGES.map(l =>
+        l.code === 'SOON' ? { ...l, label: t.common.comingSoon } : l
+    );
+
     const [step, setStep] = useState<Step>(initialTemplate ? 2 : 1);
     const [userId, setUserId] = useState('');
     const [partnerId, setPartnerId] = useState('');
@@ -469,22 +487,43 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
     return (
         <div className="max-w-6xl mx-auto pb-12">
             {/* Header with History Link */}
-            <div className="flex justify-between items-center mb-6 px-2">
+            <div className="flex justify-between items-center mb-6 px-2 flex-wrap gap-3">
                 <div>
                     <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
                         <Sparkles className="w-5 h-5 text-[#865BFF]" />
-                        Crear Nueva Herramienta
+                        {t.landing.title}
                     </h2>
+                    <p className="text-xs text-slate-400 mt-1">{t.landing.subtitle}</p>
                 </div>
-                {onGoToHistory && (
-                    <button 
-                        onClick={onGoToHistory}
-                        className="flex items-center gap-2 px-4 py-2 text-xs font-black text-[#865BFF] bg-[#865BFF]/5 hover:bg-[#865BFF]/10 rounded-xl transition-all"
-                    >
-                        <HistoryIcon className="w-4 h-4" />
-                        Ver mis guardadas
-                    </button>
-                )}
+                <div className="flex items-center gap-2">
+                    {/* Landing Language Badge — always visible */}
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.landing.landingLang}:</span>
+                        <button
+                            onClick={() => setStep(1)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#865BFF]/8 border border-[#865BFF]/20 hover:bg-[#865BFF]/15 transition-all"
+                            title={t.landing.changeLangHint}
+                        >
+                            <span className="text-sm">
+                                {DYNAMIC_LANGUAGES.find(l => l.code === language)?.flag ?? '🌐'}
+                            </span>
+                            <span className="text-[11px] font-bold text-[#865BFF]">
+                                {DYNAMIC_LANGUAGES.find(l => l.code === language)?.label?.split(' ')[0] ?? language}
+                            </span>
+                            <Globe className="w-3 h-3 text-[#865BFF] ml-0.5" />
+                        </button>
+                    </div>
+
+                    {onGoToHistory && (
+                        <button
+                            onClick={onGoToHistory}
+                            className="flex items-center gap-2 px-4 py-2 text-xs font-black text-[#865BFF] bg-[#865BFF]/5 hover:bg-[#865BFF]/10 rounded-xl transition-all"
+                        >
+                            <HistoryIcon className="w-4 h-4" />
+                            {t.landing.history}
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Step Indicator */}
@@ -565,14 +604,17 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                     <div className="mt-6">
                         <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3 block">Idioma de la Landing *</label>
                         <div className="flex flex-wrap gap-2">
-                            {LANGUAGES.map(lang => (
+                            {DYNAMIC_LANGUAGES.map(lang => (
                                 <button
                                     key={lang.code}
-                                    onClick={() => setLanguage(lang.code)}
+                                    onClick={() => { if (!(lang as any).disabled) setLanguage(lang.code); }}
+                                    disabled={(lang as any).disabled}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                                        language === lang.code
-                                            ? 'bg-[#865BFF] text-white shadow-md'
-                                            : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-[#865BFF]/30'
+                                        (lang as any).disabled
+                                            ? 'bg-slate-100 text-slate-300 cursor-not-allowed border border-dashed border-slate-200'
+                                            : language === lang.code
+                                                ? 'bg-[#865BFF] text-white shadow-md'
+                                                : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-[#865BFF]/30'
                                     }`}
                                 >
                                     <span>{lang.flag}</span> {lang.label}

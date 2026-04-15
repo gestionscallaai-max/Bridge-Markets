@@ -6,10 +6,12 @@ import LandingHistory from "@/components/Promo/LandingHistory";
 import { useSearchParams } from 'next/navigation';
 import { History as HistoryIcon, Layout } from 'lucide-react';
 import { supabase } from "@/lib/supabaseClient";
+import { useLanguage } from '@/lib/i18n/context';
 
 export default function LandingPageGenerator() {
     const searchParams = useSearchParams();
     const templateId = searchParams.get('template') || undefined;
+    const { t } = useLanguage();
     
     const [activeTab, setActiveTab] = useState<'generator' | 'history'>('generator');
     const [partnerId, setPartnerId] = useState<string>('');
@@ -64,7 +66,7 @@ export default function LandingPageGenerator() {
                     }`}
                 >
                     <Layout className="w-4 h-4" />
-                    Generador
+                    {t.landing.step2 || 'Generador'}
                 </button>
                 <button
                     onClick={() => setActiveTab('history')}
@@ -75,7 +77,7 @@ export default function LandingPageGenerator() {
                     }`}
                 >
                     <HistoryIcon className="w-4 h-4" />
-                    Mis Landings
+                    {t.landing.history}
                 </button>
             </div>
 

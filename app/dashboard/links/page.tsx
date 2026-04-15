@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { Link2, Copy, Plus, Search, Check, ExternalLink, Loader2, Trash2, X, MousePointer2, TrendingUp, Calendar, Hash } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/lib/i18n/context';
 
 export default function ReferralLinksPage() {
+    const { t } = useLanguage();
     const [links, setLinks] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export default function ReferralLinksPage() {
     }
 
     async function handleDelete(id: string) {
-        if (!confirm('¿Seguro que quieres eliminar este link?')) return;
+        if (!confirm(t.links.deleteConfirm)) return;
         await supabase.from('referral_links').delete().eq('id', id);
         setLinks(links.filter(l => l.id !== id));
     }
@@ -95,15 +97,15 @@ export default function ReferralLinksPage() {
                             <Link2 className="w-7 h-7 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-black tracking-tight mb-1">Links de Referido</h1>
-                            <p className="text-white/60 text-sm font-medium">Gestiona tus campañas y maximiza tus conversiones.</p>
+                            <h1 className="text-2xl font-black tracking-tight mb-1">{t.links.title}</h1>
+                            <p className="text-white/60 text-sm font-medium">{t.links.subtitle}</p>
                         </div>
                     </div>
                     <button
                         onClick={() => setShowForm(true)}
                         className="flex items-center justify-center gap-2 px-6 py-4 bg-white text-[#0d0221] rounded-2xl text-sm font-bold hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl"
                     >
-                        <Plus className="w-4 h-4" /> Crear Nuevo Enlace
+                        <Plus className="w-4 h-4" /> {t.links.createBtn}
                     </button>
                 </div>
             </div>
@@ -114,7 +116,7 @@ export default function ReferralLinksPage() {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-[#865BFF] transition-colors" />
                     <input
                         type="text"
-                        placeholder="Buscar por nombre o campaña..."
+                        placeholder={t.links.searchPlaceholder}
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                         className="w-full pl-12 pr-4 py-4 bg-white/60 backdrop-blur-md border border-slate-200 rounded-2xl text-sm font-medium focus:outline-none focus:border-[#865BFF]/30 focus:ring-4 focus:ring-[#865BFF]/5 transition-all shadow-sm"
@@ -123,7 +125,7 @@ export default function ReferralLinksPage() {
                 <div className="flex items-center gap-2">
                     <div className="px-5 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm text-sm font-bold text-slate-800 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-[#865BFF]"></span>
-                        {links.length} Enlaces Totales
+                        {links.length} {t.links.totalLinks}
                     </div>
                 </div>
             </div>
@@ -149,13 +151,13 @@ export default function ReferralLinksPage() {
                                 <button onClick={() => setShowForm(false)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
                                     <X className="w-6 h-6" />
                                 </button>
-                                <h3 className="text-xl font-bold mb-2">Nuevo Link de Tracking</h3>
-                                <p className="text-white/60 text-xs">Personaliza tu enlace para medir el éxito de tus campañas.</p>
+                                <h3 className="text-xl font-bold mb-2">{t.links.newLinkTitle}</h3>
+                                <p className="text-white/60 text-xs">{t.links.newLinkDesc}</p>
                             </div>
                             <form onSubmit={handleCreate} className="p-8 space-y-6">
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Nombre del Link</label>
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">{t.links.linkName}</label>
                                         <input
                                             required value={form.name}
                                             onChange={e => setForm({ ...form, name: e.target.value })}
@@ -164,7 +166,7 @@ export default function ReferralLinksPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">Nombre de Campaña (UTM)</label>
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-2">{t.links.campaignName}</label>
                                         <input
                                             value={form.campaign}
                                             onChange={e => setForm({ ...form, campaign: e.target.value })}
@@ -174,7 +176,7 @@ export default function ReferralLinksPage() {
                                     </div>
                                 </div>
                                 <div className="p-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                                    <p className="text-[11px] text-slate-400 font-medium mb-1 uppercase tracking-wider">Previsualización de URL</p>
+                                    <p className="text-[11px] text-slate-400 font-medium mb-1 uppercase tracking-wider">{t.links.urlPreview}</p>
                                     <p className="text-xs font-mono text-[#865BFF] break-all">
                                         {baseUrl}/r/{form.campaign ? form.campaign.toLowerCase().replace(/\s/g, '-') : 'tu-campana'}
                                     </p>
@@ -182,7 +184,7 @@ export default function ReferralLinksPage() {
                                 <button type="submit" disabled={creating}
                                     className="w-full flex items-center justify-center gap-2 py-4 bg-[#865BFF] text-white rounded-2xl text-sm font-bold hover:bg-[#7444ff] transition-all disabled:opacity-60 shadow-lg shadow-[#865BFF]/20">
                                     {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                                    {creating ? 'Creando...' : 'Generar Link'}
+                                    {creating ? t.links.creating : t.links.generate}
                                 </button>
                             </form>
                         </motion.div>
@@ -201,9 +203,9 @@ export default function ReferralLinksPage() {
                         <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
                             <Link2 className="w-8 h-8" />
                         </div>
-                        <h3 className="text-lg font-bold text-slate-800">No hay enlaces</h3>
-                        <p className="text-slate-500 text-sm mb-6">Empieza creando tu primer link para trackear tus leads.</p>
-                        <button onClick={() => setShowForm(true)} className="text-[#865BFF] font-bold text-sm hover:underline">+ Crear Link</button>
+                        <h3 className="text-lg font-bold text-slate-800">{t.links.noLinks}</h3>
+                        <p className="text-slate-500 text-sm mb-6">{t.links.noLinksDesc}</p>
+                        <button onClick={() => setShowForm(true)} className="text-[#865BFF] font-bold text-sm hover:underline">{t.links.createLink}</button>
                     </div>
                 ) : (
                     filtered.map((link, idx) => (
@@ -242,7 +244,7 @@ export default function ReferralLinksPage() {
                             </div>
 
                             <div className="bg-slate-50 rounded-2xl p-4 mb-6 relative group/url min-h-[80px] flex flex-col justify-center border border-slate-100">
-                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">URL de Referido</p>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">{t.links.referralUrl}</p>
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs font-mono text-slate-500 truncate flex-1">{link.url}</span>
                                     <button
@@ -256,7 +258,7 @@ export default function ReferralLinksPage() {
                                 </div>
                                 {copiedId === link.id && (
                                     <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute -bottom-2 right-4 text-[9px] font-bold text-emerald-600 bg-white px-2 py-0.5 rounded shadow-sm">
-                                        ¡Copiado!
+                                        {t.links.copied}
                                     </motion.span>
                                 )}
                             </div>
@@ -265,15 +267,15 @@ export default function ReferralLinksPage() {
                                 <div className="bg-slate-50 rounded-[1.25rem] p-4 flex flex-col items-center justify-center border border-slate-100 transition-colors hover:bg-white hover:border-[#865BFF]/20">
                                     <MousePointer2 className="w-4 h-4 text-[#865BFF] mb-1" />
                                     <div className="text-xl font-black text-slate-800 leading-none">{link.clicks?.[0]?.count ?? 0}</div>
-                                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1">Clics</div>
+                                    <div className="text-[10px] text-slate-400 font-bold uppercase mt-1">{t.links.clicks}</div>
                                 </div>
                                 <a
                                     href={link.url} target="_blank" rel="noreferrer"
                                     className="bg-slate-50 rounded-[1.25rem] p-4 flex flex-col items-center justify-center border border-slate-100 transition-all hover:bg-[#865BFF] hover:text-white group/btn"
                                 >
                                     <ExternalLink className="w-4 h-4 text-[#865BFF] group-hover/btn:text-white mb-1" />
-                                    <div className="text-xl font-black leading-none">Abrir</div>
-                                    <div className="text-[10px] font-bold uppercase mt-1 group-hover/btn:text-white text-slate-400">Enlace</div>
+                                    <div className="text-xl font-black leading-none">{t.links.open}</div>
+                                    <div className="text-[10px] font-bold uppercase mt-1 group-hover/btn:text-white text-slate-400">Link</div>
                                 </a>
                             </div>
                         </motion.div>
