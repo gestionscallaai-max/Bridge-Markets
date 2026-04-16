@@ -95,7 +95,7 @@ export const en: TranslationKeys = {
         noPartnerData: 'No partner data yet',
         howToImprove: 'How to improve your performance',
         createGraphics: 'Create graphic pieces',
-        createGraphicsDesc: 'Use materials in 14 languages to reach more markets',
+        createGraphicsDesc: 'Use materials in multiple languages to reach more markets',
         generateLandingsTip: 'Generate Landing Pages',
         generateLandingsTipDesc: 'AI personalized landing pages convert 3x more',
         shareLinkTip: 'Share your link',
@@ -106,6 +106,8 @@ export const en: TranslationKeys = {
         manageNetwork: 'Manage your Partner network',
         manageNetworkDesc: 'View roles, activities, and stats of each partner',
         viewPartnersList: 'View Partners',
+        hello: 'Hello',
+        personalMetrics: 'Your personal metrics',
     },
     common: {
         loading: 'Loading...', save: 'Save', cancel: 'Cancel', delete: 'Delete',

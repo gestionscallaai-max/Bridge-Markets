@@ -408,39 +408,51 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
     return `
     <style>
         body { 
-            background: #02000c radial-gradient(circle at 50% 0%, #1a0545 0%, #02000a 60%, #000000 100%) no-repeat fixed;
+            background: linear-gradient(135deg, #0B061A 0%, #150B2D 50%, #0B061A 100%) no-repeat fixed;
             color: #FFFFFF; 
             font-family: 'Poppins', sans-serif; 
             overflow-x: hidden; 
         }
+        /* Overlapping Sections System to avoid hard cuts */
+        .section-wrapper { 
+            position: relative;
+            z-index: 10;
+            margin-top: -40px; 
+            padding-top: 80px;
+        }
+        .section-wrapper:first-of-type { margin-top: 0; padding-top: 0; }
+        
+        /* Glassmorphism System */
         .glass-panel { 
             background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1); 
         }
         .glass { 
             background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-        .reveal { transition: all 0.8s ease-out; }
-        .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(30px); }
+        
+        .reveal { transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(40px); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .btn-purple { background: linear-gradient(90deg, #6D28D9 0%, #8B5CF6 100%); transition: all 0.4s; }
-        .btn-purple:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3); }
         
-        .floating-asset {
-            position: absolute;
-            z-index: 0;
-            pointer-events: none;
-            mix-blend-mode: color-dodge;
-            opacity: 0.7;
-            filter: drop-shadow(0 30px 40px rgba(139, 92, 246, 0.2));
-            will-change: transform;
+        .btn-purple { 
+            background: linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%); 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            box-shadow: 0 15px 30px rgba(109, 40, 217, 0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .btn-purple:hover { 
+            transform: translateY(-4px) scale(1.02); 
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.4), inset 0 1px 0 rgba(255,255,255,0.3); 
         }
         
-        /* Overrides to ensure text is visible on dark theme even if a light class was coded */
+        /* Overrides */
         .text-\\[\\#140633\\] { color: #FFFFFF !important; }
         .text-slate-800 { color: #FFFFFF !important; }
         .bg-white { background-color: transparent !important; }
@@ -475,14 +487,14 @@ export function generateModularLandingHTML(data: LandingData): string {
     const theme = template?.theme || 'dark';
     const isLight = theme === 'light';
 
-    // Render each section without slant breaks
+    // Render each section wrapped in the overlap system
     const sectionsHtml = sectionIds
         .map((sId: string, idx: number) => {
             const renderer = SECTION_RENDERERS[sId];
             if (!renderer) return `<!-- Section "${sId}" not found -->`;
             const overrides = modConf.sectionOverrides[sId] || {};
             const sectionHtml = renderer(overrides, brandConfig);
-            return `<div class="relative w-full z-10 w-full">${sectionHtml}</div>`;
+            return `<div class="section-wrapper">\n${sectionHtml}\n</div>`;
         })
         .join('\n');
 
@@ -598,54 +610,15 @@ export function generateModularLandingHTML(data: LandingData): string {
             }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
             reveals.forEach(el => observer.observe(el));
 
-            // ─── Enhanced Parallax Engine ───
-            const sections = document.querySelectorAll('.relative.w-full');
-            const assetsCatalog = [
-                '/images/imagenes%20nuevas/rey%20rosa.png',
-                '/images/imagenes%20nuevas/peones%20rosa.png',
-                '/images/imagenes%20nuevas/alfiler%20rosa.png',
-                '/images/imagenes%20nuevas/reyna%20rosa.png',
-                '/images/imagenes%20nuevas/caballo%20rosa.png',
-                '/images/imagenes%20nuevas/0ba35ff58cd00d6aab66ae503b7d759320e40c7e.png',
-                '/images/imagenes%20nuevas/reloj%20rosa.png',
-                '/images/imagenes%20nuevas/hourglass.png',
-                '/images/imagenes%20nuevas/reyna%20negra.png',
-                '/images/imagenes%20nuevas/caballo%20negro.png',
-                '/images/imagenes%20nuevas/peones%20negro.png'
-            ];
-
-            // Inject Floating Chess Assets
-            sections.forEach((section, index) => {
-                if (index > 0) { // Skip hero section occasionally or just add to all
-                    const assetUrl = assetsCatalog[index % assetsCatalog.length];
-                    const asset = document.createElement('img');
-                    asset.src = assetUrl;
-                    asset.className = 'floating-asset md:block hidden';
-                    const size = 150 + Math.random() * 250;
-                    asset.style.width = size + 'px';
-                    asset.style.top = (10 + Math.random() * 60) + '%';
-                    asset.style.left = (index % 2 === 0 ? (Math.random() * 15) + '%' : (70 + Math.random() * 15) + '%');
-                    asset.dataset.speed = (0.1 + Math.random() * 0.15).toString();
-                    section.appendChild(asset);
-                }
-            });
+            // ─── Floating/Parallax Removed ───
+            // Images from 'imagenes nuevas' were requested removed for inconsistency
 
             window.addEventListener('scroll', () => {
-                const scrolled = window.scrollY;
-                
-                // Parallax for assets and elements
-                document.querySelectorAll('.floating-asset').forEach(asset => {
-                    const speed = parseFloat(asset.dataset.speed || '0.1');
-                    const rect = asset.parentElement.getBoundingClientRect();
-                    const offset = (window.innerHeight / 2 - rect.top) * speed;
-                    asset.style.transform = 'translateY(' + offset + 'px) rotate(' + (offset * 0.05) + 'deg)';
-                });
-
-                // Parallax for titles and cards
+                // Keep only parallax for text/cards
                 document.querySelectorAll('.section-reveal').forEach(el => {
                     const rect = el.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
-                        const speed = 0.05;
+                        const speed = 0.03;
                         const offset = (window.innerHeight / 2 - rect.top) * speed;
                         const title = el.querySelector('h1, h2');
                         if (title) title.style.transform = 'translateY(' + offset + 'px)';

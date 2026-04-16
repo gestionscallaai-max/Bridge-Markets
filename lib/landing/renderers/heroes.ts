@@ -4,7 +4,7 @@ import { SECTION_CATALOG } from '../catalog';
 export function renderHeroDark(content: Record<string, any>, brand: BrandConfig): string {
     const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_dark')!.defaultContent, ...content };
     return `
-    <section class="relative py-24 px-8 overflow-hidden" style="background: radial-gradient(circle at top left, #2a1b4d 0%, #080411 50%), radial-gradient(circle at bottom right, #1a0b3a 0%, #080411 50%);">
+    <section class="relative py-24 px-8 overflow-hidden" style="background: transparent;">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div class="relative z-10 section-reveal">
                 <span class="inline-block px-4 py-1 rounded-full bg-primary/20 border border-primary/30 text-accent text-xs font-bold uppercase tracking-widest mb-8">${c.badge}</span>
@@ -85,7 +85,7 @@ export function renderHeroLight(content: Record<string, any>, brand: BrandConfig
 export function renderHeroGradient(content: Record<string, any>, brand: BrandConfig): string {
     const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_gradient')!.defaultContent, ...content };
     return `
-    <section class="relative py-32 px-8 overflow-hidden" style="background: linear-gradient(135deg, #0a0614 0%, #1a0b3a 30%, #2d1070 60%, #6635de 100%);">
+    <section class="relative py-32 px-8 overflow-hidden" style="background: transparent;">
         <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, bg-white 0); background-size: 32px 32px;"></div>
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[200px] -translate-y-1/3 translate-x-1/3"></div>
         <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
@@ -113,7 +113,7 @@ export function renderHeroOfficial(content: Record<string, any>, brand: BrandCon
     const partnerInfo = brand.communityName ? `Comunidad: ${brand.communityName}` : `${brand.fullName} Portfolio`;
 
     return `
-    <section class="relative py-32 px-8 overflow-hidden" style="background: radial-gradient(circle at 0% 0%, #2a1b4d 0%, #080411 70%);">
+    <section class="relative py-32 px-8 overflow-hidden" style="background: transparent;">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
             <div class="lg:w-2/3 section-reveal">
                 <div class="inline-flex items-center gap-3 glass-panel px-6 py-2 rounded-full mb-10 border-primary/30">

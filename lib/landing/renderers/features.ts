@@ -51,7 +51,7 @@ export function renderFeatureSplit(content: Record<string, any>, brand: BrandCon
     `).join('\n');
 
     return `
-    <section class="py-24 px-8 overflow-hidden relative" style="background: #080411;">
+    <section class="py-24 px-8 overflow-hidden relative" style="background: transparent;">
         <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-full bg-primary/10 blur-[150px] rounded-full"></div>
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-24 items-center section-reveal">
             <div class="lg:w-1/2 relative z-10">
@@ -98,7 +98,7 @@ export function renderRiskGrid(content: Record<string, any>, brand: BrandConfig)
     `).join('\n');
 
     return `
-    <section class="py-24 px-8 relative" style="background: #080411;">
+    <section class="py-24 px-8 relative" style="background: transparent;">
         <div class="max-w-7xl mx-auto glass-panel asym-card bg-[#0f081d]/40 p-12 md:p-20 border-white/5 section-reveal">
             <div class="text-center mb-20">
                 <h2 class="text-4xl font-extrabold font-headline mb-4 text-white">${c.title}</h2>
@@ -138,7 +138,7 @@ export function renderLeaderboard(content: Record<string, any>, brand: BrandConf
     }).join('\n');
 
     return `
-    <section class="py-24 px-8" style="background: #080411;">
+    <section class="py-24 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto section-reveal">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
                 <div><h2 class="text-4xl font-extrabold font-headline mb-4 text-white">${c.title} <span class="text-accent">${c.highlight}</span></h2>
@@ -222,7 +222,7 @@ export function renderWorkflowSteps(content: Record<string, any>, brand: BrandCo
     }).join('\n');
 
     return `
-    <section class="py-24 px-8" style="background: #080411;">
+    <section class="py-24 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 section-reveal">${tracks}</div>
     </section>`;
 }
@@ -243,7 +243,7 @@ export function renderSecurityFees(content: Record<string, any>, brand: BrandCon
     `).join('\n');
 
     return `
-    <section class="py-24 px-8" style="background: #080411;">
+    <section class="py-24 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 section-reveal">
             <div class="lg:col-span-2 glass-panel asym-card p-16 flex flex-col justify-between group">
                 <div><h3 class="text-4xl font-extrabold font-headline mb-10 group-hover:text-accent transition-colors text-white">${c.securityTitle}</h3>
@@ -308,7 +308,7 @@ export function renderSyntheticFamilies(content: Record<string, any>, brand: Bra
     `).join('\n');
 
     return `
-    <section class="py-32 px-8 relative" style="background: #080411;">
+    <section class="py-32 px-8 relative" style="background: transparent;">
         <div class="max-w-7xl mx-auto section-reveal">
             <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 border-b border-white/10 pb-12">
                 <div class="max-w-2xl"><h2 class="text-5xl font-black font-headline text-white mb-6 uppercase tracking-tighter">${c.title}</h2>
@@ -341,7 +341,7 @@ export function renderChallengeMatrix(content: Record<string, any>, brand: Brand
     `).join('\n');
 
     return `
-    <section class="py-32 px-8" style="background: radial-gradient(circle at bottom right, #1a0b3a 0%, #080411 70%);">
+    <section class="py-32 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto section-reveal text-center lg:text-left">
             <h2 class="text-5xl font-black font-headline text-white mb-20 uppercase tracking-tighter text-center">${c.title}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">${plans}</div>
@@ -371,7 +371,7 @@ export function renderDualSteps(content: Record<string, any>, brand: BrandConfig
     `;
 
     return `
-    <section class="py-32 px-8" style="background: #080411;">
+    <section class="py-32 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 section-reveal">
             ${renderTrack(c.titleMAM, c.stepsMAM, true)}
             ${renderTrack(c.titleCopy, c.stepsCopy, false)}
@@ -389,7 +389,7 @@ export function renderLeverageSpecs(content: Record<string, any>, brand: BrandCo
     `).join('\n');
 
     return `
-    <section class="py-32 px-8" style="background: #080411;">
+    <section class="py-32 px-8" style="background: transparent;">
         <div class="max-w-4xl mx-auto section-reveal">
             <h2 class="text-4xl font-black font-headline text-white mb-16 uppercase tracking-tighter text-center">${c.title}</h2>
             <div class="glass-panel p-12 asym-card border-white/5 bg-white/[0.02]">
@@ -414,7 +414,7 @@ export function renderUniverseLogic(content: Record<string, any>, brand: BrandCo
     `).join('\n');
 
     return `
-    <section class="py-32 px-8" style="background: radial-gradient(circle at top right, #2a1b4d 0%, #080411 70%);">
+    <section class="py-32 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto section-reveal">
             <h2 class="text-5xl font-black font-headline text-white mb-20 uppercase tracking-tighter text-center">${c.title}</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">${steps}</div>

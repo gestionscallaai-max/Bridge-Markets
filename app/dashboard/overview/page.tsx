@@ -294,9 +294,9 @@ export default function OverviewPage() {
                                         </span>
                                     </div>
                                     <h1 className="text-base font-bold text-slate-800">
-                                        {partnerName ? `¡Hola, ${partnerName.split(' ')[0]}!` : t.overview.welcomePartner}
+                                        {partnerName ? `${t.overview.hello}, ${partnerName.split(' ')[0]}!` : t.overview.welcomePartner}
                                     </h1>
-                                    <p className="text-xs text-slate-400 mt-0.5">{t.overview.realtimeData} · Tus métricas personales</p>
+                                    <p className="text-xs text-slate-400 mt-0.5">{t.overview.realtimeData} · {t.overview.personalMetrics}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3 flex-wrap">
