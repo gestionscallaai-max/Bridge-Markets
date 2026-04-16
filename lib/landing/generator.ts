@@ -424,13 +424,6 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
             position: relative;
             z-index: 10;
         }
-        
-        /* Force transparent backgrounds to avoid cuts */
-        section, .bg-brand-dark, .bg-\\[\\#0B061A\\], .bg-\\[\\#000000\\] {
-            background-color: transparent !important;
-            border-color: transparent !important;
-            box-shadow: none !important;
-        }
 
         /* Glassmorphism System */
         .glass-panel { 
@@ -463,21 +456,23 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
             box-shadow: 0 20px 40px rgba(109, 40, 217, 0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important; 
         }
         
-        /* Overrides para evitar bordes o cajas duras que corten */
-        .bg-white, .bg-\\[\\#F8FAFC\\], .bg-slate-50 { background-color: transparent !important; }
-        ` + (isDark ? `
-        .bg-white\\/5 { background: rgba(255,255,255,0.02) !important; }
-        .text-slate-800, .text-\\[\\#140633\\], .text-brand-dark { color: #FFFFFF !important; }
-        ` : `
-        .text-white { color: #0f172a !important; }
-        .text-white\\/60 { color: rgba(15, 23, 42, 0.6) !important; }
-        .text-white\\/40 { color: rgba(15, 23, 42, 0.4) !important; }
-        .bg-white\\/5 { background: rgba(255,255,255,0.6) !important; border: 1px solid rgba(0,0,0,0.05) !important; color: #0f172a !important; }
-        `) + `
         
         /* Force spacing to look complete and organized */
         .section-wrapper {
-            padding: 2rem 0 !important;
+            padding: 0 !important;
+            position: relative;
+            z-index: 10;
+        }
+        /* Superposición visual de capas ("efecto top") */
+        .section-wrapper + .section-wrapper {
+            margin-top: -4rem !important;
+        }
+        /* Bordes redondeados superiores para todas las secciones superpuestas */
+        .section-wrapper > section:not(#register), .section-wrapper > footer {
+            border-top-left-radius: 4rem !important;
+            border-top-right-radius: 4rem !important;
+            box-shadow: 0 -30px 60px rgba(0,0,0,0.2) !important;
+            padding-top: 6rem !important;
         }
     </style>`;
 }
@@ -519,67 +514,98 @@ export function generateModularLandingHTML(data: LandingData): string {
         })
         .join('\n');
 
+    const isES = data.language === 'ES';
+    const dict = {
+        nav: {
+            plat: isES ? 'Plataforma' : 'Platform',
+            sec: isES ? 'Seguridad' : 'Security',
+            price: isES ? 'Productos' : 'Pricing',
+            btn: isES ? 'Empezar' : 'Get Started'
+        },
+        form: {
+            title: isES ? 'Abrir Cuenta' : 'Open Account',
+            sub: isES ? (brandConfig.communityName ? `Únete a ${brandConfig.communityName}` : 'Empieza tu camino en Bridge Markets') : (brandConfig.communityName ? `Join ${brandConfig.communityName}` : 'Start your journey at Bridge Markets'),
+            name: isES ? 'Nombre Completo' : 'Full Name',
+            email: isES ? 'Correo Electrónico' : 'Email Address',
+            phone: isES ? 'WhatsApp / Teléfono' : 'WhatsApp / Phone',
+            btn: isES ? 'Crear Cuenta Ahora' : 'Create Account Now',
+            disc: isES ? '* El trading implica riesgos. Invierte solo lo que puedas permitirte perder.' : '* Trading involves risk. Only invest what you can afford to lose.'
+        },
+        foot: {
+            desc: isES ? 'El estándar global para social trading y gestión de fondos nivel institucional.' : 'The global standard for transparent, institutional-grade social trading and fund management.',
+            col1: isES ? 'Plataforma' : 'Platform',
+            col2: isES ? 'Empresa' : 'Company',
+            col2_1: isES ? 'Nosotros' : 'About',
+            col2_2: isES ? 'Seguridad' : 'Security',
+            col3: isES ? 'Soporte' : 'Support',
+            col3_1: isES ? 'Base de Ayuda' : 'Knowledge Base',
+            col3_2: isES ? 'Contacto' : 'Contact',
+            col4: isES ? 'Legal' : 'Legal',
+            col4_1: isES ? 'Privacidad' : 'Privacy',
+            warn: isES ? `Advertencia de Riesgo: Operar en mercados financieros implica un alto riesgo. El apalancamiento puede jugar en contra o a su favor. <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${data.partnerId}` : `High-Risk Warning: Trading in financial markets involves significant risk. Leverage can work against you as well as for you. <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${data.partnerId}`
+        }
+    };
+
     // Registration form
     const formHtml = `
-    <section id="register" class="py-24 px-8 relative" style="background: transparent;">
-        <div class="max-w-xl mx-auto glass-panel rounded-[3rem] p-12 md:p-16 relative section-reveal shadow-2xl">
+    <section id="register" class="py-32 px-8 relative z-30" style="background: transparent; margin-top: -6rem;">
+        <div class="max-w-xl mx-auto glass-panel rounded-[3rem] p-12 md:p-16 relative section-reveal shadow-2xl backdrop-blur-3xl border border-white/20">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-extrabold font-headline text-white mb-3">${data.language === 'ES' ? 'Abrir Cuenta' : 'Open Account'}</h2>
-                <p class="text-white/60 text-sm">${brandConfig.communityName ? `Únete a ${brandConfig.communityName}` : 'Empieza tu camino en Bridge Markets'}</p>
+                <h2 class="text-4xl font-extrabold font-headline text-white mb-4">${dict.form.title}</h2>
+                <p class="text-white/60 text-sm font-medium">${dict.form.sub}</p>
             </div>
             <form id="landing-form" class="space-y-6" onsubmit="return false;">
                 <input type="hidden" name="partner_id" value="${data.partnerId}" />
                 <div>
-                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'Nombre Completo' : 'Full Name'}</label>
-                    <input name="name" type="text" class="w-full bg-white/5 border-white/10 text-white border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors focus:bg-white/10" placeholder="John Doe" required />
+                    <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2">${dict.form.name}</label>
+                    <input name="name" type="text" class="w-full bg-white/5 border-white/10 text-white border rounded-2xl p-5 placeholder:text-white/20 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="John Doe" required />
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'Correo Electrónico' : 'Email'}</label>
-                    <input name="email" type="email" class="w-full bg-white/5 border-white/10 text-white border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors focus:bg-white/10" placeholder="john@example.com" required />
+                    <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2">${dict.form.email}</label>
+                    <input name="email" type="email" class="w-full bg-white/5 border-white/10 text-white border rounded-2xl p-5 placeholder:text-white/20 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="john@example.com" required />
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'WhatsApp / Teléfono' : 'Phone'}</label>
-                    <input name="phone" type="tel" class="w-full bg-white/5 border-white/10 text-white border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors focus:bg-white/10" placeholder="+1 234 567 8900" required />
+                    <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2">${dict.form.phone}</label>
+                    <input name="phone" type="tel" class="w-full bg-white/5 border-white/10 text-white border rounded-2xl p-5 placeholder:text-white/20 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="+1 234 567 8900" required />
                 </div>
-                <button type="submit" class="w-full py-5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 text-lg">${data.language === 'ES' ? 'Crear Cuenta Ahora' : 'Create Account Now'}</button>
-                <p class="text-[10px] text-white/30 text-center italic mt-4">${data.language === 'ES' ? '* El trading implica riesgos. Invierte solo capital que puedas permitirte perder.' : 'Trading involves risk. Only invest capital you can afford to lose.'}</p>
+                <button type="submit" class="w-full py-5 bg-gradient-to-r from-[#865BFF] to-blue-600 hover:from-blue-600 hover:to-[#865BFF] text-white font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-95 text-lg uppercase tracking-widest mt-4">${dict.form.btn}</button>
+                <p class="text-[10px] text-white/30 text-center italic mt-4 font-medium">${dict.form.disc}</p>
             </form>
         </div>
     </section>`;
 
     // Footer
     const footerHtml = `
-    <footer class="border-t border-white/5 pt-20 pb-12 bg-transparent text-white">
+    <footer class="border-t border-white/5 pt-24 pb-12 bg-[#05010f] text-white relative z-20">
         <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
             <div class="max-w-xs">
-                <div class="text-2xl font-bold font-headline mb-6 text-white">Bridge <span class="text-primary">Markets</span></div>
-                <p class="text-white/40 text-sm leading-relaxed">The global standard for transparent, institutional-grade social trading and fund management.</p>
+                <div class="text-3xl font-black font-headline mb-6 text-white tracking-tighter">Bridge <span class="text-[#865BFF]">Markets</span></div>
+                <p class="text-white/40 text-sm leading-relaxed font-medium">${dict.foot.desc}</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-sm font-medium">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-sm font-medium w-full md:w-auto">
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Platform</p>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Copy Trading</a>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">MAM Engine</a>
+                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col1}</p>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">Copy Trading</a>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">MAM Engine</a>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Company</p>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">About</a>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Security</a>
+                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col2}</p>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col2_1}</a>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col2_2}</a>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Support</p>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Knowledge Base</a>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Contact</a>
+                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col3}</p>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col3_1}</a>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col3_2}</a>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-widest text-[10px] font-black mb-2">Legal</p>
-                    <a class="text-white/60 hover:text-accent transition-colors" href="#">Privacy</a>
+                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col4}</p>
+                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col4_1}</a>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-8 text-center text-[10px] text-white/10 leading-relaxed border-t border-white/5 pt-12">
-            High-Risk Investment Warning: Trading in financial markets involves significant risk. Leverage can work against you as well as for you. Past performance is not indicative of future results. Only invest capital you can afford to lose.
-            <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${data.partnerId}
+        <div class="max-w-7xl mx-auto px-8 text-center text-[10px] text-white/20 leading-loose border-t border-white/5 pt-12 uppercase tracking-widest font-bold">
+            ${dict.foot.warn}
         </div>
     </footer>`;
 
@@ -595,28 +621,32 @@ export function generateModularLandingHTML(data: LandingData): string {
         ${getSharedStyles(theme)}
     </style>
 </head>
-<body class="bg-transparent text-white">
+<body class="${isLight ? 'bg-[#F8FAFC] text-slate-800' : 'bg-[#05010f] text-white'}">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[100] px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-full px-8 h-16">
-            <div class="text-xl font-bold tracking-tighter text-white font-headline">Bridge <span class="text-primary">Markets</span></div>
-            <div class="hidden md:flex items-center gap-10 text-sm font-semibold">
-                <a class="text-white/60 hover:text-primary transition-all" href="#">Platform</a>
-                <a class="text-white/60 hover:text-primary transition-all" href="#">Security</a>
-                <a class="text-white/60 hover:text-primary transition-all" href="#">Pricing</a>
+    <nav class="fixed top-0 w-full z-[100] px-6 py-6 transition-all duration-300" id="main-nav">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-full px-8 h-16 backdrop-blur-3xl">
+            <div class="text-2xl font-black tracking-tighter text-white font-headline">Bridge <span class="text-[#865BFF]">Markets</span></div>
+            <div class="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.plat}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.sec}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.price}</a>
             </div>
             <div class="flex items-center gap-4">
-                <a href="#register" class="bg-primary px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg hover:shadow-primary/40 active:scale-95 transition-all">Get Started</a>
+                <a href="#register" class="bg-white/10 border border-white/20 hover:bg-white hover:text-black px-6 py-3 rounded-full text-white text-xs font-black uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1">${dict.nav.btn}</a>
             </div>
         </div>
     </nav>
 
     <main class="">
         ${sectionsHtml}
-        ${formHtml}
+        <div class="section-wrapper">
+            ${formHtml}
+        </div>
     </main>
 
-    ${footerHtml}
+    <div class="section-wrapper">
+        ${footerHtml}
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -635,6 +665,18 @@ export function generateModularLandingHTML(data: LandingData): string {
             // Images from 'imagenes nuevas' were requested removed for inconsistency
 
             window.addEventListener('scroll', () => {
+                // Navbar scroll effect
+                const nav = document.getElementById('main-nav');
+                if (nav) {
+                    if (window.scrollY > 50) {
+                        nav.classList.add('py-2');
+                        nav.classList.remove('py-6');
+                    } else {
+                        nav.classList.add('py-6');
+                        nav.classList.remove('py-2');
+                    }
+                }
+
                 // Keep only parallax for text/cards
                 document.querySelectorAll('.section-reveal').forEach(el => {
                     const rect = el.getBoundingClientRect();

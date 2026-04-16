@@ -84,9 +84,10 @@ export function renderInstAbout(content: Record<string, any>, brand: BrandConfig
                          { val: '4', label: 'Mercados' },
                          { val: '24/7', label: 'Soporte' }
                      ].map(stat => `
-                        <div class="p-12 bg-white/5 border border-white/10 rounded-[3rem] text-center hover:bg-[#865BFF] transition-all group">
-                            <div class="text-5xl font-black text-white mb-4 group-hover:scale-110 transition-transform">${stat.val}</div>
-                            <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] group-hover:text-white/80">${stat.label}</div>
+                        <div class="p-12 bg-gradient-to-b from-[#865BFF]/10 to-transparent border border-white/10 rounded-[3rem] text-center hover:border-[#865BFF]/50 transition-all duration-500 group backdrop-blur-2xl relative overflow-hidden">
+                            <div class="absolute inset-0 bg-[#865BFF] opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+                            <div class="text-5xl font-black text-white mb-4 group-hover:-translate-y-2 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(134,91,255,0.5)]">${stat.val}</div>
+                            <div class="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] group-hover:text-white/90 transition-colors">${stat.label}</div>
                         </div>
                      `).join('')}
                      
@@ -130,10 +131,11 @@ export function renderInstWhy(content: Record<string, any>, brand: BrandConfig):
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
                 ${reasons.map((r, i) => `
-                    <div class="p-12 bg-white/5 border border-white/5 rounded-[4rem] hover:border-[#865BFF]/30 hover:bg-[#865BFF]/5 transition-all group">
-                        <div class="text-[#865BFF] text-4xl font-black mb-8 opacity-20 outline-text group-hover:opacity-100 transition-opacity">0${i+1}</div>
-                        <h3 class="text-2xl font-black text-white mb-6 uppercase tracking-tighter leading-tight">${r.t}</h3>
-                        <p class="text-white/40 text-lg leading-relaxed font-medium">${r.d}</p>
+                    <div class="p-12 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-[4rem] hover:border-[#865BFF]/40 hover:shadow-[0_20px_60px_-15px_rgba(134,91,255,0.3)] transition-all duration-500 group backdrop-blur-3xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[#865BFF]/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="text-[#865BFF] text-5xl font-black mb-8 opacity-20 outline-text group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500 drop-shadow-[0_0_15px_rgba(134,91,255,0.4)]">0${i+1}</div>
+                        <h3 class="text-2xl font-black text-white mb-6 uppercase tracking-tighter leading-tight relative z-10">${r.t}</h3>
+                        <p class="text-white/50 text-lg leading-relaxed font-medium relative z-10">${r.d}</p>
                     </div>
                 `).join('')}
             </div>
@@ -164,14 +166,15 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-40">
                 ${products.map(p => `
-                    <div class="group relative glass-panel border border-slate-100 p-16 rounded-[5rem] overflow-hidden hover:bg-white/10 hover:shadow-4xl transition-all hover:-translate-y-4">
-                        <div class="flex justify-between items-start mb-12">
-                            <span class="px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-white" style="background-color: ${p.color}">${p.badge}</span>
-                            <span class="material-symbols-outlined text-gray-200 text-6xl group-hover:text-[#865BFF] transition-colors">hub</span>
+                    <div class="group relative bg-gradient-to-br from-[#F8FAFC] to-white border border-slate-200 shadow-xl p-16 rounded-[4rem] overflow-hidden hover:shadow-[0_40px_80px_rgba(134,91,255,0.15)] transition-all duration-500 hover:-translate-y-4">
+                        <div class="absolute -right-20 -top-20 w-64 h-64 opacity-10 blur-3xl transition-all duration-700 group-hover:opacity-30 group-hover:scale-150" style="background: radial-gradient(circle, ${p.color} 0%, transparent 70%);"></div>
+                        <div class="flex justify-between items-start mb-12 relative z-10">
+                            <span class="px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-[#140633]" style="background-color: ${p.color}15; color: ${p.color}">${p.badge}</span>
+                            <span class="material-symbols-outlined text-slate-300 text-6xl group-hover:-rotate-12 transition-transform duration-500" style="color: ${p.color}">hub</span>
                         </div>
-                        <h3 class="text-4xl font-black text-[#140633] mb-8 uppercase tracking-tighter leading-none">${p.t}</h3>
-                        <p class="text-xl text-gray-400 font-medium leading-relaxed mb-12">${p.d}</p>
-                        <a href="${p.link}" class="inline-flex items-center gap-4 text-[#865BFF] font-black uppercase tracking-widest text-sm hover:gap-6 transition-all">
+                        <h3 class="text-3xl font-black text-[#140633] mb-6 uppercase tracking-tighter leading-none relative z-10">${p.t}</h3>
+                        <p class="text-lg text-slate-500 font-medium leading-relaxed mb-12 relative z-10">${p.d}</p>
+                        <a href="${p.link}" class="inline-flex items-center gap-4 text-[#865BFF] font-black uppercase tracking-widest text-sm hover:gap-8 transition-all duration-300 relative z-10">
                             Ver Detalles <span class="material-symbols-outlined">arrow_forward</span>
                         </a>
                     </div>
@@ -223,44 +226,46 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
              
              <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                  <!-- TRADER -->
-                 <div class="relative group p-20 rounded-[5rem] glass-panel border border-slate-100 text-left overflow-hidden hover:bg-[#140633] hover:text-white transition-all duration-700">
-                    <div class="relative z-10">
+                 <div class="relative group p-20 rounded-[5rem] bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-200 shadow-2xl text-left overflow-hidden hover:shadow-[0_50px_100px_rgba(134,91,255,0.2)] hover:-translate-y-4 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-br from-[#140633] to-[#2a1560] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+                    <div class="relative z-10 group-hover:text-white transition-colors duration-700">
                         <span class="text-[11px] font-black uppercase tracking-[0.8em] text-[#865BFF] mb-12 block group-hover:text-white/60 transition-colors">Perfil Activo</span>
-                        <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none">SOY <br>TRADER</h3>
-                        <p class="text-xl text-gray-400 font-medium mb-16 leading-relaxed group-hover:text-white/40 transition-colors">Quiero operar los mercados y generar beneficios con mi propia estrategia y disciplina.</p>
+                        <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none group-hover:text-white text-[#140633] transition-colors">SOY <br>TRADER</h3>
+                        <p class="text-xl text-slate-500 font-medium mb-16 leading-relaxed group-hover:text-white/70 transition-colors">Quiero operar los mercados y generar beneficios con mi propia estrategia y disciplina.</p>
                         
                         <ul class="space-y-6 mb-16">
                             ${['PropFirm: Sin arriesgar tu capital', 'Sintéticos: Disponibles 24/7', 'Leverage X12: Sin evaluación', 'Forex ECN: Spreads institucionales'].map(item => `
                                 <li class="flex items-center gap-4">
-                                     <span class="material-symbols-outlined text-[#865BFF] transition-colors">check_circle</span>
-                                     <span class="text-sm font-black uppercase tracking-widest">${item}</span>
+                                     <span class="material-symbols-outlined text-[#865BFF] group-hover:text-white transition-colors">check_circle</span>
+                                     <span class="text-sm font-black uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors opacity-90">${item}</span>
                                 </li>
                             `).join('')}
                         </ul>
 
-                        <a href="${ctaLink}" class="w-full text-center block py-8 bg-[#865BFF] text-white font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:scale-[1.02] transition-all shadow-2xl">
+                        <a href="${ctaLink}" class="w-full text-center block py-8 bg-[#865BFF] text-white font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:bg-white hover:text-[#865BFF] transition-all shadow-xl group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
                              ${c.ctaTrader}
                         </a>
                     </div>
                  </div>
 
                  <!-- INVERSOR -->
-                 <div class="relative group p-20 rounded-[5rem] glass-panel border border-slate-100 text-left overflow-hidden hover:bg-[#140633] hover:text-white transition-all duration-700">
-                    <div class="relative z-10">
+                 <div class="relative group p-20 rounded-[5rem] bg-gradient-to-bl from-white to-[#F8FAFC] border border-slate-200 shadow-2xl text-left overflow-hidden hover:shadow-[0_50px_100px_rgba(59,130,246,0.2)] hover:-translate-y-4 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-bl from-[#0f172a] to-[#1e3a8a] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+                    <div class="relative z-10 group-hover:text-white transition-colors duration-700">
                         <span class="text-[11px] font-black uppercase tracking-[0.8em] text-blue-500 mb-12 block group-hover:text-white/60 transition-colors">Perfil Pasivo</span>
-                        <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none">SOY <br>INVERSOR</h3>
-                        <p class="text-xl text-gray-400 font-medium mb-16 leading-relaxed group-hover:text-white/40 transition-colors">Quiero hacer crecer mi capital delegando la operativa en gestión profesional o réplica.</p>
+                        <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none group-hover:text-white text-[#140633] transition-colors">SOY <br>INVERSOR</h3>
+                        <p class="text-xl text-slate-500 font-medium mb-16 leading-relaxed group-hover:text-white/70 transition-colors">Quiero hacer crecer mi capital delegando la operativa en gestión profesional o réplica.</p>
                         
                         <ul class="space-y-6 mb-16">
                             ${['Copy Trading: Réplica automática', 'MAM Equity: Transparencia total', 'MAM Cash: Inversión institucional', 'Social Trading: Red de beneficios'].map(item => `
                                 <li class="flex items-center gap-4">
-                                     <span class="material-symbols-outlined text-blue-500 transition-colors">check_circle</span>
-                                     <span class="text-sm font-black uppercase tracking-widest">${item}</span>
+                                     <span class="material-symbols-outlined text-blue-500 group-hover:text-white transition-colors">check_circle</span>
+                                     <span class="text-sm font-black uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors opacity-90">${item}</span>
                                 </li>
                             `).join('')}
                         </ul>
 
-                        <a href="${ctaLink}" class="w-full text-center block py-8 bg-blue-600 text-white font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:scale-[1.02] transition-all shadow-2xl">
+                        <a href="${ctaLink}" class="w-full text-center block py-8 bg-blue-600 text-white font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:bg-white hover:text-blue-600 transition-all shadow-xl group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
                              ${c.ctaInvestor}
                         </a>
                     </div>
@@ -335,12 +340,15 @@ export function renderInstTech(content: Record<string, any>, brand: BrandConfig)
              
              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                  ${stacks.map(s => `
-                    <div class="p-16 glass-panel border border-slate-100 rounded-[4rem] group hover:bg-[#140633] hover:text-white transition-all duration-500 hover:-translate-y-4">
-                        <div class="w-20 h-20 bg-white shadow-xl rounded-[1.5rem] flex items-center justify-center text-[#865BFF] mb-12 group-hover:bg-[#865BFF] group-hover:text-white transition-all transform group-hover:rotate-6">
-                            <span class="material-symbols-outlined text-4xl">${s.icon}</span>
+                    <div class="relative p-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-200 shadow-xl rounded-[4rem] group hover:shadow-[0_30px_80px_rgba(134,91,255,0.2)] transition-all duration-500 hover:-translate-y-4 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#140633] to-[#3a1d77] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
+                        <div class="relative z-10 group-hover:text-white transition-colors duration-500">
+                            <div class="w-20 h-20 bg-white shadow-lg rounded-[1.5rem] flex items-center justify-center text-[#865BFF] mb-12 group-hover:bg-white/10 group-hover:text-white group-hover:backdrop-blur-xl border border-transparent group-hover:border-white/20 transition-all duration-500 transform group-hover:rotate-6">
+                                <span class="material-symbols-outlined text-4xl drop-shadow-md">${s.icon}</span>
+                            </div>
+                            <h4 class="text-3xl font-black mb-6 uppercase tracking-tighter leading-none">${s.title}</h4>
+                            <p class="text-slate-500 font-medium text-lg leading-relaxed group-hover:text-white/80 transition-colors uppercase tracking-widest text-sm">${s.desc}</p>
                         </div>
-                        <h4 class="text-3xl font-black mb-6 uppercase tracking-tighter leading-none">${s.title}</h4>
-                        <p class="text-gray-400 font-medium text-lg leading-relaxed group-hover:text-white/40 transition-colors uppercase tracking-widest text-sm">${s.desc}</p>
                     </div>
                  `).join('')}
              </div>
@@ -369,11 +377,12 @@ export function renderInstWorkflow(content: Record<string, any>, brand: BrandCon
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6 relative z-10">
                     ${steps.map((s, i) => `
-                        <div class="group">
-                            <div class="flex flex-col items-center p-8 glass-panel border border-slate-100 rounded-[3rem] hover:bg-white/10 hover:shadow-4xl transition-all transform hover:-translate-y-4 h-full">
-                                <span class="text-5xl font-black text-gray-100 group-hover:text-[#865BFF] transition-colors leading-none tracking-tightest mb-8">0${i+1}</span>
-                                <h4 class="text-sm font-black uppercase tracking-widest text-center leading-tight mb-4">${s.t}</h4>
-                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity">${s.d}</p>
+                        <div class="group h-full">
+                            <div class="relative flex flex-col items-center p-8 bg-gradient-to-b from-white to-slate-50 border border-slate-200 shadow-md shadow-slate-200/50 rounded-[3rem] hover:shadow-[0_20px_50px_rgba(134,91,255,0.15)] hover:border-[#865BFF]/30 transition-all duration-500 transform hover:-translate-y-4 overflow-hidden h-full z-10 hover:z-20">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#865BFF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <span class="relative z-10 text-5xl font-black text-slate-200 group-hover:text-[#865BFF] transition-colors leading-none tracking-tightest mb-8 drop-shadow-sm group-hover:drop-shadow-[0_0_15px_rgba(134,91,255,0.5)]">0${i+1}</span>
+                                <h4 class="relative z-10 text-sm font-black uppercase tracking-widest text-center leading-tight mb-4 text-[#140633] group-hover:text-[#865BFF] transition-colors">${s.t}</h4>
+                                <p class="relative z-10 text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">${s.d}</p>
                             </div>
                         </div>
                     `).join('')}
