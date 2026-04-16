@@ -104,6 +104,7 @@ export async function POST(request: Request) {
                 landing_type: data.landingType || 'Custom',
                 language: data.language || 'ES',
                 partner_id: realPartnerId,
+                status: 'pending',
                 // data: metadata, // REMOVED: This column doesn't exist in DB
             }, { onConflict: 'slug' });
 
@@ -179,6 +180,40 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ 
             success: false, 
             error: 'Failed to delete landing',
+            details: e.message || 'Unknown error'
+        }, { status: 500 });
+    }
+}
+
+export async function PATCH(request: Request) {
+    try {
+        const body = await request.json();
+        const { id, status, adminNotes } = body;
+
+        console.log('API PATCH - Updating landing status:', { id, status });
+
+        if (!id || !status) {
+            return NextResponse.json({ error: 'Landing ID and Status required' }, { status: 400 });
+        }
+
+        const { data, error } = await supabaseAdmin
+            .from('landings')
+            .update({ 
+                status,
+                admin_notes: adminNotes,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', id)
+            .select();
+
+        if (error) throw error;
+
+        return NextResponse.json({ success: true, data });
+    } catch (e: any) {
+        console.error('Critical PATCH Error:', e.message || e);
+        return NextResponse.json({ 
+            success: false, 
+            error: 'Failed to update landing status',
             details: e.message || 'Unknown error'
         }, { status: 500 });
     }

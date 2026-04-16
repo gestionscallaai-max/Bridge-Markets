@@ -35,7 +35,7 @@ BEGIN
     VALUES (
         NEW.id,
         NEW.email,
-        'BM_' || UPPER(SUBSTRING(md5(NEW.id::text) FROM 1 FOR 8)),
+        'BM_' || UPPER(SUBSTRING(md5(NEW.id::text) FROM 1 FOR 24)),
         COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1))
     );
     RETURN NEW;
@@ -62,6 +62,8 @@ CREATE TABLE IF NOT EXISTS public.landings (
     landing_type TEXT DEFAULT 'institucional',
     partner_id TEXT,
     is_published BOOLEAN DEFAULT true,
+    status TEXT DEFAULT 'pending',
+    admin_notes TEXT,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
