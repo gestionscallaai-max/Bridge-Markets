@@ -106,6 +106,10 @@ export const en: TranslationKeys = {
         manageNetwork: 'Manage your Partner network',
         manageNetworkDesc: 'View roles, activities, and stats of each partner',
         viewPartnersList: 'View Partners',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: 'Loading...', save: 'Save', cancel: 'Cancel', delete: 'Delete',

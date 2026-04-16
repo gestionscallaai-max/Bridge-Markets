@@ -71,19 +71,22 @@ export default function PromoMaterialsPage() {
         const loadInitialData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('partner_id, full_name, email')
+                // Fetch consolidated data from 'partners'
+                const { data: partner } = await supabase
+                    .from('partners')
+                    .select('partner_id, full_name, email, name')
                     .eq('id', user.id)
                     .single();
-                const fId = profile?.partner_id || 'BM_' + user.id.substring(0, 24).toUpperCase();
+
+                const fId = partner?.partner_id || 'BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase();
                 setFriendlyPartnerId(fId);
                 setPartnerId(user.id);
-                if (profile) {
+
+                if (partner) {
                     setFormData(prev => ({
                         ...prev,
-                        fullName: profile.full_name || prev.fullName,
-                        email: profile.email || prev.email,
+                        fullName: partner.full_name || partner.name || prev.fullName,
+                        email: partner.email || prev.email,
                     }));
                 }
             }

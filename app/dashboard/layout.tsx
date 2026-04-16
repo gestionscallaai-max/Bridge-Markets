@@ -11,6 +11,8 @@ import { LanguageProvider, useLanguage, type LangCode } from '@/lib/i18n/context
 import { LANGUAGE_META } from '@/lib/i18n/translations';
 
 import { AdminContext, RoleContext } from '@/lib/context';
+import NotificationBell from '@/components/Dashboard/NotificationBell';
+import GlobalNotice from '@/components/Dashboard/GlobalNotice';
 
 // ─── Language Selector Dropdown ──────────────────────────────
 function LanguageSelector() {
@@ -125,29 +127,22 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
         const loadUserData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                // Fetch public metadata from 'profiles'
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('partner_id')
+                // Fetch all user data from 'partners' (Single source of truth)
+                const { data: partner } = await supabase
+                    .from('partners')
+                    .select('partner_id, role')
                     .eq('id', user.id)
                     .single();
                 
-                if (profile?.partner_id) {
-                    setPartnerId(profile.partner_id);
+                if (partner?.partner_id) {
+                    setPartnerId(partner.partner_id);
                 } else {
-                    // Fallback if not found
-                    setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
+                    // Fallback using the same logic as the DB trigger
+                    setPartnerId('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase());
                 }
 
-                // Fetch roles from 'partners'
-                const { data: partner } = await supabase
-                    .from('partners')
-                    .select('role')
-                    .eq('id', user.id)
-                    .single();
-
                 if (partner) {
-                    setUserRole(partner.role || 'partner_view');
+                    setUserRole(partner.role || 'partner');
                     setIsAdmin(partner.role === 'admin');
                 }
             }
@@ -378,6 +373,8 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
 
                 {/* ─── Main Content ─── */}
                 <main className="flex-1 relative z-10 flex flex-col h-screen overflow-hidden">
+                    <GlobalNotice />
+                    
                     {/* Topbar */}
                     <header className="flex items-center justify-between px-4 lg:px-8 h-[64px] bg-white/80 backdrop-blur-xl border-b border-slate-200/60 shrink-0 relative">
                         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#865BFF]/40 to-transparent" />
@@ -401,10 +398,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                             <div className="hidden sm:block h-6 w-px bg-slate-200" />
 
                             {/* Notifications */}
-                            <button className="relative w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-all">
-                                <Bell className="w-4 h-4" />
-                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#865BFF] rounded-full border-2 border-white" />
-                            </button>
+                            <NotificationBell />
 
                             {/* Avatar */}
                             <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-black ring-2 ring-offset-2 ring-offset-white transition-all ${isAdmin ? 'bg-slate-700 ring-slate-300' : 'bg-gradient-to-br from-[#865BFF] to-[#6635de] ring-[#865BFF]/30'}`}>

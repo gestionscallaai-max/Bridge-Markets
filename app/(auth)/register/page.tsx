@@ -91,17 +91,28 @@ export default function RegisterPage() {
                 return;
             }
 
-            // 2. Update the partner record with role partner_view and referral link
+            // 2. Update the partner record with role 'partner' consistently
             if (data?.user?.id) {
-                const { error: updateError } = await supabase
+                await supabase
                     .from('partners')
-                    .update({ 
-                        role: 'partner_view',
-                    })
+                    .update({ role: 'partner' })
                     .eq('id', data.user.id);
 
-                if (updateError) {
-                    console.warn('Could not update partner role via client, trigger will handle defaults:', updateError.message);
+                // --- NEW: Notificar a los Admins ---
+                const { data: admins } = await supabase
+                    .from('partners')
+                    .select('id')
+                    .eq('role', 'admin');
+                
+                if (admins && admins.length > 0) {
+                    const notifications = admins.map(admin => ({
+                        user_id: admin.id,
+                        title: 'Nuevo Socio Registrado',
+                        message: `${name} se ha unido al programa como socio.`,
+                        type: 'info',
+                        link: '/dashboard/admin/partners'
+                    }));
+                    await supabase.from('notifications').insert(notifications);
                 }
             }
 
@@ -211,7 +222,7 @@ export default function RegisterPage() {
                                     transition={{ delay: 0.4 }}
                                     className="text-sm text-slate-500 mb-3 leading-relaxed"
                                 >
-                                    Tu cuenta de Partner ha sido creada con el rol <span className="font-bold text-[#865BFF]">Partner View</span>.
+                                    Tu cuenta de Partner ha sido creada con el rango <span className="font-bold text-[#865BFF]">Partner</span>.
                                 </motion.p>
                                 <motion.p 
                                     initial={{ opacity: 0, y: 10 }}

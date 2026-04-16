@@ -106,6 +106,10 @@ export const es: TranslationKeys = {
         manageNetwork: 'Gestiona tu red de Partners',
         manageNetworkDesc: 'Ver roles, actividades y estadísticas de cada partner',
         viewPartnersList: 'Ver Partners',
+        conversionRate: 'Tasa de Conversión',
+        topLandings: 'Rendimiento por Landing',
+        topLandingsDesc: 'Análisis detallado de conversión por página generada.',
+        noLandingData: 'No hay datos de rendimiento suficientes aún.',
     },
     common: {
         loading: 'Cargando...', save: 'Guardar', cancel: 'Cancelar', delete: 'Eliminar',
