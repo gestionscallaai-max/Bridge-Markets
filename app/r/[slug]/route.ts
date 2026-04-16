@@ -1,15 +1,23 @@
 import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+function getSupabaseAdmin() {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!url || !key) {
+        throw new Error('Supabase environments missing');
+    }
+    return createClient(url, key);
+}
 
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
     const { slug } = params;
     const referer = request.headers.get('referer') || '';
     const userAgent = request.headers.get('user-agent') || '';
+
+    const supabaseAdmin = getSupabaseAdmin();
 
     // Lookup the referral link by slug
     const { data: link } = await supabaseAdmin

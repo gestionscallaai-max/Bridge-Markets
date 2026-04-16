@@ -83,6 +83,12 @@ export async function POST(request: Request) {
             country: data.country || 'Global',
             whatsapp: data.whatsapp || '',
             email: data.email || '',
+            communityName: data.communityName || '',
+            heroPhrase: data.heroPhrase || '',
+            instagram: data.instagram || '',
+            telegram: data.telegram || '',
+            tiktok: data.tiktok || '',
+            ctaLink: data.ctaLink || '',
             modularConfig: data.modularConfig || {}
         };
 

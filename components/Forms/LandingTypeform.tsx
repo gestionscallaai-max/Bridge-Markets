@@ -7,8 +7,10 @@ import {
     Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
     Pencil, Eye, X, Download, ToggleLeft, ToggleRight,
     Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play,
-    History as HistoryIcon
+    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Tilt from 'react-parallax-tilt';
 import {
     generateLandingHTML, generateModularLandingHTML, openLandingPreview,
     type LandingData, type ModularConfig
@@ -162,72 +164,103 @@ function SectionPicker({
         : SECTION_CATALOG.filter(s => s.category === filterCat);
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-                    <div>
-                        <h3 className="text-lg font-black text-slate-800">Agregar Sección</h3>
-                        <p className="text-xs text-slate-400">Selecciona secciones de cualquier template</p>
+        <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4 md:p-8">
+            <div className="bg-white/95 border border-slate-200/60 rounded-[32px] w-full max-w-6xl h-[85vh] flex flex-col md:flex-row shadow-[0_20px_80px_-15px_rgba(109,40,217,0.2)] overflow-hidden relative">
+                
+                {/* Left Sidebar Category Filters */}
+                <div className="md:w-72 bg-slate-50/80 backdrop-blur-xl border-r border-slate-200/60 flex flex-col relative z-10">
+                    <div className="p-8 pb-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-brand-purple to-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-brand-purple/20">
+                            <Sparkles className="w-6 h-6 text-white" />
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-2">Librería<br/>Modular</h3>
+                        <p className="text-xs text-slate-500 leading-relaxed font-medium">Arrastra o toca para inyectar secciones al Blueprint actual.</p>
                     </div>
-                    <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400">
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
 
-                {/* Category filters */}
-                <div className="flex items-center gap-1.5 px-6 py-3 border-b border-slate-100 overflow-x-auto">
-                    <button
-                        onClick={() => setFilterCat('all')}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex-shrink-0 ${
-                            filterCat === 'all'
-                                ? 'bg-[#865BFF] text-white'
-                                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                        }`}
-                    >Todas</button>
-                    {(Object.entries(SECTION_CATEGORIES) as [SectionCategory, { label: string; icon: string }][]).map(([key, val]) => (
+                    <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
                         <button
-                            key={key}
-                            onClick={() => setFilterCat(key)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex-shrink-0 ${
-                                filterCat === key
-                                    ? 'bg-[#865BFF] text-white'
-                                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                            onClick={() => setFilterCat('all')}
+                            className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-xs font-bold transition-all duration-300 ${
+                                filterCat === 'all'
+                                    ? 'bg-brand-purple/10 text-brand-purple shadow-sm border border-brand-purple/20'
+                                    : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-800'
                             }`}
-                        ><span className="material-symbols-outlined text-[14px]">{val.icon}</span> {val.label}</button>
-                    ))}
+                        >
+                            <span className="material-symbols-outlined text-[18px]">apps</span>
+                            Todas las Secciones
+                        </button>
+                        {(Object.entries(SECTION_CATEGORIES) as [SectionCategory, { label: string; icon: string }][]).map(([key, val]) => (
+                            <button
+                                key={key}
+                                onClick={() => setFilterCat(key)}
+                                className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-xs font-bold transition-all duration-300 ${
+                                    filterCat === key
+                                        ? 'bg-brand-purple/10 text-brand-purple shadow-sm border border-brand-purple/20'
+                                        : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-800'
+                                }`}
+                            ><span className="material-symbols-outlined text-[18px]">{val.icon}</span> {val.label}</button>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Section list */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                    {filtered.map(section => {
-                        const isAlready = alreadySelected.includes(section.id);
-                        return (
-                            <div
-                                key={section.id}
-                                className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-                                    isAlready
-                                        ? 'border-emerald-200 bg-emerald-50'
-                                        : 'border-slate-200 hover:border-[#865BFF]/30 hover:bg-[#865BFF]/5 cursor-pointer'
-                                }`}
-                                onClick={() => !isAlready && onAdd(section.id)}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <span className="material-symbols-outlined text-lg text-[#865BFF]">{section.icon}</span>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-slate-800">{section.name}</h4>
-                                        <p className="text-[10px] text-slate-400">{section.description}</p>
+                {/* Right Side Content Area */}
+                <div className="flex-1 flex flex-col relative z-10 bg-white">
+                    {/* Header */}
+                    <div className="flex justify-between items-center px-8 py-6 border-b border-slate-100 backdrop-blur-md sticky top-0 z-20 bg-white/80">
+                        <div>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Mostrando Resultados</span>
+                            <h4 className="text-lg font-bold text-slate-800 mt-1">
+                                {filterCat === 'all' ? 'Catálogo Completo' : SECTION_CATEGORIES[filterCat as string].label}
+                            </h4>
+                        </div>
+                        <button onClick={onClose} className="p-3 bg-slate-100 rounded-2xl hover:bg-slate-200 hover:rotate-90 text-slate-500 hover:text-slate-800 transition-all duration-300">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* Section Grid */}
+                    <div className="flex-1 overflow-y-auto p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            {filtered.map(section => {
+                                const isAlready = alreadySelected.includes(section.id);
+                                return (
+                                    <div
+                                        key={section.id}
+                                        className={`group relative overflow-hidden flex flex-col justify-between p-6 rounded-[28px] border transition-all duration-500 ease-out ${
+                                            isAlready
+                                                ? 'border-brand-purple/20 bg-brand-purple/5 shadow-sm cursor-not-allowed'
+                                                : 'border-slate-200 bg-white hover:border-brand-purple/40 cursor-pointer hover:-translate-y-1 shadow-sm hover:shadow-xl hover:shadow-brand-purple/10'
+                                        }`}
+                                        onClick={() => !isAlready && onAdd(section.id)}
+                                    >
+                                        <div className="flex items-start justify-between relative z-10 mb-6">
+                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${isAlready ? 'bg-brand-purple text-white' : 'bg-slate-50 text-brand-purple border border-slate-100 group-hover:scale-110 group-hover:bg-brand-purple group-hover:text-white'}`}>
+                                                <span className="material-symbols-outlined text-2xl">{section.icon}</span>
+                                            </div>
+                                            {isAlready ? (
+                                                <div className="bg-white border border-brand-purple/30 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm">
+                                                    <Check className="w-3 h-3 text-brand-purple" />
+                                                    <span className="text-[9px] font-black tracking-widest text-brand-purple uppercase">Añadida</span>
+                                                </div>
+                                            ) : (
+                                                <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center bg-slate-50 group-hover:border-brand-purple group-hover:bg-brand-purple transition-all duration-300">
+                                                    <Plus className="w-4 h-4 text-slate-400 group-hover:text-white" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        <div className="relative z-10">
+                                            <h4 className="text-base font-bold text-slate-800 mb-2 tracking-tight group-hover:text-brand-purple transition-colors">{section.name}</h4>
+                                            <p className="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors line-clamp-2">{section.description}</p>
+                                        </div>
+
+                                        {/* Hover geometric decoration */}
+                                        <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-tl from-brand-purple/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl"></div>
                                     </div>
-                                </div>
-                                {isAlready ? (
-                                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                                        <Check className="w-3.5 h-3.5" /> Incluida
-                                    </span>
-                                ) : (
-                                    <Plus className="w-5 h-5 text-[#865BFF]" />
-                                )}
-                            </div>
-                        );
-                    })}
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,9 +325,15 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
     // Step 1: Basic Data
     const [fullName, setFullName] = useState('');
     const [country, setCountry] = useState('');
-    const [language, setLanguage] = useState('ES');
     const [whatsapp, setWhatsapp] = useState('');
     const [email, setEmail] = useState('');
+    const [communityName, setCommunityName] = useState('');
+    const [heroPhrase, setHeroPhrase] = useState('');
+    const [instagram, setInstagram] = useState('');
+    const [telegram, setTelegram] = useState('');
+    const [tiktok, setTiktok] = useState('');
+    const [ctaLink, setCtaLink] = useState('');
+    const [language, setLanguage] = useState('ES');
 
     // Step 2: Template Selection
     const [selectedTemplate, setSelectedTemplate] = useState<string>(initialTemplate || '');
@@ -410,6 +449,12 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             landingType: selectedTemplate,
             partnerId,
             slug: `${selectedTemplate}-${language.toLowerCase()}-${Date.now()}`,
+            communityName,
+            heroPhrase,
+            instagram,
+            telegram,
+            tiktok,
+            ctaLink,
             modularConfig: {
                 templateId: selectedTemplate,
                 selectedSections,
@@ -479,13 +524,23 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             fullName, country, language, whatsapp, email,
             landingType: selectedTemplate, partnerId,
             slug: 'live-preview',
+            communityName,
+            heroPhrase,
+            instagram,
+            telegram,
+            tiktok,
+            ctaLink,
             modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
         };
         return generateModularLandingHTML(data);
-    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId]);
+    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, ctaLink]);
 
     return (
-        <div className="max-w-6xl mx-auto pb-12">
+        <div className="max-w-[1600px] mx-auto pb-12">
+            <div className="flex flex-col lg:flex-row gap-8 items-start">
+                
+                {/* ─── LEFT COLUMN: CONTROLS (60%) ─── */}
+                <div className="flex-1 w-full lg:max-w-3xl">
             {/* Header with History Link */}
             <div className="flex justify-between items-center mb-6 px-2 flex-wrap gap-3">
                 <div>
@@ -526,79 +581,206 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 </div>
             </div>
 
-            {/* Step Indicator */}
-            <div className="flex items-center justify-center gap-2 mb-8">
+            {/* Step Indicator - Modernized */}
+            <div className="flex items-center justify-between mb-10 px-4 py-3 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-x-auto no-scrollbar">
                 {STEPS.map((s, i) => {
                     const Icon = s.icon;
                     const isActive = step === s.num;
                     const isDone = step > s.num;
                     return (
                         <React.Fragment key={s.num}>
-                            <button
-                                onClick={() => { if (isDone) setStep(s.num as Step); }}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                    isActive
-                                        ? 'bg-[#865BFF] text-white shadow-md shadow-[#865BFF]/20'
-                                        : isDone
-                                            ? 'bg-emerald-100 text-emerald-700 cursor-pointer hover:bg-emerald-200'
-                                            : 'bg-slate-100 text-slate-400'
-                                }`}
-                            >
-                                {isDone ? <Check className="w-3.5 h-3.5" /> : <Icon className="w-3.5 h-3.5" />}
-                                {s.label}
-                            </button>
-                            {i < STEPS.length - 1 && <ChevronRight className="w-4 h-4 text-slate-300" />}
+                            <div className="flex items-center gap-3 shrink-0">
+                                <button
+                                    onClick={() => { if (isDone) setStep(s.num as Step); }}
+                                    className={`relative flex items-center justify-center w-8 h-8 rounded-lg text-xs font-black transition-all ${
+                                        isActive ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/30 scale-110' :
+                                        isDone ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'
+                                    }`}
+                                >
+                                    {isDone ? <Check className="w-4 h-4" /> : s.num}
+                                    {isActive && (
+                                        <motion.div layoutId="step-glow" className="absolute inset-0 rounded-lg bg-[#865BFF] blur-md opacity-40 -z-10" />
+                                    )}
+                                </button>
+                                <span className={`text-[11px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-800' : 'text-slate-400'}`}>
+                                    {s.label}
+                                </span>
+                            </div>
+                            {i < STEPS.length - 1 && <div className="w-8 h-[2px] bg-slate-100 mx-2 shrink-0" />}
                         </React.Fragment>
                     );
                 })}
             </div>
 
-            {/* ─── STEP 1: Basic Data ─── */}
-            {step === 1 && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-                    <h2 className="text-2xl font-black text-slate-800 mb-1">Datos del Partner</h2>
-                    <p className="text-sm text-slate-400 mb-8">Información que se reflejará en la landing generada</p>
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={step}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                >
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">Nombre Completo *</label>
-                            <input
-                                type="text" value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
-                                placeholder="John Doe"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
-                            />
+            {step === 1 && (
+                    <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                                <User className="w-5 h-5 text-slate-400" />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-black text-slate-800">Identidad Digital</h2>
+                                <p className="text-xs text-slate-400 font-medium">Información oficial que aparecerá en tu landing</p>
+                            </div>
                         </div>
-                        <div>
-                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">Email</label>
-                            <input
-                                type="email" value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="partner@email.com"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
-                            />
+
+                        <div className="space-y-8">
+                            {/* Grupo 1: Datos Corporativos */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Público *</label>
+                                    <div className="relative group">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#865BFF] transition-colors">
+                                            <User className="w-4 h-4" />
+                                        </div>
+                                        <input
+                                            type="text" value={fullName}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            placeholder="Tu nombre o marca personal"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email de Contacto</label>
+                                    <div className="relative group">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#865BFF] transition-colors">
+                                            <Globe className="w-4 h-4" />
+                                        </div>
+                                        <input
+                                            type="email" value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="ejemplo@correo.com"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Grupo 2: Personalización Visual */}
+                            <div className="p-6 rounded-2xl bg-[#865BFF]/5 border border-[#865BFF]/10 space-y-6">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Sparkles className="w-4 h-4 text-[#865BFF]" />
+                                    <span className="text-xs font-black text-[#865BFF] uppercase tracking-wider">Ajustes de Marca</span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Comunidad (Opcional)</label>
+                                        <input
+                                            type="text" value={communityName}
+                                            onChange={(e) => setCommunityName(e.target.value)}
+                                            placeholder="Ej: Wolf Trading Club"
+                                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Frase Impacto (Hero)</label>
+                                        <input
+                                            type="text" value={heroPhrase}
+                                            onChange={(e) => setHeroPhrase(e.target.value)}
+                                            placeholder="Ej: Tu puerta al éxito"
+                                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Grupo 3: Social Hub */}
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Share2 className="w-4 h-4 text-slate-400" />
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Canales de Comunicación</span>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    {/* WhatsApp */}
+                                    <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 group focus-within:border-emerald-200 transition-all">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center">
+                                                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 uppercase">WhatsApp</span>
+                                        </div>
+                                        <input
+                                            type="text" value={whatsapp}
+                                            onChange={(e) => setWhatsapp(e.target.value)}
+                                            placeholder="+1..."
+                                            className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
+                                        />
+                                    </div>
+                                    {/* Telegram */}
+                                    <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 group focus-within:border-sky-200 transition-all">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center">
+                                                <Send className="w-3.5 h-3.5 text-sky-600" />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 uppercase">Telegram</span>
+                                        </div>
+                                        <input
+                                            type="text" value={telegram}
+                                            onChange={(e) => setTelegram(e.target.value)}
+                                            placeholder="@id_canal"
+                                            className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
+                                        />
+                                    </div>
+                                    {/* Instagram */}
+                                    <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 group focus-within:border-pink-200 transition-all">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-7 h-7 rounded-lg bg-pink-100 flex items-center justify-center">
+                                                <div className="w-3.5 h-3.5 rounded-sm border-2 border-pink-600" />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 uppercase">Instagram</span>
+                                        </div>
+                                        <input
+                                            type="text" value={instagram}
+                                            onChange={(e) => setInstagram(e.target.value)}
+                                            placeholder="@usuario"
+                                            className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
+                                        />
+                                    </div>
+                                    {/* TikTok Extra */}
+                                    <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 group focus-within:border-slate-800 transition-all">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center">
+                                                <span className="text-[10px] text-white">𝅘𝅥𝅮</span>
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 uppercase">TikTok</span>
+                                        </div>
+                                        <input
+                                            type="text" value={tiktok}
+                                            onChange={(e) => setTiktok(e.target.value)}
+                                            placeholder="@tiktok"
+                                            className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
+                                        />
+                                    </div>
+                                    {/* CTA Link Extra */}
+                                    <div className="md:col-span-2 p-4 rounded-2xl border border-[#865BFF]/20 bg-[#865BFF]/5 group focus-within:border-[#865BFF] transition-all">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-7 h-7 rounded-lg bg-[#865BFF] flex items-center justify-center">
+                                                <ExternalLink className="w-3.5 h-3.5 text-white" />
+                                            </div>
+                                            <span className="text-[10px] font-black text-[#865BFF] uppercase">Botón de Acción (Link Custom)</span>
+                                        </div>
+                                        <input
+                                            type="text" value={ctaLink}
+                                            onChange={(e) => setCtaLink(e.target.value)}
+                                            placeholder="https://tu-link-de-afiliado.com"
+                                            className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">WhatsApp</label>
-                            <input
-                                type="text" value={whatsapp}
-                                onChange={(e) => setWhatsapp(e.target.value)}
-                                placeholder="+1 234 567 8900"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
-                            />
-                        </div>
-                        <div>
-                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 block">País</label>
-                            <select
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10"
-                            >
-                                <option value="">Seleccionar...</option>
-                                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
-                        </div>
-                    </div>
 
                     {/* Language */}
                     <div className="mt-6">
@@ -638,86 +820,112 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             {/* ─── STEP 2: Template Selection ─── */}
             {step === 2 && (
                 <div>
-                    <div className="text-center mb-6">
-                        <h2 className="text-2xl font-black text-slate-800 mb-1">Elegir Template Base</h2>
-                        <p className="text-sm text-slate-400">Selecciona un diseño como punto de partida. Podrás personalizar las secciones después.</p>
+                    <div className="text-center mb-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#865BFF]/10 text-[#865BFF] text-[10px] font-black uppercase tracking-widest mb-4">
+                            Step 02 — Studio Designs
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-800 mb-2">Selecciona tu Blueprint</h2>
+                        <p className="text-sm text-slate-400 max-w-lg mx-auto">Elige una base profesional diseñada para máxima conversión. Podrás editar cada sección en el siguiente paso.</p>
                     </div>
 
                     {/* Category filters */}
-                    <div className="flex items-center justify-center gap-1.5 mb-6 flex-wrap">
+                    <div className="flex items-center justify-center gap-2 mb-10 flex-wrap">
                         {templateCategories.map(cat => (
                             <button
                                 key={cat}
                                 onClick={() => setTemplateFilter(cat)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                                className={`px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all ${
                                     templateFilter === cat
-                                        ? 'bg-[#865BFF] text-white shadow-sm'
-                                        : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
+                                        ? 'bg-[#865BFF] text-white shadow-xl shadow-[#865BFF]/20 scale-105'
+                                        : 'bg-white border border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600 shadow-sm'
                                 }`}
                             >
-                                {cat === 'all' ? 'Todas' : cat}
+                                {cat === 'all' ? 'Ver Todos' : cat}
                             </button>
                         ))}
                     </div>
 
                     {/* Template Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {filteredTemplates.map(template => {
                             const isSelected = selectedTemplate === template.id;
                             return (
-                                <div
+                                <Tilt
                                     key={template.id}
-                                    onClick={() => setSelectedTemplate(template.id)}
-                                    className={`group relative rounded-2xl border-2 overflow-hidden cursor-pointer transition-all duration-300 ${
-                                        isSelected
-                                            ? 'border-[#865BFF] shadow-xl shadow-[#865BFF]/10 ring-2 ring-[#865BFF]/20'
-                                            : 'border-slate-200 hover:border-slate-300 hover:shadow-lg hover:-translate-y-0.5'
-                                    }`}
+                                    tiltMaxAngleX={5}
+                                    tiltMaxAngleY={5}
+                                    perspective={1000}
+                                    scale={isSelected ? 1.02 : 1}
+                                    className="h-full"
                                 >
-                                    {/* Gradient Header */}
                                     <div
-                                        className="h-28 relative overflow-hidden"
-                                        style={{ background: template.gradient }}
+                                        onClick={() => setSelectedTemplate(template.id)}
+                                        className={`h-full group relative rounded-[2.5rem] border-4 overflow-hidden cursor-pointer transition-all duration-500 ${
+                                            isSelected
+                                                ? 'border-[#865BFF] shadow-2xl shadow-[#865BFF]/20 bg-white'
+                                                : 'border-white bg-white/50 hover:bg-white shadow-xl shadow-slate-200/50 grayscale-[0.3] hover:grayscale-0'
+                                        }`}
                                     >
-                                        <div className="absolute inset-0 opacity-20" style={{
-                                            backgroundImage: 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.2) 0%, transparent 50%)',
-                                        }} />
-                                        {template.badge && (
-                                            <span className="absolute top-3 right-3 text-white text-[9px] font-black px-2 py-0.5 rounded-lg uppercase tracking-wider"
-                                                style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}
-                                            >{template.badge}</span>
-                                        )}
-                                        <div className="absolute bottom-3 left-4">
-                                            <div className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/40">Bridge Markets</div>
-                                            <h3 className="text-lg font-black text-white leading-tight">{template.name}</h3>
-                                        </div>
-                                        {isSelected && (
-                                            <div className="absolute top-3 left-3">
-                                                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                                                    <Check className="w-4 h-4 text-[#865BFF]" />
+                                        {/* Preview Area */}
+                                        <div className="h-64 relative overflow-hidden" style={{ background: template.gradient }}>
+                                            <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{
+                                                backgroundImage: 'radial-gradient(circle at 71% 9%, rgba(255, 255, 255, 0.4) 0%, transparent 40%)'
+                                            }} />
+                                            
+                                            {/* Badge Layout */}
+                                            <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">Blueprint</span>
+                                                    <span className="text-white font-black text-xl tracking-tighter">{template.name}</span>
                                                 </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Body */}
-                                    <div className="p-4 bg-white">
-                                        <p className="text-[12px] text-slate-500 mb-3 line-clamp-2">{template.description}</p>
-                                        <div className="flex items-center gap-1 flex-wrap">
-                                            {template.sections.slice(0, 4).map(sId => {
-                                                const sec = SECTION_CATALOG.find(s => s.id === sId);
-                                                return sec ? (
-                                                    <span key={sId} className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-semibold">
-                                                        <span className="material-symbols-outlined text-[10px]">{sec.icon}</span> {sec.name.split(' ')[0]}
+                                                {template.badge && (
+                                                    <span className="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+                                                        {template.badge}
                                                     </span>
-                                                ) : null;
-                                            })}
-                                            {template.sections.length > 4 && (
-                                                <span className="text-[9px] text-slate-400 font-bold">+{template.sections.length - 4}</span>
+                                                )}
+                                            </div>
+
+                                            {/* Selection Indicator */}
+                                            {isSelected && (
+                                                <div className="absolute inset-0 bg-[#865BFF]/10 backdrop-blur-[2px] flex items-center justify-center">
+                                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl">
+                                                        <Check className="w-8 h-8 text-[#865BFF]" />
+                                                    </motion.div>
+                                                </div>
                                             )}
                                         </div>
+
+                                        {/* Content Area */}
+                                        <div className="p-8">
+                                            <p className="text-slate-400 text-sm leading-relaxed mb-6 font-medium">
+                                                {template.description}
+                                            </p>
+                                            
+                                            <div className="flex flex-wrap gap-2">
+                                                {template.sections.slice(0, 5).map(sId => {
+                                                    const sec = SECTION_CATALOG.find(s => s.id === sId);
+                                                    return sec ? (
+                                                        <div key={sId} className="flex items-center gap-1.5 bg-slate-50 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-100 group-hover:border-[#865BFF]/10 transition-colors">
+                                                            <span className="material-symbols-outlined text-[14px] text-[#865BFF]/60">{sec.icon}</span>
+                                                            <span className="text-[10px] font-bold uppercase tracking-wider">{sec.name.split(' ')[0]}</span>
+                                                        </div>
+                                                    ) : null;
+                                                })}
+                                                {template.sections.length > 5 && (
+                                                    <div className="flex items-center justify-center bg-slate-50 text-slate-400 px-3 py-1.5 rounded-xl border border-slate-100 text-[10px] font-black">
+                                                        +{template.sections.length - 5}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <button className={`w-full mt-8 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all ${
+                                                isSelected ? 'bg-[#865BFF] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-100 group-hover:text-slate-600'
+                                            }`}>
+                                                {isSelected ? 'Plantilla Seleccionada' : 'Elegir éste Diseño'}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                </Tilt>
                             );
                         })}
                     </div>
@@ -741,52 +949,63 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 </div>
             )}
 
-            {/* ─── STEP 3: Section Editor ─── */}
+            {/* ─── STEP 3: Section Editor (Studio Builder) ─── */}
             {step === 3 && (
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr,350px] gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h2 className="text-2xl font-black text-slate-800 mb-1">Editor de Secciones</h2>
-                                <p className="text-sm text-slate-400">
-                                    Activa/desactiva, reordena y edita el contenido.
-                                    <span className="font-bold text-[#865BFF] ml-1">{selectedSections.length} activas</span>
-                                </p>
+                <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-[#865BFF]/10 flex items-center justify-center">
+                                <Layout className="w-6 h-6 text-[#865BFF]" />
                             </div>
-                            <button
-                                onClick={() => setShowSectionPicker(true)}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-[#865BFF]/10 text-[#865BFF] font-bold rounded-xl hover:bg-[#865BFF]/20 transition-all text-sm border border-[#865BFF]/20"
-                            >
-                                <Plus className="w-4 h-4" /> Agregar Sección
-                            </button>
+                            <div>
+                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">Estructura Modular</h2>
+                                <p className="text-sm text-slate-400 font-medium font-mono">Total: {selectedSections.length} bloques activos</p>
+                            </div>
                         </div>
+                        <button
+                            onClick={() => setShowSectionPicker(true)}
+                            className="group flex items-center gap-3 px-6 py-3.5 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#865BFF]/30"
+                        >
+                            <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" /> 
+                            Agregar Bloque
+                        </button>
+                    </div>
 
-                        {/* Active sections */}
-                        <div className="space-y-3">
+                    {/* Active sections - Premium Flow */}
+                    <div className="space-y-4">
+                        <AnimatePresence initial={false}>
                             {selectedSections.map((sId, index) => {
                                 const section = SECTION_CATALOG.find(s => s.id === sId);
                                 if (!section) return null;
                                 return (
-                                    <div key={`${sId}-${index}`} className="flex items-start gap-2">
-                                        {/* Reorder controls */}
-                                        <div className="flex flex-col gap-0.5 pt-3">
+                                    <motion.div 
+                                        key={`${sId}-${index}`}
+                                        layout
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        className="flex items-stretch gap-4 group"
+                                    >
+                                        {/* Premium Vertical Dock for Controls */}
+                                        <div className="hidden md:flex flex-col justify-center items-center gap-1 w-10 bg-slate-50 border border-slate-100 rounded-2xl group-hover:bg-slate-100/100 transition-colors shrink-0">
                                             <button
                                                 onClick={() => moveSectionUp(index)}
-                                                className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
+                                                className="p-1.5 rounded-lg hover:bg-white hover:shadow-sm text-slate-300 hover:text-[#865BFF] disabled:opacity-10 transition-all"
                                                 disabled={index === 0}
                                             >
                                                 <ChevronUp className="w-4 h-4" />
                                             </button>
+                                            <div className="h-4 w-[1px] bg-slate-200" />
                                             <button
                                                 onClick={() => moveSectionDown(index)}
-                                                className="p-0.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 disabled:opacity-20"
+                                                className="p-1.5 rounded-lg hover:bg-white hover:shadow-sm text-slate-300 hover:text-[#865BFF] disabled:opacity-10 transition-all"
                                                 disabled={index === selectedSections.length - 1}
                                             >
                                                 <ChevronDown className="w-4 h-4" />
                                             </button>
                                         </div>
 
-                                        {/* Section card */}
+                                        {/* Section Card Content */}
                                         <div className="flex-1">
                                             <SectionCard
                                                 section={section}
@@ -796,52 +1015,41 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                                 onUpdateOverride={(key, val) => updateOverride(sId, key, val)}
                                             />
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 );
                             })}
-                        </div>
+                        </AnimatePresence>
 
-                        {/* Available sections not yet added (Horizontal Scroll or Grid) */}
-                        {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).length > 0 && (
-                            <div className="border-t border-slate-200 pt-6">
-                                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Secciones Recomendadas</h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {SECTION_CATALOG.filter(s => !selectedSections.includes(s.id)).slice(0, 4).map(section => (
-                                        <div key={section.id} className="opacity-80 hover:opacity-100 transition-opacity">
-                                            <SectionCard
-                                                section={section}
-                                                isEnabled={false}
-                                                onToggle={() => addSection(section.id)}
-                                                overrides={{}}
-                                                onUpdateOverride={() => {}}
-                                            />
-                                        </div>
-                                    ))}
+                        {selectedSections.length === 0 && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-20 text-center border-2 border-dashed border-slate-100 rounded-[2rem] bg-slate-50/30">
+                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-50 text-slate-200">
+                                    <Layout className="w-6 h-6" />
                                 </div>
-                            </div>
+                                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">Diseño vacío</p>
+                                <button
+                                    onClick={() => setShowSectionPicker(true)}
+                                    className="mt-4 text-[#865BFF] font-black text-xs hover:underline decoration-2 underline-offset-4"
+                                >
+                                    Agrega el primer bloque de contenido
+                                </button>
+                            </motion.div>
                         )}
-
-                        {/* Nav */}
-                        <div className="mt-10 flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                            <button
-                                onClick={() => setStep(2)}
-                                className="flex items-center gap-2 px-6 py-3 text-slate-500 font-bold rounded-xl hover:text-slate-800 transition-all text-sm"
-                            >
-                                <ArrowLeft className="w-4 h-4" /> Cambiar Template
-                            </button>
-                            <button
-                                onClick={() => setStep(4)}
-                                disabled={!canAdvance(3)}
-                                className="flex items-center gap-2 px-10 py-4 bg-[#865BFF] text-white font-bold rounded-2xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#865BFF]/30 active:scale-[0.98]"
-                            >
-                                Siguiente Paso <ArrowRight className="w-4 h-4" />
-                            </button>
-                        </div>
                     </div>
 
-                    {/* Desktop Sidebar: Live Preview */}
-                    <div className="hidden lg:block">
-                        <PhoneMockup html={livePreviewHtml} />
+                    {/* Studio Footer Navigation */}
+                    <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-slate-50">
+                        <button
+                            onClick={() => setStep(2)}
+                            className="flex items-center gap-3 px-6 py-3.5 text-slate-400 font-black text-xs uppercase tracking-[0.1em] hover:text-slate-600 transition-all"
+                        >
+                            <ArrowLeft className="w-4 h-4" /> Blueprints
+                        </button>
+                        <button
+                            onClick={() => setStep(4)}
+                            className="w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] transition-all text-xs uppercase tracking-widest shadow-2xl shadow-[#865BFF]/30 active:scale-[0.98]"
+                        >
+                            Finalizar y Lanzar <ArrowRight className="w-4 h-4 shadow-inner" />
+                        </button>
                     </div>
 
                     {/* Section Picker Modal */}
@@ -858,79 +1066,85 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             {/* ─── STEP 4: Preview & Generate ─── */}
             {step === 4 && (
                 <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-                    <h2 className="text-2xl font-black text-slate-800 mb-1">Preview y Generar</h2>
-                    <p className="text-sm text-slate-400 mb-6">Revisa tu configuración antes de generar</p>
+                    <div className="text-center mb-10">
+                        <div className="w-20 h-20 bg-[#865BFF]/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-[#865BFF]/5">
+                            <Rocket className="w-10 h-10 text-[#865BFF]" />
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">Protocolo de Lanzamiento</h2>
+                        <p className="text-sm text-slate-400 font-medium">Todo listo para generar tu nueva herramienta de captación</p>
+                    </div>
 
-                    {/* Summary */}
-                    <div className="bg-slate-50 rounded-xl p-6 mb-6 space-y-4">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Template</span>
-                                <p className="text-sm font-bold text-slate-800">
-                                    {LANDING_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
-                                </p>
-                            </div>
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Idioma</span>
-                                <p className="text-sm font-bold text-slate-800">
-                                    {LANGUAGES.find(l => l.code === language)?.flag} {LANGUAGES.find(l => l.code === language)?.label}
-                                </p>
-                            </div>
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Secciones</span>
-                                <p className="text-sm font-bold text-[#865BFF]">{selectedSections.length} activas</p>
-                            </div>
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Partner</span>
-                                <p className="text-sm font-bold text-slate-800">{partnerId}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                        {/* Blueprint Summary Card */}
+                        <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#865BFF]/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700" />
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Configuración Base</h3>
+                            
+                            <div className="space-y-6 relative z-10">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm text-[#865BFF]">
+                                        <Layout className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight">Design Blueprint</p>
+                                        <p className="text-sm font-medium text-slate-500">{LANDING_TEMPLATES.find(t => t.id === selectedTemplate)?.name}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm text-emerald-500">
+                                        <Globe className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight">Territorio / Idioma</p>
+                                        <p className="text-sm font-medium text-slate-500">{LANGUAGES.find(l => l.code === language)?.flag} {LANGUAGES.find(l => l.code === language)?.label}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Section list */}
-                        <div className="flex flex-wrap gap-1.5 pt-2">
-                            {selectedSections.map(sId => {
-                                const sec = SECTION_CATALOG.find(s => s.id === sId);
-                                return sec ? (
-                                    <span key={sId} className="text-[10px] bg-white border border-slate-200 text-slate-600 px-2.5 py-1 rounded-lg font-semibold">
-                                        <span className="material-symbols-outlined text-[12px]">{sec.icon}</span> {sec.name}
-                                    </span>
-                                ) : null;
-                            })}
+                        {/* Inventory Card */}
+                        <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 border-dashed relative">
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Inventario de Bloques</h3>
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                    <span className="text-xs font-bold text-slate-700">Secciones Activas</span>
+                                    <span className="text-xs font-black text-[#865BFF] bg-[#865BFF]/10 px-2 py-0.5 rounded-lg">{selectedSections.length}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-1.5 pt-2">
+                                    {selectedSections.slice(0, 6).map(sId => {
+                                        const sec = SECTION_CATALOG.find(s => s.id === sId);
+                                        return sec ? (
+                                            <div key={sId} className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#865BFF] transition-colors" title={sec.name}>
+                                                <span className="material-symbols-outlined text-[16px]">{sec.icon}</span>
+                                            </div>
+                                        ) : null;
+                                    })}
+                                    {selectedSections.length > 6 && (
+                                        <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-[10px] font-black text-slate-300">
+                                            +{selectedSections.length - 6}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Action buttons */}
-                    <div className="flex gap-3">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <button
                             onClick={() => setStep(3)}
-                            className="flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                            className="flex-1 flex items-center justify-center gap-3 px-8 py-4 border-2 border-slate-100 text-slate-400 font-black rounded-2xl hover:bg-slate-50 hover:text-slate-600 transition-all text-sm uppercase tracking-widest"
                         >
-                            <ArrowLeft className="w-4 h-4" /> Editar
-                        </button>
-                        <button
-                            onClick={() => {
-                                const data: LandingData = {
-                                    fullName, country, language, whatsapp, email,
-                                    landingType: selectedTemplate, partnerId,
-                                    slug: `preview-${Date.now()}`,
-                                    modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
-                                };
-                                const html = generateModularLandingHTML(data);
-                                openLandingPreview(html);
-                            }}
-                            className="flex items-center gap-2 px-6 py-3 border-2 border-[#865BFF]/30 text-[#865BFF] font-bold rounded-xl hover:bg-[#865BFF]/5 transition-all"
-                        >
-                            <Play className="w-4 h-4" /> Preview en Vivo
+                            <Pencil className="w-4 h-4" /> Volver al Editor
                         </button>
                         <button
                             onClick={handleGenerate}
                             disabled={isGenerating}
-                            className="flex-1 flex items-center justify-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 transition-all shadow-lg shadow-[#865BFF]/20"
+                            className="flex-[2] flex items-center justify-center gap-4 px-10 py-4 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] disabled:opacity-50 transition-all text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#865BFF]/30 active:scale-[0.98]"
                         >
                             {isGenerating ? (
-                                <><Loader2 className="w-4 h-4 animate-spin" /> Generando...</>
+                                <><Loader2 className="w-5 h-5 animate-spin" /> Procesando...</>
                             ) : (
-                                <><Rocket className="w-4 h-4" /> Generar y Guardar</>
+                                <><Rocket className="w-5 h-5 shadow-lg" /> ¡Desplegar Landing!</>
                             )}
                         </button>
                     </div>
@@ -992,6 +1206,49 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                     </div>
                 </div>
             )}
+                </motion.div>
+            </AnimatePresence>
         </div>
-    );
+
+        {/* ─── RIGHT COLUMN: STUDIO PREVIEW (40%) ─── */}
+        <div className="hidden lg:block lg:w-[400px] shrink-0 sticky top-10">
+            <div className="bg-slate-50/50 rounded-[3rem] p-8 border border-slate-200/50 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-8 px-4">
+                    <div className="flex items-center gap-2">
+                        <Smartphone className="w-5 h-5 text-slate-400" />
+                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Studio Preview</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] font-bold text-emerald-600 uppercase">Live</span>
+                    </div>
+                </div>
+                
+                <PhoneMockup html={livePreviewHtml} />
+                
+                <div className="mt-8 space-y-4">
+                    <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                        <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">Estado del Diseño</p>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-bold text-slate-700">Progreso total</span>
+                            <span className="text-sm font-black text-[#865BFF]">{Math.round((step / 4) * 100)}%</span>
+                        </div>
+                        <div className="w-full h-1.5 bg-slate-100 rounded-full mt-3 overflow-hidden">
+                            <motion.div 
+                                className="h-full bg-[#865BFF]" 
+                                initial={{ width: 0 }}
+                                animate={{ width: `${(step / 4) * 100}%` }}
+                            />
+                        </div>
+                    </div>
+                    
+                    <p className="text-[10px] text-center text-slate-400 px-4">
+                        Toda la información se guarda automáticamente encriptada en la base de datos oficial.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+);
 }

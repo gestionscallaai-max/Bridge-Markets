@@ -71,10 +71,10 @@ export default function DashboardLayout() {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <AssetCard id="crypto-bull-run" title="Crypto Bull Run" type="Banner" size="300x250" language="ES" onOpenCode={() => openCodeGenerator('crypto-bull-run', 'ES')} />
-                <AssetCard id="forex-mastery" title="Forex Mastery" type="Banner" size="728x90" language="EN" onOpenCode={() => openCodeGenerator('forex-mastery', 'EN')} />
-                <AssetCard id="crypto-bull-run" title="Gold Trading Setup" type="Banner" size="1080x1080" language="PT" onOpenCode={() => openCodeGenerator('crypto-bull-run', 'PT')} />
-                <AssetCard id="forex-mastery" title="Zero Spread Promo" type="Landing Page" size="Web" language="ES" onOpenCode={() => openCodeGenerator('forex-mastery', 'ES')} />
+                <AssetCard id="crypto-bull-run" title="Crypto Bull Run" type="Banner" size="300x250" language="ES" ctaText="Operar Ahora" onOpenCode={() => openCodeGenerator('crypto-bull-run', 'ES')} />
+                <AssetCard id="forex-mastery" title="Forex Mastery" type="Banner" size="728x90" language="EN" ctaText="Join Now" onOpenCode={() => openCodeGenerator('forex-mastery', 'EN')} />
+                <AssetCard id="crypto-bull-run" title="Gold Trading Setup" type="Banner" size="1080x1080" language="PT" ctaText="Começar" onOpenCode={() => openCodeGenerator('crypto-bull-run', 'PT')} />
+                <AssetCard id="forex-mastery" title="Zero Spread Promo" type="Landing Page" size="Web" language="ES" ctaText="Ver Más" onOpenCode={() => openCodeGenerator('forex-mastery', 'ES')} />
             </div>
 
             {/* Modal */}
@@ -82,6 +82,7 @@ export default function DashboardLayout() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 assetId={selectedAssetId}
+                affiliateId="USER_ID"
                 selectedLanguage={selectedLanguage}
             />
         </div>

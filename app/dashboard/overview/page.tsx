@@ -9,8 +9,7 @@ import {
     Globe, Zap, BarChart2, Award, Clock, TrendingUp,
     Shield, Crown, Network, Target, Star, Eye, Pencil, Link2
 } from 'lucide-react';
-import { useAdmin } from '../layout';
-import { useRole } from '../layout';
+import { useAdmin, useRole } from '@/lib/context';
 import { supabase } from '@/lib/supabaseClient';
 import { useLanguage } from '@/lib/i18n/context';
 

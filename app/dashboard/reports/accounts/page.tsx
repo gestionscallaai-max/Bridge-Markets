@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { CreditCard, Loader2, User, Mail, Calendar, Diamond, ShieldCheck, Activity, Crown, Shield, Search, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/context';
-import { useAdmin } from '../../layout';
+import { useAdmin } from '@/lib/context';
 
 export default function ReportsAccountsPage() {
     const { t, lang } = useLanguage();

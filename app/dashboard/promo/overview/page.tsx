@@ -57,6 +57,12 @@ export default function PromoMaterialsPage() {
         fullName: 'Bridge Markets Partner',
         whatsapp: '+1234567890',
         email: 'partner@bridgemarkets.com',
+        communityName: '',
+        heroPhrase: '',
+        instagram: '',
+        telegram: '',
+        tiktok: '',
+        ctaLink: '',
     });
 
     useEffect(() => {
@@ -117,6 +123,12 @@ export default function PromoMaterialsPage() {
                 selectedSections: template.sections,
                 sectionOverrides: {},
             },
+            communityName: formData.communityName,
+            heroPhrase: formData.heroPhrase,
+            instagram: formData.instagram,
+            telegram: formData.telegram,
+            tiktok: formData.tiktok,
+            ctaLink: formData.ctaLink,
         };
         const html = generateModularLandingHTML(data);
         setPreviewHtml(html);

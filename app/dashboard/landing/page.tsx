@@ -1,14 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import LandingTypeform from "@/components/Forms/LandingTypeform";
 import LandingHistory from "@/components/Promo/LandingHistory";
 import { useSearchParams } from 'next/navigation';
-import { History as HistoryIcon, Layout } from 'lucide-react';
+import { History as HistoryIcon, Layout, Loader2 } from 'lucide-react';
 import { supabase } from "@/lib/supabaseClient";
 import { useLanguage } from '@/lib/i18n/context';
 
-export default function LandingPageGenerator() {
+function LandingPageContent() {
     const searchParams = useSearchParams();
     const templateId = searchParams.get('template') || undefined;
     const { t } = useLanguage();
@@ -95,5 +95,17 @@ export default function LandingPageGenerator() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function LandingPageGenerator() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center p-20">
+                <Loader2 className="w-8 h-8 text-[#865BFF] animate-spin" />
+            </div>
+        }>
+            <LandingPageContent />
+        </Suspense>
     );
 }

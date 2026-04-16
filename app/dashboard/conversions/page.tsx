@@ -1,7 +1,8 @@
 "use client";
 
-import React from 'react';
-import { Download, Filter, Search, Calendar, ChevronDown, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Download, Filter, Search, Calendar, ChevronDown, CheckCircle2, Clock, XCircle, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
 
 const MOCK_CONVERSIONS = [
     { id: 'CONV-8829', user: 'user_4f92...a1b', amount: '$50.00', date: '12 Sep 2023 14:30', status: 'Aprobado', campaign: 'Campaña Principal ES', type: 'CPA' },

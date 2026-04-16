@@ -9,7 +9,7 @@ import {
     BarChart, Bar, Cell
 } from 'recharts';
 import { useLanguage } from '@/lib/i18n/context';
-import { useAdmin } from '../../layout';
+import { useAdmin } from '@/lib/context';
 
 export default function ReportsStatsPage() {
     const { t } = useLanguage();

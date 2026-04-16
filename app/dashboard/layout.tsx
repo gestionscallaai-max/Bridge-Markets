@@ -10,16 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LanguageProvider, useLanguage, type LangCode } from '@/lib/i18n/context';
 import { LANGUAGE_META } from '@/lib/i18n/translations';
 
-// ─── Admin Context ───────────────────────────────────────────
-export const AdminContext = createContext<{ isAdmin: boolean; setIsAdmin: (val: boolean) => void }>({
-    isAdmin: false,
-    setIsAdmin: () => { },
-});
-export const useAdmin = () => useContext(AdminContext);
-
-// ─── Role Context ─────────────────────────────────────────────
-export const RoleContext = createContext<{ userRole: string }>({ userRole: 'partner_view' });
-export const useRole = () => useContext(RoleContext);
+import { AdminContext, RoleContext } from '@/lib/context';
 
 // ─── Language Selector Dropdown ──────────────────────────────
 function LanguageSelector() {
