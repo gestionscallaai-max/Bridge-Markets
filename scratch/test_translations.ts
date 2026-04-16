@@ -1,4 +1,4 @@
-import { TRANSLATIONS } from '../lib/i18n/dictionary'; // or wherever it is exported
+import { TRANSLATIONS } from '../lib/landing/dictionary';
 
 export const langTest = () => {
    console.log("TRANSLATIONS loaded");

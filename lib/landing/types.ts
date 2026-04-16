@@ -34,4 +34,6 @@ export interface BrandConfig {
     ctaLink?: string;
     // URL del logo del IB
     logoUrl?: string;
+    // Nombre del IB (fallback para communityName)
+    ibName?: string;
 }

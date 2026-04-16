@@ -125,15 +125,30 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
         const loadUserData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+                // Fetch public metadata from 'profiles'
                 const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('partner_id')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile?.partner_id) {
+                    setPartnerId(profile.partner_id);
+                } else {
+                    // Fallback if not found
+                    setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+                }
+
+                // Fetch roles from 'partners'
+                const { data: partner } = await supabase
                     .from('partners')
                     .select('role')
                     .eq('id', user.id)
                     .single();
-                if (profile) {
-                    setUserRole(profile.role || 'partner_view');
-                    setIsAdmin(profile.role === 'admin');
+
+                if (partner) {
+                    setUserRole(partner.role || 'partner_view');
+                    setIsAdmin(partner.role === 'admin');
                 }
             }
         };
