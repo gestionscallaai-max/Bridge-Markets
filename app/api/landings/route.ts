@@ -126,3 +126,60 @@ export async function POST(request: Request) {
         }, { status: 500 });
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+        const slug = searchParams.get('slug');
+
+        console.log('API DELETE - Attempting to delete landing:', { id, slug });
+
+        if (!id && !slug) {
+            return NextResponse.json({ error: 'Landing ID or Slug required' }, { status: 400 });
+        }
+
+        let query = supabaseAdmin.from('landings').delete();
+        
+        if (id) {
+            // Check if it's a valid UUID format
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (uuidRegex.test(id)) {
+                query = query.eq('id', id);
+            } else {
+                console.warn('API DELETE - Provided ID is not a valid UUID, falling back to slug check.');
+                query = query.eq('slug', id); 
+            }
+        } else if (slug) {
+            query = query.eq('slug', slug);
+        }
+
+        // We use select() to get the row back and verify it was deleted
+        const { error, data: deletedData } = await query.select();
+
+        if (error) {
+            console.error('Supabase Delete Error:', error);
+            return NextResponse.json({ 
+                success: false, 
+                error: 'Database error', 
+                details: error.message 
+            }, { status: 500 });
+        }
+
+        const count = deletedData?.length || 0;
+        console.log('API DELETE - Operation finished. Records deleted:', count);
+        
+        return NextResponse.json({ 
+            success: true, 
+            count,
+            message: count === 0 ? 'No matching record found' : 'Deleted successfully'
+        });
+    } catch (e: any) {
+        console.error('Critical DELETE Error:', e.message || e);
+        return NextResponse.json({ 
+            success: false, 
+            error: 'Failed to delete landing',
+            details: e.message || 'Unknown error'
+        }, { status: 500 });
+    }
+}

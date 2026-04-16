@@ -14,7 +14,8 @@ import {
     Check,
     Loader2,
     FileText,
-    ExternalLink
+    ExternalLink,
+    Trash2
 } from 'lucide-react';
 
 interface Landing {
@@ -90,15 +91,38 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
         setTimeout(() => setCopying(null), 2000);
     };
 
-    const handleDownload = (landing: Landing) => {
-        const filename = `landing-${landing.slug}.html`;
-        const blob = new Blob([landing.html], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
+    const handleDelete = async (id: string) => {
+        console.log('Attempting to delete landing with ID:', id);
+
+        if (!id || id === 'undefined') {
+            alert('Error: ID de landing no válido. Intenta refrescar la página.');
+            return;
+        }
+
+        if (!window.confirm('¿Estás seguro de que deseas eliminar esta landing? Esta acción no se puede deshacer.')) {
+            return;
+        }
+
+        try {
+            // Pasamos tanto el id como el slug por si hay desajustes en la base de datos
+            const res = await fetch(`/api/landings?id=${id}&slug=${id}`, { method: 'DELETE' });
+            const json = await res.json();
+            
+            console.log('Delete API response:', json);
+
+            if (json.success) {
+                if (json.count === 0) {
+                    console.warn('No se encontró el registro en la DB, pero lo removemos de la UI.');
+                }
+                // Remove from local state
+                setLandings(prev => prev.filter(l => l.id !== id && l.slug !== id));
+            } else {
+                alert(`Error al eliminar: ${json.error}\nDetalles: ${json.details || ''}`);
+            }
+        } catch (error) {
+            console.error('Error deleting landing:', error);
+            alert('Error de conexión al intentar eliminar la landing.');
+        }
     };
 
     const filteredLandings = landings.filter(l => 
@@ -203,12 +227,12 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
                                     <span className="text-[9px] font-black uppercase">{copying === landing.slug ? 'Listo' : 'Link'}</span>
                                 </button>
                                 <button 
-                                    onClick={() => handleDownload(landing)}
-                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl hover:bg-white hover:shadow-sm transition-all text-slate-600 hover:text-[#865BFF]"
-                                    title="Descargar HTML"
+                                    onClick={() => handleDelete(landing.id)}
+                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl hover:bg-red-50 hover:shadow-sm transition-all text-slate-400 hover:text-red-500"
+                                    title="Eliminar Landing"
                                 >
-                                    <Download className="w-4 h-4" />
-                                    <span className="text-[9px] font-black uppercase">HTML</span>
+                                    <Trash2 className="w-4 h-4" />
+                                    <span className="text-[9px] font-black uppercase">Eliminar</span>
                                 </button>
                             </div>
                         </div>
