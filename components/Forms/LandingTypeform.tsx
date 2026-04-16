@@ -369,7 +369,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                     if (partnerData.email) setEmail(partnerData.email);
                 } else {
                     // Fallback to BM_ ID if partner record doesn't exist
-                    setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+                    setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
                 }
             }
         };

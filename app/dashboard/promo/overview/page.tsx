@@ -75,7 +75,7 @@ export default function PromoMaterialsPage() {
                     .select('partner_id, full_name, email')
                     .eq('id', user.id)
                     .single();
-                const fId = profile?.partner_id || 'BM_' + user.id.substring(0, 8).toUpperCase();
+                const fId = profile?.partner_id || 'BM_' + user.id.substring(0, 24).toUpperCase();
                 setFriendlyPartnerId(fId);
                 setPartnerId(user.id);
                 if (profile) {

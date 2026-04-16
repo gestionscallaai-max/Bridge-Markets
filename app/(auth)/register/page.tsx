@@ -24,6 +24,7 @@ export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [autoLogin, setAutoLogin] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
     // Initialize Vanta.js
@@ -104,8 +105,17 @@ export default function RegisterPage() {
                 }
             }
 
-            setSuccess(true);
-            setLoading(false);
+            // 3. Handle auto-login if session exists
+            if (data?.session) {
+                setAutoLogin(true);
+                setSuccess(true);
+                setTimeout(() => {
+                    router.push('/dashboard');
+                }, 2000);
+            } else {
+                setSuccess(true);
+                setLoading(false);
+            }
         } catch (err: any) {
             setErrorMsg(err?.message || 'Error inesperado al crear la cuenta.');
             setLoading(false);
@@ -209,21 +219,30 @@ export default function RegisterPage() {
                                     transition={{ delay: 0.45 }}
                                     className="text-sm text-slate-400 mb-8 leading-relaxed"
                                 >
-                                    Revisa tu bandeja de entrada para verificar tu correo electrónico antes de iniciar sesión.
+                                    {autoLogin ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <Loader2 className="w-4 h-4 animate-spin text-[#865BFF]" />
+                                            Iniciando sesión automáticamente...
+                                        </span>
+                                    ) : (
+                                        "Revisa tu bandeja de entrada para verificar tu correo electrónico antes de iniciar sesión."
+                                    )}
                                 </motion.p>
 
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.55 }}
-                                >
-                                    <button 
-                                        onClick={() => router.push('/login')} 
-                                        className="w-full bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 py-3 rounded-lg font-semibold transition-all hover:shadow-[#865BFF]/40"
+                                {!autoLogin && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.55 }}
                                     >
-                                        Ir al Inicio de Sesión
-                                    </button>
-                                </motion.div>
+                                        <button 
+                                            onClick={() => router.push('/login')} 
+                                            className="w-full bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 py-3 rounded-lg font-semibold transition-all hover:shadow-[#865BFF]/40"
+                                        >
+                                            Ir al Inicio de Sesión
+                                        </button>
+                                    </motion.div>
+                                )}
                             </motion.div>
                         ) : (
                             <motion.div 

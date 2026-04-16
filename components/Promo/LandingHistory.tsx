@@ -24,6 +24,8 @@ interface Landing {
     landing_type: string;
     language: string;
     html: string;
+    status: string;
+    admin_notes: string;
     created_at: string;
     data: {
         fullName?: string;
@@ -180,8 +182,23 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
                             {/* Preview Badge */}
                             <div className="p-6 pb-4">
                                 <div className="flex justify-between items-start mb-4">
-                                    <div className="px-3 py-1 bg-[#865BFF]/10 text-[#865BFF] text-[10px] font-black rounded-full uppercase tracking-wider">
-                                        {landing.landing_type || 'Personalizada'}
+                                    <div className="flex flex-col gap-2 items-start">
+                                        <div className="px-3 py-1 bg-[#865BFF]/10 text-[#865BFF] text-[10px] font-black rounded-full uppercase tracking-wider">
+                                            {landing.landing_type || 'Personalizada'}
+                                        </div>
+                                        <div className={`px-2 py-0.5 text-[8px] font-black uppercase tracking-widest rounded flex items-center gap-1 ${
+                                            landing.status === 'approved' ? 'bg-emerald-100 text-emerald-700' :
+                                            landing.status === 'rejected' ? 'bg-rose-100 text-rose-700' :
+                                            'bg-amber-100 text-amber-700'
+                                        }`}>
+                                            <div className={`w-1 h-1 rounded-full ${
+                                                landing.status === 'approved' ? 'bg-emerald-500' :
+                                                landing.status === 'rejected' ? 'bg-rose-500' :
+                                                'bg-amber-500 animate-pulse'
+                                            }`} />
+                                            {landing.status === 'approved' ? 'Activa' : 
+                                             landing.status === 'rejected' ? 'Rechazada' : 'En Revisión'}
+                                        </div>
                                     </div>
                                     <div className="flex items-center gap-1 text-slate-400 text-[10px] font-bold">
                                         <Calendar className="w-3 h-3" />
@@ -206,14 +223,29 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
                                         <span className="text-xs font-bold text-slate-700 truncate">{landing.data?.country || 'Global'}</span>
                                     </div>
                                 </div>
+
+                                {landing.status === 'rejected' && landing.admin_notes && (
+                                    <div className="mt-2 p-3 bg-rose-50 border border-rose-100 rounded-2xl flex gap-2">
+                                        <Rocket className="w-3 h-3 text-rose-500 shrink-0 rotate-180" />
+                                        <p className="text-[10px] text-rose-700 font-medium leading-relaxed">
+                                            <span className="font-black uppercase block mb-0.5">Motivo del rechazo:</span>
+                                            {landing.admin_notes}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Actions */}
                             <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 grid grid-cols-3 gap-2">
                                 <button 
-                                    onClick={() => window.open(`/l/${landing.slug}`, '_blank')}
-                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl hover:bg-white hover:shadow-sm transition-all text-slate-600 hover:text-[#865BFF]"
-                                    title="Ver en vivo"
+                                    onClick={() => landing.status === 'approved' && window.open(`/l/${landing.slug}`, '_blank')}
+                                    disabled={landing.status !== 'approved'}
+                                    className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
+                                        landing.status === 'approved' 
+                                            ? 'hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]' 
+                                            : 'opacity-40 cursor-not-allowed text-slate-400'
+                                    }`}
+                                    title={landing.status === 'approved' ? "Ver en vivo" : "Pendiente de aprobación"}
                                 >
                                     <Eye className="w-4 h-4" />
                                     <span className="text-[9px] font-black uppercase">Ver</span>

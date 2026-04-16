@@ -136,7 +136,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                     setPartnerId(profile.partner_id);
                 } else {
                     // Fallback if not found
-                    setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+                    setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
                 }
 
                 // Fetch roles from 'partners'
@@ -203,6 +203,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
             key: 'admin', label: t.nav.admin, icon: Shield, isSubmenu: true, roles: ['admin'],
             children: [
                 { href: '/dashboard/admin/partners', label: t.nav.partnerManagement },
+                { href: '/dashboard/admin/landings', label: 'Aprobación Landings' },
                 { href: '/dashboard/admin/settings', label: t.nav.globalSettings },
             ]
         },

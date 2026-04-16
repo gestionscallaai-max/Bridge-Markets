@@ -54,7 +54,7 @@ export default function OverviewPage() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) return;
 
-            if (user) setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
+            if (user) setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
 
             try {
                 // ── Fetch partner name
