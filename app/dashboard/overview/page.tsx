@@ -26,8 +26,10 @@ export default function OverviewPage() {
         leads: 0,
         clicks: 0,
         landings: 0,
+        conversionRate: 0,
         weeklyData: [] as { day: string; count: number }[],
         countryData: [] as { country: string; count: number }[],
+        landingPerformance: [] as { slug: string; leads: number; clicks: number; cr: number }[],
     });
     const [topPartners, setTopPartners] = useState<any[]>([]);
     const [mounted, setMounted] = useState(false);
@@ -54,16 +56,25 @@ export default function OverviewPage() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) return;
 
-            if (user) setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
-
             try {
-                // ── Fetch partner name
+                // ── Fetch user identity data from 'partners'
                 const { data: partnerData } = await supabase
                     .from('partners')
-                    .select('name, role')
+                    .select('name, role, partner_id')
                     .eq('id', user.id)
                     .single();
-                if (partnerData?.name) setPartnerName(partnerData.name);
+
+                if (partnerData) {
+                    if (partnerData.name) setPartnerName(partnerData.name);
+                    
+                    // Set Partner ID (BM_...)
+                    if (partnerData.partner_id) {
+                        setPartnerId(partnerData.partner_id);
+                    } else {
+                        // Global fallback logic
+                        setPartnerId('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase());
+                    }
+                }
 
                 let leadsQuery = supabase.from('leads').select('*', { count: 'exact' });
                 let clicksQuery = supabase.from('clicks').select('*', { count: 'exact' });
@@ -76,6 +87,31 @@ export default function OverviewPage() {
                 }
 
                 const [l, c, ln] = await Promise.all([leadsQuery, clicksQuery, landingsQuery]);
+
+                // ── Calculate Performance by Slug
+                const perfMap: Record<string, { leads: number; clicks: number }> = {};
+                l.data?.forEach(lead => {
+                    const slug = (lead as any).slug || 'N/A';
+                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
+                    perfMap[slug].leads++;
+                });
+                c.data?.forEach(click => {
+                    const slug = (click as any).slug || 'N/A';
+                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
+                    perfMap[slug].clicks++;
+                });
+
+                const landingPerf = Object.entries(perfMap)
+                    .map(([slug, data]) => ({
+                        slug,
+                        leads: data.leads,
+                        clicks: data.clicks,
+                        cr: data.clicks > 0 ? (data.leads / data.clicks) * 100 : 0
+                    }))
+                    .sort((a, b) => b.leads - a.leads)
+                    .slice(0, 5);
+
+                const globalCR = c.count ? (l.count! / c.count) * 100 : 0;
 
                 // Admin: fetch total partners count
                 if (isAdmin) {
@@ -167,8 +203,10 @@ export default function OverviewPage() {
                     leads: l.count || 0,
                     clicks: c.count || 0,
                     landings: ln.count || 0,
+                    conversionRate: globalCR,
                     weeklyData: chartData,
                     countryData: formattedCountryData as any,
+                    landingPerformance: landingPerf,
                 });
             } catch (err) {
                 console.error('Error fetching stats:', err);
@@ -189,6 +227,7 @@ export default function OverviewPage() {
     const partnerStatCards = [
         { title: t.overview.myLeads, value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF' },
         { title: t.overview.trafficClicks, value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6' },
+        { title: t.overview.conversionRate || 'Tasa de Conversión', value: stats.conversionRate.toFixed(1) + '%', icon: Target, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981' },
         { title: t.overview.myLandings, value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b' },
     ];
 
@@ -530,6 +569,75 @@ export default function OverviewPage() {
                             </div>
                         </div>
                     ))}
+                </div>
+            </motion.div>
+
+            {/* ── Mejores Landings Table */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.42 }}
+                className="card p-6">
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <Activity className="w-4 h-4 text-[#865BFF]" />
+                            {t.overview.topLandings || 'Rendimiento por Landing'}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-0.5">{t.overview.topLandingsDesc || 'Análisis detallado de conversión por página generada.'}</p>
+                    </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr className="border-b border-slate-100">
+                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">{t.landing.title || 'Landing'}</th>
+                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">{t.overview.trafficClicks || 'Clicks'}</th>
+                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">{t.overview.myLeads || 'Leads'}</th>
+                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">{t.overview.conversion || 'Rendimiento'}</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                            {stats.landingPerformance.length > 0 ? stats.landingPerformance.map((lp, i) => (
+                                <tr key={i} className="group hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[#865BFF]">
+                                                <Globe className="w-4 h-4" />
+                                            </div>
+                                            <div>
+                                                <div className="text-sm font-bold text-slate-800 group-hover:text-[#865BFF] transition-colors">{lp.slug}</div>
+                                                <div className="text-[10px] text-slate-400 font-medium">/l/{lp.slug}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="py-4 text-center">
+                                        <span className="text-sm font-semibold text-slate-600">{lp.clicks}</span>
+                                    </td>
+                                    <td className="py-4 text-center">
+                                        <span className="text-sm font-bold text-slate-800">{lp.leads}</span>
+                                    </td>
+                                    <td className="py-4 text-right">
+                                        <div className="flex flex-col items-end">
+                                            <span className={`text-sm font-black ${lp.cr > 15 ? 'text-emerald-500' : 'text-[#865BFF]'}`}>
+                                                {lp.cr.toFixed(1)}%
+                                            </span>
+                                            <div className="w-16 h-1 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full ${lp.cr > 15 ? 'bg-emerald-500' : 'bg-[#865BFF]'}`}
+                                                    style={{ width: `${Math.min(lp.cr * 2, 100)}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )) : (
+                                <tr>
+                                    <td colSpan={4} className="py-10 text-center text-slate-400 text-xs italic">
+                                        {t.overview.noLandingData || 'No hay datos de rendimiento suficientes aún.'}
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </motion.div>
 

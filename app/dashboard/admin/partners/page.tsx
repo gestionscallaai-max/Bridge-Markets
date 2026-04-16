@@ -120,7 +120,7 @@ export default function PartnersManagementPage() {
                                     <td className="px-6 py-5">
                                         <div className="flex flex-col gap-1">
                                             <div className="text-[11px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded w-fit">
-                                                BM_{partner.id.substring(0, 24).toUpperCase()}
+                                                {partner.partner_id || `BM_${partner.id.replace(/-/g, '').substring(0, 24).toUpperCase()}`}
                                             </div>
                                             <div className="flex items-center gap-1 text-[11px] text-slate-400">
                                                 <Calendar className="w-3 h-3" />

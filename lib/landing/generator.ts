@@ -465,21 +465,21 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
         
         /* Overrides para evitar bordes o cajas duras que corten */
         .bg-white, .bg-\\[\\#F8FAFC\\], .bg-slate-50 { background-color: transparent !important; }
-        ${isDark ? \`
+        ` + (isDark ? `
         .bg-white\\/5 { background: rgba(255,255,255,0.02) !important; }
         .text-slate-800, .text-\\[\\#140633\\], .text-brand-dark { color: #FFFFFF !important; }
-        \` : \`
+        ` : `
         .text-white { color: #0f172a !important; }
         .text-white\\/60 { color: rgba(15, 23, 42, 0.6) !important; }
         .text-white\\/40 { color: rgba(15, 23, 42, 0.4) !important; }
         .bg-white\\/5 { background: rgba(255,255,255,0.6) !important; border: 1px solid rgba(0,0,0,0.05) !important; color: #0f172a !important; }
-        \`}
+        `) + `
         
         /* Force spacing to look complete and organized */
         .section-wrapper {
             padding: 2rem 0 !important;
         }
-    </style>\`;
+    </style>`;
 }
 
 export function generateModularLandingHTML(data: LandingData): string {

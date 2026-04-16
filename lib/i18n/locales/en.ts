@@ -108,6 +108,10 @@ export const en: TranslationKeys = {
         viewPartnersList: 'View Partners',
         hello: 'Hello',
         personalMetrics: 'Your personal metrics',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: 'Loading...', save: 'Save', cancel: 'Cancel', delete: 'Delete',

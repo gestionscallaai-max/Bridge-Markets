@@ -117,6 +117,26 @@ export async function POST(request: Request) {
             }, { status: 500 });
         }
 
+        // --- Notificar a los Admins ---
+        const { data: admins } = await supabaseAdmin
+            .from('partners')
+            .select('id')
+            .eq('role', 'admin');
+
+        const adminNotifTitle = 'Nueva Landing Pendiente';
+        const adminNotifMessage = `El socio ha creado la landing "${slug}". Necesita revisión.`;
+        
+        if (admins && admins.length > 0) {
+            const notifications = admins.map(admin => ({
+                user_id: admin.id,
+                title: adminNotifTitle,
+                message: adminNotifMessage,
+                type: 'warning',
+                link: '/dashboard/admin/landings'
+            }));
+            await supabaseAdmin.from('notifications').insert(notifications);
+        }
+
         return NextResponse.json({ success: true, url: `/l/${slug}` });
     } catch (e: any) {
         console.error('Critical API Error:', e);
@@ -208,7 +228,26 @@ export async function PATCH(request: Request) {
 
         if (error) throw error;
 
-        return NextResponse.json({ success: true, data });
+        // --- Notificar al socio ---
+        if (data && data.length > 0) {
+            const landing = data[0];
+            const notifTitle = status === 'approved' ? '¡Landing Aprobada!' : 'Landing Rechazada';
+            const notifMessage = status === 'approved' 
+                ? `Tu landing "${landing.slug}" ha sido aprobada y ya es pública.`
+                : `Tu landing "${landing.slug}" requiere cambios. Nota: ${adminNotes || 'Ver detalles'}`;
+            
+            await supabaseAdmin
+                .from('notifications')
+                .insert({
+                    user_id: landing.partner_id,
+                    title: notifTitle,
+                    message: notifMessage,
+                    type: status === 'approved' ? 'success' : 'error',
+                    link: '/dashboard/promo/overview'
+                });
+        }
+
+        return NextResponse.json({ success: true, data: data[0] });
     } catch (e: any) {
         console.error('Critical PATCH Error:', e.message || e);
         return NextResponse.json({ 

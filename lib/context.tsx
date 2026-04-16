@@ -10,5 +10,5 @@ export const AdminContext = createContext<{ isAdmin: boolean; setIsAdmin: (val: 
 export const useAdmin = () => useContext(AdminContext);
 
 // ─── Role Context ─────────────────────────────────────────────
-export const RoleContext = createContext<{ userRole: string }>({ userRole: 'partner_view' });
+export const RoleContext = createContext<{ userRole: string }>({ userRole: 'partner' });
 export const useRole = () => useContext(RoleContext);
