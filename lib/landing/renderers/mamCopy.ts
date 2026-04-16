@@ -11,7 +11,7 @@ export function renderMCHero(content: Record<string, any>, brand: BrandConfig): 
         <div class="absolute inset-0 z-0">
             <div class="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-[#865BFF]/5 rounded-full blur-[120px] animate-pulse"></div>
             <div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px]"></div>
-            <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#140633 1px, transparent 1px); background-size: 40px 40px;"></div>
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#140633 1px, bg-white 1px); background-size: 40px 40px;"></div>
         </div>
         
         <div class="max-w-7xl mx-auto w-full relative z-10 flex-grow flex flex-col pt-24">
@@ -90,14 +90,14 @@ export function renderMCIntro(content: Record<string, any>, brand: BrandConfig):
                     </p>
                 </div>
                 <div class="grid grid-cols-1 gap-10">
-                    <div class="p-12 bg-slate-50 rounded-[3rem] border border-slate-100 hover:shadow-3xl hover:bg-white transition-all transform hover:-translate-x-4 group">
+                    <div class="p-12 glass-panel rounded-[3rem] border border-slate-100 hover:shadow-3xl hover:bg-white/10 transition-all transform hover:-translate-x-4 group">
                         <div class="flex items-center gap-8 mb-8">
                             <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-4xl">account_balance</span></div>
                             <h4 class="text-3xl font-black text-[#140633] uppercase tracking-tighter">MAM Ecosystem</h4>
                         </div>
                         <p class="text-gray-400 font-medium text-lg leading-relaxed">Gestión centralizada de múltiples cuentas bajo una sola terminal maestra con ejecución LPOA.</p>
                     </div>
-                    <div class="p-12 bg-slate-50 rounded-[3rem] border border-slate-100 hover:shadow-3xl hover:bg-white transition-all transform hover:-translate-x-2 group">
+                    <div class="p-12 glass-panel rounded-[3rem] border border-slate-100 hover:shadow-3xl hover:bg-white/10 transition-all transform hover:-translate-x-2 group">
                         <div class="flex items-center gap-8 mb-8">
                             <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-4xl">auto_awesome</span></div>
                             <h4 class="text-3xl font-black text-[#140633] uppercase tracking-tighter">Social Copy</h4>
@@ -112,7 +112,7 @@ export function renderMCIntro(content: Record<string, any>, brand: BrandConfig):
 
 export function renderMCMamBlock(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section id="mam" class="py-48 bg-[#F8FAFC] relative overflow-hidden">
+    <section id="mam" class="py-48 glass-panel relative overflow-hidden">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,#3B82F608,transparent_50%)]"></div>
         <div class="max-w-7xl mx-auto px-8 relative z-10">
             <div class="mb-40 section-reveal text-center lg:text-left">
@@ -175,11 +175,11 @@ export function renderMCMamBlock(content: Record<string, any>, brand: BrandConfi
                         "Limited Power of Attorney: La seguridad de que tu capital **siempre** es tuyo."
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full text-left">
-                        <div class="p-10 bg-slate-50 rounded-[3rem] border border-slate-100 flex gap-8 items-center">
+                        <div class="p-10 glass-panel rounded-[3rem] border border-slate-100 flex gap-8 items-center">
                             <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 shrink-0"><span class="material-symbols-outlined text-4xl">lock</span></div>
                             <p class="text-sm font-black text-[#140633] uppercase tracking-[0.2em] leading-relaxed">El gestor tiene restringido el acceso a retiros de fondos de clientes.</p>
                         </div>
-                        <div class="p-10 bg-slate-50 rounded-[3rem] border border-slate-100 flex gap-8 items-center">
+                        <div class="p-10 glass-panel rounded-[3rem] border border-slate-100 flex gap-8 items-center">
                             <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-emerald-600 shrink-0"><span class="material-symbols-outlined text-4xl">key</span></div>
                             <p class="text-sm font-black text-[#140633] uppercase tracking-[0.2em] leading-relaxed">Solo el titular de la cuenta puede autorizar depósitos y retiros.</p>
                         </div>
@@ -209,7 +209,7 @@ export function renderMCCopyBlock(content: Record<string, any>, brand: BrandConf
                     { icon: 'payments', title: 'Inmediato', desc: 'Retira tus beneficios sin esperar aprobaciones de terceros.' },
                     { icon: 'groups', title: 'Diverso', desc: 'Copia a múltiples estrategias para diversificar tu riesgo.' }
                 ].map((item, i) => `
-                    <div class="bg-slate-50 p-14 rounded-[3.5rem] border border-slate-100 shadow-inner hover:shadow-3xl hover:bg-white transition-all transform hover:-translate-y-6 group">
+                    <div class="glass-panel p-14 rounded-[3.5rem] border border-slate-100 shadow-inner hover:shadow-3xl hover:bg-white/10 transition-all transform hover:-translate-y-6 group">
                         <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-emerald-600 mb-12 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-700 shadow-md">
                             <span class="material-symbols-outlined text-5xl">${item.icon}</span>
                         </div>
@@ -220,7 +220,7 @@ export function renderMCCopyBlock(content: Record<string, any>, brand: BrandConf
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 section-reveal">
-                <div class="bg-[#F8FAFC] rounded-[5rem] p-20 border border-slate-100 shadow-2xl relative overflow-hidden group">
+                <div class="glass-panel rounded-[5rem] p-20 border border-slate-100 shadow-2xl relative overflow-hidden group">
                     <span class="text-[120px] font-black text-gray-100 absolute -top-10 -right-10 leading-none tracking-tightest group-hover:text-emerald-500/5 transition-colors">SYNC</span>
                     <h4 class="text-emerald-600 text-[11px] font-black uppercase tracking-[0.8em] mb-16 relative z-10">Ventaja Competitiva</h4>
                     <div class="space-y-16 relative z-10">
@@ -277,7 +277,7 @@ export function renderMCComparison(content: Record<string, any>, brand: BrandCon
                                 { c: 'Ejecución Operativa', m: 'Proporcional por Capital', ct: 'Replicada en milisegundos' },
                                 { c: 'Perfil Sugerido', m: 'Inversionistas Institucionales / High-Net', ct: 'Retail Traders / Traders Pasivos' }
                             ].map(row => `
-                                <tr class="hover:bg-slate-50 transition-colors">
+                                <tr class="hover:glass-panel transition-colors">
                                     <td class="py-12 px-12 text-[#140633] font-black text-sm uppercase tracking-widest border-r border-slate-50">${row.c}</td>
                                     <td class="py-12 px-12 text-gray-500 text-lg font-medium border-r border-slate-50">${row.m}</td>
                                     <td class="py-12 px-12 text-gray-500 text-lg font-medium">${row.ct}</td>
@@ -375,7 +375,7 @@ export function renderMCCommunity(content: Record<string, any>, brand: BrandConf
     <section id="community" class="py-48 bg-white relative">
         <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal">
             <div class="bg-white rounded-[6rem] p-16 lg:p-32 border border-slate-100 shadow-4xl relative overflow-hidden flex flex-col lg:flex-row items-center gap-32 group">
-                <div class="absolute inset-0 bg-slate-50 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-0 glass-panel opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 <div class="lg:w-1/2 relative">
                     <div class="rounded-[4rem] overflow-hidden shadow-4xl rotate-3 hover:rotate-0 transition-transform duration-1000 aspect-square border-8 border-white">
                         <img src="${bannerUrl}" alt="Banner" class="w-full h-full object-cover">
@@ -413,7 +413,7 @@ export function renderMCFaq(content: Record<string, any>, brand: BrandConfig): s
                     { q: '¿Tengo que dejar mi computadora encendida para CopyTrading?', a: 'No. La replicación ocurre en la nube, dentro de los servidores de Bridge Markets. Una vez conectada tu cuenta, puedes apagar tu dispositivo y el sistema seguirá replicando 24/5.' },
                     { q: '¿Qué riesgo asumo al copiar a un tercero?', a: 'Asumes el riesgo operativo de la estrategia elegida. Sin embargo, en CopyTrading tú mantienes el control de detener la copia en cualquier momento y de definir tu propio nivel de gestión de riesgo.' }
                 ].map((item, i) => `
-                    <div class="bg-slate-50 border border-slate-100 p-14 rounded-[4rem] text-left hover:border-[#865BFF]/30 hover:bg-white transition-all group shadow-sm hover:shadow-3xl">
+                    <div class="glass-panel border border-slate-100 p-14 rounded-[4rem] text-left hover:border-[#865BFF]/30 hover:bg-white/10 transition-all group shadow-sm hover:shadow-3xl">
                         <h4 class="text-3xl font-black text-[#140633] mb-8 uppercase tracking-tighter flex items-center gap-8">
                             <span class="w-4 h-4 rounded-full bg-[#865BFF]"></span> ${item.q}
                         </h4>
@@ -459,7 +459,7 @@ export function renderMCFooter(content: Record<string, any>, brand: BrandConfig)
                 <div class="max-w-md">
                     <img src="/logo.png" alt="Bridge Markets" class="w-12 h-12 object-contain filter ${isLight ? 'brightness-0' : 'brightness-100'}">
                     <p class="text-gray-400 text-lg font-bold uppercase tracking-widest leading-loose mb-16">Infraestructura institucional V3. Bridge Markets LTD está regulado internacionalmente para garantizar la máxima seguridad de fondos segregados.</p>
-                    <div class="p-12 bg-slate-50 rounded-[4rem] border border-slate-100 flex gap-10 items-center">
+                    <div class="p-12 glass-panel rounded-[4rem] border border-slate-100 flex gap-10 items-center">
                         <div class="w-20 h-20 bg-white rounded-[1.5rem] shadow-sm flex items-center justify-center text-[#865BFF] text-3xl font-black">
                             ${ibName.charAt(0)}
                         </div>

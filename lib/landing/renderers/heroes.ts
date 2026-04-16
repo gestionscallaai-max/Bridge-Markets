@@ -86,7 +86,7 @@ export function renderHeroGradient(content: Record<string, any>, brand: BrandCon
     const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_gradient')!.defaultContent, ...content };
     return `
     <section class="relative py-32 px-8 overflow-hidden" style="background: linear-gradient(135deg, #0a0614 0%, #1a0b3a 30%, #2d1070 60%, #6635de 100%);">
-        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 32px 32px;"></div>
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, bg-white 0); background-size: 32px 32px;"></div>
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[200px] -translate-y-1/3 translate-x-1/3"></div>
         <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
             <span class="inline-block px-5 py-2 rounded-full bg-white/10 border border-white/20 text-accent text-xs font-bold uppercase tracking-[0.2em] mb-8 backdrop-blur">${c.badge}</span>

@@ -194,7 +194,7 @@ export default function LibraryDocuments() {
                             onClick={() => setShowUploadModal(true)}
                             className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-xl hover:-translate-y-0.5"
                         >
-                            <Shield className="w-4 h-4 text-amber-500" /> Gestionar Biblioteca
+                            <Shield className="w-4 h-4 text-amber-500" /> {t.gallery.manageDocs}
                         </button>
                     )}
                 </div>
@@ -280,12 +280,12 @@ export default function LibraryDocuments() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="border-b border-slate-50 bg-slate-50/50">
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Visual</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Documento</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Categoría</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Idioma</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Tamaño</th>
-                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Acciones</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.gallery.visual}</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.gallery.document}</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.gallery.category}</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.gallery.language}</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.gallery.size}</th>
+                                    <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">{t.gallery.actions}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
@@ -335,7 +335,7 @@ export default function LibraryDocuments() {
                     </div>
                     <h3 className="text-2xl font-black text-slate-800 mb-2">{t.common.noData}</h3>
                     <p className="text-sm text-slate-400 font-medium max-w-sm text-center leading-relaxed">
-                        No hay documentos que coincidan con los filtros seleccionados.
+                        {t.gallery.noDocsFound}
                     </p>
                 </div>
             )}
@@ -472,8 +472,8 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
             >
                 <div className="px-10 py-8 border-b border-slate-100 flex items-center justify-between bg-white">
                     <div>
-                        <h2 className="text-2xl font-black text-slate-800 tracking-tight">Gestionar Documentos</h2>
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Portal Administrativo</p>
+                        <h2 className="text-2xl font-black text-slate-800 tracking-tight">{t.gallery.manageDocs}</h2>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">{t.gallery.adminPortal}</p>
                     </div>
                     <button onClick={onClose} className="p-3 rounded-2xl hover:bg-slate-50 text-slate-400 hover:text-slate-800 transition-all">
                         <X className="w-6 h-6" />
@@ -488,13 +488,13 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                     onClick={() => setFileType('single')}
                                     className={`flex-1 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${fileType === 'single' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
                                 >
-                                    Carga Manual
+                                    {t.gallery.manualUpload}
                                 </button>
                                 <button 
                                     onClick={() => setFileType('migration')}
                                     className={`flex-1 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${fileType === 'migration' ? 'bg-white text-[#865BFF] shadow-sm border border-[#865BFF]/10' : 'text-slate-400 hover:text-[#865BFF]'}`}
                                 >
-                                    <Sparkles className="w-3.5 h-3.5 inline mr-2 text-amber-500" /> Migración Local
+                                    <Sparkles className="w-3.5 h-3.5 inline mr-2 text-amber-500" /> {t.gallery.localMigration}
                                 </button>
                             </div>
 
@@ -502,7 +502,7 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                 <div className="grid grid-cols-1 gap-6">
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Título del Documento</label>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">{t.gallery.docTitle}</label>
                                             <input 
                                                 type="text" 
                                                 value={title}
@@ -513,7 +513,7 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Categoría</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">{t.gallery.category}</label>
                                                 <select 
                                                     value={selectedCategory}
                                                     onChange={(e) => setSelectedCategory(e.target.value)}
@@ -525,7 +525,7 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Idioma</label>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">{t.gallery.language}</label>
                                                 <select 
                                                     value={selectedLang}
                                                     onChange={(e) => setSelectedLang(e.target.value)}
@@ -542,12 +542,12 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="relative border-2 border-dashed border-slate-100 rounded-[1.5rem] p-6 text-center hover:border-[#865BFF]/30 hover:bg-[#865BFF]/5 transition-all cursor-pointer group">
                                                 <FileText className="w-6 h-6 text-[#865BFF] mx-auto mb-3 transition-transform group-hover:scale-110" />
-                                                <span className="text-[10px] font-black text-slate-500 uppercase block truncate">{pdfFile ? pdfFile.name : 'Subir PDF'}</span>
+                                                <span className="text-[10px] font-black text-slate-500 uppercase block truncate">{pdfFile ? pdfFile.name : t.gallery.uploadPdf}</span>
                                                 <input type="file" accept=".pdf" onChange={(e) => setPdfFile(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
                                             </div>
                                             <div className="relative border-2 border-dashed border-slate-100 rounded-[1.5rem] p-6 text-center hover:border-[#865BFF]/30 hover:bg-[#865BFF]/5 transition-all cursor-pointer group">
                                                 <Upload className="w-6 h-6 text-emerald-500 mx-auto mb-3 transition-transform group-hover:scale-110" />
-                                                <span className="text-[10px] font-black text-slate-500 uppercase block truncate">{thumbFile ? thumbFile.name : 'Miniatura JPG'}</span>
+                                                <span className="text-[10px] font-black text-slate-500 uppercase block truncate">{thumbFile ? thumbFile.name : t.gallery.thumbnailJpg}</span>
                                                 <input type="file" accept="image/*" onChange={(e) => setThumbFile(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
                                             </div>
                                         </div>
@@ -557,15 +557,15 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                         disabled={!pdfFile || !thumbFile || !title}
                                         className="w-full py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-sm shadow-2xl hover:bg-[#865BFF] disabled:opacity-30 transition-all mt-4"
                                     >
-                                        Sincronizar Documento
+                                        {t.gallery.syncDoc}
                                     </button>
                                 </div>
                             ) : (
                                 <div className="space-y-6">
                                     <div className="p-10 border-2 border-dashed border-[#865BFF]/30 bg-[#865BFF]/5 rounded-[2.5rem] text-center relative group">
                                         <Sparkles className="w-12 h-12 text-[#865BFF] mx-auto mb-4 group-hover:rotate-12 transition-transform duration-500" />
-                                        <h4 className="text-lg font-black text-slate-800 mb-2 tracking-tight">Carga Masiva (Folder Docs)</h4>
-                                        <p className="text-[11px] text-slate-400 max-w-[240px] mx-auto font-medium leading-relaxed">Arrastra todos los archivos de la carpeta Docs Bridge Makets</p>
+                                        <h4 className="text-lg font-black text-slate-800 mb-2 tracking-tight">{t.gallery.massiveUpload}</h4>
+                                        <p className="text-[11px] text-slate-400 max-w-[240px] mx-auto font-medium leading-relaxed">{t.gallery.dragFilesDesc}</p>
                                         <input 
                                             type="file" multiple 
                                             onChange={(e) => setMigrationFiles(Array.from(e.target.files || []))}
@@ -574,8 +574,8 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                     </div>
                                     {migrationFiles.length > 0 && (
                                         <div className="bg-slate-50 p-6 rounded-[1.5rem] border border-slate-100 flex items-center justify-between">
-                                            <span className="text-[11px] font-black text-slate-700 uppercase tracking-widest">{migrationFiles.length} Archivos Listos</span>
-                                            <button onClick={() => setMigrationFiles([])} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:bg-white px-3 py-1.5 rounded-lg transition-all">Limpiar</button>
+                                            <span className="text-[11px] font-black text-slate-700 uppercase tracking-widest">{migrationFiles.length} {t.gallery.filesReady}</span>
+                                            <button onClick={() => setMigrationFiles([])} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:bg-white px-3 py-1.5 rounded-lg transition-all">{t.gallery.clearBtn}</button>
                                         </div>
                                     )}
                                     <button 
@@ -583,7 +583,7 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                         disabled={migrationFiles.length === 0}
                                         className="w-full py-5 bg-[#865BFF] text-white rounded-[1.5rem] font-black text-sm shadow-xl hover:bg-[#7349e5] disabled:opacity-30 transition-all"
                                     >
-                                        Iniciar Procesamiento Automático
+                                        {t.gallery.startProcess}
                                     </button>
                                 </div>
                             )}
@@ -595,7 +595,7 @@ function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () =>
                                 <div className="absolute inset-0 flex items-center justify-center font-black text-[10px] text-[#865BFF] mt-10">{progress}%</div>
                             </div>
                             <div className="space-y-4">
-                                <h3 className="text-xl font-black text-slate-800 tracking-tight">Sincronizando con Servidor</h3>
+                                <h3 className="text-xl font-black text-slate-800 tracking-tight">{t.gallery.syncingServer}</h3>
                                 <div className="max-w-md mx-auto text-[10px] font-mono text-slate-400 bg-slate-900 p-5 rounded-[1.5rem] text-left h-32 overflow-y-auto custom-scrollbar">
                                     {logs.map((log, i) => (
                                         <div key={i} className="mb-2 flex gap-2">

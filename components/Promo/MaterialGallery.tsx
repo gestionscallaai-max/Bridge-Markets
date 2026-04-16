@@ -176,8 +176,8 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
             {/* Header / Controls */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
-                    <h3 className="text-xl font-black text-slate-800 tracking-tight">Material de Promoción</h3>
-                    <p className="text-sm text-slate-500">Recursos visuales para tus redes sociales</p>
+                    <h3 className="text-xl font-black text-slate-800 tracking-tight">{t.gallery.materialGalleryTitle}</h3>
+                    <p className="text-sm text-slate-500">{t.gallery.materialGalleryDesc}</p>
                 </div>
                 
                 <div className="flex items-center gap-2 w-full md:w-auto">
@@ -185,7 +185,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
                             type="text" 
-                            placeholder="Buscar material..."
+                            placeholder={t.gallery.searchMaterial}
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                             className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#865BFF]/20 transition-all"
@@ -198,7 +198,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                                 onClick={handleSync}
                                 disabled={syncing}
                                 className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
-                                title="Sincronizar imágenes existentes"
+                                title={t.gallery.syncExistingImages}
                             >
                                 {syncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />}
                                 <span className="hidden sm:inline">Sync</span>
@@ -206,7 +206,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                             
                             <label className="flex items-center gap-2 px-4 py-2 bg-[#865BFF] hover:bg-[#7349e5] text-white rounded-xl text-sm font-bold shadow-lg shadow-[#865BFF]/20 cursor-pointer transition-all">
                                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                                <span>{uploading ? 'Subiendo...' : 'Subir'}</span>
+                                <span>{uploading ? t.gallery.uploading : t.gallery.upload}</span>
                                 <input type="file" className="hidden" onChange={handleUpload} accept="image/*" disabled={uploading} />
                             </label>
                         </>
@@ -218,7 +218,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 grayscale opacity-50">
                     <Loader2 className="w-10 h-10 animate-spin text-[#865BFF] mb-4" />
-                    <p className="font-bold text-slate-400">Cargando galería...</p>
+                    <p className="font-bold text-slate-400">{t.gallery.loadingGallery}</p>
                 </div>
             ) : filteredAssets.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -237,14 +237,14 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                                     <button 
                                         onClick={() => window.open(asset.url, '_blank')}
                                         className="p-3 bg-white/20 backdrop-blur-md rounded-xl text-white hover:bg-white/40 transition-all shadow-xl"
-                                        title="Ver tamaño completo"
+                                        title={t.gallery.viewFullSize}
                                     >
                                         <ExternalLink className="w-5 h-5" />
                                     </button>
                                     <button 
                                         onClick={() => handleDownload(asset)}
                                         className="p-3 bg-white text-slate-900 rounded-xl hover:scale-105 transition-all shadow-xl"
-                                        title="Descargar material"
+                                        title={t.gallery.downloadMaterial}
                                     >
                                         <Download className="w-5 h-5" />
                                     </button>
@@ -252,7 +252,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                                         <button 
                                             onClick={() => handleDelete(asset.id)}
                                             className="p-3 bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl"
-                                            title="Eliminar de la galería"
+                                            title={t.gallery.deleteFromGallery}
                                         >
                                             <Trash2 className="w-5 h-5" />
                                         </button>
@@ -261,24 +261,21 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                             </div>
 
                             {/* Info */}
-                            <div className="p-4 border-t border-slate-100 bg-white">
-                                <div className="flex items-center justify-between mb-1">
-                                    <h4 className="text-[13px] font-bold text-slate-800 truncate pr-2">{asset.title}</h4>
-                                    <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
+                            <div className="p-4 border-t border-slate-100 bg-white flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest bg-slate-50 px-2 py-0.5 rounded border border-slate-200 shadow-sm">
                                         {asset.mime_type.split('/')[1]}
                                     </span>
-                                </div>
-                                <div className="flex items-center justify-between">
                                     <span className="text-[10px] text-slate-400 font-medium">
                                         {new Date(asset.created_at).toLocaleDateString()}
                                     </span>
-                                    <button 
-                                        onClick={() => handleDownload(asset)}
-                                        className="text-[10px] font-bold text-[#865BFF] hover:underline"
-                                    >
-                                        Descargar
-                                    </button>
                                 </div>
+                                <button 
+                                    onClick={() => handleDownload(asset)}
+                                    className="text-[10px] font-bold text-[#865BFF] hover:text-[#7349e5] transition-colors"
+                                >
+                                    {t.gallery.downloadBtn}
+                                </button>
                             </div>
                         </div>
                     ))}
@@ -288,9 +285,9 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                     <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <ImageIcon className="w-10 h-10 text-slate-300" />
                     </div>
-                    <h3 className="text-xl font-black text-slate-800 mb-2">Galería vacía</h3>
+                    <h3 className="text-xl font-black text-slate-800 mb-2">{t.gallery.emptyGallery}</h3>
                     <p className="text-slate-500 max-w-sm mx-auto mb-8">
-                        No hay material de promoción disponible actualmente.
+                        {t.gallery.noMaterialAvailable}
                     </p>
                     {isAdmin && (
                         <button 
@@ -299,7 +296,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                             className="inline-flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white rounded-xl font-bold shadow-lg shadow-[#865BFF]/20 hover:scale-105 transition-all"
                         >
                             {syncing ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCcw className="w-5 h-5" />}
-                            Registrar imágenes de /public/images/post
+                            {t.gallery.syncBtn}
                         </button>
                     )}
                 </div>

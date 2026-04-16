@@ -178,12 +178,11 @@ export default function OverviewPage() {
         fetchStats();
     }, [isAdmin, lang]);
 
-    // ── ADMIN stat cards
     const adminStatCards = [
-        { title: 'Red Total - Leads', value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF', badge: 'Global' },
-        { title: 'Clicks Totales Red', value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6', badge: 'Red' },
-        { title: 'Landings Activas', value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b', badge: 'Total' },
-        { title: 'Partners Activos', value: totalPartners.toString(), icon: Network, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981', badge: 'Red' },
+        { title: t.overview.adminStatLeads, value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF', badge: t.overview.global },
+        { title: t.overview.adminStatClicks, value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6', badge: t.overview.network },
+        { title: t.overview.adminStatLandings, value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b', badge: t.overview.total },
+        { title: t.overview.adminStatPartners, value: totalPartners.toString(), icon: Network, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981', badge: t.overview.network },
     ];
 
     // ── PARTNER VIEW stat cards
@@ -223,10 +222,10 @@ export default function OverviewPage() {
 
     // Quick actions differ by role
     const adminQuickActions = [
-        { label: 'Gestionar Partners', desc: 'Ver y administrar toda la red', icon: Shield, color: '#865BFF', bg: 'rgba(134,91,255,0.08)', href: '/dashboard/admin/partners' },
-        { label: 'Clientes Globales', desc: 'Ver todos los leads de la red', icon: Users, color: '#10b981', bg: 'rgba(16,185,129,0.08)', href: '/dashboard/reports/clients' },
-        { label: 'Estadísticas Red', desc: 'Métricas consolidadas', icon: BarChart2, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', href: '/dashboard/reports/stats' },
-        { label: 'Landings Activas', desc: 'Todas las landings de la red', icon: Globe, color: '#38bdf8', bg: 'rgba(56,189,248,0.08)', href: '/dashboard/landing' },
+        { label: t.overview.managePartners, desc: t.overview.managePartnersDesc, icon: Shield, color: '#865BFF', bg: 'rgba(134,91,255,0.08)', href: '/dashboard/admin/partners' },
+        { label: t.overview.globalClients, desc: t.overview.globalClientsDesc, icon: Users, color: '#10b981', bg: 'rgba(16,185,129,0.08)', href: '/dashboard/reports/clients' },
+        { label: t.overview.networkStats, desc: t.overview.networkStatsDesc, icon: BarChart2, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', href: '/dashboard/reports/stats' },
+        { label: t.overview.activeLandings, desc: t.overview.activeLandingsDesc, icon: Globe, color: '#38bdf8', bg: 'rgba(56,189,248,0.08)', href: '/dashboard/landing' },
     ];
 
     const partnerQuickActions = [
@@ -261,11 +260,11 @@ export default function OverviewPage() {
                                 <div>
                                     <div className="flex items-center gap-2 mb-0.5">
                                         <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-500/60 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
-                                            <Shield className="w-2.5 h-2.5" /> Panel Administrador
+                                            <Shield className="w-2.5 h-2.5" /> {t.overview.adminPanel}
                                         </span>
                                     </div>
                                     <h1 className="text-base font-bold text-white">{t.overview.adminPanel}</h1>
-                                    <p className="text-xs text-white/40 mt-0.5">{t.overview.realtimeData} · Toda la red</p>
+                                    <p className="text-xs text-white/40 mt-0.5">{t.overview.realtimeData} · {t.overview.network}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3 flex-wrap">
@@ -331,7 +330,7 @@ export default function OverviewPage() {
                                 <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded mt-1.5 inline-block ${
                                     isAdmin ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
                                 }`}>
-                                    {isAdmin ? (s as any).badge || 'Global' : t.overview.realTime}
+                                    {isAdmin ? (s as any).badge || t.overview.global : t.overview.realTime}
                                 </span>
                             </div>
                         </motion.div>
@@ -343,7 +342,7 @@ export default function OverviewPage() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }} className="lg:col-span-2 space-y-2">
                     <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                        {isAdmin ? <><Zap className="w-3.5 h-3.5 text-amber-500" /><span>Accesos Rápidos — Admin</span></> : t.overview.quickActions}
+                        {isAdmin ? <><Zap className="w-3.5 h-3.5 text-amber-500" /><span>{t.overview.adminQuickActions}</span></> : t.overview.quickActions}
                     </h2>
                     {quickActions.map((action, i) => {
                         const Icon = action.icon;
@@ -366,10 +365,10 @@ export default function OverviewPage() {
                     <div className="flex items-center justify-between mb-5">
                         <div>
                             <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                                {isAdmin ? <><BarChart2 className="w-4 h-4 text-amber-500" /><span>Volumen Consolidado — Red</span></> : t.overview.dailyLeads}
+                                {isAdmin ? <><BarChart2 className="w-4 h-4 text-amber-500" /><span>{t.overview.consolidatedVolumeAdmin}</span></> : t.overview.dailyLeads}
                             </h3>
                             <p className="text-xs text-slate-400 mt-0.5">
-                                {isAdmin ? 'Actividad total de todos los partners' : t.overview.realTrafficNote}
+                                {isAdmin ? t.overview.consolidatedVolumeAdminDesc : t.overview.realTrafficNote}
                             </p>
                         </div>
                         <button className="px-3 py-1.5 text-[11px] font-semibold text-slate-500 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
@@ -418,16 +417,16 @@ export default function OverviewPage() {
                         <div>
                             <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                                 <Star className="w-4 h-4 text-amber-500" />
-                                Top Partners — Esta Semana
+                                {t.overview.topPartnersWeek}
                             </h3>
-                            <p className="text-xs text-slate-400 mt-0.5">Ranking por volumen de leads generados</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{t.overview.topPartnersWeekDesc}</p>
                         </div>
                         <button onClick={() => router.push('/dashboard/admin/partners')} className="text-xs font-bold text-[#865BFF] hover:text-[#6b3fd6] flex items-center gap-1">
-                            Ver todos <ChevronRight className="w-3 h-3" />
+                            {t.overview.viewAll} <ChevronRight className="w-3 h-3" />
                         </button>
                     </div>
                     {topPartners.length === 0 ? (
-                        <div className="text-center py-8 text-slate-400 text-sm">No hay datos de partners aún</div>
+                        <div className="text-center py-8 text-slate-400 text-sm">{t.overview.noPartnerData}</div>
                     ) : (
                         <div className="space-y-2">
                             {topPartners.map((p, i) => (
@@ -459,13 +458,13 @@ export default function OverviewPage() {
                     className="card p-6">
                     <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4">
                         <Target className="w-4 h-4 text-[#865BFF]" />
-                        Cómo mejorar tu rendimiento
+                        {t.overview.howToImprove}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {[
-                            { Icon: Pencil, tip: 'Crea piezas gráficas', desc: 'Usa los materiales en 14 idiomas para llegar a más mercados', href: '/dashboard/promo/overview', color: 'text-pink-500', bg: 'bg-pink-50' },
-                            { Icon: Globe, tip: 'Genera Landing Pages', desc: 'Landing pages personalizadas con IA convierten 3x más', href: '/dashboard/landing', color: 'text-blue-500', bg: 'bg-blue-50' },
-                            { Icon: Link2, tip: 'Comparte tu link', desc: 'Distribuye tus links de referido en todos tus canales', href: '/dashboard/links', color: 'text-[#865BFF]', bg: 'bg-[#865BFF]/10' },
+                            { Icon: Pencil, tip: t.overview.createGraphics, desc: t.overview.createGraphicsDesc, href: '/dashboard/promo/overview', color: 'text-pink-500', bg: 'bg-pink-50' },
+                            { Icon: Globe, tip: t.overview.generateLandingsTip, desc: t.overview.generateLandingsTipDesc, href: '/dashboard/landing', color: 'text-blue-500', bg: 'bg-blue-50' },
+                            { Icon: Link2, tip: t.overview.shareLinkTip, desc: t.overview.shareLinkTipDesc, href: '/dashboard/links', color: 'text-[#865BFF]', bg: 'bg-[#865BFF]/10' },
                         ].map((item, i) => (
                             <button key={i} onClick={() => router.push(item.href)}
                                 className="text-left p-4 rounded-xl bg-gradient-to-br from-[#865BFF]/5 to-transparent border border-[#865BFF]/10 hover:from-[#865BFF]/10 hover:border-[#865BFF]/20 transition-all group">
@@ -485,10 +484,10 @@ export default function OverviewPage() {
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                            {isAdmin ? <><Globe2 className="w-4 h-4 text-amber-500" /><span>Distribución Global — Toda la Red</span></> : t.overview.heatmapTitle}
+                            {isAdmin ? <><Globe2 className="w-4 h-4 text-amber-500" /><span>{t.overview.globalDistribution}</span></> : t.overview.heatmapTitle}
                         </h3>
                         <p className="text-xs text-slate-400 mt-0.5">
-                            {isAdmin ? 'Origen geográfico consolidado de todos los leads' : t.overview.heatmapSubtitle}
+                            {isAdmin ? t.overview.globalDistributionDesc : t.overview.heatmapSubtitle}
                         </p>
                     </div>
                 </div>
@@ -552,18 +551,18 @@ export default function OverviewPage() {
                     <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 flex items-center gap-1.5 ${
                             isAdmin ? 'text-amber-500/60' : 'text-[#865BFF]/60'
                         }`}>
-                        {isAdmin ? <><Shield className="w-3 h-3" /><span>ZONA ADMIN</span></> : t.overview.materialsReady}
+                        {isAdmin ? <><Shield className="w-3 h-3" /><span>{t.overview.adminZone}</span></> : t.overview.materialsReady}
                     </div>
                     <h3 className="text-white font-bold text-base">
-                        {isAdmin ? 'Gestiona tu red de Partners' : t.overview.materialsTitle}
+                        {isAdmin ? t.overview.manageNetwork : t.overview.materialsTitle}
                     </h3>
                     <p className="text-white/50 text-sm mt-1">
-                        {isAdmin ? 'Ver roles, actividades y estadísticas de cada partner' : t.overview.materialsSubtitle}
+                        {isAdmin ? t.overview.manageNetworkDesc : t.overview.materialsSubtitle}
                     </p>
                 </div>
                 <button className="relative z-10 flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all flex-shrink-0">
                     <ExternalLink className="w-4 h-4" />
-                    {isAdmin ? 'Ver Partners' : t.overview.viewMaterials}
+                    {isAdmin ? t.overview.viewPartnersList : t.overview.viewMaterials}
                 </button>
             </motion.div>
         </motion.div>

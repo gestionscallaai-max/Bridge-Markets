@@ -405,32 +405,47 @@ function getSharedHead(title: string, desc: string, language: string) {
 }
 
 function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
-    const isDark = theme === 'dark';
     return `
     <style>
         body { 
-            background-color: ${isDark ? '#0A051A' : '#ffffff'}; 
-            color: ${isDark ? '#FFFFFF' : '#140633'}; 
+            background: #02000c radial-gradient(circle at 50% 0%, #1a0545 0%, #02000a 60%, #000000 100%) no-repeat fixed;
+            color: #FFFFFF; 
             font-family: 'Poppins', sans-serif; 
             overflow-x: hidden; 
         }
         .glass-panel { 
-            background: ${isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(20, 6, 51, 0.02)'}; 
+            background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(20px); 
-            border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(20, 6, 51, 0.05)'}; 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
         }
         .glass { 
-            background: ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(20, 6, 51, 0.01)'}; 
+            background: rgba(255, 255, 255, 0.02); 
             backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
         }
         .reveal { transition: all 0.8s ease-out; }
         .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(30px); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .btn-purple { background: linear-gradient(90deg, #6D28D9 0%, #8B5CF6 100%); transition: all 0.4s; }
         .btn-purple:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3); }
-        .theme-light .text-white { color: #140633 !important; }
-        .theme-light .text-white\\/60 { color: #140633\\/60 !important; }
-        .theme-light .glass-panel { background: #ffffff !important; border-color: rgba(20, 6, 51, 0.08) !important; }
+        
+        .floating-asset {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: color-dodge;
+            opacity: 0.7;
+            filter: drop-shadow(0 30px 40px rgba(139, 92, 246, 0.2));
+            will-change: transform;
+        }
+        
+        /* Overrides to ensure text is visible on dark theme even if a light class was coded */
+        .text-\\[\\#140633\\] { color: #FFFFFF !important; }
+        .text-slate-800 { color: #FFFFFF !important; }
+        .bg-white { background-color: transparent !important; }
+        .bg-\\[\\#F8FAFC\\] { background-color: transparent !important; }
+        .bg-slate-50 { background-color: transparent !important; }
     </style>`;
 }
 
@@ -460,53 +475,52 @@ export function generateModularLandingHTML(data: LandingData): string {
     const theme = template?.theme || 'dark';
     const isLight = theme === 'light';
 
-    // Render each section with alternating slants
+    // Render each section without slant breaks
     const sectionsHtml = sectionIds
         .map((sId: string, idx: number) => {
             const renderer = SECTION_RENDERERS[sId];
             if (!renderer) return `<!-- Section "${sId}" not found -->`;
             const overrides = modConf.sectionOverrides[sId] || {};
             const sectionHtml = renderer(overrides, brandConfig);
-            const slantClass = idx % 2 === 0 ? 'slant-down' : 'slant-up';
-            return `<div class="${slantClass}">${sectionHtml}</div>`;
+            return `<div class="relative w-full z-10 w-full">${sectionHtml}</div>`;
         })
         .join('\n');
 
     // Registration form
     const formHtml = `
-    <section id="register" class="py-24 px-8 relative slant-down" style="background: ${isLight ? '#F4F5F7' : 'linear-gradient(135deg, #0f081d 0%, #6635de 100%)'};">
-        <div class="max-w-xl mx-auto ${isLight ? 'bg-white' : 'glass-panel'} asym-card p-12 md:p-16 relative section-reveal shadow-2xl">
+    <section id="register" class="py-24 px-8 relative" style="background: transparent;">
+        <div class="max-w-xl mx-auto glass-panel rounded-[3rem] p-12 md:p-16 relative section-reveal shadow-2xl">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-extrabold font-headline ${isLight ? 'text-[#140633]' : 'text-white'} mb-3">${data.language === 'ES' ? 'Abrir Cuenta' : 'Open Account'}</h2>
-                <p class="${isLight ? 'text-gray-500' : 'text-white/60'} text-sm">${brandConfig.communityName ? `Únete a ${brandConfig.communityName}` : 'Empieza tu camino en Bridge Markets'}</p>
+                <h2 class="text-3xl font-extrabold font-headline text-white mb-3">${data.language === 'ES' ? 'Abrir Cuenta' : 'Open Account'}</h2>
+                <p class="text-white/60 text-sm">${brandConfig.communityName ? `Únete a ${brandConfig.communityName}` : 'Empieza tu camino en Bridge Markets'}</p>
             </div>
             <form id="landing-form" class="space-y-6" onsubmit="return false;">
                 <input type="hidden" name="partner_id" value="${data.partnerId}" />
                 <div>
-                    <label class="text-[10px] font-bold ${isLight ? 'text-gray-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'Nombre Completo' : 'Full Name'}</label>
-                    <input name="name" type="text" class="w-full ${isLight ? 'bg-gray-50 border-gray-200 text-[#140633]' : 'bg-white/5 border-white/10 text-white'} border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary" placeholder="John Doe" required />
+                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'Nombre Completo' : 'Full Name'}</label>
+                    <input name="name" type="text" class="w-full bg-white/5 border-white/10 text-white border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors focus:bg-white/10" placeholder="John Doe" required />
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold ${isLight ? 'text-gray-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'Correo Electrónico' : 'Email'}</label>
-                    <input name="email" type="email" class="w-full ${isLight ? 'bg-gray-50 border-gray-200 text-[#140633]' : 'bg-white/5 border-white/10 text-white'} border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary" placeholder="john@example.com" required />
+                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'Correo Electrónico' : 'Email'}</label>
+                    <input name="email" type="email" class="w-full bg-white/5 border-white/10 text-white border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors focus:bg-white/10" placeholder="john@example.com" required />
                 </div>
                 <div>
-                    <label class="text-[10px] font-bold ${isLight ? 'text-gray-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'WhatsApp / Teléfono' : 'Phone'}</label>
-                    <input name="phone" type="tel" class="w-full ${isLight ? 'bg-gray-50 border-gray-200 text-[#140633]' : 'bg-white/5 border-white/10 text-white'} border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary" placeholder="+1 234 567 8900" required />
+                    <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest block mb-2">${data.language === 'ES' ? 'WhatsApp / Teléfono' : 'Phone'}</label>
+                    <input name="phone" type="tel" class="w-full bg-white/5 border-white/10 text-white border rounded-xl p-4 placeholder:text-gray-300 focus:outline-none focus:border-primary transition-colors focus:bg-white/10" placeholder="+1 234 567 8900" required />
                 </div>
-                <button type="submit" class="w-full py-5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-2xl transition-all text-lg">${data.language === 'ES' ? 'Crear Cuenta Ahora' : 'Create Account Now'}</button>
-                <p class="text-[10px] ${isLight ? 'text-gray-400' : 'text-white/30'} text-center italic mt-4">${data.language === 'ES' ? '* El trading implica riesgos. Invierte solo capital que puedas permitirte perder.' : 'Trading involves risk. Only invest capital you can afford to lose.'}</p>
+                <button type="submit" class="w-full py-5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 text-lg">${data.language === 'ES' ? 'Crear Cuenta Ahora' : 'Create Account Now'}</button>
+                <p class="text-[10px] text-white/30 text-center italic mt-4">${data.language === 'ES' ? '* El trading implica riesgos. Invierte solo capital que puedas permitirte perder.' : 'Trading involves risk. Only invest capital you can afford to lose.'}</p>
             </form>
         </div>
     </section>`;
 
     // Footer
     const footerHtml = `
-    <footer class="border-t ${isLight ? 'border-gray-200' : 'border-white/5'} pt-20 pb-12" style="background: ${isLight ? '#F8FAFC' : '#0f081d'};">
+    <footer class="border-t border-white/5 pt-20 pb-12 bg-transparent text-white">
         <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
             <div class="max-w-xs">
-                <div class="text-2xl font-bold font-headline mb-6 ${isLight ? 'text-[#140633]' : 'text-white'}">Bridge <span class="text-primary">Markets</span></div>
-                <p class="${isLight ? 'text-gray-500' : 'text-white/40'} text-sm leading-relaxed">The global standard for transparent, institutional-grade social trading and fund management.</p>
+                <div class="text-2xl font-bold font-headline mb-6 text-white">Bridge <span class="text-primary">Markets</span></div>
+                <p class="text-white/40 text-sm leading-relaxed">The global standard for transparent, institutional-grade social trading and fund management.</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-sm font-medium">
                 <div class="flex flex-col gap-4">
@@ -544,19 +558,19 @@ export function generateModularLandingHTML(data: LandingData): string {
     <title>Bridge Markets | ${template?.name || 'Trading Platform'}</title>
     ${getSharedHead(template?.name || 'Trading Platform', 'Access institutional markets', data.language)}
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background: ${isLight ? '#ffffff' : '#080411'}; }
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background: transparent; }
         ${getSharedStyles(theme)}
     </style>
 </head>
-<body class="${isLight ? 'bg-white theme-light' : 'bg-[#080411]'} text-[#211635]">
+<body class="bg-transparent text-white">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-[100] px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center ${isLight ? 'bg-white/80 backdrop-blur-xl border-gray-200 shadow-xl' : 'bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl'} border rounded-full px-8 h-16">
-            <div class="text-2xl font-bold tracking-tighter ${isLight ? 'text-[#140633]' : 'text-white'} font-headline">Bridge <span class="text-primary">Markets</span></div>
+        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-full px-8 h-16">
+            <div class="text-xl font-bold tracking-tighter text-white font-headline">Bridge <span class="text-primary">Markets</span></div>
             <div class="hidden md:flex items-center gap-10 text-sm font-semibold">
-                <a class="${isLight ? 'text-gray-600' : 'text-white/60'} hover:text-primary transition-all" href="#">Platform</a>
-                <a class="${isLight ? 'text-gray-600' : 'text-white/60'} hover:text-primary transition-all" href="#">Security</a>
-                <a class="${isLight ? 'text-gray-600' : 'text-white/60'} hover:text-primary transition-all" href="#">Pricing</a>
+                <a class="text-white/60 hover:text-primary transition-all" href="#">Platform</a>
+                <a class="text-white/60 hover:text-primary transition-all" href="#">Security</a>
+                <a class="text-white/60 hover:text-primary transition-all" href="#">Pricing</a>
             </div>
             <div class="flex items-center gap-4">
                 <a href="#register" class="bg-primary px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg hover:shadow-primary/40 active:scale-95 transition-all">Get Started</a>
@@ -585,27 +599,33 @@ export function generateModularLandingHTML(data: LandingData): string {
             reveals.forEach(el => observer.observe(el));
 
             // ─── Enhanced Parallax Engine ───
-            const sections = document.querySelectorAll('section, div.slant-down, div.slant-up');
+            const sections = document.querySelectorAll('.relative.w-full');
             const assetsCatalog = [
                 '/images/imagenes%20nuevas/rey%20rosa.png',
                 '/images/imagenes%20nuevas/peones%20rosa.png',
                 '/images/imagenes%20nuevas/alfiler%20rosa.png',
                 '/images/imagenes%20nuevas/reyna%20rosa.png',
-                '/images/imagenes%20nuevas/caballo%20rosa.png'
+                '/images/imagenes%20nuevas/caballo%20rosa.png',
+                '/images/imagenes%20nuevas/0ba35ff58cd00d6aab66ae503b7d759320e40c7e.png',
+                '/images/imagenes%20nuevas/reloj%20rosa.png',
+                '/images/imagenes%20nuevas/hourglass.png',
+                '/images/imagenes%20nuevas/reyna%20negra.png',
+                '/images/imagenes%20nuevas/caballo%20negro.png',
+                '/images/imagenes%20nuevas/peones%20negro.png'
             ];
 
             // Inject Floating Chess Assets
             sections.forEach((section, index) => {
-                if (index % 1 === 0) { // All sections
+                if (index > 0) { // Skip hero section occasionally or just add to all
                     const assetUrl = assetsCatalog[index % assetsCatalog.length];
                     const asset = document.createElement('img');
                     asset.src = assetUrl;
-                    asset.className = 'floating-asset';
-                    const size = 150 + Math.random() * 200;
+                    asset.className = 'floating-asset md:block hidden';
+                    const size = 150 + Math.random() * 250;
                     asset.style.width = size + 'px';
-                    asset.style.top = (20 + Math.random() * 60) + '%';
-                    asset.style.left = (index % 2 === 0 ? '-5%' : '85%');
-                    asset.dataset.speed = (0.05 + Math.random() * 0.1).toString();
+                    asset.style.top = (10 + Math.random() * 60) + '%';
+                    asset.style.left = (index % 2 === 0 ? (Math.random() * 15) + '%' : (70 + Math.random() * 15) + '%');
+                    asset.dataset.speed = (0.1 + Math.random() * 0.15).toString();
                     section.appendChild(asset);
                 }
             });

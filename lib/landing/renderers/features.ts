@@ -325,7 +325,7 @@ export function renderSyntheticFamilies(content: Record<string, any>, brand: Bra
 export function renderChallengeMatrix(content: Record<string, any>, brand: BrandConfig): string {
     const c = { ...SECTION_CATALOG.find(s => s.id === 'challenge_matrix')!.defaultContent, ...content };
     const plans = (c.plans || []).map((p: any) => `
-        <div class="glass-panel p-8 asym-card border-white/5 hover:bg-white/[0.05] transition-all relative overflow-hidden group">
+        <div class="glass-panel p-8 asym-card border-white/5 hover:bg-white/10/[0.05] transition-all relative overflow-hidden group">
             <div class="relative z-10 text-center">
                 <h3 class="text-sm font-black text-primary uppercase tracking-[0.4em] mb-6">${p.name}</h3>
                 <div class="text-5xl font-black font-headline text-white mb-4 tracking-tighter">${p.cap}</div>
@@ -777,7 +777,7 @@ export function renderSntPlatforms(content: Record<string, any>, brand: BrandCon
                     <h3 class="text-4xl font-black text-white mb-6 uppercase tracking-tighter">MetaTrader 5</h3>
                     <p class="text-white/50 text-sm mb-12 font-medium leading-relaxed">Considerada la plataforma más robusta y veloz para el trading algorítmico e institucional. Tus índices corren aquí.</p>
                     <div class="flex flex-wrap justify-center gap-4">
-                        <span class="px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors cursor-pointer shadow-lg">Windows / Mac</span>
+                        <span class="px-8 py-4 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-black transition-colors cursor-pointer shadow-lg">Windows / Mac</span>
                         <span class="px-8 py-4 rounded-full bg-[#0a0515] border border-white/5 text-white/50 text-[10px] font-black uppercase tracking-widest">Mobile Apps</span>
                     </div>
                 </div>
@@ -862,7 +862,7 @@ export function renderSntCTA(content: Record<string, any>, brand: BrandConfig): 
     return `
     <section class="py-40 bg-[#05010f] relative overflow-hidden section-reveal">
         <div class="absolute inset-0 z-0">
-            <div class="absolute bottom-0 left-0 w-full h-1/2 bg-[linear-gradient(0deg,#865BFF,transparent)] opacity-10"></div>
+            <div class="absolute bottom-0 left-0 w-full h-1/2 bg-[linear-gradient(0deg,#865BFF,bg-white)] opacity-10"></div>
             <div class="absolute top-[20%] left-[50%] -translate-x-[50%] w-full max-w-4xl h-full bg-[#865BFF]/10 rounded-t-full blur-[120px] pointer-events-none"></div>
         </div>
         

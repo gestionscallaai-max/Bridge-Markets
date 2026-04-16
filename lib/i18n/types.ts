@@ -1,6 +1,59 @@
 export type LangCode = 'es' | 'en' | 'zh' | 'hi' | 'fr' | 'ar' | 'bn' | 'pt' | 'ru' | 'ja';
 
 export type TranslationKeys = {
+    gallery: {
+        materialGalleryTitle: string;
+        materialGalleryDesc: string;
+        searchMaterial: string;
+        syncExistingImages: string;
+        uploading: string;
+        upload: string;
+        loadingGallery: string;
+        viewFullSize: string;
+        downloadMaterial: string;
+        deleteFromGallery: string;
+        downloadBtn: string;
+        emptyGallery: string;
+        noMaterialAvailable: string;
+        syncBtn: string;
+        manageDocs: string;
+        adminPortal: string;
+        manualUpload: string;
+        localMigration: string;
+        docTitle: string;
+        category: string;
+        language: string;
+        uploadPdf: string;
+        thumbnailJpg: string;
+        syncDoc: string;
+        massiveUpload: string;
+        dragFilesDesc: string;
+        filesReady: string;
+        clearBtn: string;
+        startProcess: string;
+        syncingServer: string;
+        visual: string;
+        document: string;
+        size: string;
+        actions: string;
+        noDocsFound: string;
+        copyLink: string;
+    };
+    templates: {
+        synthetic_edu_name: string;
+        synthetic_edu_desc: string;
+        propfirm_pro_name: string;
+        propfirm_pro_desc: string;
+        unified_copy_mam_name: string;
+        unified_copy_mam_desc: string;
+        pro_leverage_x12_name: string;
+        pro_leverage_x12_desc: string;
+        institutional_mother_name: string;
+        institutional_mother_desc: string;
+        synthetic_universe_total_name: string;
+        synthetic_universe_total_desc: string;
+    };
+
     // Sidebar Navigation
     nav: {
         overview: string;

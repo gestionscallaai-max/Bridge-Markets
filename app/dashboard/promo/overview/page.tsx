@@ -21,19 +21,15 @@ import { getTemplateDescription, getTemplateBadge, getSectionName } from '@/lib/
 import LibraryDocuments from '@/components/LibraryDocuments';
 import MaterialGallery from '@/components/Promo/MaterialGallery';
 import { RoleContext } from '@/lib/context';
+import { getT, LANGUAGE_META } from '@/lib/i18n/translations';
+import type { LangCode } from '@/lib/i18n/types';
 
 // ─── Idiomas ─────────────────────────────────────
-const LANGUAGES = [
-    { code: 'ES', flag: '🇪🇸', label: 'Español' },
-    { code: 'GB', flag: '🇬🇧', label: 'English' },
-    { code: 'BR', flag: '🇧🇷', label: 'Português' },
-    { code: 'FR', flag: '🇫🇷', label: 'Français' },
-    { code: 'AR', flag: '🇸🇦', label: 'العربية' },
-    { code: 'JP', flag: '🇯🇵', label: '日本語' },
-    { code: 'ZH', flag: '🇨🇳', label: '中文' },
-    { code: 'ID', flag: '🇮🇩', label: 'Indonesia' },
-    { code: 'VI', flag: '🇻🇳', label: 'Tiếng Việt' },
-];
+const LANGUAGES = Object.entries(LANGUAGE_META).map(([code, meta]) => ({
+    code: code.toUpperCase(),
+    flag: meta.flag,
+    label: meta.nativeLabel
+}));
 
 export default function PromoMaterialsPage() {
     const { userRole } = useContext(RoleContext);
@@ -43,7 +39,12 @@ export default function PromoMaterialsPage() {
     const [activeFilter, setActiveFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLanding, setSelectedLanding] = useState<string | null>(null);
-    const [selectedLang, setSelectedLang] = useState('ES');
+    const [selectedLang, setSelectedLang] = useState(lang.toUpperCase());
+
+    // Auto-sync local language with global language when it changes
+    useEffect(() => {
+        setSelectedLang(lang.toUpperCase());
+    }, [lang]);
 
     // State for coordination
     const [copied, setCopied] = useState<string | null>(null);
@@ -288,6 +289,12 @@ export default function PromoMaterialsPage() {
                     {filtered.map(template => {
                         const isSelected = selectedLanding === template.id;
                         const url = getLandingUrl(template);
+                        
+                        // Map selectedLang to LangCode for translation
+                        const mapToLangCode = (code: string): LangCode => {
+                            return code.toLowerCase() as LangCode;
+                        };
+                        const previewT = getT(mapToLangCode(selectedLang));
 
                         return (
                             <div
@@ -321,13 +328,13 @@ export default function PromoMaterialsPage() {
                                             <span
                                                 className="text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
                                                 style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}
-                                            >{getTemplateBadge(template.badge, lang)}</span>
+                                            >{getTemplateBadge(template.badge, mapToLangCode(selectedLang))}</span>
                                         </div>
                                     )}
 
                                     <div className="absolute bottom-4 left-5 right-5 z-10">
                                         <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">Bridge Markets</div>
-                                        <h3 className="text-xl font-black text-white leading-tight drop-shadow-md">{template.name}</h3>
+                                        <h3 className="text-xl font-black text-white leading-tight drop-shadow-md">{previewT.templates[`${template.id}_name` as keyof typeof previewT.templates] || template.name}</h3>
                                     </div>
 
                                     {/* Hover overlay */}
@@ -349,7 +356,7 @@ export default function PromoMaterialsPage() {
 
                                 {/* Card body */}
                                 <div className="p-4">
-                                    <p className="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-2">{getTemplateDescription(template.id, lang)}</p>
+                                    <p className="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-2">{previewT.templates[`${template.id}_desc` as keyof typeof previewT.templates] || getTemplateDescription(template.id, mapToLangCode(selectedLang))}</p>
 
                                     {/* Action area - expanded */}
                                     <div className={`transition-all duration-300 overflow-hidden ${isSelected ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
@@ -371,7 +378,7 @@ export default function PromoMaterialsPage() {
                                             onClick={() => setSelectedLanding(template.id)}
                                             className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-[#865BFF] bg-[#865BFF]/5 hover:bg-[#865BFF]/10 transition-all border border-[#865BFF]/10"
                                         >
-                                            <Link2 className="w-3.5 h-3.5" /> {t.common.copy} Link <ArrowRight className="w-3 h-3 ml-0.5" />
+                                            <Link2 className="w-3.5 h-3.5" /> {t.gallery.copyLink} <ArrowRight className="w-3 h-3 ml-0.5" />
                                         </button>
                                     )}
                                 </div>

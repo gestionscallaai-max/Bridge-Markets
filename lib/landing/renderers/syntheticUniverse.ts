@@ -248,7 +248,7 @@ export function renderSNUWhy(content: Record<string, any>, brand: BrandConfig): 
              
              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                  ${cards.map((c, i) => `
-                    <div class="p-16 bg-white/5 border border-white/10 rounded-[5rem] hover:bg-white hover:text-[#0a0614] transition-all duration-700 group">
+                    <div class="p-16 bg-white/5 border border-white/10 rounded-[5rem] hover:bg-white/10 hover:text-[#0a0614] transition-all duration-700 group">
                         <span class="material-symbols-outlined text-6xl text-[#865BFF] mb-12 group-hover:text-[#0a0614] transition-colors">verified</span>
                         <h3 class="text-4xl font-black mb-8 uppercase tracking-tighter leading-none">${c.t}</h3>
                         <p class="text-white/40 font-medium text-lg leading-relaxed group-hover:text-[#0a0614]/60 transition-colors uppercase tracking-widest text-xs">${c.d}</p>
@@ -356,7 +356,7 @@ export function renderSNUCTA(content: Record<string, any>, brand: BrandConfig): 
             
             <div class="flex flex-wrap justify-center gap-12">
                 <a href="${ctaLink}" class="px-24 py-10 bg-[#865BFF] text-white font-black rounded-full hover:shadow-[0_45px_100px_rgba(134,91,255,0.4)] hover:scale-110 transition-all uppercase text-2xl tracking-tighter shadow-3xl">${c.ctaPrimary}</a>
-                <a href="https://charts.bridgemarkets.global" class="px-24 py-10 bg-white/5 border border-white/10 text-white font-black rounded-full hover:bg-white hover:text-black transition-all uppercase text-2xl tracking-tighter backdrop-blur-md">${c.ctaSecondary}</a>
+                <a href="https://charts.bridgemarkets.global" class="px-24 py-10 bg-white/5 border border-white/10 text-white font-black rounded-full hover:bg-white/10 hover:text-black transition-all uppercase text-2xl tracking-tighter backdrop-blur-md">${c.ctaSecondary}</a>
             </div>
 
             <div class="mt-40">

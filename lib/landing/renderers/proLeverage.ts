@@ -135,7 +135,7 @@ export function renderLX12TableCompare(content: Record<string, any>, brand: Bran
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             ${rows.map(r => `
-                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                <tr class="hover:bg-white/10/[0.02] transition-colors">
                                     <td class="py-6 px-10 text-white font-bold text-sm tracking-tight">${r.c}</td>
                                     <td class="py-6 px-10 text-white font-black text-sm">${r.lx}</td>
                                     <td class="py-6 px-10 text-white/40 text-sm font-medium">${r.pf}</td>
@@ -393,7 +393,7 @@ export function renderLX12Faq(content: Record<string, any>, brand: BrandConfig):
             <h2 class="text-4xl font-black text-white mb-24 uppercase tracking-widest">FREQUENTLY ASKED</h2>
             <div class="space-y-6">
                 ${faqs.map(f => `
-                    <div class="bg-white/5 p-12 rounded-[2.5rem] text-left hover:bg-white/[0.08] transition-all cursor-pointer group">
+                    <div class="bg-white/5 p-12 rounded-[2.5rem] text-left hover:bg-white/10/[0.08] transition-all cursor-pointer group">
                         <h4 class="text-xl font-black text-white mb-6 uppercase tracking-tighter group-hover:text-[#865BFF] transition-colors">${f.q}</h4>
                         <p class="text-white/40 leading-relaxed font-medium">${f.a}</p>
                     </div>

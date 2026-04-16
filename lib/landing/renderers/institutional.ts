@@ -12,7 +12,7 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
         <div class="absolute inset-0 z-0">
             <div class="absolute top-[-10%] right-[-10%] w-[1000px] h-[1000px] bg-[#865BFF]/10 rounded-full blur-[150px] animate-pulse"></div>
             <div class="absolute bottom-[-10%] left-[-10%] w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px]"></div>
-            <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(#865BFF 1px, transparent 1px); background-size: 50px 50px;"></div>
+            <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(#865BFF 1px, bg-white 1px); background-size: 50px 50px;"></div>
         </div>
         
         <div class="max-w-7xl mx-auto w-full relative z-10">
@@ -49,7 +49,7 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
                             <span class="uppercase tracking-tighter">${c.cta1}</span>
                             <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">bolt</span>
                         </a>
-                        <a href="#ecosistema" class="group px-16 py-8 bg-white/5 border border-white/10 text-white font-black rounded-[2rem] hover:bg-white hover:text-black hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-2xl uppercase tracking-tighter backdrop-blur-md">
+                        <a href="#ecosistema" class="group px-16 py-8 bg-white/5 border border-white/10 text-white font-black rounded-[2rem] hover:bg-white/10 hover:text-black hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-2xl uppercase tracking-tighter backdrop-blur-md">
                             ${c.cta2}
                         </a>
                     </div>
@@ -164,7 +164,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-40">
                 ${products.map(p => `
-                    <div class="group relative bg-[#F8FAFC] border border-slate-100 p-16 rounded-[5rem] overflow-hidden hover:bg-white hover:shadow-4xl transition-all hover:-translate-y-4">
+                    <div class="group relative glass-panel border border-slate-100 p-16 rounded-[5rem] overflow-hidden hover:bg-white/10 hover:shadow-4xl transition-all hover:-translate-y-4">
                         <div class="flex justify-between items-start mb-12">
                             <span class="px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-white" style="background-color: ${p.color}">${p.badge}</span>
                             <span class="material-symbols-outlined text-gray-200 text-6xl group-hover:text-[#865BFF] transition-colors">hub</span>
@@ -178,7 +178,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
                 `).join('')}
             </div>
 
-            <div class="overflow-x-auto bg-slate-50 rounded-[4rem] border border-slate-100 p-8 shadow-inner">
+            <div class="overflow-x-auto glass-panel rounded-[4rem] border border-slate-100 p-8 shadow-inner">
                 <table class="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr class="border-b border-slate-200">
@@ -196,7 +196,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
                             { p: 'MAM Accounts', who: 'Gestores & Fondos', raw: 'LPOA Segura. Master Sync.' },
                             { p: 'Copy Trading', who: 'Inversionistas Pasivos', raw: 'Réplica verificada. Control total.' }
                         ].map(row => `
-                            <tr class="hover:bg-white transition-colors group">
+                            <tr class="hover:bg-white/10 transition-colors group">
                                 <td class="py-10 px-8 text-2xl font-black text-[#140633] uppercase tracking-tighter">${row.p}</td>
                                 <td class="py-10 px-8 text-gray-400 font-bold uppercase text-xs tracking-widest">${row.who}</td>
                                 <td class="py-10 px-8 text-gray-500 font-medium text-lg">${row.raw}</td>
@@ -223,7 +223,7 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
              
              <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                  <!-- TRADER -->
-                 <div class="relative group p-20 rounded-[5rem] bg-[#F8FAFC] border border-slate-100 text-left overflow-hidden hover:bg-[#140633] hover:text-white transition-all duration-700">
+                 <div class="relative group p-20 rounded-[5rem] glass-panel border border-slate-100 text-left overflow-hidden hover:bg-[#140633] hover:text-white transition-all duration-700">
                     <div class="relative z-10">
                         <span class="text-[11px] font-black uppercase tracking-[0.8em] text-[#865BFF] mb-12 block group-hover:text-white/60 transition-colors">Perfil Activo</span>
                         <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none">SOY <br>TRADER</h3>
@@ -245,7 +245,7 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
                  </div>
 
                  <!-- INVERSOR -->
-                 <div class="relative group p-20 rounded-[5rem] bg-[#F8FAFC] border border-slate-100 text-left overflow-hidden hover:bg-[#140633] hover:text-white transition-all duration-700">
+                 <div class="relative group p-20 rounded-[5rem] glass-panel border border-slate-100 text-left overflow-hidden hover:bg-[#140633] hover:text-white transition-all duration-700">
                     <div class="relative z-10">
                         <span class="text-[11px] font-black uppercase tracking-[0.8em] text-blue-500 mb-12 block group-hover:text-white/60 transition-colors">Perfil Pasivo</span>
                         <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none">SOY <br>INVERSOR</h3>
@@ -335,7 +335,7 @@ export function renderInstTech(content: Record<string, any>, brand: BrandConfig)
              
              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                  ${stacks.map(s => `
-                    <div class="p-16 bg-[#F8FAFC] border border-slate-100 rounded-[4rem] group hover:bg-[#140633] hover:text-white transition-all duration-500 hover:-translate-y-4">
+                    <div class="p-16 glass-panel border border-slate-100 rounded-[4rem] group hover:bg-[#140633] hover:text-white transition-all duration-500 hover:-translate-y-4">
                         <div class="w-20 h-20 bg-white shadow-xl rounded-[1.5rem] flex items-center justify-center text-[#865BFF] mb-12 group-hover:bg-[#865BFF] group-hover:text-white transition-all transform group-hover:rotate-6">
                             <span class="material-symbols-outlined text-4xl">${s.icon}</span>
                         </div>
@@ -370,7 +370,7 @@ export function renderInstWorkflow(content: Record<string, any>, brand: BrandCon
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6 relative z-10">
                     ${steps.map((s, i) => `
                         <div class="group">
-                            <div class="flex flex-col items-center p-8 bg-[#F8FAFC] border border-slate-100 rounded-[3rem] hover:bg-white hover:shadow-4xl transition-all transform hover:-translate-y-4 h-full">
+                            <div class="flex flex-col items-center p-8 glass-panel border border-slate-100 rounded-[3rem] hover:bg-white/10 hover:shadow-4xl transition-all transform hover:-translate-y-4 h-full">
                                 <span class="text-5xl font-black text-gray-100 group-hover:text-[#865BFF] transition-colors leading-none tracking-tightest mb-8">0${i+1}</span>
                                 <h4 class="text-sm font-black uppercase tracking-widest text-center leading-tight mb-4">${s.t}</h4>
                                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity">${s.d}</p>
@@ -438,7 +438,7 @@ export function renderInstFAQ(content: Record<string, any>, brand: BrandConfig):
              
              <div class="space-y-8 text-left">
                  ${faqs.map(f => `
-                    <div class="bg-slate-50 border border-slate-100 p-12 rounded-[4rem] group hover:bg-white hover:border-[#140633] transition-all shadow-sm hover:shadow-4xl">
+                    <div class="glass-panel border border-slate-100 p-12 rounded-[4rem] group hover:bg-white/10 hover:border-[#140633] transition-all shadow-sm hover:shadow-4xl">
                         <h4 class="text-3xl font-black text-[#140633] mb-8 uppercase tracking-tighter flex items-center gap-8 group-hover:text-[#865BFF]">
                              <span class="w-1.5 h-12 bg-[#865BFF] rounded-full"></span> ${f.q}
                         </h4>
@@ -485,7 +485,7 @@ export function renderInstFooter(content: Record<string, any>, brand: BrandConfi
                 <div class="col-span-1 lg:col-span-1">
                     <img src="/logo.png" alt="BM" class="h-10 mb-12">
                     <p class="text-gray-400 text-xs font-black uppercase tracking-[0.2em] leading-loose mb-12">Infraestructura institucional V3. Bridge Markets LTD está regulado internacionalmente para garantizar fondos segregados.</p>
-                    <div class="p-8 bg-slate-50 border border-slate-100 rounded-[2rem] flex items-center gap-6">
+                    <div class="p-8 glass-panel border border-slate-100 rounded-[2rem] flex items-center gap-6">
                         <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#865BFF] font-black">${ibName.charAt(0)}</div>
                         <div class="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none">Presentado por <br><span class="text-[#140633] text-sm">${ibName}</span></div>
                     </div>

@@ -407,7 +407,7 @@ export function renderPropCTA(content: Record<string, any>, brand: BrandConfig):
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-4xl mx-auto mb-16">
                 ${['OBSIDIAN', 'BASALT', 'ELITE', 'ULTRA'].map(p => `
-                    <a href="${ctaLink}" class="px-6 py-8 asym-card border border-white/10 bg-[#0a0a0a]/80 text-white hover:bg-white hover:text-black font-black text-sm tracking-widest transition-all text-center uppercase shadow-xl hover:-translate-y-2 group backdrop-blur-md">
+                    <a href="${ctaLink}" class="px-6 py-8 asym-card border border-white/10 bg-[#0a0a0a]/80 text-white hover:bg-white/10 hover:text-black font-black text-sm tracking-widest transition-all text-center uppercase shadow-xl hover:-translate-y-2 group backdrop-blur-md">
                         <span class="block text-[9px] text-[#865BFF] uppercase tracking-[0.3em] mb-2 group-hover:text-black/50">Challenge Plan</span>
                         QUIERO ${p}
                     </a>
