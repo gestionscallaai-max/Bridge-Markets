@@ -259,14 +259,13 @@ export function generateLandingHTML(data: LandingData): string {
     </script>
     <style>
         body {
-            background-color: #FFFFFF;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(245, 243, 255, 0.8) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, rgba(219, 234, 254, 0.8) 0, transparent 50%), 
-                radial-gradient(at 100% 100%, rgba(245, 243, 255, 0.8) 0, transparent 50%), 
-                radial-gradient(at 0% 100%, rgba(219, 234, 254, 0.8) 0, transparent 50%);
+            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #F8FAFC 100%);
             background-attachment: fixed; min-height: 100vh;
         }
+        
+        /* Overrides para evitar cortes */
+        section { background: transparent !important; border: none !important; box-shadow: none !important; }
+
         .btn-purple { background: linear-gradient(90deg, #6D28D9 0%, #8B5CF6 100%); transition: all 0.4s; }
         .btn-purple:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3); }
         
@@ -274,7 +273,7 @@ export function generateLandingHTML(data: LandingData): string {
         .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(30px); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .glass { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body class="font-sans text-gray-800 antialiased">
@@ -405,11 +404,18 @@ function getSharedHead(title: string, desc: string, language: string) {
 }
 
 function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
+    const isDark = theme === 'dark';
+    const bgGradient = isDark 
+        ? "linear-gradient(135deg, #0A051A 0%, #170B3B 50%, #0A051A 100%)"
+        : "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #F8FAFC 100%)";
+    const textColor = isDark ? "#FFFFFF" : "#0F172A";
+
     return `
     <style>
         body { 
-            background: linear-gradient(135deg, #0B061A 0%, #150B2D 50%, #0B061A 100%) no-repeat fixed;
-            color: #FFFFFF; 
+            background: ${bgGradient};
+            background-attachment: fixed;
+            color: ${textColor}; 
             font-family: 'Poppins', sans-serif; 
             overflow-x: hidden; 
         }
@@ -417,25 +423,29 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
         .section-wrapper { 
             position: relative;
             z-index: 10;
-            margin-top: -40px; 
-            padding-top: 80px;
         }
-        .section-wrapper:first-of-type { margin-top: 0; padding-top: 0; }
         
+        /* Force transparent backgrounds to avoid cuts */
+        section, .bg-brand-dark, .bg-\\[\\#0B061A\\], .bg-\\[\\#000000\\] {
+            background-color: transparent !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+        }
+
         /* Glassmorphism System */
         .glass-panel { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(24px); 
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1); 
+            background: ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.6)'} !important; 
+            backdrop-filter: blur(24px) !important; 
+            -webkit-backdrop-filter: blur(24px) !important;
+            border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)'} !important;
+            box-shadow: ${isDark ? '0 30px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)' : '0 30px 60px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,1)'} !important; 
         }
         .glass { 
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: ${isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(255, 255, 255, 0.4)'} !important; 
+            backdrop-filter: blur(12px) !important; 
+            -webkit-backdrop-filter: blur(12px) !important;
+            border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.3)'} !important;
+            box-shadow: ${isDark ? '0 10px 30px rgba(0, 0, 0, 0.2)' : '0 10px 30px rgba(0, 0, 0, 0.05)'} !important;
         }
         
         .reveal { transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -443,22 +453,33 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         .btn-purple { 
-            background: linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%); 
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
-            box-shadow: 0 15px 30px rgba(109, 40, 217, 0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%) !important; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important; 
+            box-shadow: 0 15px 30px rgba(109, 40, 217, 0.2), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+            color: white !important;
         }
         .btn-purple:hover { 
-            transform: translateY(-4px) scale(1.02); 
-            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.4), inset 0 1px 0 rgba(255,255,255,0.3); 
+            transform: translateY(-4px) scale(1.02) !important; 
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important; 
         }
         
-        /* Overrides */
-        .text-\\[\\#140633\\] { color: #FFFFFF !important; }
-        .text-slate-800 { color: #FFFFFF !important; }
-        .bg-white { background-color: transparent !important; }
-        .bg-\\[\\#F8FAFC\\] { background-color: transparent !important; }
-        .bg-slate-50 { background-color: transparent !important; }
-    </style>`;
+        /* Overrides para evitar bordes o cajas duras que corten */
+        .bg-white, .bg-\\[\\#F8FAFC\\], .bg-slate-50 { background-color: transparent !important; }
+        ${isDark ? \`
+        .bg-white\\/5 { background: rgba(255,255,255,0.02) !important; }
+        .text-slate-800, .text-\\[\\#140633\\], .text-brand-dark { color: #FFFFFF !important; }
+        \` : \`
+        .text-white { color: #0f172a !important; }
+        .text-white\\/60 { color: rgba(15, 23, 42, 0.6) !important; }
+        .text-white\\/40 { color: rgba(15, 23, 42, 0.4) !important; }
+        .bg-white\\/5 { background: rgba(255,255,255,0.6) !important; border: 1px solid rgba(0,0,0,0.05) !important; color: #0f172a !important; }
+        \`}
+        
+        /* Force spacing to look complete and organized */
+        .section-wrapper {
+            padding: 2rem 0 !important;
+        }
+    </style>\`;
 }
 
 export function generateModularLandingHTML(data: LandingData): string {
