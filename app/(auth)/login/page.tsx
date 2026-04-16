@@ -158,7 +158,9 @@ export default function LoginPage() {
 
                     {errorMsg && (
                         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 mb-6">
-                            Credenciales incorrectas.
+                            {errorMsg.toLowerCase().includes('invalid') || errorMsg.toLowerCase().includes('credentials')
+                                ? 'Credenciales incorrectas. Verifica tu email y contraseña.'
+                                : errorMsg}
                         </div>
                     )}
 
@@ -187,6 +189,13 @@ export default function LoginPage() {
                                 <label className="block text-[12px] font-semibold text-slate-600">
                                     Contraseña
                                 </label>
+                                <button
+                                    type="button"
+                                    onClick={() => router.push('/forgot-password')}
+                                    className="text-[11px] font-semibold text-[#865BFF] hover:text-[#6b3fd6] transition-colors"
+                                >
+                                    ¿Olvidaste tu contraseña?
+                                </button>
                             </div>
                             <div className="relative">
                                 <input

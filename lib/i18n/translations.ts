@@ -201,6 +201,14 @@ export type TranslationKeys = {
         dragOrClick: string;
         aspectRatio: string;
         export: string;
+        documentsTab: string;
+        docSearch: string;
+        docType: string;
+        docLanguage: string;
+        catManuales: string;
+        catPayRetailers: string;
+        catGlosarios: string;
+        catPresentaciones: string;
     };
     // Settings page
     settings: {
@@ -349,6 +357,8 @@ const T: Record<LangCode, TranslationKeys> = {
             sections: 'Secciones', languages: 'Idiomas', customize: 'Personalizar', createCustom: 'Crear Landing Personalizada',
             more: 'más', all: 'Todas', uploadPiece: 'Sube tu pieza', imageUploaded: 'Imagen cargada',
             dragOrClick: 'Arrastra o haz clic para subir', aspectRatio: 'Ratio de aspecto', export: 'Exportar',
+            documentsTab: 'Documentos', docSearch: 'Buscar documentos...', docType: 'Tipo', docLanguage: 'Idioma',
+            catManuales: 'Manuales & FAQ', catPayRetailers: 'Pay Retailers', catGlosarios: 'Glosarios', catPresentaciones: 'Presentaciones',
         },
         settings: {
             menuTitle: 'Menú de Configuración', profile: 'Perfil Personal', security: 'Seguridad', preferences: 'Preferencias',
@@ -487,6 +497,8 @@ const T: Record<LangCode, TranslationKeys> = {
             sections: 'Sections', languages: 'Languages', customize: 'Customize', createCustom: 'Create Custom Landing',
             more: 'more', all: 'All', uploadPiece: 'Upload your asset', imageUploaded: 'Image uploaded',
             dragOrClick: 'Drag or click to upload', aspectRatio: 'Aspect ratio', export: 'Export',
+            documentsTab: 'Documents', docSearch: 'Search documents...', docType: 'Type', docLanguage: 'Language',
+            catManuales: 'Manuals & FAQ', catPayRetailers: 'Pay Retailers', catGlosarios: 'Glossaries', catPresentaciones: 'Presentations',
         },
         settings: {
             menuTitle: 'Settings Menu', profile: 'Personal Profile', security: 'Security', preferences: 'Preferences',

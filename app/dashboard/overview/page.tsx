@@ -6,18 +6,23 @@ import { motion } from 'framer-motion';
 import {
     Users, Globe2, MousePointerClick,
     Activity, ChevronRight, ExternalLink,
-    Globe, Zap, BarChart2, Award, Clock, TrendingUp
+    Globe, Zap, BarChart2, Award, Clock, TrendingUp,
+    Shield, Crown, Network, Target, Star, Eye, Pencil, Link2
 } from 'lucide-react';
 import { useAdmin } from '../layout';
+import { useRole } from '../layout';
 import { supabase } from '@/lib/supabaseClient';
 import { useLanguage } from '@/lib/i18n/context';
 
 export default function OverviewPage() {
     const router = useRouter();
     const { isAdmin } = useAdmin();
+    const { userRole } = useRole();
     const { t, lang } = useLanguage();
     const [loading, setLoading] = useState(true);
     const [partnerId, setPartnerId] = useState('BM_PARTNER_01');
+    const [partnerName, setPartnerName] = useState('');
+    const [totalPartners, setTotalPartners] = useState(0);
     const [stats, setStats] = useState({
         leads: 0,
         clicks: 0,
@@ -25,10 +30,9 @@ export default function OverviewPage() {
         weeklyData: [] as { day: string; count: number }[],
         countryData: [] as { country: string; count: number }[],
     });
-
+    const [topPartners, setTopPartners] = useState<any[]>([]);
     const [mounted, setMounted] = useState(false);
 
-    // Day names per language
     const DAY_NAMES: Record<string, string[]> = {
         es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
         en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -54,6 +58,14 @@ export default function OverviewPage() {
             if (user) setPartnerId('BM_' + user.id.substring(0, 8).toUpperCase());
 
             try {
+                // ── Fetch partner name
+                const { data: partnerData } = await supabase
+                    .from('partners')
+                    .select('name, role')
+                    .eq('id', user.id)
+                    .single();
+                if (partnerData?.name) setPartnerName(partnerData.name);
+
                 let leadsQuery = supabase.from('leads').select('*', { count: 'exact' });
                 let clicksQuery = supabase.from('clicks').select('*', { count: 'exact' });
                 let landingsQuery = supabase.from('landings').select('*', { count: 'exact' });
@@ -65,6 +77,32 @@ export default function OverviewPage() {
                 }
 
                 const [l, c, ln] = await Promise.all([leadsQuery, clicksQuery, landingsQuery]);
+
+                // Admin: fetch total partners count
+                if (isAdmin) {
+                    const { count: partnersCount } = await supabase
+                        .from('partners')
+                        .select('*', { count: 'exact', head: true });
+                    setTotalPartners(partnersCount || 0);
+
+                    // Top partners by leads
+                    const { data: topData } = await supabase
+                        .from('leads')
+                        .select('partner_id, partners(name)')
+                        .limit(100);
+
+                    if (topData) {
+                        const countMap: Record<string, { name: string; count: number }> = {};
+                        topData.forEach((lead: any) => {
+                            const pid = lead.partner_id;
+                            const name = lead.partners?.name || 'Unknown';
+                            if (!countMap[pid]) countMap[pid] = { name, count: 0 };
+                            countMap[pid].count++;
+                        });
+                        const sorted = Object.values(countMap).sort((a, b) => b.count - a.count).slice(0, 5);
+                        setTopPartners(sorted);
+                    }
+                }
 
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -141,23 +179,22 @@ export default function OverviewPage() {
         fetchStats();
     }, [isAdmin, lang]);
 
-    const statCards = [
-        {
-            title: isAdmin ? t.overview.networkLeads : t.overview.myLeads,
-            value: stats.leads.toString(),
-            icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF'
-        },
-        {
-            title: isAdmin ? t.overview.totalClicks : t.overview.trafficClicks,
-            value: stats.clicks.toString(),
-            icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6'
-        },
-        {
-            title: isAdmin ? t.overview.partnerLandings : t.overview.myLandings,
-            value: stats.landings.toString(),
-            icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b'
-        },
+    // ── ADMIN stat cards
+    const adminStatCards = [
+        { title: 'Red Total - Leads', value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF', badge: 'Global' },
+        { title: 'Clicks Totales Red', value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6', badge: 'Red' },
+        { title: 'Landings Activas', value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b', badge: 'Total' },
+        { title: 'Partners Activos', value: totalPartners.toString(), icon: Network, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981', badge: 'Red' },
     ];
+
+    // ── PARTNER VIEW stat cards
+    const partnerStatCards = [
+        { title: t.overview.myLeads, value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF' },
+        { title: t.overview.trafficClicks, value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6' },
+        { title: t.overview.myLandings, value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b' },
+    ];
+
+    const statCards = isAdmin ? adminStatCards : partnerStatCards;
 
     const COUNTRY_COORDS: Record<string, { top: string; left: string }> = {
         'Mexico': { top: '48%', left: '22%' }, 'México': { top: '48%', left: '22%' },
@@ -185,14 +222,23 @@ export default function OverviewPage() {
         { top: '35%', left: '50%', size: 'w-6 h-6', color: 'bg-rose-400', shadow: 'shadow-rose-400/50', label: 'España', count: 890, conversion: '18.5%', topPartner: 'N/A' },
     ];
 
-    const quickActions = [
+    // Quick actions differ by role
+    const adminQuickActions = [
+        { label: 'Gestionar Partners', desc: 'Ver y administrar toda la red', icon: Shield, color: '#865BFF', bg: 'rgba(134,91,255,0.08)', href: '/dashboard/admin/partners' },
+        { label: 'Clientes Globales', desc: 'Ver todos los leads de la red', icon: Users, color: '#10b981', bg: 'rgba(16,185,129,0.08)', href: '/dashboard/reports/clients' },
+        { label: 'Estadísticas Red', desc: 'Métricas consolidadas', icon: BarChart2, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', href: '/dashboard/reports/stats' },
+        { label: 'Landings Activas', desc: 'Todas las landings de la red', icon: Globe, color: '#38bdf8', bg: 'rgba(56,189,248,0.08)', href: '/dashboard/landing' },
+    ];
+
+    const partnerQuickActions = [
         { label: t.overview.materialPost, desc: t.overview.materialPostDesc, icon: Globe, color: '#865BFF', bg: 'rgba(134,91,255,0.08)', href: '/dashboard/promo/overview' },
         { label: t.overview.landingGen, desc: t.overview.landingGenDesc, icon: Zap, color: '#38bdf8', bg: 'rgba(56,189,248,0.08)', href: '/dashboard/landing' },
         { label: t.overview.myClients, desc: t.overview.myClientsDesc, icon: Users, color: '#10b981', bg: 'rgba(16,185,129,0.08)', href: '/dashboard/reports/clients' },
         { label: t.overview.reports, desc: t.overview.reportsDesc, icon: BarChart2, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', href: '/dashboard/reports/stats' },
     ];
 
-    // Date locale map
+    const quickActions = isAdmin ? adminQuickActions : partnerQuickActions;
+
     const dateLocales: Record<string, string> = {
         es: 'es-ES', en: 'en-US', zh: 'zh-CN', hi: 'hi-IN', fr: 'fr-FR',
         ar: 'ar-SA', bn: 'bn-BD', pt: 'pt-BR', ru: 'ru-RU', ja: 'ja-JP',
@@ -200,56 +246,106 @@ export default function OverviewPage() {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 pb-10">
-            {/* Welcome Banner */}
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="card px-6 py-5">
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                    <div className="flex items-center gap-4">
-                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#865BFF] to-[#5b3fd6] flex items-center justify-center shadow-lg shadow-[#865BFF]/20">
-                            <TrendingUp className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-base font-bold text-slate-800">
-                                {isAdmin ? t.overview.adminPanel : t.overview.welcomePartner}
-                            </h1>
-                            <p className="text-xs text-slate-400 mt-0.5">{t.overview.realtimeData}</p>
+
+            {/* ── Welcome Banner — Visual diferente por rol */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+                {isAdmin ? (
+                    /* ADMIN Banner — dorado/oscuro */
+                    <div className="relative overflow-hidden rounded-2xl p-5 border border-amber-500/20" style={{ background: 'linear-gradient(135deg, #1a0f00 0%, #2d1a00 50%, #1a0f00 100%)' }}>
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-amber-600/5 rounded-full blur-[60px] pointer-events-none" />
+                        <div className="relative z-10 flex items-center justify-between gap-4 flex-wrap">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                                    <Crown className="w-6 h-6 text-amber-400" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-2 mb-0.5">
+                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-500/60 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                                            <Shield className="w-2.5 h-2.5" /> Panel Administrador
+                                        </span>
+                                    </div>
+                                    <h1 className="text-base font-bold text-white">{t.overview.adminPanel}</h1>
+                                    <p className="text-xs text-white/40 mt-0.5">{t.overview.realtimeData} · Toda la red</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 flex-wrap">
+                                <div className="flex items-center gap-1.5 text-xs text-amber-300/60 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                                </div>
+                                <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+                                    <Network className="w-3.5 h-3.5 text-amber-400" />
+                                    <span className="text-xs font-bold font-mono text-amber-400">{totalPartners} Partners</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                        <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                            <Clock className="w-3.5 h-3.5" />
-                            {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-                        </div>
-                        <div className="flex items-center gap-1.5 bg-[#865BFF]/8 border border-[#865BFF]/20 rounded-lg px-3 py-2">
-                            <Award className="w-3.5 h-3.5 text-[#865BFF]" />
-                            <span className="text-xs font-bold font-mono text-[#865BFF]">{partnerId}</span>
+                ) : (
+                    /* PARTNER VIEW Banner — morado */
+                    <div className="card px-6 py-5">
+                        <div className="flex items-center justify-between gap-4 flex-wrap">
+                            <div className="flex items-center gap-4">
+                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#865BFF] to-[#5b3fd6] flex items-center justify-center shadow-lg shadow-[#865BFF]/20">
+                                    <TrendingUp className="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-2 mb-0.5">
+                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-[#865BFF] bg-[#865BFF]/8 px-2 py-0.5 rounded-md border border-[#865BFF]/15">
+                                            <Eye className="w-2.5 h-2.5" /> Partner View
+                                        </span>
+                                    </div>
+                                    <h1 className="text-base font-bold text-slate-800">
+                                        {partnerName ? `¡Hola, ${partnerName.split(' ')[0]}!` : t.overview.welcomePartner}
+                                    </h1>
+                                    <p className="text-xs text-slate-400 mt-0.5">{t.overview.realtimeData} · Tus métricas personales</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 flex-wrap">
+                                <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                                </div>
+                                <div className="flex items-center gap-1.5 bg-[#865BFF]/8 border border-[#865BFF]/20 rounded-lg px-3 py-2">
+                                    <Award className="w-3.5 h-3.5 text-[#865BFF]" />
+                                    <span className="text-xs font-bold font-mono text-[#865BFF]">{partnerId}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </motion.div>
 
-            {/* Stat Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* ── Stat Cards */}
+            <div className={`grid grid-cols-1 gap-4 ${isAdmin ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}>
                 {statCards.map((s, i) => {
                     const Icon = s.icon;
                     return (
-                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.08 }} className="card p-5 flex items-start gap-4 hover:shadow-md transition-all">
+                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.08 }}
+                            className={`card p-5 flex items-start gap-4 hover:shadow-md transition-all ${isAdmin ? 'border-amber-500/10' : ''}`}>
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${s.iconBg} ${s.iconColor}`}>
                                 <Icon className="w-5 h-5" strokeWidth={1.8} />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <h3 className="text-slate-400 text-[11px] font-semibold uppercase tracking-wide">{s.title}</h3>
                                 <div className="text-2xl font-bold text-slate-800 tracking-tight mt-0.5">{s.value}</div>
-                                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 mt-1.5 inline-block">{t.overview.realTime}</span>
+                                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded mt-1.5 inline-block ${
+                                    isAdmin ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
+                                }`}>
+                                    {isAdmin ? (s as any).badge || 'Global' : t.overview.realTime}
+                                </span>
                             </div>
                         </motion.div>
                     );
                 })}
             </div>
 
-            {/* Quick Actions + Chart */}
+            {/* ── Quick Actions + Chart */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }} className="lg:col-span-2 space-y-2">
-                    <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">{t.overview.quickActions}</h2>
+                    <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        {isAdmin ? <><Zap className="w-3.5 h-3.5 text-amber-500" /><span>Accesos Rápidos — Admin</span></> : t.overview.quickActions}
+                    </h2>
                     {quickActions.map((action, i) => {
                         const Icon = action.icon;
                         return (
@@ -270,10 +366,12 @@ export default function OverviewPage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="card p-6 lg:col-span-3">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <h3 className="text-sm font-bold text-slate-800">
-                                {isAdmin ? t.overview.consolidatedVolume : t.overview.dailyLeads}
+                            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                                {isAdmin ? <><BarChart2 className="w-4 h-4 text-amber-500" /><span>Volumen Consolidado — Red</span></> : t.overview.dailyLeads}
                             </h3>
-                            <p className="text-xs text-slate-400 mt-0.5">{t.overview.realTrafficNote}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                                {isAdmin ? 'Actividad total de todos los partners' : t.overview.realTrafficNote}
+                            </p>
                         </div>
                         <button className="px-3 py-1.5 text-[11px] font-semibold text-slate-500 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                             {t.overview.thisWeek}
@@ -291,7 +389,11 @@ export default function OverviewPage() {
                                             initial={{ height: 0 }}
                                             animate={{ height: `${Math.max(heightPercentage, d.count > 0 ? 5 : 0)}%` }}
                                             transition={{ duration: 0.6, delay: 0.4 + (i * 0.05) }}
-                                            className={`w-full max-w-[32px] rounded-t-lg transition-colors shadow-sm ${d.count > 0 ? 'bg-gradient-to-t from-[#865BFF] to-[#a88bff] group-hover:from-[#6b3fd6] group-hover:to-[#865BFF]' : 'bg-slate-100'}`}
+                                            className={`w-full max-w-[32px] rounded-t-lg transition-colors shadow-sm ${d.count > 0
+                                                ? isAdmin
+                                                    ? 'bg-gradient-to-t from-amber-500 to-amber-300 group-hover:from-amber-600 group-hover:to-amber-400'
+                                                    : 'bg-gradient-to-t from-[#865BFF] to-[#a88bff] group-hover:from-[#6b3fd6] group-hover:to-[#865BFF]'
+                                                : 'bg-slate-100'}`}
                                         />
                                     </div>
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{d.day}</span>
@@ -309,12 +411,86 @@ export default function OverviewPage() {
                 </motion.div>
             </div>
 
-            {/* Heatmap */}
+            {/* ── ADMIN ONLY: Top Partners Table */}
+            {isAdmin && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
+                    className="card p-6 border-amber-500/10">
+                    <div className="flex items-center justify-between mb-5">
+                        <div>
+                            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                <Star className="w-4 h-4 text-amber-500" />
+                                Top Partners — Esta Semana
+                            </h3>
+                            <p className="text-xs text-slate-400 mt-0.5">Ranking por volumen de leads generados</p>
+                        </div>
+                        <button onClick={() => router.push('/dashboard/admin/partners')} className="text-xs font-bold text-[#865BFF] hover:text-[#6b3fd6] flex items-center gap-1">
+                            Ver todos <ChevronRight className="w-3 h-3" />
+                        </button>
+                    </div>
+                    {topPartners.length === 0 ? (
+                        <div className="text-center py-8 text-slate-400 text-sm">No hay datos de partners aún</div>
+                    ) : (
+                        <div className="space-y-2">
+                            {topPartners.map((p, i) => (
+                                <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black ${
+                                        i === 0 ? 'bg-amber-100 text-amber-600' :
+                                        i === 1 ? 'bg-slate-100 text-slate-600' :
+                                        i === 2 ? 'bg-orange-100 text-orange-600' :
+                                        'bg-slate-50 text-slate-400'
+                                    }`}>#{i + 1}</div>
+                                    <div className="flex-1">
+                                        <div className="text-sm font-bold text-slate-800">{p.name}</div>
+                                    </div>
+                                    <div className="text-sm font-bold text-[#865BFF]">{p.count} leads</div>
+                                    <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                        <div className="h-full bg-gradient-to-r from-[#865BFF] to-[#a88bff] rounded-full"
+                                            style={{ width: `${(p.count / (topPartners[0]?.count || 1)) * 100}%` }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </motion.div>
+            )}
+
+            {/* ── PARTNER VIEW ONLY: Performance Tips */}
+            {!isAdmin && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
+                    className="card p-6">
+                    <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4">
+                        <Target className="w-4 h-4 text-[#865BFF]" />
+                        Cómo mejorar tu rendimiento
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        {[
+                            { Icon: Pencil, tip: 'Crea piezas gráficas', desc: 'Usa los materiales en 14 idiomas para llegar a más mercados', href: '/dashboard/promo/overview', color: 'text-pink-500', bg: 'bg-pink-50' },
+                            { Icon: Globe, tip: 'Genera Landing Pages', desc: 'Landing pages personalizadas con IA convierten 3x más', href: '/dashboard/landing', color: 'text-blue-500', bg: 'bg-blue-50' },
+                            { Icon: Link2, tip: 'Comparte tu link', desc: 'Distribuye tus links de referido en todos tus canales', href: '/dashboard/links', color: 'text-[#865BFF]', bg: 'bg-[#865BFF]/10' },
+                        ].map((item, i) => (
+                            <button key={i} onClick={() => router.push(item.href)}
+                                className="text-left p-4 rounded-xl bg-gradient-to-br from-[#865BFF]/5 to-transparent border border-[#865BFF]/10 hover:from-[#865BFF]/10 hover:border-[#865BFF]/20 transition-all group">
+                                <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center mb-3`}>
+                                    <item.Icon className={`w-4 h-4 ${item.color}`} />
+                                </div>
+                                <div className="text-sm font-bold text-slate-800 group-hover:text-[#865BFF] transition-colors">{item.tip}</div>
+                                <div className="text-xs text-slate-400 mt-1">{item.desc}</div>
+                            </button>
+                        ))}
+                    </div>
+                </motion.div>
+            )}
+
+            {/* ── Heatmap */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="card p-6">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-sm font-bold text-slate-800">{t.overview.heatmapTitle}</h3>
-                        <p className="text-xs text-slate-400 mt-0.5">{t.overview.heatmapSubtitle}</p>
+                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            {isAdmin ? <><Globe2 className="w-4 h-4 text-amber-500" /><span>Distribución Global — Toda la Red</span></> : t.overview.heatmapTitle}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                            {isAdmin ? 'Origen geográfico consolidado de todos los leads' : t.overview.heatmapSubtitle}
+                        </p>
                     </div>
                 </div>
                 <div className="relative w-full h-[340px] bg-slate-900 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
@@ -330,7 +506,7 @@ export default function OverviewPage() {
                                 <div className="w-full flex justify-between items-center mb-2 border-b border-slate-100 pb-1.5">
                                     <span className="text-[10px] uppercase font-black tracking-widest text-[#865BFF]">{point.label}</span>
                                     <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 uppercase">
-                                        {point.count > 100 ? t.overview.highDensity.split('(')[0].trim() : t.overview.medDensity.split('(')[0].trim()}
+                                        {point.count > 100 ? t.overview.highDensity?.split('(')[0]?.trim() || 'Alto' : t.overview.medDensity?.split('(')[0]?.trim() || 'Medio'}
                                     </span>
                                 </div>
                                 <div className="flex flex-col items-center">
@@ -359,25 +535,36 @@ export default function OverviewPage() {
                 </div>
             </motion.div>
 
-            {/* Materials Banner */}
+            {/* ── Materials Banner */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.45 }}
                 className="rounded-2xl p-6 flex items-center justify-between gap-4 flex-wrap cursor-pointer relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg,#140633 0%,#2d1060 50%,#865BFF 100%)' }}
-                onClick={() => router.push('/dashboard/promo/overview')}
+                style={{ background: isAdmin
+                    ? 'linear-gradient(135deg, #1a0f00 0%, #2d1900 50%, #c47b0a 100%)'
+                    : 'linear-gradient(135deg,#140633 0%,#2d1060 50%,#865BFF 100%)'
+                }}
+                onClick={() => router.push(isAdmin ? '/dashboard/admin/partners' : '/dashboard/promo/overview')}
             >
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 translate-x-16 -translate-y-16" />
                     <div className="absolute bottom-0 left-48 w-32 h-32 rounded-full bg-white/5 translate-y-8" />
                 </div>
                 <div className="relative z-10">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-[#865BFF]/60 mb-1">{t.overview.materialsReady}</div>
-                    <h3 className="text-white font-bold text-base">{t.overview.materialsTitle}</h3>
-                    <p className="text-white/50 text-sm mt-1">{t.overview.materialsSubtitle}</p>
+                    <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 flex items-center gap-1.5 ${
+                            isAdmin ? 'text-amber-500/60' : 'text-[#865BFF]/60'
+                        }`}>
+                        {isAdmin ? <><Shield className="w-3 h-3" /><span>ZONA ADMIN</span></> : t.overview.materialsReady}
+                    </div>
+                    <h3 className="text-white font-bold text-base">
+                        {isAdmin ? 'Gestiona tu red de Partners' : t.overview.materialsTitle}
+                    </h3>
+                    <p className="text-white/50 text-sm mt-1">
+                        {isAdmin ? 'Ver roles, actividades y estadísticas de cada partner' : t.overview.materialsSubtitle}
+                    </p>
                 </div>
                 <button className="relative z-10 flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all flex-shrink-0">
                     <ExternalLink className="w-4 h-4" />
-                    {t.overview.viewMaterials}
+                    {isAdmin ? 'Ver Partners' : t.overview.viewMaterials}
                 </button>
             </motion.div>
         </motion.div>

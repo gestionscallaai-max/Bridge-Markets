@@ -6,7 +6,7 @@ import {
     ChevronRight, Layout, Download,
     Image as ImageIcon, Upload, Sparkles, Search,
     ArrowRight, Languages, Link2, TrendingUp, Rocket, Play,
-    Pencil, Plus, BarChart3, Shield, Zap, Briefcase, Cpu, Coins, Crown, Sparkle
+    Pencil, Plus, BarChart3, Shield, Zap, Briefcase, Cpu, Coins, Crown, Sparkle, FileText
 } from 'lucide-react';
 import {
     generateModularLandingHTML, openLandingPreview,
@@ -18,6 +18,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/context';
 import { getTemplateDescription, getTemplateBadge, getSectionName } from '@/lib/i18n/template-translations';
+import LibraryDocuments from '@/components/LibraryDocuments';
 
 // ─── Idiomas ─────────────────────────────────────
 const LANGUAGES = [
@@ -35,7 +36,7 @@ const LANGUAGES = [
 export default function PromoMaterialsPage() {
     const router = useRouter();
     const { t, lang } = useLanguage();
-    const [mainTab, setMainTab] = useState<'landings' | 'banners'>('landings');
+    const [mainTab, setMainTab] = useState<'landings' | 'banners' | 'documents'>('landings');
     const [activeFilter, setActiveFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLanding, setSelectedLanding] = useState<string | null>(null);
@@ -199,6 +200,16 @@ export default function PromoMaterialsPage() {
                                 }`}
                             >
                                 <ImageIcon className="w-4 h-4" /> {t.nav.materialPost}
+                            </button>
+                            <button
+                                onClick={() => setMainTab('documents')}
+                                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                                    mainTab === 'documents'
+                                        ? 'bg-white text-[#0d0221] shadow-lg shadow-white/10'
+                                        : 'bg-white/[0.07] text-white/60 hover:bg-white/[0.12] hover:text-white border border-white/[0.08]'
+                                }`}
+                            >
+                                <FileText className="w-4 h-4" /> {t.promo.documentsTab}
                             </button>
                         </div>
                         <button
@@ -533,6 +544,11 @@ export default function PromoMaterialsPage() {
                         )}
                     </div>
                 </div>
+            )}
+
+            {/* ─── DOCUMENTS TAB ─── */}
+            {mainTab === 'documents' && (
+                <LibraryDocuments />
             )}
 
             {/* Preview Modal */}

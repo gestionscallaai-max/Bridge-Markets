@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { LayoutDashboard, FileBarChart, Megaphone, Headphones, ChevronDown, ChevronRight, Bell, Settings, LogOut, Sparkles, Menu, X, Shield, Globe } from 'lucide-react';
+import { LayoutDashboard, FileBarChart, Megaphone, Headphones, ChevronDown, ChevronRight, Bell, Settings, LogOut, Sparkles, Menu, X, Shield, Globe, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
@@ -16,6 +16,10 @@ export const AdminContext = createContext<{ isAdmin: boolean; setIsAdmin: (val: 
     setIsAdmin: () => { },
 });
 export const useAdmin = () => useContext(AdminContext);
+
+// ─── Role Context ─────────────────────────────────────────────
+export const RoleContext = createContext<{ userRole: string }>({ userRole: 'partner_view' });
+export const useRole = () => useContext(RoleContext);
 
 // ─── Language Selector Dropdown ──────────────────────────────
 function LanguageSelector() {
@@ -122,7 +126,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const { t, isRTL } = useLanguage();
     const [isAdmin, setIsAdmin] = useState(false);
-    const [userRole, setUserRole] = useState('partner');
+    const [userRole, setUserRole] = useState('partner_view');
     const [partnerId, setPartnerId] = useState('...');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -137,7 +141,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                     .eq('id', user.id)
                     .single();
                 if (profile) {
-                    setUserRole(profile.role || 'partner');
+                    setUserRole(profile.role || 'partner_view');
                     setIsAdmin(profile.role === 'admin');
                 }
             }
@@ -170,9 +174,9 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
     };
 
     const menuStructure = [
-        { href: '/dashboard/overview', label: t.nav.overview, icon: LayoutDashboard, isSubmenu: false, roles: ['admin', 'partner'] },
+        { href: '/dashboard/overview', label: t.nav.overview, icon: LayoutDashboard, isSubmenu: false, roles: ['admin', 'partner', 'partner_view'] },
         {
-            key: 'reports', label: t.nav.reports, icon: FileBarChart, isSubmenu: true, roles: ['admin', 'partner'],
+            key: 'reports', label: t.nav.reports, icon: FileBarChart, isSubmenu: true, roles: ['admin', 'partner', 'partner_view'],
             children: [
                 { href: '/dashboard/reports/clients', label: t.nav.clients },
                 { href: '/dashboard/reports/accounts', label: t.nav.accounts },
@@ -180,7 +184,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
             ]
         },
         {
-            key: 'promo', label: t.nav.promo, icon: Megaphone, isSubmenu: true, roles: ['admin', 'partner'],
+            key: 'promo', label: t.nav.promo, icon: Megaphone, isSubmenu: true, roles: ['admin', 'partner', 'partner_view'],
             children: [
                 { href: '/dashboard/promo/overview', label: t.nav.materialPost },
                 { href: '/dashboard/landing', label: t.nav.landingTools },
@@ -188,7 +192,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                 { href: '/dashboard/promo/guidelines', label: t.nav.guidelines },
             ]
         },
-        { href: '/dashboard/support', label: t.nav.support, icon: Headphones, isSubmenu: false, roles: ['admin', 'partner'] },
+        { href: '/dashboard/support', label: t.nav.support, icon: Headphones, isSubmenu: false, roles: ['admin', 'partner', 'partner_view'] },
         {
             key: 'admin', label: t.nav.admin, icon: Shield, isSubmenu: true, roles: ['admin'],
             children: [
@@ -196,7 +200,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                 { href: '/dashboard/admin/settings', label: t.nav.globalSettings },
             ]
         },
-        { href: '/dashboard/settings', label: t.nav.settings, icon: Settings, isSubmenu: false, roles: ['admin', 'partner'] },
+        { href: '/dashboard/settings', label: t.nav.settings, icon: Settings, isSubmenu: false, roles: ['admin', 'partner', 'partner_view'] },
     ];
 
     const filteredMenu = menuStructure.filter(item => item.roles.includes(userRole));
@@ -218,6 +222,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
     const title = getPageTitle();
 
     return (
+        <RoleContext.Provider value={{ userRole }}>
         <AdminContext.Provider value={{ isAdmin, setIsAdmin }}>
             <div className={`flex h-screen bg-[#f8fafc] text-slate-800 overflow-hidden relative ${isRTL ? 'flex-row-reverse' : ''}`}>
 
@@ -321,17 +326,38 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
 
                     {/* User Card */}
                     <div className="relative z-10 px-4 py-4">
-                        <div className={`rounded-2xl p-4 transition-all duration-300 ${isAdmin ? 'bg-slate-800/50 border border-slate-700/50' : 'bg-gradient-to-br from-[#865BFF]/10 to-[#865BFF]/5 border border-[#865BFF]/15'}`}>
+                        <div className={`rounded-2xl p-4 transition-all duration-300 ${
+                            isAdmin 
+                                ? 'bg-amber-500/5 border border-amber-500/20' 
+                                : 'bg-gradient-to-br from-[#865BFF]/10 to-[#865BFF]/5 border border-[#865BFF]/15'
+                        }`}>
+                            {/* Role Badge */}
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest mb-3 ${
+                                isAdmin 
+                                    ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' 
+                                    : 'bg-[#865BFF]/15 text-[#a88bff] border border-[#865BFF]/20'
+                            }`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${
+                                    isAdmin ? 'bg-amber-400' : 'bg-[#865BFF]'
+                                } shadow-[0_0_6px_currentColor]`} />
+                                <Shield className="w-2.5 h-2.5" />
+                                {isAdmin ? 'Administrador' : <><Eye className="w-2.5 h-2.5" /><span>Partner View</span></>}
+                            </div>
+
                             <div className="flex items-center gap-3 mb-3">
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-black shadow-lg ${isAdmin ? 'bg-slate-700' : 'bg-gradient-to-br from-[#865BFF] to-[#6635de] shadow-[#865BFF]/20'}`}>
-                                    {isAdmin ? 'AD' : 'JP'}
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-black shadow-lg ${
+                                    isAdmin 
+                                        ? 'bg-gradient-to-br from-amber-500 to-amber-600 shadow-amber-500/20' 
+                                        : 'bg-gradient-to-br from-[#865BFF] to-[#6635de] shadow-[#865BFF]/20'
+                                }`}>
+                                    {partnerId.substring(3, 5)}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
-                                        {isAdmin ? t.common.admin + ' ID' : 'Partner ID'}
+                                        {isAdmin ? 'Admin ID' : 'Partner ID'}
                                     </div>
-                                    <div className="text-[13px] font-bold text-white tracking-wide truncate">
-                                        {isAdmin ? 'ADMIN_ROOT' : partnerId}
+                                    <div className="text-[12px] font-bold text-white tracking-wide truncate font-mono">
+                                        {partnerId}
                                     </div>
                                 </div>
                             </div>
@@ -362,18 +388,6 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                         </div>
 
                         <div className="flex items-center gap-1.5 lg:gap-2.5">
-                            {/* Admin Toggle */}
-                            <button
-                                onClick={() => setIsAdmin(!isAdmin)}
-                                className={`hidden sm:flex items-center gap-1.5 px-3 lg:px-4 py-2 rounded-xl text-[10px] lg:text-[11px] font-bold transition-all ${isAdmin ? 'bg-slate-800 text-white shadow-md hover:bg-slate-700' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700'}`}
-                            >
-                                <Sparkles className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
-                                <span className="hidden lg:inline">{isAdmin ? t.topbar.partnerView : t.topbar.adminView}</span>
-                                <span className="lg:hidden">{isAdmin ? 'Partner' : 'Admin'}</span>
-                            </button>
-
-                            <div className="hidden sm:block h-6 w-px bg-slate-200" />
-
                             {/* Language Selector */}
                             <LanguageSelector />
 
@@ -406,6 +420,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                 </main>
             </div>
         </AdminContext.Provider>
+        </RoleContext.Provider>
     );
 }
 

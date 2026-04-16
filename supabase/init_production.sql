@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS public.partners (
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     tier TEXT DEFAULT 'Silver',
-    role TEXT DEFAULT 'partner', -- 'admin', 'partner'
+    role TEXT DEFAULT 'partner_view', -- 'admin', 'partner', 'partner_view'
+    referral_link TEXT, -- Link de referido del partner
     wallet_balance NUMERIC DEFAULT 0.00,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -139,11 +140,13 @@ CREATE POLICY "Partners manage their own localized assets" ON public.localized_a
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.partners (id, name, email)
+  INSERT INTO public.partners (id, name, email, role, referral_link)
   VALUES (
     new.id, 
     COALESCE(new.raw_user_meta_data->>'full_name', 'Nuevo Partner'), 
-    new.email
+    new.email,
+    'partner_view',
+    COALESCE(new.raw_user_meta_data->>'referral_link', NULL)
   );
   RETURN new;
 END;

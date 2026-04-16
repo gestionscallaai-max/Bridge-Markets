@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, ArrowRight, Mail, Lock, Eye, EyeOff, Shield, User, Globe, Zap, ShieldCheck, Pencil, CheckCircle2 } from 'lucide-react';
+import { Loader2, ArrowRight, Mail, Lock, Eye, EyeOff, Shield, User, Globe, Zap, ShieldCheck, Pencil, CheckCircle2, Link2 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,6 +20,7 @@ export default function RegisterPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [referralLink, setReferralLink] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -50,11 +51,11 @@ export default function RegisterPage() {
                     minWidth: 200.00,
                     scale: 1.00,
                     scaleMobile: 1.00,
-                    color: 0x9b51e0,
-                    shininess: 80.00,
-                    waveHeight: 20.00,
-                    waveSpeed: 0.65,
-                    zoom: 0.8
+                    color: 0x140633,
+                    shininess: 35.00,
+                    waveHeight: 15.00,
+                    waveSpeed: 0.50,
+                    zoom: 0.85
                 });
                 setVantaEffect(effect);
             }
@@ -69,24 +70,46 @@ export default function RegisterPage() {
         setLoading(true);
         setErrorMsg('');
 
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    full_name: name,
+        try {
+            // 1. Create auth user with role partner_view in metadata
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: name,
+                        role: 'partner_view',
+                        referral_link: referralLink,
+                    }
+                }
+            });
+
+            if (error) {
+                setErrorMsg(error.message);
+                setLoading(false);
+                return;
+            }
+
+            // 2. Update the partner record with role partner_view and referral link
+            if (data?.user?.id) {
+                const { error: updateError } = await supabase
+                    .from('partners')
+                    .update({ 
+                        role: 'partner_view',
+                    })
+                    .eq('id', data.user.id);
+
+                if (updateError) {
+                    console.warn('Could not update partner role via client, trigger will handle defaults:', updateError.message);
                 }
             }
-        });
 
-        if (error) {
-            setErrorMsg(error.message);
+            setSuccess(true);
             setLoading(false);
-            return;
+        } catch (err: any) {
+            setErrorMsg(err?.message || 'Error inesperado al crear la cuenta.');
+            setLoading(false);
         }
-
-        setSuccess(true);
-        setLoading(false);
     };
 
     const features = [
@@ -97,13 +120,13 @@ export default function RegisterPage() {
     ];
 
     return (
-        <div className="flex h-screen w-screen font-sans overflow-hidden bg-slate-50">
+        <div className="flex h-screen w-screen font-sans overflow-hidden">
 
             {/* ========== LEFT PANEL — Branded Info ========== */}
             <div className="relative w-1/2 hidden lg:flex flex-col items-center justify-center overflow-hidden">
-                {/* Vanta Background */}
-                <div ref={vantaRef} className="absolute inset-0 z-0" />
-                <div className="absolute inset-0 z-[1] bg-gradient-to-b from-purple-900/30 via-transparent to-purple-900/40" />
+                {/* Vanta Background - Dark purple like login */}
+                <div ref={vantaRef} className="absolute inset-0 z-0" style={{ background: '#0d0221' }} />
+                <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(160deg, rgba(13,2,33,0.85) 0%, rgba(20,6,51,0.6) 50%, rgba(134,91,255,0.15) 100%)' }} />
 
                 {/* Content */}
                 <div className="relative z-10 text-center px-12 max-w-lg">
@@ -154,19 +177,53 @@ export default function RegisterPage() {
                                 transition={{ duration: 0.4, ease: "easeOut" }}
                                 className="text-center w-full"
                             >
-                                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-600">
-                                    <CheckCircle2 className="w-8 h-8" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-slate-800 tracking-tight mb-2">¡Solicitud Recibida!</h2>
-                                <p className="text-sm text-slate-500 mb-8 leading-relaxed">
-                                    Hemos creado tu cuenta de Partner. Revisa tu bandeja de entrada para verificar tu correo electrónico antes de iniciar sesión.
-                                </p>
-                                <button 
-                                    onClick={() => router.push('/login')} 
-                                    className="w-full bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 py-3 rounded-lg font-semibold transition-all"
+                                {/* Animated checkmark */}
+                                <motion.div 
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 15 }}
+                                    className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-500/30"
                                 >
-                                    Ir al Inicio de Sesión
-                                </button>
+                                    <CheckCircle2 className="w-10 h-10 text-white" />
+                                </motion.div>
+
+                                <motion.h2 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="text-2xl font-bold text-slate-800 tracking-tight mb-2"
+                                >
+                                    ¡Cuenta creada exitosamente!
+                                </motion.h2>
+                                <motion.p 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                    className="text-sm text-slate-500 mb-3 leading-relaxed"
+                                >
+                                    Tu cuenta de Partner ha sido creada con el rol <span className="font-bold text-[#865BFF]">Partner View</span>.
+                                </motion.p>
+                                <motion.p 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.45 }}
+                                    className="text-sm text-slate-400 mb-8 leading-relaxed"
+                                >
+                                    Revisa tu bandeja de entrada para verificar tu correo electrónico antes de iniciar sesión.
+                                </motion.p>
+
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.55 }}
+                                >
+                                    <button 
+                                        onClick={() => router.push('/login')} 
+                                        className="w-full bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 py-3 rounded-lg font-semibold transition-all hover:shadow-[#865BFF]/40"
+                                    >
+                                        Ir al Inicio de Sesión
+                                    </button>
+                                </motion.div>
                             </motion.div>
                         ) : (
                             <motion.div 
@@ -187,14 +244,14 @@ export default function RegisterPage() {
                                 <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
                                     Crea tu cuenta
                                 </h1>
-                                <p className="text-sm text-slate-400 mt-1 mb-8">
+                                <p className="text-sm text-slate-400 mt-1 mb-7">
                                     Completa tus datos para obtener acceso al panel.
                                 </p>
 
                                 {errorMsg && (
                                     <motion.div 
                                         initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
-                                        className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 mb-6"
+                                        className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 mb-5"
                                     >
                                         {errorMsg}
                                     </motion.div>
@@ -204,7 +261,7 @@ export default function RegisterPage() {
                                 <form onSubmit={handleRegister}>
                                     
                                     {/* Name */}
-                                    <div className="mb-5">
+                                    <div className="mb-4">
                                         <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
                                             Nombre completo
                                         </label>
@@ -213,7 +270,7 @@ export default function RegisterPage() {
                                                 type="text"
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
                                                 placeholder="Juan Pérez"
                                                 required
                                             />
@@ -221,7 +278,7 @@ export default function RegisterPage() {
                                     </div>
 
                                     {/* Email */}
-                                    <div className="mb-5">
+                                    <div className="mb-4">
                                         <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
                                             Email corporativo
                                         </label>
@@ -230,7 +287,7 @@ export default function RegisterPage() {
                                                 type="email"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
                                                 placeholder="tu@bridge.com"
                                                 required
                                             />
@@ -238,7 +295,7 @@ export default function RegisterPage() {
                                     </div>
 
                                     {/* Password */}
-                                    <div className="mb-7">
+                                    <div className="mb-4">
                                         <div className="flex justify-between items-center mb-1.5">
                                             <label className="block text-[12px] font-semibold text-slate-600">
                                                 Contraseña
@@ -250,7 +307,7 @@ export default function RegisterPage() {
                                                 value={password}
                                                 minLength={6}
                                                 onChange={(e) => setPassword(e.target.value)}
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 px-4 pr-11 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 pr-11 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
                                                 placeholder="••••••••"
                                                 required
                                             />
@@ -262,7 +319,27 @@ export default function RegisterPage() {
                                                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                             </button>
                                         </div>
-                                        <p className="mt-2 text-[11px] text-slate-400">Debe tener al menos 6 caracteres.</p>
+                                        <p className="mt-1.5 text-[11px] text-slate-400">Debe tener al menos 6 caracteres.</p>
+                                    </div>
+
+                                    {/* Referral Link */}
+                                    <div className="mb-6">
+                                        <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                                            Link de referido
+                                        </label>
+                                        <div className="relative">
+                                            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+                                                <Link2 className="w-4 h-4" />
+                                            </div>
+                                            <input
+                                                type="url"
+                                                value={referralLink}
+                                                onChange={(e) => setReferralLink(e.target.value)}
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-10 pr-4 text-sm font-medium text-slate-800 transition-all focus:outline-none focus:bg-white focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/10 placeholder:text-slate-400"
+                                                placeholder="https://tu-link-de-referido.com"
+                                            />
+                                        </div>
+                                        <p className="mt-1.5 text-[11px] text-slate-400">Opcional. Tu enlace de afiliado o referido.</p>
                                     </div>
 
                                     {/* Submit */}
