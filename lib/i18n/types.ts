@@ -223,6 +223,71 @@ export type TranslationKeys = {
         landingLang: string;
         history: string;
         changeLangHint: string;
+        // Step 1 form
+        digitalIdentity: string;
+        officialInfo: string;
+        publicName: string;
+        publicNamePlaceholder: string;
+        contactEmail: string;
+        brandSettings: string;
+        communityName: string;
+        heroPhrase: string;
+        communityPlaceholder: string;
+        heroPlaceholder: string;
+        channels: string;
+        ctaLinkLabel: string;
+        landingLanguageLabel: string;
+        nextBtn: string;
+        // Step 2
+        step2Badge: string;
+        selectBlueprint: string;
+        selectBlueprintDesc: string;
+        viewAll: string;
+        templateSelected: string;
+        chooseDesign: string;
+        backBtn: string;
+        customizeSections: string;
+        // Step 3
+        modularStructure: string;
+        activeBlocks: string;
+        addBlock: string;
+        emptyDesign: string;
+        addFirstBlock: string;
+        finishAndLaunch: string;
+        // Step 4
+        launchProtocol: string;
+        launchProtocolDesc: string;
+        baseConfig: string;
+        designBlueprint: string;
+        territoryLang: string;
+        blockInventory: string;
+        activeSections: string;
+        backToEditor: string;
+        processing: string;
+        deployLanding: string;
+        // Step 5
+        landingGenerated: string;
+        landingReadyToShare: string;
+        viewLive: string;
+        copyLink: string;
+        copiedLink: string;
+        viewHistory: string;
+        createAnother: string;
+        // Preview sidebar
+        studioPreview: string;
+        designStatus: string;
+        totalProgress: string;
+        autoSaveNote: string;
+        livePreviewLabel: string;
+        // Section picker modal
+        modularLibrary: string;
+        modularLibraryDesc: string;
+        allSections: string;
+        showingResults: string;
+        completeCatalog: string;
+        sectionAdded: string;
+        // Section card
+        arraysDefaultNote: string;
     };
     // Referral Links page
     links: {
@@ -322,4 +387,6 @@ export type TranslationKeys = {
         improveTitle: string; improveDesc: string; goToAcademy: string;
         dayMon: string; dayTue: string; dayWed: string; dayThu: string; dayFri: string; daySat: string; daySun: string;
     };
+    // Section catalog translations (id_name / id_desc)
+    sections: Record<string, string>;
 };

@@ -64,6 +64,7 @@ function SectionCard({
     overrides: Record<string, any>;
     onUpdateOverride: (key: string, value: any) => void;
 }) {
+    const { t } = useLanguage();
     const [expanded, setExpanded] = useState(false);
     const content = { ...section.defaultContent, ...overrides };
 
@@ -84,14 +85,14 @@ function SectionCard({
                     <div className="min-w-0">
                         <div className="flex items-center gap-2">
                             <h4 className={`font-bold text-[13px] truncate ${isEnabled ? 'text-slate-800' : 'text-slate-400'}`}>
-                                {section.name}
+                                {t.sections[`${section.id}_name`] || section.name}
                             </h4>
                             <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 font-bold uppercase tracking-wider flex-shrink-0">
                                 L{section.sourceTemplate}
                             </span>
                         </div>
                         <p className={`text-[10px] mt-0.5 truncate ${isEnabled ? 'text-slate-400' : 'text-slate-300'}`}>
-                            {section.description}
+                            {t.sections[`${section.id}_desc`] || section.description}
                         </p>
                     </div>
                 </div>
@@ -139,7 +140,7 @@ function SectionCard({
                         </div>
                     ))}
                     <p className="text-[10px] text-slate-400 italic pt-1">
-                        Los arrays (items, traders, etc.) usan valores por defecto. Edita los textos básicos aquí.
+                        {t.landing.arraysDefaultNote}
                     </p>
                 </div>
             )}
@@ -157,6 +158,7 @@ function SectionPicker({
     onClose: () => void;
     alreadySelected: string[];
 }) {
+    const { t } = useLanguage();
     const [filterCat, setFilterCat] = useState<SectionCategory | 'all'>('all');
 
     const filtered = filterCat === 'all'
@@ -173,8 +175,10 @@ function SectionPicker({
                         <div className="w-12 h-12 bg-gradient-to-br from-brand-purple to-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-brand-purple/20">
                             <Sparkles className="w-6 h-6 text-white" />
                         </div>
-                        <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-2">Librería<br/>Modular</h3>
-                        <p className="text-xs text-slate-500 leading-relaxed font-medium">Arrastra o toca para inyectar secciones al Blueprint actual.</p>
+                        <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-2">
+                            {t.landing.modularLibrary.split('\n').map((line, i) => <React.Fragment key={i}>{line}{i < 1 && <br/>}</React.Fragment>)}
+                        </h3>
+                        <p className="text-xs text-slate-500 leading-relaxed font-medium">{t.landing.modularLibraryDesc}</p>
                     </div>
 
                     <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
@@ -187,7 +191,7 @@ function SectionPicker({
                             }`}
                         >
                             <span className="material-symbols-outlined text-[18px]">apps</span>
-                            Todas las Secciones
+                            {t.landing.allSections}
                         </button>
                         {(Object.entries(SECTION_CATEGORIES) as [SectionCategory, { label: string; icon: string }][]).map(([key, val]) => (
                             <button
@@ -208,9 +212,9 @@ function SectionPicker({
                     {/* Header */}
                     <div className="flex justify-between items-center px-8 py-6 border-b border-slate-100 backdrop-blur-md sticky top-0 z-20 bg-white/80">
                         <div>
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Mostrando Resultados</span>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.landing.showingResults}</span>
                             <h4 className="text-lg font-bold text-slate-800 mt-1">
-                                {filterCat === 'all' ? 'Catálogo Completo' : SECTION_CATEGORIES[filterCat as string].label}
+                                {filterCat === 'all' ? t.landing.completeCatalog : SECTION_CATEGORIES[filterCat as string].label}
                             </h4>
                         </div>
                         <button onClick={onClose} className="p-3 bg-slate-100 rounded-2xl hover:bg-slate-200 hover:rotate-90 text-slate-500 hover:text-slate-800 transition-all duration-300">
@@ -240,7 +244,7 @@ function SectionPicker({
                                             {isAlready ? (
                                                 <div className="bg-white border border-brand-purple/30 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm">
                                                     <Check className="w-3 h-3 text-brand-purple" />
-                                                    <span className="text-[9px] font-black tracking-widest text-brand-purple uppercase">Añadida</span>
+                                                    <span className="text-[9px] font-black tracking-widest text-brand-purple uppercase">{t.landing.sectionAdded}</span>
                                                 </div>
                                             ) : (
                                                 <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center bg-slate-50 group-hover:border-brand-purple group-hover:bg-brand-purple transition-all duration-300">
@@ -250,8 +254,8 @@ function SectionPicker({
                                         </div>
                                         
                                         <div className="relative z-10">
-                                            <h4 className="text-base font-bold text-slate-800 mb-2 tracking-tight group-hover:text-brand-purple transition-colors">{section.name}</h4>
-                                            <p className="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors line-clamp-2">{section.description}</p>
+                                            <h4 className="text-base font-bold text-slate-800 mb-2 tracking-tight group-hover:text-brand-purple transition-colors">{t.sections[`${section.id}_name`] || section.name}</h4>
+                                            <p className="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors line-clamp-2">{t.sections[`${section.id}_desc`] || section.description}</p>
                                         </div>
 
                                         {/* Hover geometric decoration */}
@@ -269,6 +273,7 @@ function SectionPicker({
 
 // ─── Live Preview Component ───────────────────────────────
 function PhoneMockup({ html }: { html: string }) {
+    const { t } = useLanguage();
     return (
         <div className="sticky top-10 w-full max-w-[320px] mx-auto">
             <div className="relative w-full aspect-[9/18.5] bg-[#0d0221] rounded-[40px] border-[8px] border-[#1a0545] shadow-2xl overflow-hidden group">
@@ -297,7 +302,7 @@ function PhoneMockup({ html }: { html: string }) {
             <div className="mt-4 text-center">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-1.5 line-pulse">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    Vista Previa en Vivo
+                    {t.landing.livePreviewLabel}
                 </span>
             </div>
         </div>
@@ -311,7 +316,7 @@ interface LandingTypeformProps {
 }
 
 export default function LandingTypeform({ initialTemplate, onGoToHistory }: LandingTypeformProps) {
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
 
     // Dynamic languages: keep static list but translate the SOON label
     const DYNAMIC_LANGUAGES = LANGUAGES.map(l =>
@@ -333,7 +338,35 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
     const [telegram, setTelegram] = useState('');
     const [tiktok, setTiktok] = useState('');
     const [ctaLink, setCtaLink] = useState('');
-    const [language, setLanguage] = useState('ES');
+    
+    // Sync portal language to landing generator language representation
+    const getLandingLangFromPortal = (pLang: string) => {
+        if (pLang === 'en') return 'GB';
+        if (pLang === 'pt') return 'BR';
+        return pLang.toUpperCase();
+    };
+
+    const [language, setLanguage] = useState(() => {
+        // Retrieve locally strictly for the generator if needed, or fallback to portal
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('bm_landing_lang');
+            if (saved) return saved;
+        }
+        return 'ES'; // Default safe
+    });
+
+    // When portal language changes, auto-update the landing generator
+    useEffect(() => {
+        const mapped = getLandingLangFromPortal(lang);
+        setLanguage(mapped);
+    }, [lang]);
+
+    // Persist local selection
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('bm_landing_lang', language);
+        }
+    }, [language]);
 
     // Step 2: Template Selection
     const [selectedTemplate, setSelectedTemplate] = useState<string>(initialTemplate || '');
@@ -509,12 +542,22 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
 
     const templateCategories = ['all', ...Array.from(new Set(LANDING_TEMPLATES.map(t => t.category)))];
 
+    // Helper: get localized template name/description
+    const getTemplateName = (tpl: LandingTemplate) => {
+        const key = `${tpl.id}_name` as keyof typeof t.templates;
+        return (t.templates as any)[key] || tpl.name;
+    };
+    const getTemplateDesc = (tpl: LandingTemplate) => {
+        const key = `${tpl.id}_desc` as keyof typeof t.templates;
+        return (t.templates as any)[key] || tpl.description;
+    };
+
     // Step indicator
     const STEPS = [
-        { num: 1, label: 'Datos', icon: User },
-        { num: 2, label: 'Template', icon: Layout },
-        { num: 3, label: 'Secciones', icon: Sparkles },
-        { num: 4, label: 'Generar', icon: Rocket },
+        { num: 1, label: t.landing.step1, icon: User },
+        { num: 2, label: t.landing.step2, icon: Layout },
+        { num: 3, label: t.landing.step3, icon: Sparkles },
+        { num: 4, label: t.common.generate, icon: Rocket },
     ];
 
     // Live Preview HTML
@@ -628,8 +671,8 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                 <User className="w-5 h-5 text-slate-400" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-black text-slate-800">Identidad Digital</h2>
-                                <p className="text-xs text-slate-400 font-medium">Información oficial que aparecerá en tu landing</p>
+                                <h2 className="text-xl font-black text-slate-800">{t.landing.digitalIdentity}</h2>
+                                <p className="text-xs text-slate-400 font-medium">{t.landing.officialInfo}</p>
                             </div>
                         </div>
 
@@ -637,7 +680,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             {/* Grupo 1: Datos Corporativos */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-1.5">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Público *</label>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t.landing.publicName} *</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#865BFF] transition-colors">
                                             <User className="w-4 h-4" />
@@ -645,13 +688,13 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                         <input
                                             type="text" value={fullName}
                                             onChange={(e) => setFullName(e.target.value)}
-                                            placeholder="Tu nombre o marca personal"
+                                            placeholder={t.landing.publicNamePlaceholder}
                                             className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
                                         />
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email de Contacto</label>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t.landing.contactEmail}</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#865BFF] transition-colors">
                                             <Globe className="w-4 h-4" />
@@ -659,7 +702,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                         <input
                                             type="email" value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="ejemplo@correo.com"
+                                            placeholder="partner@bridgemarkets.com"
                                             className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
                                         />
                                     </div>
@@ -670,24 +713,24 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             <div className="p-6 rounded-2xl bg-[#865BFF]/5 border border-[#865BFF]/10 space-y-6">
                                 <div className="flex items-center gap-2 mb-2">
                                     <Sparkles className="w-4 h-4 text-[#865BFF]" />
-                                    <span className="text-xs font-black text-[#865BFF] uppercase tracking-wider">Ajustes de Marca</span>
+                                    <span className="text-xs font-black text-[#865BFF] uppercase tracking-wider">{t.landing.brandSettings}</span>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Comunidad (Opcional)</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t.landing.communityName}</label>
                                         <input
                                             type="text" value={communityName}
                                             onChange={(e) => setCommunityName(e.target.value)}
-                                            placeholder="Ej: Wolf Trading Club"
+                                            placeholder={t.landing.communityPlaceholder}
                                             className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Frase Impacto (Hero)</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t.landing.heroPhrase}</label>
                                         <input
                                             type="text" value={heroPhrase}
                                             onChange={(e) => setHeroPhrase(e.target.value)}
-                                            placeholder="Ej: Tu puerta al éxito"
+                                            placeholder={t.landing.heroPlaceholder}
                                             className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
                                         />
                                     </div>
@@ -699,7 +742,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <Share2 className="w-4 h-4 text-slate-400" />
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Canales de Comunicación</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t.landing.channels}</span>
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -769,7 +812,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                             <div className="w-7 h-7 rounded-lg bg-[#865BFF] flex items-center justify-center">
                                                 <ExternalLink className="w-3.5 h-3.5 text-white" />
                                             </div>
-                                            <span className="text-[10px] font-black text-[#865BFF] uppercase">Botón de Acción (Link Custom)</span>
+                                            <span className="text-[10px] font-black text-[#865BFF] uppercase">{t.landing.ctaLinkLabel}</span>
                                         </div>
                                         <input
                                             type="text" value={ctaLink}
@@ -784,7 +827,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
 
                     {/* Language */}
                     <div className="mt-6">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3 block">Idioma de la Landing *</label>
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3 block">{t.landing.landingLanguageLabel} *</label>
                         <div className="flex flex-wrap gap-2">
                             {DYNAMIC_LANGUAGES.map(lang => (
                                 <button
@@ -811,7 +854,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             disabled={!canAdvance(1)}
                             className="flex items-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#865BFF]/20"
                         >
-                            Siguiente <ArrowRight className="w-4 h-4" />
+                            {t.landing.nextBtn} <ArrowRight className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
@@ -822,10 +865,10 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 <div>
                     <div className="text-center mb-10">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#865BFF]/10 text-[#865BFF] text-[10px] font-black uppercase tracking-widest mb-4">
-                            Step 02 — Studio Designs
+                            {t.landing.step2Badge}
                         </div>
-                        <h2 className="text-3xl font-black text-slate-800 mb-2">Selecciona tu Blueprint</h2>
-                        <p className="text-sm text-slate-400 max-w-lg mx-auto">Elige una base profesional diseñada para máxima conversión. Podrás editar cada sección en el siguiente paso.</p>
+                        <h2 className="text-3xl font-black text-slate-800 mb-2">{t.landing.selectBlueprint}</h2>
+                        <p className="text-sm text-slate-400 max-w-lg mx-auto">{t.landing.selectBlueprintDesc}</p>
                     </div>
 
                     {/* Category filters */}
@@ -840,7 +883,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                         : 'bg-white border border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600 shadow-sm'
                                 }`}
                             >
-                                {cat === 'all' ? 'Ver Todos' : cat}
+                                {cat === 'all' ? t.landing.viewAll : cat}
                             </button>
                         ))}
                     </div>
@@ -876,7 +919,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                             <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
                                                 <div className="flex flex-col gap-1">
                                                     <span className="text-[9px] font-black text-white/50 uppercase tracking-widest">Blueprint</span>
-                                                    <span className="text-white font-black text-xl tracking-tighter">{template.name}</span>
+                                                    <span className="text-white font-black text-xl tracking-tighter">{getTemplateName(template)}</span>
                                                 </div>
                                                 {template.badge && (
                                                     <span className="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
@@ -898,7 +941,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                         {/* Content Area */}
                                         <div className="p-8">
                                             <p className="text-slate-400 text-sm leading-relaxed mb-6 font-medium">
-                                                {template.description}
+                                                {getTemplateDesc(template)}
                                             </p>
                                             
                                             <div className="flex flex-wrap gap-2">
@@ -907,7 +950,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                                     return sec ? (
                                                         <div key={sId} className="flex items-center gap-1.5 bg-slate-50 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-100 group-hover:border-[#865BFF]/10 transition-colors">
                                                             <span className="material-symbols-outlined text-[14px] text-[#865BFF]/60">{sec.icon}</span>
-                                                            <span className="text-[10px] font-bold uppercase tracking-wider">{sec.name.split(' ')[0]}</span>
+                                                            <span className="text-[10px] font-bold uppercase tracking-wider">{(t.sections[`${sec.id}_name`] || sec.name).split(' ')[0]}</span>
                                                         </div>
                                                     ) : null;
                                                 })}
@@ -921,7 +964,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                             <button className={`w-full mt-8 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all ${
                                                 isSelected ? 'bg-[#865BFF] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-100 group-hover:text-slate-600'
                                             }`}>
-                                                {isSelected ? 'Plantilla Seleccionada' : 'Elegir éste Diseño'}
+                                                {isSelected ? t.landing.templateSelected : t.landing.chooseDesign}
                                             </button>
                                         </div>
                                     </div>
@@ -936,14 +979,14 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             onClick={() => setStep(1)}
                             className="flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
                         >
-                            <ArrowLeft className="w-4 h-4" /> Atrás
+                            <ArrowLeft className="w-4 h-4" /> {t.landing.backBtn}
                         </button>
                         <button
                             onClick={() => setStep(3)}
                             disabled={!canAdvance(2)}
                             className="flex items-center gap-2 px-8 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#865BFF]/20"
                         >
-                            Personalizar Secciones <ArrowRight className="w-4 h-4" />
+                            {t.landing.customizeSections} <ArrowRight className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
@@ -958,8 +1001,8 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                 <Layout className="w-6 h-6 text-[#865BFF]" />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">Estructura Modular</h2>
-                                <p className="text-sm text-slate-400 font-medium font-mono">Total: {selectedSections.length} bloques activos</p>
+                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">{t.landing.modularStructure}</h2>
+                                <p className="text-sm text-slate-400 font-medium font-mono">Total: {selectedSections.length} {t.landing.activeBlocks}</p>
                             </div>
                         </div>
                         <button
@@ -967,7 +1010,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             className="group flex items-center gap-3 px-6 py-3.5 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#865BFF]/30"
                         >
                             <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" /> 
-                            Agregar Bloque
+                            {t.landing.addBlock}
                         </button>
                     </div>
 
@@ -1025,12 +1068,12 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-slate-50 text-slate-200">
                                     <Layout className="w-6 h-6" />
                                 </div>
-                                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">Diseño vacío</p>
+                                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">{t.landing.emptyDesign}</p>
                                 <button
                                     onClick={() => setShowSectionPicker(true)}
                                     className="mt-4 text-[#865BFF] font-black text-xs hover:underline decoration-2 underline-offset-4"
                                 >
-                                    Agrega el primer bloque de contenido
+                                    {t.landing.addFirstBlock}
                                 </button>
                             </motion.div>
                         )}
@@ -1048,7 +1091,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             onClick={() => setStep(4)}
                             className="w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] transition-all text-xs uppercase tracking-widest shadow-2xl shadow-[#865BFF]/30 active:scale-[0.98]"
                         >
-                            Finalizar y Lanzar <ArrowRight className="w-4 h-4 shadow-inner" />
+                            {t.landing.finishAndLaunch} <ArrowRight className="w-4 h-4 shadow-inner" />
                         </button>
                     </div>
 
@@ -1070,15 +1113,15 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                         <div className="w-20 h-20 bg-[#865BFF]/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-[#865BFF]/5">
                             <Rocket className="w-10 h-10 text-[#865BFF]" />
                         </div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">Protocolo de Lanzamiento</h2>
-                        <p className="text-sm text-slate-400 font-medium">Todo listo para generar tu nueva herramienta de captación</p>
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">{t.landing.launchProtocol}</h2>
+                        <p className="text-sm text-slate-400 font-medium">{t.landing.launchProtocolDesc}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                         {/* Blueprint Summary Card */}
                         <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-[#865BFF]/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700" />
-                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Configuración Base</h3>
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{t.landing.baseConfig}</h3>
                             
                             <div className="space-y-6 relative z-10">
                                 <div className="flex items-center gap-4">
@@ -1087,7 +1130,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                     </div>
                                     <div>
                                         <p className="text-xs font-black text-slate-800 uppercase tracking-tight">Design Blueprint</p>
-                                        <p className="text-sm font-medium text-slate-500">{LANDING_TEMPLATES.find(t => t.id === selectedTemplate)?.name}</p>
+                                        <p className="text-sm font-medium text-slate-500">{(() => { const tpl = LANDING_TEMPLATES.find(tp => tp.id === selectedTemplate); return tpl ? getTemplateName(tpl) : ''; })()}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -1095,7 +1138,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                         <Globe className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight">Territorio / Idioma</p>
+                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight">{t.landing.territoryLang}</p>
                                         <p className="text-sm font-medium text-slate-500">{LANGUAGES.find(l => l.code === language)?.flag} {LANGUAGES.find(l => l.code === language)?.label}</p>
                                     </div>
                                 </div>
@@ -1104,10 +1147,10 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
 
                         {/* Inventory Card */}
                         <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 border-dashed relative">
-                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Inventario de Bloques</h3>
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{t.landing.blockInventory}</h3>
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm">
-                                    <span className="text-xs font-bold text-slate-700">Secciones Activas</span>
+                                    <span className="text-xs font-bold text-slate-700">{t.landing.activeSections}</span>
                                     <span className="text-xs font-black text-[#865BFF] bg-[#865BFF]/10 px-2 py-0.5 rounded-lg">{selectedSections.length}</span>
                                 </div>
                                 <div className="flex flex-wrap gap-1.5 pt-2">
@@ -1134,7 +1177,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             onClick={() => setStep(3)}
                             className="flex-1 flex items-center justify-center gap-3 px-8 py-4 border-2 border-slate-100 text-slate-400 font-black rounded-2xl hover:bg-slate-50 hover:text-slate-600 transition-all text-sm uppercase tracking-widest"
                         >
-                            <Pencil className="w-4 h-4" /> Volver al Editor
+                            <Pencil className="w-4 h-4" /> {t.landing.backToEditor}
                         </button>
                         <button
                             onClick={handleGenerate}
@@ -1142,9 +1185,9 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             className="flex-[2] flex items-center justify-center gap-4 px-10 py-4 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] disabled:opacity-50 transition-all text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#865BFF]/30 active:scale-[0.98]"
                         >
                             {isGenerating ? (
-                                <><Loader2 className="w-5 h-5 animate-spin" /> Procesando...</>
+                                <><Loader2 className="w-5 h-5 animate-spin" /> {t.landing.processing}</>
                             ) : (
-                                <><Rocket className="w-5 h-5 shadow-lg" /> ¡Desplegar Landing!</>
+                                <><Rocket className="w-5 h-5 shadow-lg" /> {t.landing.deployLanding}</>
                             )}
                         </button>
                     </div>
@@ -1157,15 +1200,15 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                     <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Check className="w-8 h-8 text-emerald-500" />
                     </div>
-                    <h2 className="text-2xl font-black text-slate-800 mb-2">¡Landing Generada!</h2>
-                    <p className="text-sm text-slate-400 mb-8">Tu landing modular está lista para compartir</p>
+                    <h2 className="text-2xl font-black text-slate-800 mb-2">{t.landing.landingGenerated}</h2>
+                    <p className="text-sm text-slate-400 mb-8">{t.landing.landingReadyToShare}</p>
 
                     <div className="flex flex-wrap gap-3 justify-center">
                         <button
                             onClick={() => openLandingPreview(generatedHTML)}
                             className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
                         >
-                            <Eye className="w-4 h-4" /> Ver en Vivo
+                            <Eye className="w-4 h-4" /> {t.landing.viewLive}
                         </button>
                         <button
                             onClick={() => {
@@ -1176,7 +1219,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
                         >
                             {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                            {copied ? '¡Copiado!' : 'Copiar Link'}
+                            {copied ? t.landing.copiedLink : t.landing.copyLink}
                         </button>
 
                         {onGoToHistory && (
@@ -1185,7 +1228,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                 className="flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] transition-all shadow-lg shadow-[#865BFF]/20"
                             >
                                 <HistoryIcon className="w-4 h-4" />
-                                Ver mi Historial
+                                {t.landing.viewHistory}
                             </button>
                         )}
                     </div>
@@ -1201,7 +1244,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             }}
                             className="text-slate-400 hover:text-[#865BFF] text-sm font-black uppercase tracking-wider transition-all"
                         >
-                            + Crear otra herramienta
+                            {t.landing.createAnother}
                         </button>
                     </div>
                 </div>
@@ -1216,7 +1259,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 <div className="flex items-center justify-between mb-8 px-4">
                     <div className="flex items-center gap-2">
                         <Smartphone className="w-5 h-5 text-slate-400" />
-                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Studio Preview</span>
+                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{t.landing.studioPreview}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -1228,9 +1271,9 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 
                 <div className="mt-8 space-y-4">
                     <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">Estado del Diseño</p>
+                        <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">{t.landing.designStatus}</p>
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-slate-700">Progreso total</span>
+                            <span className="text-sm font-bold text-slate-700">{t.landing.totalProgress}</span>
                             <span className="text-sm font-black text-[#865BFF]">{Math.round((step / 4) * 100)}%</span>
                         </div>
                         <div className="w-full h-1.5 bg-slate-100 rounded-full mt-3 overflow-hidden">
@@ -1243,7 +1286,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                     </div>
                     
                     <p className="text-[10px] text-center text-slate-400 px-4">
-                        Toda la información se guarda automáticamente encriptada en la base de datos oficial.
+                        {t.landing.autoSaveNote}
                     </p>
                 </div>
             </div>

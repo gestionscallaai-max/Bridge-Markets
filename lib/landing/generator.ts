@@ -609,13 +609,68 @@ export function generateModularLandingHTML(data: LandingData): string {
         </div>
     </footer>`;
 
+    const flags: Record<string, string> = {
+        'ES': '🇪🇸', 'GB': '🇬🇧', 'ZH': '🇨🇳', 'HI': '🇮🇳',
+        'FR': '🇫🇷', 'AR': '🇸🇦', 'BN': '🇧🇩', 'BR': '🇧🇷',
+        'RU': '🇷🇺', 'JP': '🇯🇵', 'ID': '🇮🇩', 'VI': '🇻🇳'
+    };
+    const currentLangCode = data.language?.toUpperCase() || 'ES';
+    const currentFlag = flags[currentLangCode] || '🌐';
+
+    const googleTranslateCode: Record<string, string> = {
+        'ES': 'es', 'GB': 'en', 'ZH': 'zh-CN', 'HI': 'hi',
+        'FR': 'fr', 'AR': 'ar', 'BN': 'bn', 'BR': 'pt',
+        'RU': 'ru', 'JP': 'ja', 'ID': 'id', 'VI': 'vi'
+    };
+    const targetLang = googleTranslateCode[currentLangCode] || 'es';
+
+    const translateScripts = targetLang !== 'es' ? `
+    <style>
+        /* Ocultar widget sin display:none para que GTranslate sí se inicialice */
+        #google_translate_element { position: absolute; opacity: 0; z-index: -999; pointer-events: none; width: 1px; height: 1px; overflow: hidden; }
+        .goog-te-banner-frame {display:none !important;}
+        body {top:0 !important;}
+        .VIpgJd-ZVi9od-ORHb-OEVmcd {display:none !important;}
+        #goog-gt-tt, .goog-te-balloon-frame {display:none !important;}
+    </style>
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        // 1. Force cookie for direct page launch
+        document.cookie = "googtrans=/es/${targetLang}; path=/; domain=" + window.location.hostname;
+        document.cookie = "googtrans=/es/${targetLang}; path=/;";
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'es', 
+                includedLanguages: '${targetLang}',
+                autoDisplay: false
+            }, 'google_translate_element');
+            
+            // 2. Force DOM event for iframe boundaries where cookies might be blocked
+            var attempts = 0;
+            var forceTranslate = setInterval(function() {
+                var selectField = document.querySelector(".goog-te-combo");
+                if (selectField && selectField.options && selectField.options.length > 0) {
+                    selectField.value = '${targetLang}';
+                    selectField.dispatchEvent(new Event('change'));
+                    clearInterval(forceTranslate);
+                }
+                attempts++;
+                if (attempts > 60) clearInterval(forceTranslate); // Stop after 18 seconds
+            }, 300);
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    ` : '';
+
     return `<!DOCTYPE html>
-<html lang="${data.language === 'ES' ? 'es' : data.language === 'BR' ? 'pt' : 'en'}">
+<html lang="${targetLang}">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Bridge Markets | ${template?.name || 'Trading Platform'}</title>
     ${getSharedHead(template?.name || 'Trading Platform', 'Access institutional markets', data.language)}
+    ${translateScripts}
     <style>
         body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background: transparent; }
         ${getSharedStyles(theme)}
@@ -632,6 +687,10 @@ export function generateModularLandingHTML(data: LandingData): string {
                 <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.price}</a>
             </div>
             <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest text-[#865BFF] cursor-default">
+                    <span class="text-base leading-none">${currentFlag}</span>
+                    <span>${currentLangCode}</span>
+                </div>
                 <a href="#register" class="bg-white/10 border border-white/20 hover:bg-white hover:text-black px-6 py-3 rounded-full text-white text-xs font-black uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1">${dict.nav.btn}</a>
             </div>
         </div>

@@ -113,10 +113,12 @@ export default function PromoMaterialsPage() {
     };
 
     const handlePreview = (template: LandingTemplate) => {
+        const mappedLang = selectedLang === 'EN' ? 'GB' : selectedLang === 'PT' ? 'BR' : selectedLang;
+        
         const data: LandingData = {
             fullName: formData.fullName,
             country: 'Global',
-            language: selectedLang,
+            language: mappedLang,
             whatsapp: formData.whatsapp,
             email: formData.email,
             landingType: template.id,
