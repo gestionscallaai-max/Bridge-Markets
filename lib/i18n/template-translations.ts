@@ -107,7 +107,7 @@ const TEMPLATE_DESC: Record<string, Record<LangCode, string>> = {
         en: 'Bento-style design with interactive tiles for advanced tech traders.',
         zh: 'Bento风格设计，交互式磁贴，面向高级技术交易者。',
         hi: 'उन्नत टेक ट्रेडर्स के लिए इंटरैक्टिव टाइल्स वाला बेंटो-स्टाइल डिज़ाइन।',
-        fr: 'Design bento avec tuiles interactives pour traders technologiques avancés.',
+        fr: 'Design bento avec tuiles interactives pour traders technologiques avanzados.',
         ar: 'تصميم بنتو مع بلاطات تفاعلية للمتداولين التقنيين المتقدمين.',
         bn: 'উন্নত টেক ট্রেডারদের জন্য ইন্টারেক্টিভ টাইলস সহ বেন্টো-স্টাইল ডিজাইন।',
         pt: 'Design bento com tiles interativos para traders tecnológicos avançados.',
@@ -124,7 +124,7 @@ const TEMPLATE_DESC: Record<string, Record<LangCode, string>> = {
         bn: 'পেশাদার লিভারেজে ফোকাস করা মিনিমালিস্ট হিরো সহ আধুনিক পোর্টাল।',
         pt: 'Portal moderno com hero minimalista focado em alavancagem profissional.',
         ru: 'Современный портал: минималистичный хедер, фокус на профессиональном плече.',
-        ja: 'プロフェッショナルレバレッジ重視のミニマリストヒーロー付きモダンポータル。',
+        ja: 'プロフェッショナルレバレッジ重视のミニマリストヒーロー付きモダンポータル。',
     },
     stellar_assets: {
         es: 'Enfocada en criptoactivos y activos digitales con diseño holo-futurista.',
@@ -158,7 +158,7 @@ const TEMPLATE_DESC: Record<string, Record<LangCode, string>> = {
         fr: 'Première version de l\'écosystème synthétiques avec grille d\'instruments et stats.',
         ar: 'النسخة الأولى من نظام الأصول الصناعية مع شبكة أدوات وإحصائيات.',
         bn: 'ইনস্ট্রুমেন্ট গ্রিড এবং স্ট্যাটস সহ সিন্থেটিক্স ইকোসিস্টেমের প্রথম সংস্করণ।',
-        pt: 'Primeira versão do ecossistema de sintéticos com grid de instrumentos e stats.',
+        pt: 'Primeira versão do ecossistema de sintéticos con grid de instrumentos e stats.',
         ru: 'Первая версия экосистемы синтетиков: сетка инструментов и статистика.',
         ja: 'インストルメントグリッドと統計付きシンセティクスエコシステムv1。',
     },
@@ -166,13 +166,43 @@ const TEMPLATE_DESC: Record<string, Record<LangCode, string>> = {
         es: 'Evolución definitiva con hero gradiente, testimonios y flujo de registro optimizado.',
         en: 'Definitive evolution with gradient hero, testimonials and optimized registration flow.',
         zh: '终极进化版：渐变主题、推荐和优化注册流程。',
-        hi: 'ग्रेडिएंट हीरो, प्रशंसापत्र और अनुकूलित पंजीकरण फ्लो के साथ निश्चित विकास।',
-        fr: 'Évolution définitive avec hero gradient, témoignages et flux d\'inscription optimisé.',
-        ar: 'التطور النهائي مع بطل متدرج، شهادات وتدفق تسجيل محسّن.',
+        hi: 'ग्रेडिएंट हीरो, प्रशंसापत्र और अनुकूलित पंजीकरण फ्लो के साथ निश्चित विकास。',
+        fr: 'Évolution definitiva avec hero gradient, témoignages et flux d\'inscription optimisé.',
+        ar: 'التطور النهائي مع بطل متدرج，شهادات وتدفق تسجيل محسّن.',
         bn: 'গ্রেডিয়েন্ট হিরো, সাক্ষ্য এবং অপ্টিমাইজড রেজিস্ট্রেশন ফ্লো সহ চূড়ান্ত বিবর্তন।',
-        pt: 'Evolução definitiva com hero gradiente, depoimentos e fluxo de registro otimizado.',
+        pt: 'Evolução definitiva con hero gradiente, depoimentos e fluxo de registro otimizado.',
         ru: 'Финальная эволюция: градиентный хедер, отзывы и оптимизированная регистрация.',
         ja: 'グラデーションヒーロー、推薦文、最適化登録フロー付き最終進化版。',
+    },
+    synthetic_edu: {
+        es: 'Enfocada en explicar y educar sobre el mercado de sintéticos. Ideal para captar nuevos traders.',
+        en: 'Focused on explaining and educating about the synthetics market. Ideal to capture new traders.',
+        zh: '专注于讲解和教育合成市场。非常适合吸引新交易者。',
+    },
+    propfirm_pro: {
+        es: 'Landing de alta conversión para los retos de PropFirm (Obsidian, Basalt, Elite, Ultra).',
+        en: 'High conversion landing for PropFirm challenges (Obsidian, Basalt, Elite, Ultra).',
+        zh: '用于 PropFirm 挑战（Obsidian、Basalt、Elite、Ultra）的高转化落地页。',
+    },
+    unified_copy_mam: {
+        es: 'Landing dual que explica tanto el sistema MAM como el Copy Trading con tablas comparativas.',
+        en: 'Dual landing explaining both MAM system and Copy Trading with comparison tables.',
+        zh: '双重落地页，通过对比表讲解 MAM 系统和跟单交易。',
+    },
+    pro_leverage_x12: {
+        es: 'Especializada en cuentas con apalancamiento x12 sin evaluación. Sin límites de tiempo.',
+        en: 'Specialized in x12 leverage accounts without evaluation. No time limits.',
+        zh: '专注于无需评估的 x12 杠杆账户。无时间限制。',
+    },
+    institutional_mother: {
+        es: 'La landing principal corporativa de Bridge Markets con todos los servicios integrados.',
+        en: 'The main corporate landing for Bridge Markets with all services integrated.',
+        zh: 'Bridge Markets 的主要公司落地页，整合了所有服务。',
+    },
+    synthetic_universe_total: {
+        es: 'Landing premium que muestra el ecosistema completo: Deriv + Weltrade + Bridge Markets.',
+        en: 'Premium landing showcasing the complete ecosystem: Deriv + Weltrade + Bridge Markets.',
+        zh: '展示完整生态系统的优质落地页：Deriv + Weltrade + Bridge Markets。',
     },
 };
 
@@ -229,7 +259,7 @@ const TEMPLATE_BADGE: Record<string, Record<LangCode, string>> = {
         ru: 'Избранный', ja: '注目',
     },
     'Crypto': {
-        es: 'Cripto', en: 'Crypto', zh: '加密', hi: 'क्रिप्टो',
+        es: 'Cripto', en: 'Crypto', zh: '加密', hi: 'крипто',
         fr: 'Crypto', ar: 'كريبتو', bn: 'ক্রিপ্টো', pt: 'Cripto',
         ru: 'Крипто', ja: 'クリプト',
     },
@@ -238,7 +268,7 @@ const TEMPLATE_BADGE: Record<string, Record<LangCode, string>> = {
 // ── Section short names ──
 const SECTION_NAME: Record<string, Record<LangCode, string>> = {
     hero_dark: { es: 'Hero Oscuro', en: 'Dark Hero', zh: '暗色主题', hi: 'डार्क हीरो', fr: 'Hero Sombre', ar: 'بطل داكن', bn: 'ডার্ক হিরো', pt: 'Hero Escuro', ru: 'Тёмный хедер', ja: 'ダークヒーロー' },
-    hero_light: { es: 'Hero Claro', en: 'Light Hero', zh: '亮色主题', hi: 'लाइट हीरो', fr: 'Hero Clair', ar: 'بطل فاتح', bn: 'লাইট হিরো', pt: 'Hero Claro', ru: 'Светлый хедер', ja: 'ライトヒーロー' },
+    hero_light: { es: 'Hero Claro', en: 'Light Hero', zh: '亮色主题', hi: 'लाइट हीरो', fr: 'Hero Clair', ar: 'بطل فاتح', bn: 'লাইট হোরো', pt: 'Hero Claro', ru: 'Светлый хедер', ja: 'ライトヒーロー' },
     hero_gradient: { es: 'Hero Gradiente', en: 'Gradient Hero', zh: '渐变主题', hi: 'ग्रेडिएंट', fr: 'Hero Gradient', ar: 'بطل متدرج', bn: 'গ্রেডিয়েন্ট', pt: 'Hero Gradiente', ru: 'Градиент', ja: 'グラデーション' },
     bento_grid: { es: 'Bento Grid', en: 'Bento Grid', zh: 'Bento网格', hi: 'बेंटो ग्रिड', fr: 'Grille Bento', ar: 'شبكة بنتو', bn: 'বেন্টো গ্রিড', pt: 'Bento Grid', ru: 'Бенто-сетка', ja: 'ベントグリッド' },
     feature_split: { es: 'Características', en: 'Features', zh: '特性', hi: 'विशेषताएं', fr: 'Fonctionnalités', ar: 'الميزات', bn: 'বৈশিষ্ট্য', pt: 'Recursos', ru: 'Возможности', ja: '機能' },

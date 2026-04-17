@@ -267,21 +267,7 @@ export default function PromoMaterialsPage() {
                             </div>
 
                             <div className="flex items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-                                <Languages className="w-3.5 h-3.5 text-white/25 flex-shrink-0" />
-                                {LANGUAGES.map(l => (
-                                    <button
-                                        key={l.code}
-                                        onClick={() => setSelectedLang(l.code)}
-                                        className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all flex-shrink-0 ${
-                                            selectedLang === l.code
-                                                ? 'bg-white/15 text-white border border-white/20'
-                                                : 'text-white/35 hover:text-white/60 hover:bg-white/[0.06]'
-                                        }`}
-                                    >
-                                        <span className="text-sm">{l.flag}</span>
-                                        <span className="hidden xl:inline">{l.label}</span>
-                                    </button>
-                                ))}
+                                {/* Local language selector removed as it was redundant. Marketing materials now follow the global dashboard language. */}
                             </div>
                         </div>
                     </div>
@@ -295,11 +281,8 @@ export default function PromoMaterialsPage() {
                         const isSelected = selectedLanding === template.id;
                         const url = getLandingUrl(template);
                         
-                        // Map selectedLang to LangCode for translation
-                        const mapToLangCode = (code: string): LangCode => {
-                            return code.toLowerCase() as LangCode;
-                        };
-                        const previewT = getT(mapToLangCode(selectedLang));
+                        // Correctly map global language to translation keys
+                        const previewT = getT(lang as LangCode);
 
                         return (
                             <div
@@ -331,15 +314,15 @@ export default function PromoMaterialsPage() {
                                     {template.badge && (
                                         <div className="absolute top-4 right-4 z-10">
                                             <span
-                                                className="text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
+                                                className="text-white text-[10px] font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
                                                 style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}
-                                            >{getTemplateBadge(template.badge, mapToLangCode(selectedLang))}</span>
+                                            >{getTemplateBadge(template.badge || 'New', lang as LangCode)}</span>
                                         </div>
                                     )}
 
                                     <div className="absolute bottom-4 left-5 right-5 z-10">
-                                        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 mb-1">Bridge Markets</div>
-                                        <h3 className="text-xl font-black text-white leading-tight drop-shadow-md">{previewT.templates[`${template.id}_name` as keyof typeof previewT.templates] || template.name}</h3>
+                                        <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-1">Bridge Markets</div>
+                                        <h3 className="text-xl font-medium text-white leading-tight drop-shadow-md">{previewT.templates[`${template.id}_name` as keyof typeof previewT.templates] || template.name}</h3>
                                     </div>
 
                                     {/* Hover overlay */}
@@ -361,7 +344,7 @@ export default function PromoMaterialsPage() {
 
                                 {/* Card body */}
                                 <div className="p-4">
-                                    <p className="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-2">{previewT.templates[`${template.id}_desc` as keyof typeof previewT.templates] || getTemplateDescription(template.id, mapToLangCode(selectedLang))}</p>
+                                    <p className="text-[13px] text-slate-500 leading-relaxed mb-3 line-clamp-2">{previewT.templates[`${template.id}_desc` as keyof typeof previewT.templates] || getTemplateDescription(template.id, lang as LangCode)}</p>
 
                                     {/* Action area - expanded */}
                                     <div className={`transition-all duration-300 overflow-hidden ${isSelected ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
