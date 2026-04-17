@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2, ArrowRight, Mail, Lock, Eye, EyeOff, Shield, User, Globe, Zap, ShieldCheck, Pencil, CheckCircle2, Link2 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,7 @@ declare global {
 
 export default function RegisterPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const vantaRef = useRef<HTMLDivElement>(null);
     const [vantaEffect, setVantaEffect] = useState<any>(null);
 
@@ -26,6 +27,19 @@ export default function RegisterPage() {
     const [success, setSuccess] = useState(false);
     const [autoLogin, setAutoLogin] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+    useEffect(() => {
+        const pId = searchParams.get('partner_id');
+        const slug = searchParams.get('slug');
+        if (pId || slug) {
+            // If we have a slug, we can reconstruct a "friendly" display link
+            const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+            const displayLink = slug ? `${baseUrl}/r/${slug}` : `Partner: ${pId}`;
+            setReferralLink(displayLink);
+            
+            // Log for debug (Production ready)
+            console.log('Attribution captured:', { pId, slug });
+        }
+    }, [searchParams]);
 
     // Initialize Vanta.js
     useEffect(() => {
@@ -156,7 +170,7 @@ export default function RegisterPage() {
                         <img src="/images/logo.png" alt="Bridge Markets" className="h-16 object-contain drop-shadow-2xl" />
                     </div>
 
-                    <h2 className="text-3xl font-bold text-white tracking-tight mb-3">
+                    <h2 className="text-xl font-normal text-white tracking-tight mb-3">
                         Únete al Programa
                     </h2>
                     <p className="text-white/70 text-sm leading-relaxed mb-10">
@@ -175,7 +189,7 @@ export default function RegisterPage() {
                                     <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${feat.color} flex items-center justify-center mb-2.5 shadow-sm`}>
                                         <Icon className="w-4 h-4 text-white" />
                                     </div>
-                                    <div className="text-white text-[13px] font-semibold">{feat.title}</div>
+                                    <div className="text-white text-[13px] font-normal">{feat.title}</div>
                                     <div className="text-white/50 text-[11px] mt-0.5">{feat.desc}</div>
                                 </div>
                             );
@@ -212,7 +226,7 @@ export default function RegisterPage() {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3 }}
-                                    className="text-2xl font-bold text-slate-800 tracking-tight mb-2"
+                                    className="text-lg font-normal text-slate-800 tracking-tight mb-2"
                                 >
                                     ¡Cuenta creada exitosamente!
                                 </motion.h2>
@@ -222,7 +236,7 @@ export default function RegisterPage() {
                                     transition={{ delay: 0.4 }}
                                     className="text-sm text-slate-500 mb-3 leading-relaxed"
                                 >
-                                    Tu cuenta de Partner ha sido creada con el rango <span className="font-bold text-[#865BFF]">Partner</span>.
+                                    Tu cuenta de Partner ha sido creada con el rango <span className="font-normal text-[#865BFF]">Partner</span>.
                                 </motion.p>
                                 <motion.p 
                                     initial={{ opacity: 0, y: 10 }}
@@ -248,7 +262,7 @@ export default function RegisterPage() {
                                     >
                                         <button 
                                             onClick={() => router.push('/login')} 
-                                            className="w-full bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 py-3 rounded-lg font-semibold transition-all hover:shadow-[#865BFF]/40"
+                                            className="w-full bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 py-3 rounded-lg font-normal transition-all hover:shadow-[#865BFF]/40"
                                         >
                                             Ir al Inicio de Sesión
                                         </button>
@@ -267,11 +281,11 @@ export default function RegisterPage() {
                                 {/* Badge */}
                                 <div className="flex items-center gap-2 mb-5">
                                     <Shield className="w-4 h-4 text-[#865BFF]" />
-                                    <span className="text-xs font-semibold text-[#865BFF] uppercase tracking-wider">Nuevo Partner</span>
+                                    <span className="text-xs font-normal text-[#865BFF] uppercase tracking-wider">Nuevo Partner</span>
                                 </div>
 
                                 {/* Heading */}
-                                <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+                                <h1 className="text-lg font-normal text-slate-800 tracking-tight">
                                     Crea tu cuenta
                                 </h1>
                                 <p className="text-sm text-slate-400 mt-1 mb-7">
@@ -281,7 +295,7 @@ export default function RegisterPage() {
                                 {errorMsg && (
                                     <motion.div 
                                         initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
-                                        className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 mb-5"
+                                        className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-normal flex items-center gap-2 mb-5"
                                     >
                                         {errorMsg}
                                     </motion.div>
@@ -292,7 +306,7 @@ export default function RegisterPage() {
                                     
                                     {/* Name */}
                                     <div className="mb-4">
-                                        <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <label className="block text-[12px] font-normal text-slate-600 mb-1.5">
                                             Nombre completo
                                         </label>
                                         <div className="relative">
@@ -309,7 +323,7 @@ export default function RegisterPage() {
 
                                     {/* Email */}
                                     <div className="mb-4">
-                                        <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <label className="block text-[12px] font-normal text-slate-600 mb-1.5">
                                             Email corporativo
                                         </label>
                                         <div className="relative">
@@ -327,7 +341,7 @@ export default function RegisterPage() {
                                     {/* Password */}
                                     <div className="mb-4">
                                         <div className="flex justify-between items-center mb-1.5">
-                                            <label className="block text-[12px] font-semibold text-slate-600">
+                                            <label className="block text-[12px] font-normal text-slate-600">
                                                 Contraseña
                                             </label>
                                         </div>
@@ -354,7 +368,7 @@ export default function RegisterPage() {
 
                                     {/* Referral Link */}
                                     <div className="mb-6">
-                                        <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                                        <label className="block text-[12px] font-normal text-slate-600 mb-1.5">
                                             Link de referido
                                         </label>
                                         <div className="relative">
@@ -376,7 +390,7 @@ export default function RegisterPage() {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className={`w-full rounded-lg py-3 text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 
+                                        className={`w-full rounded-lg py-3 text-sm font-normal flex items-center justify-center gap-2 transition-all duration-200 
                                             bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 hover:shadow-[#865BFF]/40
                                             disabled:opacity-70 disabled:cursor-not-allowed`}
                                     >

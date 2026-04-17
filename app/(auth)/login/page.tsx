@@ -111,7 +111,7 @@ export default function LoginPage() {
                         <img src="/images/logo.png" alt="Bridge Markets" className="h-16 object-contain drop-shadow-2xl" />
                     </div>
 
-                    <h2 className="text-3xl font-bold text-white tracking-tight mb-3">
+                    <h2 className="text-xl font-normal text-white tracking-tight mb-3">
                         Bridge Internal Panel
                     </h2>
                     <p className="text-white/70 text-sm leading-relaxed mb-10">
@@ -130,7 +130,7 @@ export default function LoginPage() {
                                     <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${feat.color} flex items-center justify-center mb-2.5 shadow-sm`}>
                                         <Icon className="w-4 h-4 text-white" />
                                     </div>
-                                    <div className="text-white text-[13px] font-semibold">{feat.title}</div>
+                                    <div className="text-white text-[13px] font-normal">{feat.title}</div>
                                     <div className="text-white/50 text-[11px] mt-0.5">{feat.desc}</div>
                                 </div>
                             );
@@ -145,11 +145,11 @@ export default function LoginPage() {
                     {/* Badge */}
                     <div className="flex items-center gap-2 mb-5">
                         <Shield className="w-4 h-4 text-[#865BFF]" />
-                        <span className="text-xs font-semibold text-[#865BFF] uppercase tracking-wider">Acceso Privado</span>
+                        <span className="text-xs font-normal text-[#865BFF] uppercase tracking-wider">Acceso Privado</span>
                     </div>
 
                     {/* Heading */}
-                    <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+                    <h1 className="text-lg font-normal text-slate-800 tracking-tight">
                         Bienvenido de vuelta
                     </h1>
                     <p className="text-sm text-slate-400 mt-1 mb-8">
@@ -157,7 +157,7 @@ export default function LoginPage() {
                     </p>
 
                     {errorMsg && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 mb-6">
+                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-normal flex items-center gap-2 mb-6">
                             {errorMsg.toLowerCase().includes('invalid') || errorMsg.toLowerCase().includes('credentials')
                                 ? 'Credenciales incorrectas. Verifica tu email y contraseña.'
                                 : errorMsg}
@@ -168,7 +168,7 @@ export default function LoginPage() {
                     <form onSubmit={handleLogin}>
                         {/* Email */}
                         <div className="mb-5">
-                            <label className="block text-[12px] font-semibold text-slate-600 mb-1.5">
+                            <label className="block text-[12px] font-normal text-slate-600 mb-1.5">
                                 Email corporativo
                             </label>
                             <div className="relative">
@@ -186,13 +186,13 @@ export default function LoginPage() {
                         {/* Password */}
                         <div className="mb-7">
                             <div className="flex justify-between items-center mb-1.5">
-                                <label className="block text-[12px] font-semibold text-slate-600">
+                                <label className="block text-[12px] font-normal text-slate-600">
                                     Contraseña
                                 </label>
                                 <button
                                     type="button"
                                     onClick={() => router.push('/forgot-password')}
-                                    className="text-[11px] font-semibold text-[#865BFF] hover:text-[#6b3fd6] transition-colors"
+                                    className="text-[11px] font-normal text-[#865BFF] hover:text-[#6b3fd6] transition-colors"
                                 >
                                     ¿Olvidaste tu contraseña?
                                 </button>
@@ -220,7 +220,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading || success}
-                            className={`w-full rounded-lg py-3 text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${success
+                            className={`w-full rounded-lg py-3 text-sm font-normal flex items-center justify-center gap-2 transition-all duration-200 ${success
                                 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
                                 : 'bg-gradient-to-r from-[#865BFF] to-[#6b3fd6] text-white hover:from-[#7344ff] hover:to-[#5c36b8] shadow-lg shadow-[#865BFF]/20 hover:shadow-[#865BFF]/40'
                                 } disabled:opacity-70 disabled:cursor-not-allowed`}
@@ -237,11 +237,11 @@ export default function LoginPage() {
 
                     {/* Help links */}
                     <div className="mt-6 flex flex-col items-center gap-4">
-                        <button onClick={() => router.push('/register')} className="w-full flex justify-center py-2.5 px-4 rounded-lg text-sm font-bold text-slate-700 bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-all focus:outline-none">
+                        <button onClick={() => router.push('/register')} className="w-full flex justify-center py-2.5 px-4 rounded-lg text-sm font-normal text-slate-700 bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-all focus:outline-none">
                             Solicitar Cuenta de Afiliado
                         </button>
                         <p className="text-center text-[11px] text-slate-400">
-                            ¿Problemas de acceso? Contacta con <a href="mailto:soporte@bridge.com" className="font-semibold text-[#865BFF] hover:text-[#6b3fd6]">soporte@bridge.com</a>
+                            ¿Problemas de acceso? Contacta con <a href="mailto:soporte@bridge.com" className="font-normal text-[#865BFF] hover:text-[#6b3fd6]">soporte@bridge.com</a>
                         </p>
                     </div>
                 </div>

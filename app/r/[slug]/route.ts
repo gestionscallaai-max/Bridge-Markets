@@ -40,6 +40,12 @@ export async function GET(request: Request, { params }: { params: { slug: string
     }).then(() => {});
 
     // Redirect to the main registration/landing page (or the URL defined on the link)
-    const destination = process.env.NEXT_PUBLIC_REGISTER_URL || '/register';
-    return NextResponse.redirect(new URL(destination, request.url));
+    const destinationBase = process.env.NEXT_PUBLIC_REGISTER_URL || '/register';
+    const destinationUrl = new URL(destinationBase, request.url);
+    
+    // Add attribution params
+    destinationUrl.searchParams.set('partner_id', link.partner_id);
+    destinationUrl.searchParams.set('slug', slug);
+    
+    return NextResponse.redirect(destinationUrl);
 }

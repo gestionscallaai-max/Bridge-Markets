@@ -57,108 +57,60 @@ export default function OverviewPage() {
             if (!user) return;
 
             try {
-                // ── Fetch user identity data from 'partners'
-                const { data: partnerData } = await supabase
-                    .from('partners')
-                    .select('name, role, partner_id')
-                    .eq('id', user.id)
-                    .single();
+                // ── Parallelized Initial Queries: Partner identity and total counts
+                const [partnerResult, leadsResult, clicksResult, landingsResult] = await Promise.all([
+                    supabase.from('partners').select('name, role, partner_id').eq('id', user.id).single(),
+                    (isAdmin ? supabase.from('leads').select('*', { count: 'exact', head: true }) : supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id)),
+                    (isAdmin ? supabase.from('clicks').select('*', { count: 'exact', head: true }) : supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id)),
+                    (isAdmin ? supabase.from('landings').select('*', { count: 'exact', head: true }) : supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id))
+                ]);
 
-                if (partnerData) {
-                    if (partnerData.name) setPartnerName(partnerData.name);
-                    
-                    // Set Partner ID (BM_...)
-                    if (partnerData.partner_id) {
-                        setPartnerId(partnerData.partner_id);
-                    } else {
-                        // Global fallback logic
-                        setPartnerId('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase());
-                    }
+                if (partnerResult.data) {
+                    const p = partnerResult.data;
+                    if (p.name) setPartnerName(p.name);
+                    setPartnerId(p.partner_id || ('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase()));
                 }
 
-                let leadsQuery = supabase.from('leads').select('*', { count: 'exact' });
-                let clicksQuery = supabase.from('clicks').select('*', { count: 'exact' });
-                let landingsQuery = supabase.from('landings').select('*', { count: 'exact' });
+                // Global CR computation
+                const globalCR = clicksResult.count ? (leadsResult.count! / clicksResult.count) * 100 : 0;
 
-                if (!isAdmin) {
-                    leadsQuery = leadsQuery.eq('partner_id', user.id);
-                    clicksQuery = clicksQuery.eq('partner_id', user.id);
-                    landingsQuery = landingsQuery.eq('partner_id', user.id);
-                }
-
-                const [l, c, ln] = await Promise.all([leadsQuery, clicksQuery, landingsQuery]);
-
-                // ── Calculate Performance by Slug
-                const perfMap: Record<string, { leads: number; clicks: number }> = {};
-                l.data?.forEach(lead => {
-                    const slug = (lead as any).slug || 'N/A';
-                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
-                    perfMap[slug].leads++;
-                });
-                c.data?.forEach(click => {
-                    const slug = (click as any).slug || 'N/A';
-                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
-                    perfMap[slug].clicks++;
-                });
-
-                const landingPerf = Object.entries(perfMap)
-                    .map(([slug, data]) => ({
-                        slug,
-                        leads: data.leads,
-                        clicks: data.clicks,
-                        cr: data.clicks > 0 ? (data.leads / data.clicks) * 100 : 0
-                    }))
-                    .sort((a, b) => b.leads - a.leads)
-                    .slice(0, 5);
-
-                const globalCR = c.count ? (l.count! / c.count) * 100 : 0;
-
-                // Admin: fetch total partners count
+                // ── Sequential Admin Data (If needed, can also be parallelized if we know in advance)
+                let topPartnersData = [];
                 if (isAdmin) {
-                    const { count: partnersCount } = await supabase
-                        .from('partners')
-                        .select('*', { count: 'exact', head: true });
-                    setTotalPartners(partnersCount || 0);
+                    const [pCount, topLeads] = await Promise.all([
+                        supabase.from('partners').select('*', { count: 'exact', head: true }),
+                        supabase.from('leads').select('partner_id, partners(name)').limit(200)
+                    ]);
+                    setTotalPartners(pCount.count || 0);
 
-                    // Top partners by leads
-                    const { data: topData } = await supabase
-                        .from('leads')
-                        .select('partner_id, partners(name)')
-                        .limit(100);
-
-                    if (topData) {
+                    if (topLeads.data) {
                         const countMap: Record<string, { name: string; count: number }> = {};
-                        topData.forEach((lead: any) => {
+                        topLeads.data.forEach((lead: any) => {
                             const pid = lead.partner_id;
                             const name = lead.partners?.name || 'Unknown';
                             if (!countMap[pid]) countMap[pid] = { name, count: 0 };
                             countMap[pid].count++;
                         });
-                        const sorted = Object.values(countMap).sort((a, b) => b.count - a.count).slice(0, 5);
-                        setTopPartners(sorted);
+                        topPartnersData = Object.values(countMap).sort((a, b) => b.count - a.count).slice(0, 5);
+                        setTopPartners(topPartnersData);
                     }
                 }
 
+                // ── Parallelized Historical & Performance Data (Last 7 Days)
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-                let activityQuery = supabase
-                    .from('leads')
-                    .select('created_at, country, partner_id, partners(name)')
-                    .gte('created_at', sevenDaysAgo.toISOString());
-
-                let clicksGeoQuery = supabase
-                    .from('clicks')
-                    .select('country')
-                    .gte('created_at', sevenDaysAgo.toISOString());
+                let actQuery = supabase.from('leads').select('created_at, country, landing_slug').gte('created_at', sevenDaysAgo.toISOString());
+                let geoQuery = supabase.from('clicks').select('country, landing_slug').gte('created_at', sevenDaysAgo.toISOString());
 
                 if (!isAdmin) {
-                    activityQuery = activityQuery.eq('partner_id', user.id);
-                    clicksGeoQuery = clicksGeoQuery.eq('partner_id', user.id);
+                    actQuery = actQuery.eq('partner_id', user.id);
+                    geoQuery = geoQuery.eq('partner_id', user.id);
                 }
 
-                const { data: leadsData } = await activityQuery;
-                const { data: clicksGeoData } = await clicksGeoQuery;
+                const [hLeads, hClicks] = await Promise.all([actQuery, geoQuery]);
+                const leadsData = hLeads.data || [];
+                const clicksGeoData = hClicks.data || [];
 
                 const activityMap: Record<string, number> = {};
                 for (let i = 6; i >= 0; i--) {
@@ -168,11 +120,17 @@ export default function OverviewPage() {
                 }
 
                 const countryStats: Record<string, { leads: number; clicks: number; topPartner?: string }> = {};
+                const perfMap: Record<string, { leads: number; clicks: number }> = {};
 
-                leadsData?.forEach(lead => {
+                leadsData.forEach(lead => {
                     const d = new Date(lead.created_at);
                     const dayName = days[d.getDay()];
                     if (activityMap[dayName] !== undefined) activityMap[dayName]++;
+
+                    // Performance grouping
+                    const slug = (lead as any).landing_slug || (lead as any).slug || 'N/A';
+                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
+                    perfMap[slug].leads++;
 
                     if (lead.country) {
                         if (!countryStats[lead.country]) countryStats[lead.country] = { leads: 0, clicks: 0 };
@@ -183,7 +141,11 @@ export default function OverviewPage() {
                     }
                 });
 
-                clicksGeoData?.forEach(click => {
+                clicksGeoData.forEach(click => {
+                    const slug = (click as any).landing_slug || (click as any).slug || 'N/A';
+                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
+                    perfMap[slug].clicks++;
+
                     if (click.country) {
                         if (!countryStats[click.country]) countryStats[click.country] = { leads: 0, clicks: 0 };
                         countryStats[click.country].clicks++;
@@ -198,6 +160,16 @@ export default function OverviewPage() {
                     conversion: data.clicks > 0 ? ((data.leads / data.clicks) * 100).toFixed(1) + '%' : '0%',
                     topPartner: data.topPartner || 'N/A'
                 }));
+
+                const landingPerf = Object.entries(perfMap)
+                    .map(([slug, data]) => ({
+                        slug,
+                        leads: data.leads,
+                        clicks: data.clicks,
+                        cr: data.clicks > 0 ? (data.leads / data.clicks) * 100 : 0
+                    }))
+                    .sort((a, b) => b.leads - a.leads)
+                    .slice(0, 5);
 
                 setStats({
                     leads: l.count || 0,
@@ -298,11 +270,11 @@ export default function OverviewPage() {
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-500/60 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-widest text-amber-500/60 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
                                             <Shield className="w-2.5 h-2.5" /> {t.overview.adminPanel}
                                         </span>
                                     </div>
-                                    <h1 className="text-base font-bold text-white">{t.overview.adminPanel}</h1>
+                                    <h1 className="text-base font-normal text-white">{t.overview.adminPanel}</h1>
                                     <p className="text-xs text-white/40 mt-0.5">{t.overview.realtimeData} · {t.overview.network}</p>
                                 </div>
                             </div>
@@ -313,7 +285,7 @@ export default function OverviewPage() {
                                 </div>
                                 <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
                                     <Network className="w-3.5 h-3.5 text-amber-400" />
-                                    <span className="text-xs font-bold font-mono text-amber-400">{totalPartners} Partners</span>
+                                    <span className="text-xs font-normal font-mono text-amber-400">{totalPartners} Partners</span>
                                 </div>
                             </div>
                         </div>
@@ -328,11 +300,11 @@ export default function OverviewPage() {
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-[#865BFF] bg-[#865BFF]/8 px-2 py-0.5 rounded-md border border-[#865BFF]/15">
+                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-widest text-[#865BFF] bg-[#865BFF]/8 px-2 py-0.5 rounded-md border border-[#865BFF]/15">
                                             <Eye className="w-2.5 h-2.5" /> Partner View
                                         </span>
                                     </div>
-                                    <h1 className="text-base font-bold text-slate-800">
+                                    <h1 className="text-base font-normal text-slate-800">
                                         {partnerName ? `${t.overview.hello}, ${partnerName.split(' ')[0]}!` : t.overview.welcomePartner}
                                     </h1>
                                     <p className="text-xs text-slate-400 mt-0.5">{t.overview.realtimeData} · {t.overview.personalMetrics}</p>
@@ -345,7 +317,7 @@ export default function OverviewPage() {
                                 </div>
                                 <div className="flex items-center gap-1.5 bg-[#865BFF]/8 border border-[#865BFF]/20 rounded-lg px-3 py-2">
                                     <Award className="w-3.5 h-3.5 text-[#865BFF]" />
-                                    <span className="text-xs font-bold font-mono text-[#865BFF]">{partnerId}</span>
+                                    <span className="text-xs font-normal font-mono text-[#865BFF]">{partnerId}</span>
                                 </div>
                             </div>
                         </div>
@@ -364,9 +336,9 @@ export default function OverviewPage() {
                                 <Icon className="w-5 h-5" strokeWidth={1.8} />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h3 className="text-slate-400 text-[11px] font-semibold uppercase tracking-wide">{s.title}</h3>
-                                <div className="text-2xl font-bold text-slate-800 tracking-tight mt-0.5">{s.value}</div>
-                                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded mt-1.5 inline-block ${
+                                <h3 className="text-slate-400 text-[11px] font-normal uppercase tracking-wide">{s.title}</h3>
+                                <div className="text-lg font-normal text-slate-800 tracking-tight mt-0.5">{s.value}</div>
+                                <span className={`text-[10px] font-normal px-1.5 py-0.5 rounded mt-1.5 inline-block ${
                                     isAdmin ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
                                 }`}>
                                     {isAdmin ? (s as any).badge || t.overview.global : t.overview.realTime}
@@ -380,7 +352,7 @@ export default function OverviewPage() {
             {/* ── Quick Actions + Chart */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }} className="lg:col-span-2 space-y-2">
-                    <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <h2 className="text-xs font-normal text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                         {isAdmin ? <><Zap className="w-3.5 h-3.5 text-amber-500" /><span>{t.overview.adminQuickActions}</span></> : t.overview.quickActions}
                     </h2>
                     {quickActions.map((action, i) => {
@@ -391,7 +363,7 @@ export default function OverviewPage() {
                                     <Icon className="w-4 h-4" style={{ color: action.color }} />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="font-semibold text-slate-800 text-xs">{action.label}</div>
+                                    <div className="font-normal text-slate-800 text-xs">{action.label}</div>
                                     <div className="text-[11px] text-slate-400 mt-0.5 truncate">{action.desc}</div>
                                 </div>
                                 <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
@@ -403,14 +375,14 @@ export default function OverviewPage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="card p-6 lg:col-span-3">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                            <h3 className="text-sm font-normal text-slate-800 flex items-center gap-1.5">
                                 {isAdmin ? <><BarChart2 className="w-4 h-4 text-amber-500" /><span>{t.overview.consolidatedVolumeAdmin}</span></> : t.overview.dailyLeads}
                             </h3>
                             <p className="text-xs text-slate-400 mt-0.5">
                                 {isAdmin ? t.overview.consolidatedVolumeAdminDesc : t.overview.realTrafficNote}
                             </p>
                         </div>
-                        <button className="px-3 py-1.5 text-[11px] font-semibold text-slate-500 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                        <button className="px-3 py-1.5 text-[11px] font-normal text-slate-500 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                             {t.overview.thisWeek}
                         </button>
                     </div>
@@ -433,7 +405,7 @@ export default function OverviewPage() {
                                                 : 'bg-slate-100'}`}
                                         />
                                     </div>
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{d.day}</span>
+                                    <span className="text-[10px] font-normal text-slate-400 uppercase tracking-tight">{d.day}</span>
                                 </div>
                             );
                         }) : (
@@ -454,13 +426,13 @@ export default function OverviewPage() {
                     className="card p-6 border-amber-500/10">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2">
                                 <Star className="w-4 h-4 text-amber-500" />
                                 {t.overview.topPartnersWeek}
                             </h3>
                             <p className="text-xs text-slate-400 mt-0.5">{t.overview.topPartnersWeekDesc}</p>
                         </div>
-                        <button onClick={() => router.push('/dashboard/admin/partners')} className="text-xs font-bold text-[#865BFF] hover:text-[#6b3fd6] flex items-center gap-1">
+                        <button onClick={() => router.push('/dashboard/admin/partners')} className="text-xs font-normal text-[#865BFF] hover:text-[#6b3fd6] flex items-center gap-1">
                             {t.overview.viewAll} <ChevronRight className="w-3 h-3" />
                         </button>
                     </div>
@@ -470,16 +442,16 @@ export default function OverviewPage() {
                         <div className="space-y-2">
                             {topPartners.map((p, i) => (
                                 <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
-                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black ${
+                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-medium ${
                                         i === 0 ? 'bg-amber-100 text-amber-600' :
                                         i === 1 ? 'bg-slate-100 text-slate-600' :
                                         i === 2 ? 'bg-orange-100 text-orange-600' :
                                         'bg-slate-50 text-slate-400'
                                     }`}>#{i + 1}</div>
                                     <div className="flex-1">
-                                        <div className="text-sm font-bold text-slate-800">{p.name}</div>
+                                        <div className="text-sm font-normal text-slate-800">{p.name}</div>
                                     </div>
-                                    <div className="text-sm font-bold text-[#865BFF]">{p.count} leads</div>
+                                    <div className="text-sm font-normal text-[#865BFF]">{p.count} leads</div>
                                     <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
                                         <div className="h-full bg-gradient-to-r from-[#865BFF] to-[#a88bff] rounded-full"
                                             style={{ width: `${(p.count / (topPartners[0]?.count || 1)) * 100}%` }} />
@@ -495,7 +467,7 @@ export default function OverviewPage() {
             {!isAdmin && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
                     className="card p-6">
-                    <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4">
+                    <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2 mb-4">
                         <Target className="w-4 h-4 text-[#865BFF]" />
                         {t.overview.howToImprove}
                     </h3>
@@ -510,7 +482,7 @@ export default function OverviewPage() {
                                 <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center mb-3`}>
                                     <item.Icon className={`w-4 h-4 ${item.color}`} />
                                 </div>
-                                <div className="text-sm font-bold text-slate-800 group-hover:text-[#865BFF] transition-colors">{item.tip}</div>
+                                <div className="text-sm font-normal text-slate-800 group-hover:text-[#865BFF] transition-colors">{item.tip}</div>
                                 <div className="text-xs text-slate-400 mt-1">{item.desc}</div>
                             </button>
                         ))}
@@ -522,7 +494,7 @@ export default function OverviewPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="card p-6">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2">
                             {isAdmin ? <><Globe2 className="w-4 h-4 text-amber-500" /><span>{t.overview.globalDistribution}</span></> : t.overview.heatmapTitle}
                         </h3>
                         <p className="text-xs text-slate-400 mt-0.5">
@@ -541,29 +513,29 @@ export default function OverviewPage() {
                             </div>
                             <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 backdrop-blur-md text-slate-800 px-4 py-3 rounded-2xl shadow-2xl flex flex-col items-center pointer-events-none min-w-[160px] z-20 border border-slate-200 translate-y-2 group-hover:translate-y-0">
                                 <div className="w-full flex justify-between items-center mb-2 border-b border-slate-100 pb-1.5">
-                                    <span className="text-[10px] uppercase font-black tracking-widest text-[#865BFF]">{point.label}</span>
-                                    <span className="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 uppercase">
+                                    <span className="text-[10px] uppercase font-medium tracking-widest text-[#865BFF]">{point.label}</span>
+                                    <span className="text-[9px] font-normal bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 uppercase">
                                         {point.count > 100 ? t.overview.highDensity?.split('(')[0]?.trim() || 'Alto' : t.overview.medDensity?.split('(')[0]?.trim() || 'Medio'}
                                     </span>
                                 </div>
                                 <div className="flex flex-col items-center">
-                                    <span className="text-2xl font-black text-slate-800 leading-none">+{point.count}</span>
-                                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight mt-1">Leads</span>
+                                    <span className="text-lg font-medium text-slate-800 leading-none">+{point.count}</span>
+                                    <span className="text-[9px] text-slate-400 font-normal uppercase tracking-tight mt-1">Leads</span>
                                 </div>
                                 {isAdmin && (
                                     <div className="w-full mt-2 pt-2 border-t border-slate-100 text-center">
-                                        <div className="text-[8px] text-slate-400 font-bold uppercase mb-1">{t.overview.topPartner}</div>
-                                        <div className="text-[10px] font-bold text-[#865BFF] truncate w-full">{(point as any).topPartner}</div>
+                                        <div className="text-[8px] text-slate-400 font-normal uppercase mb-1">{t.overview.topPartner}</div>
+                                        <div className="text-[10px] font-normal text-[#865BFF] truncate w-full">{(point as any).topPartner}</div>
                                     </div>
                                 )}
                                 <div className="mt-2 pt-2 border-t border-slate-100 w-full flex justify-around">
                                     <div className="flex flex-col items-center">
-                                        <span className="text-xs font-bold text-emerald-500">{point.conversion || '0%'}</span>
-                                        <span className="text-[8px] text-slate-400 font-bold uppercase">{t.overview.conversion}</span>
+                                        <span className="text-xs font-normal text-emerald-500">{point.conversion || '0%'}</span>
+                                        <span className="text-[8px] text-slate-400 font-normal uppercase">{t.overview.conversion}</span>
                                     </div>
                                     <div className="flex flex-col items-center">
-                                        <span className="text-xs font-bold text-blue-500">↑ 5%</span>
-                                        <span className="text-[8px] text-slate-400 font-bold uppercase">{t.overview.growth}</span>
+                                        <span className="text-xs font-normal text-blue-500">↑ 5%</span>
+                                        <span className="text-[8px] text-slate-400 font-normal uppercase">{t.overview.growth}</span>
                                     </div>
                                 </div>
                             </div>
@@ -577,7 +549,7 @@ export default function OverviewPage() {
                 className="card p-6">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2">
                             <Activity className="w-4 h-4 text-[#865BFF]" />
                             {t.overview.topLandings || 'Rendimiento por Landing'}
                         </h3>
@@ -589,10 +561,10 @@ export default function OverviewPage() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-slate-100">
-                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">{t.landing.title || 'Landing'}</th>
-                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">{t.overview.trafficClicks || 'Clicks'}</th>
-                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">{t.overview.myLeads || 'Leads'}</th>
-                                <th className="pb-3 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">{t.overview.conversion || 'Rendimiento'}</th>
+                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400">{t.landing.title || 'Landing'}</th>
+                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-center">{t.overview.trafficClicks || 'Clicks'}</th>
+                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-center">{t.overview.myLeads || 'Leads'}</th>
+                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-right">{t.overview.conversion || 'Rendimiento'}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
@@ -604,20 +576,20 @@ export default function OverviewPage() {
                                                 <Globe className="w-4 h-4" />
                                             </div>
                                             <div>
-                                                <div className="text-sm font-bold text-slate-800 group-hover:text-[#865BFF] transition-colors">{lp.slug}</div>
+                                                <div className="text-sm font-normal text-slate-800 group-hover:text-[#865BFF] transition-colors">{lp.slug}</div>
                                                 <div className="text-[10px] text-slate-400 font-medium">/l/{lp.slug}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="py-4 text-center">
-                                        <span className="text-sm font-semibold text-slate-600">{lp.clicks}</span>
+                                        <span className="text-sm font-normal text-slate-600">{lp.clicks}</span>
                                     </td>
                                     <td className="py-4 text-center">
-                                        <span className="text-sm font-bold text-slate-800">{lp.leads}</span>
+                                        <span className="text-sm font-normal text-slate-800">{lp.leads}</span>
                                     </td>
                                     <td className="py-4 text-right">
                                         <div className="flex flex-col items-end">
-                                            <span className={`text-sm font-black ${lp.cr > 15 ? 'text-emerald-500' : 'text-[#865BFF]'}`}>
+                                            <span className={`text-sm font-medium ${lp.cr > 15 ? 'text-emerald-500' : 'text-[#865BFF]'}`}>
                                                 {lp.cr.toFixed(1)}%
                                             </span>
                                             <div className="w-16 h-1 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
@@ -656,19 +628,19 @@ export default function OverviewPage() {
                     <div className="absolute bottom-0 left-48 w-32 h-32 rounded-full bg-white/5 translate-y-8" />
                 </div>
                 <div className="relative z-10">
-                    <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 flex items-center gap-1.5 ${
+                    <div className={`text-[10px] font-normal uppercase tracking-widest mb-1 flex items-center gap-1.5 ${
                             isAdmin ? 'text-amber-500/60' : 'text-[#865BFF]/60'
                         }`}>
                         {isAdmin ? <><Shield className="w-3 h-3" /><span>{t.overview.adminZone}</span></> : t.overview.materialsReady}
                     </div>
-                    <h3 className="text-white font-bold text-base">
+                    <h3 className="text-white font-normal text-base">
                         {isAdmin ? t.overview.manageNetwork : t.overview.materialsTitle}
                     </h3>
                     <p className="text-white/50 text-sm mt-1">
                         {isAdmin ? t.overview.manageNetworkDesc : t.overview.materialsSubtitle}
                     </p>
                 </div>
-                <button className="relative z-10 flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all flex-shrink-0">
+                <button className="relative z-10 flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-normal text-sm px-5 py-2.5 rounded-xl transition-all flex-shrink-0">
                     <ExternalLink className="w-4 h-4" />
                     {isAdmin ? t.overview.viewPartnersList : t.overview.viewMaterials}
                 </button>

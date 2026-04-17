@@ -83,7 +83,7 @@ function LanguageSelector() {
                             key={code}
                             onClick={() => { setLang(code); setOpen(false); }}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-[12px] font-medium transition-colors text-left hover:bg-violet-50
-                                ${code === lang ? 'bg-violet-50 text-[#865BFF] font-bold' : 'text-slate-700'}`}
+                                ${code === lang ? 'bg-violet-50 text-[#865BFF] font-normal' : 'text-slate-700'}`}
                         >
                             <span className="text-lg leading-none flex-shrink-0">{meta.flag}</span>
                             <span className="flex-1">{meta.nativeLabel}</span>
@@ -100,7 +100,7 @@ function LanguageSelector() {
             <button
                 ref={triggerRef}
                 onClick={handleOpen}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 transition-all text-[11px] font-bold"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 transition-all text-[11px] font-normal"
             >
                 <span className="text-base leading-none">{current.flag}</span>
                 <span className="hidden md:inline">{current.nativeLabel}</span>
@@ -296,7 +296,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                                                             {item.children?.map(child => {
                                                                 const isChildActive = pathname === child.href || (child.href !== '/dashboard' && pathname.startsWith(child.href));
                                                                 return (
-                                                                    <Link key={child.href} href={child.href} className={`relative block text-[13px] py-2 px-3 rounded-lg transition-all duration-150 ${isChildActive ? 'text-white font-semibold bg-[#865BFF]/10' : 'text-white/40 hover:text-white/70 hover:bg-white/[0.03]'}`}>
+                                                                    <Link key={child.href} href={child.href} className={`relative block text-[13px] py-2 px-3 rounded-lg transition-all duration-150 ${isChildActive ? 'text-white font-normal bg-[#865BFF]/10' : 'text-white/40 hover:text-white/70 hover:bg-white/[0.03]'}`}>
                                                                         {isChildActive && <span className="absolute -left-[17px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#865BFF] shadow-[0_0_8px_rgba(134,91,255,0.6)]" />}
                                                                         {child.label}
                                                                     </Link>
@@ -334,7 +334,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                                 : 'bg-gradient-to-br from-[#865BFF]/10 to-[#865BFF]/5 border border-[#865BFF]/15'
                         }`}>
                             {/* Role Badge */}
-                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest mb-3 ${
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-medium uppercase tracking-widest mb-3 ${
                                 isAdmin 
                                     ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' 
                                     : 'bg-[#865BFF]/15 text-[#a88bff] border border-[#865BFF]/20'
@@ -347,7 +347,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                             </div>
 
                             <div className="flex items-center gap-3 mb-3">
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-black shadow-lg ${
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-medium shadow-lg ${
                                     isAdmin 
                                         ? 'bg-gradient-to-br from-amber-500 to-amber-600 shadow-amber-500/20' 
                                         : 'bg-gradient-to-br from-[#865BFF] to-[#6635de] shadow-[#865BFF]/20'
@@ -355,15 +355,15 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                                     {partnerId.substring(3, 5)}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-0.5">
+                                    <div className="text-[10px] font-normal uppercase tracking-widest text-white/30 mb-0.5">
                                         {isAdmin ? 'Admin ID' : 'Partner ID'}
                                     </div>
-                                    <div className="text-[12px] font-bold text-white tracking-wide truncate font-mono">
+                                    <div className="text-[12px] font-normal text-white tracking-wide truncate font-mono">
                                         {partnerId}
                                     </div>
                                 </div>
                             </div>
-                            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] font-bold text-white/40 hover:text-white hover:bg-white/[0.06] transition-all">
+                            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] font-normal text-white/40 hover:text-white hover:bg-white/[0.06] transition-all">
                                 <LogOut className="w-3.5 h-3.5" />
                                 {t.common.logout}
                             </button>
@@ -384,9 +384,9 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                                 <Menu className="w-5 h-5" />
                             </button>
                             <div>
-                                <h1 className="text-sm lg:text-lg font-black tracking-tight text-slate-800 leading-tight">
+                                <h1 className="text-sm lg:text-lg font-medium tracking-tight text-slate-800 leading-tight">
                                     {title.main}{' '}
-                                    {title.accent && <span className="bg-gradient-to-r from-[#865BFF] to-[#6635de] bg-clip-text text-transparent font-black">{title.accent}</span>}
+                                    {title.accent && <span className="bg-gradient-to-r from-[#865BFF] to-[#6635de] bg-clip-text text-transparent font-medium">{title.accent}</span>}
                                 </h1>
                             </div>
                         </div>
@@ -401,7 +401,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                             <NotificationBell />
 
                             {/* Avatar */}
-                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-black ring-2 ring-offset-2 ring-offset-white transition-all ${isAdmin ? 'bg-slate-700 ring-slate-300' : 'bg-gradient-to-br from-[#865BFF] to-[#6635de] ring-[#865BFF]/30'}`}>
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-medium ring-2 ring-offset-2 ring-offset-white transition-all ${isAdmin ? 'bg-slate-700 ring-slate-300' : 'bg-gradient-to-br from-[#865BFF] to-[#6635de] ring-[#865BFF]/30'}`}>
                                 {isAdmin ? 'AD' : 'JP'}
                             </div>
                         </div>

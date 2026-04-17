@@ -20,7 +20,7 @@ export async function POST(request: Request) {
                 landing_slug: landingSlug,
                 partner_id: partnerId,
                 click_id: clickId || null,
-                country_code: countryCode || null,
+                country: countryCode || null,
                 source: source || 'direct'
             });
 
