@@ -7,53 +7,92 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
     const ctaLink = brand.ctaLink || '#registro';
 
     return `
-    <section class="relative min-h-screen flex flex-col justify-center pt-20 pb-32 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Animación de Fondo -->
+    <section class="relative min-h-screen flex items-center pt-24 pb-32 px-8 overflow-hidden bg-[#05010f]">
+        <!-- Fondo Institucional Premium -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-[-10%] right-[-10%] w-[1000px] h-[1000px] bg-[#865BFF]/10 rounded-full blur-[150px] animate-pulse"></div>
-            <div class="absolute bottom-[-10%] left-[-10%] w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px]"></div>
-            <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(#865BFF 1px, bg-white 1px); background-size: 50px 50px;"></div>
+            <div class="absolute top-[-20%] right-[-10%] w-[1200px] h-[1200px] bg-[#865BFF]/10 rounded-full blur-[200px] animate-pulse"></div>
+            <div class="absolute bottom-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[180px]"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
         </div>
         
         <div class="max-w-7xl mx-auto w-full relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
-                <div class="lg:col-span-8 section-reveal">
-                    <div class="flex items-center gap-4 mb-12">
-                        <img src="/logo.png" alt="BM" class="h-8">
-                        <div class="h-6 w-[1px] bg-white/20"></div>
-                        <span class="text-[10px] font-black uppercase tracking-[0.5em] text-[#865BFF]">Presentado por ${ibName}</span>
+                
+                <!-- Columna Izquierda: El Mensaje de Poder -->
+                <div class="lg:col-span-7 section-reveal">
+                    <div class="flex items-center gap-6 mb-16">
+                        <img src="/logo.png" alt="BM" class="h-10 brightness-[10]">
+                        <div class="h-8 w-[1px] bg-white/20"></div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-black uppercase tracking-[0.5em] text-[#865BFF] mb-1">PARTNER OFICIAL</span>
+                            <span class="text-sm font-bold text-white/80">${ibName}</span>
+                        </div>
                     </div>
                     
-                    <h1 class="text-7xl md:text-9xl lg:text-[10rem] font-black font-headline leading-[0.85] mb-12 tracking-tightest text-white uppercase drop-shadow-2xl">
+                    <h1 class="text-7xl md:text-9xl lg:text-[10rem] font-black font-headline leading-[0.82] mb-12 tracking-tightest text-white uppercase">
                         ${c.title.split(' ').slice(0, 2).join(' ')} <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/50">${c.title.split(' ').slice(2).join(' ')}</span>
                     </h1>
                     
-                    <p class="text-2xl md:text-3xl text-white/50 leading-relaxed max-w-3xl mb-12 font-medium">
+                    <p class="text-2xl md:text-3xl text-white/40 leading-relaxed max-w-2xl mb-16 font-light">
                         ${c.subtitle}
                     </p>
 
-                    ${c.ibPhrase ? `<p class="text-xl text-[#865BFF]/80 mb-16 font-black italic decoration-[#865BFF]/30 underline underline-offset-8">"${c.ibPhrase}"</p>` : ''}
-                    
-                    <div class="flex flex-wrap gap-8 mb-20">
-                        ${['Regulado', '5+ Años', 'Soporte 24/7'].map(badge => `
-                            <div class="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
-                                <span class="w-2 h-2 rounded-full bg-[#865BFF] animate-ping"></span>
-                                <span class="text-[10px] font-black text-white/80 uppercase tracking-widest">${badge}</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-20">
+                        <div class="p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-3xl shadow-2xl">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="material-symbols-outlined text-[#865BFF]">security</span>
+                                <span class="text-[11px] font-black text-white uppercase tracking-widest">REGULACIÓN GLOBAL</span>
                             </div>
-                        `).join('')}
+                            <p class="text-sm text-white/40 font-medium">UK & Marshall Islands Compliance standards.</p>
+                        </div>
+                        <div class="p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-3xl shadow-2xl">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="material-symbols-outlined text-[#865BFF]">speed</span>
+                                <span class="text-[11px] font-black text-white uppercase tracking-widest">EJECUCIÓN ECN</span>
+                            </div>
+                            <p class="text-sm text-white/40 font-medium">Servidores BridgeMarkets-MT5 de baja latencia.</p>
+                        </div>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-8">
-                        <a href="${ctaLink}" class="group relative px-16 py-8 bg-[#865BFF] text-white font-black rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(134,91,255,0.5)] hover:shadow-[0_45px_90px_-15px_rgba(134,91,255,0.6)] hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-2xl">
-                            <span class="uppercase tracking-tighter">${c.cta1}</span>
-                            <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">bolt</span>
+                        <a href="${ctaLink}" class="group relative px-12 py-6 bg-[#865BFF] text-white font-black rounded-3xl shadow-[0_0_60px_rgba(134,91,255,0.4)] hover:shadow-[0_0_100px_rgba(134,91,255,0.6)] transition-all transform hover:-translate-y-2 flex items-center justify-center gap-6 text-xl">
+                            <span class="uppercase tracking-widest">${c.cta1}</span>
+                            <span class="material-symbols-outlined group-hover:translate-x-3 transition-transform text-3xl">trending_up</span>
                         </a>
-                        <a href="#ecosistema" class="group px-16 py-8 bg-white/5 border border-white/10 text-white font-black rounded-[2rem] hover:bg-white/10 hover:text-black hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-2xl uppercase tracking-tighter backdrop-blur-md">
+                        <a href="#ecosistema" class="px-12 py-6 bg-white/5 border border-white/10 text-white font-black rounded-3xl hover:bg-white/10 hover:text-black hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-xl uppercase tracking-widest backdrop-blur-3xl">
                             ${c.cta2}
                         </a>
                     </div>
                 </div>
+
+                <!-- Columna Derecha: El Activo Institucional -->
+                <div class="lg:col-span-5 relative lg:block hidden section-reveal">
+                    <div class="relative group">
+                        <div class="absolute -inset-20 bg-[#865BFF]/10 rounded-full blur-[150px] animate-pulse"></div>
+                        <div class="absolute -inset-10 bg-blue-600/5 rounded-full blur-[120px]"></div>
+                        
+                        <div class="relative z-10 rounded-[6rem] overflow-hidden border border-white/10 shadow-[0_60px_120px_rgba(0,0,0,0.6)] transform rotate-2 group-hover:rotate-0 transition-all duration-1000 aspect-[3/4] bg-black">
+                            <img src="/institutional_hero_3d.png" alt="Bridge Markets Institutional" class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000 opacity-90">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#05010f] via-transparent to-transparent"></div>
+                            
+                            <!-- Overlay Card: Market Stats -->
+                            <div class="absolute bottom-12 left-12 right-12 p-8 bg-black/40 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-2xl">
+                                <div class="flex justify-between items-center mb-6">
+                                    <p class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">LIVE VOLUMEN (24H)</p>
+                                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                </div>
+                                <p class="text-5xl font-black text-white tracking-tighter mb-2">$2,450,189,200</p>
+                                <div class="flex gap-4">
+                                    <span class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Global Aggregation</span>
+                                    <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">+4.2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>`;

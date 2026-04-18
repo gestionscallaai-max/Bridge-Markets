@@ -7,45 +7,85 @@ export function renderSNUHero(content: Record<string, any>, brand: BrandConfig):
     const ctaLink = brand.ctaLink || '#registro';
 
     return `
-    <section class="relative min-h-screen flex flex-col justify-center pt-20 pb-32 px-8 overflow-hidden bg-[#0a0614]">
-        <!-- Efecto Galaxia -->
+    <section class="relative min-h-screen flex items-center pt-24 pb-32 px-8 overflow-hidden bg-[#0a0614]">
+        <!-- Fondo Galáctico Dinámico -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-            <div class="absolute top-[-20%] right-[-10%] w-[1200px] h-[1200px] bg-[#865BFF]/10 rounded-full blur-[180px] animate-pulse"></div>
-            <div class="absolute bottom-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[150px]"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
+            <div class="absolute top-[-20%] right-[-10%] w-[1200px] h-[1200px] bg-[#865BFF]/10 rounded-full blur-[200px] animate-pulse"></div>
+            <div class="absolute bottom-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[180px]"></div>
+            
+            <!-- Estrellas fugaces o partículas (CSS simple) -->
+            <div class="absolute top-1/4 left-1/4 w-px h-px bg-white shadow-[0_0_10px_2px_white] rounded-full animate-ping"></div>
+            <div class="absolute top-2/3 right-1/3 w-px h-px bg-white shadow-[0_0_15px_3px_white] rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
         </div>
         
-        <div class="max-w-7xl mx-auto w-full relative z-10 text-center">
-            <div class="inline-flex items-center gap-4 mb-12 px-8 py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-2xl section-reveal">
-                <span class="material-symbols-outlined text-[#865BFF] animate-spin-slow">star</span>
-                <span class="text-[10px] font-black uppercase tracking-[0.5em] text-white/80">EL ÚNICO BROKER QUE CONECTA DERIV + WELTRADE + BM</span>
-            </div>
-            
-            <h1 class="text-6xl md:text-8xl lg:text-[11rem] font-black font-headline leading-[0.8] mb-12 tracking-tightest text-white uppercase drop-shadow-[0_0_50px_rgba(134,91,255,0.3)] section-reveal">
-                ${c.title.split('.').slice(0, 1).join('')}. <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/50">${c.title.split('.').slice(1).join('')}</span>
-            </h1>
-            
-            <p class="text-2xl md:text-3xl text-white/40 leading-relaxed max-w-5xl mx-auto mb-16 font-medium section-reveal" style="animation-delay: 0.1s;">
-                ${c.subtitle}
-            </p>
+        <div class="max-w-7xl mx-auto w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Columna Izquierda: El Mensaje Universal -->
+                <div class="lg:col-span-7 section-reveal">
+                    <div class="inline-flex items-center gap-4 mb-10 px-6 py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-3xl shadow-2xl">
+                        <span class="material-symbols-outlined text-[#865BFF] animate-spin-slow">star_half</span>
+                        <span class="text-[11px] font-black uppercase tracking-[0.5em] text-white/90">LA TRINIDAD SINTÉTICA: DERIV + WELTRADE + BM</span>
+                    </div>
+                    
+                    <h1 class="text-6xl md:text-8xl lg:text-[9.5rem] font-black font-headline leading-[0.82] mb-12 tracking-tightest text-white uppercase drop-shadow-[0_0_80px_rgba(134,91,255,0.4)]">
+                        TODO TU <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/50">UNIVERSO.</span>
+                    </h1>
+                    
+                    <p class="text-2xl md:text-3xl text-white/40 leading-relaxed max-w-2xl mb-16 font-light">
+                        ${c.subtitle}
+                    </p>
 
-            ${(brand.heroPhrase || c.ibPhrase) ? `<p class="text-xl text-white/70 italic mb-12 max-w-2xl mx-auto border-y border-[#865BFF]/30 py-6 section-reveal">"${brand.heroPhrase || c.ibPhrase}"</p>` : ''}
-
-            <div class="flex flex-col sm:flex-row gap-8 justify-center items-center section-reveal" style="animation-delay: 0.2s;">
-                <a href="${ctaLink}" class="group relative px-16 py-8 bg-[#865BFF] text-white font-black rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(134,91,255,0.5)] hover:shadow-[0_45px_90px_-15px_rgba(134,91,255,0.6)] hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-2xl">
-                    <span class="uppercase tracking-tighter">${c.cta}</span>
-                    <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">rocket_launch</span>
-                </a>
-                <div class="flex items-center gap-4 p-4 border border-white/10 rounded-3xl bg-white/5 backdrop-blur-md">
-                    <img src="/logo.png" alt="BM" class="h-6">
-                    <div class="h-4 w-px bg-white/20"></div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-white/60">Por ${ibName}</span>
+                    <div class="flex flex-col sm:flex-row gap-8 items-center">
+                        <a href="${ctaLink}" class="group relative px-12 py-6 bg-[#865BFF] text-white font-black rounded-3xl shadow-[0_0_60px_rgba(134,91,255,0.5)] hover:shadow-[0_0_100px_rgba(134,91,255,0.7)] transition-all transform hover:-translate-y-2 flex items-center justify-center gap-6 text-xl">
+                            <span class="uppercase tracking-widest">${c.cta}</span>
+                            <span class="material-symbols-outlined group-hover:translate-x-3 transition-transform text-3xl">rocket</span>
+                        </a>
+                        
+                        <div class="flex items-center gap-6 p-5 border border-white/5 rounded-[2.5rem] bg-white/[0.02] backdrop-blur-2xl">
+                            <div class="w-14 h-14 rounded-2xl bg-black/50 border border-[#865BFF]/30 flex items-center justify-center overflow-hidden">
+                                <img src="${brand.logoUrl || '/logo.png'}" alt="IB" class="w-10 object-contain">
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-[0.5em] text-[#865BFF] mb-1">PROYECTO LIDERADO POR</p>
+                                <p class="text-lg font-black text-white uppercase tracking-tighter">${ibName}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Columna Derecha: El Orbe Galáctico -->
+                <div class="lg:col-span-5 relative lg:block hidden section-reveal">
+                    <div class="relative group">
+                        <div class="absolute -inset-16 bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
+                        <div class="absolute -inset-8 bg-[#865BFF]/15 rounded-full blur-[100px] group-hover:bg-[#865BFF]/25 transition-all duration-1000"></div>
+                        
+                        <div class="relative z-10 rounded-[5rem] overflow-hidden border border-white/5 shadow-[0_50px_100px_rgba(0,0,0,0.8)] transform rotate-[-2deg] group-hover:rotate-0 transition-all duration-1000 aspect-square bg-[#0a0614]">
+                            <img src="/synthetic_universe_3d.png" alt="Synthetic Universe" class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000 opacity-80">
+                            
+                            <!-- Floating Info Tags -->
+                            <div class="absolute top-12 left-12 p-5 bg-white/5 backdrop-blur-3xl rounded-3xl border border-white/10 shadow-2xl animate-bounce-slow">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-3 h-3 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></div>
+                                    <span class="text-[10px] font-black text-white uppercase tracking-widest">LIVE SYNC ACTIVE</span>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-12 right-12 p-6 bg-black/60 backdrop-blur-3xl rounded-3xl border border-[#865BFF]/20 shadow-2xl">
+                                <p class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-2">NETWORK LATENCY</p>
+                                <p class="text-3xl font-black text-white tracking-tighter">0.005 ms</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>`;
 }
+
 
 export function renderSNUMetrics(content: Record<string, any>, brand: BrandConfig): string {
     return `
