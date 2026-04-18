@@ -37,7 +37,9 @@ export default async function middleware(req: NextRequest) {
 
     // Logic to identify if there is a subdomain
     let affiliateId = null;
-    if (!isLocalhost && domainParts.length >= 3) {
+    const isEasypanel = hostname.includes('easypanel.host');
+
+    if (!isLocalhost && !isEasypanel && domainParts.length >= 3) {
         affiliateId = domainParts[0];
     } else if (isLocalhost && domainParts.length >= 2) {
         affiliateId = domainParts[0];
@@ -45,7 +47,14 @@ export default async function middleware(req: NextRequest) {
 
     // If there's an affiliate subdomain AND the user isn't on the root portal (Dashboard),
     // we rewrite the request to the dynamic affiliate viewer page.
-    if (affiliateId && affiliateId !== 'www' && !url.pathname.startsWith('/dashboard') && !url.pathname.startsWith('/login') && !url.pathname.startsWith('/register')) {
+    // Also avoid infinite loops by checking if we already rewrote
+    const isInternalRoute = url.pathname.startsWith('/dashboard') || 
+                           url.pathname.startsWith('/login') || 
+                           url.pathname.startsWith('/register') ||
+                           url.pathname.startsWith('/api') ||
+                           url.pathname.startsWith('/_next');
+
+    if (affiliateId && affiliateId !== 'www' && !isInternalRoute && !url.pathname.startsWith(`/${affiliateId}`)) {
         return NextResponse.rewrite(new URL(`/${affiliateId}${url.pathname}`, req.url));
     }
 
