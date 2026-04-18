@@ -7,6 +7,8 @@ import { renderMCHero, renderMCIntro, renderMCMamBlock, renderMCCopyBlock, rende
 import { renderLX12Hero, renderLX12Intro, renderLX12TableCompare, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA } from './proLeverage';
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
 import { renderSNUHero, renderSNUMetrics, renderSNUUniversesIntro, renderSNUU1BM, renderSNUU2Deriv, renderSNUU3Welt, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUCTA, renderSNUFooter } from './syntheticUniverse';
+import { renderPSHero, renderPSBanner, renderPSFeatures, renderPSMatrix, renderPSCalculator, renderPSRules, renderPSContact, renderPSFooter } from './propfirmSinteticos';
+
 
 export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, brand: BrandConfig) => string> = {
     hero_dark: renderHeroDark,
@@ -97,4 +99,12 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     snu_faq: renderSNUFAQ,
     snu_cta: renderSNUCTA,
     snu_footer: renderSNUFooter,
+    ps_hero: renderPSHero,
+    ps_banner: renderPSBanner,
+    ps_features: renderPSFeatures,
+    ps_matrix: renderPSMatrix,
+    ps_calculator: renderPSCalculator,
+    ps_rules: renderPSRules,
+    ps_contact: renderPSContact,
+    ps_footer: renderPSFooter,
 };

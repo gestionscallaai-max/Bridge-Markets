@@ -144,6 +144,28 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         badgeColor: '#865BFF',
         theme: 'dark',
     },
+    {
+        id: 'propfirm_sinteticos_premium',
+        name: 'PropFirm - Sintéticos (Premium)',
+        category: 'Official',
+        description: 'Diseño ultra-premium optimizado para retos de fondeo en índices sintéticos. Alta conversión y estética Cyber Purple.',
+        sourceFile: 'Blueprint 7',
+        sections: [
+            'ps_hero',
+            'ps_banner',
+            'ps_features',
+            'ps_matrix',
+            'ps_calculator',
+            'ps_rules',
+            'ps_contact',
+            'ps_footer'
+        ],
+        gradient: 'linear-gradient(135deg, #050112 0%, #0c0027 50%, #865BFF 100%)',
+        accentColor: '#865BFF',
+        badge: 'New',
+        badgeColor: '#865BFF',
+        theme: 'dark',
+    },
 ];
 
 // Helper: get template by ID

@@ -1104,6 +1104,119 @@ export const SECTION_CATALOG: SectionMeta[] = [
             ibName: 'Presentado por IB Sintéticos'
         },
     },
+    // ─── BLUEPRINT 7: PROPFIRM SINTÉTICOS PREMIUM ──────────
+    {
+        id: 'ps_hero',
+        name: 'PS: Hero Cyber Purple',
+        icon: 'stadium',
+        category: 'hero',
+        description: 'Hero ultra-premium con estética púrpura y blur cards.',
+        sourceTemplate: 7,
+        defaultContent: {
+            title: 'POTENCIALIZA',
+            highlight: 'TU TRADING',
+            subtitle: 'Opera con capital institucional en el mercado más dinámico del mundo.',
+            ctaText: 'Empieza Ahora',
+            badgeText: 'EL MEJOR CHALLENGE DEL MERCADO'
+        },
+    },
+    {
+        id: 'ps_banner',
+        name: 'PS: Social Proof Banner',
+        icon: 'view_list',
+        category: 'content',
+        description: 'Banner flotante con estadísticas y beneficios flash.',
+        sourceTemplate: 7,
+        defaultContent: {
+            items: ['Ejecución Instantánea', 'Spread 0.0', 'Soporte 24/7', 'Retiros cada 14 días']
+        },
+    },
+    {
+        id: 'ps_features',
+        name: 'PS: Grid de Ventajas',
+        icon: 'grid_view',
+        category: 'content',
+        description: 'Grid de 3 columnas con iconos neón y borde de cristal.',
+        sourceTemplate: 7,
+        defaultContent: {
+            title: '¿Por qué elegir nuestro reto?',
+            features: [
+                { icon: 'bolt', title: 'Velocidad', desc: 'Conectividad directa con los servidores de baja latencia.' },
+                { icon: 'security', title: 'Seguridad', desc: 'Fondos segregados y protección contra saldo negativo.' },
+                { icon: 'analytics', title: 'Analítica', desc: 'Dashboard avanzado para monitorear tu operativa.' }
+            ]
+        },
+    },
+    {
+        id: 'ps_matrix',
+        name: 'PS: Tabla de Planes',
+        icon: 'table_chart',
+        category: 'content',
+        description: 'Tabla de retos oficiales (2 Fases) con precios.',
+        sourceTemplate: 7,
+        defaultContent: {
+            title: 'REGLAS BM 2 FASES',
+            plans: [
+                { size: '$5,000', price: '$49' },
+                { size: '$10,000', price: '$89' },
+                { size: '$25,000', price: '$189' },
+                { size: '$50,000', price: '$329' },
+                { size: '$100,000', price: '$549' }
+            ]
+        },
+    },
+    {
+        id: 'ps_calculator',
+        name: 'PS: Calculadora de Ganancias',
+        icon: 'calculate',
+        category: 'content',
+        description: 'Calculadora interactiva de profit basada en el target del 4%.',
+        sourceTemplate: 7,
+        defaultContent: {
+            title: 'Calcula tus ganancias',
+            note: 'Basado en un target conservador de 4% mensual.'
+        },
+    },
+    {
+        id: 'ps_rules',
+        name: 'PS: Reglas y Cumplimiento',
+        icon: 'gavel',
+        category: 'content',
+        description: 'Sección de reglas operativas detalladas.',
+        sourceTemplate: 7,
+        defaultContent: {
+            title: 'Protocolos Operativos',
+            rules: [
+                { title: 'Drawdown Diario', value: '5%' },
+                { title: 'Drawdown Total', value: '10%' },
+                { title: 'Objetivo Fase 1', value: '8%' },
+                { title: 'Objetivo Fase 2', value: '5%' }
+            ]
+        },
+    },
+    {
+        id: 'ps_contact',
+        name: 'PS: Contacto CTA',
+        icon: 'contact_support',
+        category: 'cta',
+        description: 'Sección final de contacto con formulario y título gigante.',
+        sourceTemplate: 7,
+        defaultContent: {
+            title: 'CONTÁCTANOS',
+            subtitle: '¿Tienes dudas? Nuestro equipo está listo para ayudarte.'
+        },
+    },
+    {
+        id: 'ps_footer',
+        name: 'PS: Footer Especializado',
+        icon: 'bottom_panel_open',
+        category: 'layout',
+        description: 'Footer oscuro con logos y atribución legal.',
+        sourceTemplate: 7,
+        defaultContent: {
+            disclaimer: 'El trading conlleva un riesgo significativo.'
+        },
+    },
 ];
 
 
