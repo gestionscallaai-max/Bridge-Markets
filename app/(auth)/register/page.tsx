@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2, ArrowRight, Mail, Lock, Eye, EyeOff, Shield, User, Globe, Zap, ShieldCheck, Pencil, CheckCircle2, Link2 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
@@ -12,7 +12,7 @@ declare global {
     }
 }
 
-export default function RegisterPage() {
+function RegisterPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const vantaRef = useRef<HTMLDivElement>(null);
@@ -413,5 +413,17 @@ export default function RegisterPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex h-screen w-screen items-center justify-center bg-[#0d0221]">
+                <Loader2 className="w-10 h-10 animate-spin text-[#865BFF]" />
+            </div>
+        }>
+            <RegisterPageContent />
+        </Suspense>
     );
 }
