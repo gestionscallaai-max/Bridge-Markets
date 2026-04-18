@@ -305,7 +305,7 @@ export function renderPSRules(content: Record<string, any>, brand: BrandConfig):
 export function renderPSContact(content: Record<string, any>, brand: BrandConfig): string {
     const title = content.title || "CONTÁCTANOS";
     const subtitle = content.subtitle || "¿Tienes dudas? Nuestro equipo está listo para ayudarte.";
-    const partnerId = brand.partnerId || brand.id;
+    const partnerId = brand.partnerId;
 
     return `
     <section class="py-32 px-6 bg-[#E9EFF4] relative overflow-hidden">
