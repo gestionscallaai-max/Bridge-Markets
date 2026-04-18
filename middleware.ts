@@ -37,8 +37,8 @@ export default async function middleware(req: NextRequest) {
 
     // Logic to identify if there is a subdomain
     let affiliateId = null;
-    const isEasypanel = hostname.includes('easypanel.host');
-
+    const isEasypanel = hostname.includes('easypanel.host') || hostname.includes('easypanel.proxy');
+    
     if (!isLocalhost && !isEasypanel && domainParts.length >= 3) {
         affiliateId = domainParts[0];
     } else if (isLocalhost && domainParts.length >= 2) {
@@ -52,7 +52,9 @@ export default async function middleware(req: NextRequest) {
                            url.pathname.startsWith('/login') || 
                            url.pathname.startsWith('/register') ||
                            url.pathname.startsWith('/api') ||
-                           url.pathname.startsWith('/_next');
+                           url.pathname.startsWith('/_next') ||
+                           url.pathname.includes('favicon.ico') ||
+                           url.pathname.startsWith('/images');
 
     if (affiliateId && affiliateId !== 'www' && !isInternalRoute && !url.pathname.startsWith(`/${affiliateId}`)) {
         return NextResponse.rewrite(new URL(`/${affiliateId}${url.pathname}`, req.url));
