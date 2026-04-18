@@ -52,6 +52,8 @@ export type TranslationKeys = {
         institutional_mother_desc: string;
         synthetic_universe_total_name: string;
         synthetic_universe_total_desc: string;
+        propfirm_sinteticos_premium_name: string;
+        propfirm_sinteticos_premium_desc: string;
     };
 
     // Sidebar Navigation

@@ -197,6 +197,8 @@ export const zh: TranslationKeys = {
         institutional_mother_desc: 'Bridge Markets 的主要公司落地页，整合了所有服务。',
         synthetic_universe_total_name: '合成宇宙全集',
         synthetic_universe_total_desc: '展示完整生态系统的优质落地页：Deriv + Weltrade + Bridge Markets。',
+        propfirm_sinteticos_premium_name: 'PropFirm - Synthetics (Premium)',
+        propfirm_sinteticos_premium_desc: 'Ultra-premium design optimized for synthetic indices funding challenges. High conversion and Cyber Purple aesthetic.',
     },
     sections: {
         'hero_dark_name': '深色高级主图',

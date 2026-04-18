@@ -275,6 +275,8 @@ export const ru: TranslationKeys = {
         institutional_mother_desc: 'The main corporate landing for Bridge Markets with all services integrated.',
         synthetic_universe_total_name: 'Total Synthetics Universe',
         synthetic_universe_total_desc: 'Premium landing showcasing the complete ecosystem: Deriv + Weltrade + Bridge Markets.',
+        propfirm_sinteticos_premium_name: 'PropFirm - Synthetics (Premium)',
+        propfirm_sinteticos_premium_desc: 'Ultra-premium design optimized for synthetic indices funding challenges. High conversion and Cyber Purple aesthetic.',
     },
     sections: {
         'hero_dark_name': 'Dark Premium Hero',
