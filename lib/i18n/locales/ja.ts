@@ -108,6 +108,10 @@ export const ja: TranslationKeys = {
         viewPartnersList: 'パートナーを表示',
         hello: 'こんにちは',
         personalMetrics: 'あなたの個人的な指標',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: '読み込み中...', save: '保存', cancel: 'キャンセル', delete: '削除',

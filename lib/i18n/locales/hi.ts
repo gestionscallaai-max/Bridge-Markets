@@ -108,6 +108,10 @@ export const hi: TranslationKeys = {
         viewPartnersList: 'भागीदार देखें',
         hello: 'नमस्ते',
         personalMetrics: 'आपके व्यक्तिगत मेट्रिक्स',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: 'लोड हो रहा है...', save: 'सहेजें', cancel: 'रद्द करें', delete: 'हटाएं',

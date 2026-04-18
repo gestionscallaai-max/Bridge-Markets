@@ -155,6 +155,10 @@ export type TranslationKeys = {
         viewPartnersList: string;
         hello: string;
         personalMetrics: string;
+        conversionRate: string;
+        topLandings: string;
+        topLandingsDesc: string;
+        noLandingData: string;
     };
     // Common
     common: {

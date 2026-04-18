@@ -108,6 +108,10 @@ export const ar: TranslationKeys = {
         viewPartnersList: 'عرض الشركاء',
         hello: 'أهلاً',
         personalMetrics: 'مقاييسك الشخصية',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: 'جارٍ التحميل...', save: 'حفظ', cancel: 'إلغاء', delete: 'حذف',

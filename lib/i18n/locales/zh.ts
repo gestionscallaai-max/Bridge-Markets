@@ -54,6 +54,10 @@ export const zh: TranslationKeys = {
         adminZone: '管理专区', manageNetwork: '管理合作伙伴网络',
         manageNetworkDesc: '查看每个合作伙伴的角色、活动和统计数据',
         viewPartnersList: '查看合作伙伴', hello: '你好', personalMetrics: '你的个人指标',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: '加载中...', save: '保存', cancel: '取消', delete: '删除',

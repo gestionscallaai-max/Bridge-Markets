@@ -108,6 +108,10 @@ export const bn: TranslationKeys = {
         viewPartnersList: 'পার্টনার দেখুন',
         hello: 'হ্যালো',
         personalMetrics: 'আপনার ব্যক্তিগত মেট্রিক্স',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: 'লোড হচ্ছে...', save: 'সেভ করুন', cancel: 'বাতিল', delete: 'মুছুন',

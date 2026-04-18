@@ -108,6 +108,10 @@ export const ru: TranslationKeys = {
         viewPartnersList: 'Просмотр партнеров',
         hello: 'Привет',
         personalMetrics: 'Ваши личные метрики',
+        conversionRate: 'Conversion Rate',
+        topLandings: 'Top Landings Performance',
+        topLandingsDesc: 'Detailed conversion analysis by generated landing page.',
+        noLandingData: 'Not enough performance data yet.',
     },
     common: {
         loading: 'Загрузка...', save: 'Сохранить', cancel: 'Отмена', delete: 'Удалить',
