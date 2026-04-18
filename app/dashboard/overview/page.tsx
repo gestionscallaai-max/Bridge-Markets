@@ -58,21 +58,21 @@ export default function OverviewPage() {
 
             try {
                 // ── Parallelized Initial Queries: Partner identity and total counts
-                const [partnerResult, leadsResult, clicksResult, landingsResult] = await Promise.all([
+                const [p_res, l, c, ln] = await Promise.all([
                     supabase.from('partners').select('name, role, partner_id').eq('id', user.id).single(),
                     (isAdmin ? supabase.from('leads').select('*', { count: 'exact', head: true }) : supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id)),
                     (isAdmin ? supabase.from('clicks').select('*', { count: 'exact', head: true }) : supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id)),
                     (isAdmin ? supabase.from('landings').select('*', { count: 'exact', head: true }) : supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id))
                 ]);
 
-                if (partnerResult.data) {
-                    const p = partnerResult.data;
+                if (p_res.data) {
+                    const p = p_res.data;
                     if (p.name) setPartnerName(p.name);
                     setPartnerId(p.partner_id || ('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase()));
                 }
 
                 // Global CR computation
-                const globalCR = clicksResult.count ? (leadsResult.count! / clicksResult.count) * 100 : 0;
+                const globalCR = c.count ? (l.count! / c.count) * 100 : 0;
 
                 // ── Sequential Admin Data (If needed, can also be parallelized if we know in advance)
                 let topPartnersData = [];
