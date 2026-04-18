@@ -352,6 +352,7 @@ export default function LibraryDocuments() {
 }
 
 function LibraryUploadModal({ onClose, onSuccess, categories }: { onClose: () => void, onSuccess: () => void, categories: any[] }) {
+    const { t } = useLanguage();
     const [step, setStep] = useState<'selection' | 'uploading'>('selection');
     const [fileType, setFileType] = useState<'single' | 'migration'>('single');
     const [selectedCategory, setSelectedCategory] = useState(categories[0]?.id || 'manuales');
