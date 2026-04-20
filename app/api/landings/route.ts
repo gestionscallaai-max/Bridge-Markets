@@ -159,7 +159,7 @@ export async function POST(request: Request) {
         const adminNotifMessage = `El socio ha creado la landing "${slug}". Necesita revisión.`;
         
         if (admins && admins.length > 0) {
-            const notifications = admins.map(admin => ({
+            const notifications = admins.map((admin: any) => ({
                 user_id: admin.id,
                 title: adminNotifTitle,
                 message: adminNotifMessage,
