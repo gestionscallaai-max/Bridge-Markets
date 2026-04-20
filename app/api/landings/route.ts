@@ -7,11 +7,15 @@ let _supabaseAdmin: any = null;
 const getSupabaseAdmin = () => {
     if (_supabaseAdmin) return _supabaseAdmin;
 
-    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 
+    let url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    let key = process.env.SUPABASE_SERVICE_ROLE_KEY || 
                 process.env.SUPABASE_ANON_KEY || 
                 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
                 process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+
+    // Protección contra placeholders de EasyPanel
+    if (url && (url.includes('tu_url') || url.includes('your_url'))) url = undefined;
+    if (key && (key.includes('tu_llave') || key.includes('your_key'))) key = undefined;
 
     if (!url || !key) {
         console.error('--- SUPABASE ERROR ---');
