@@ -1,11 +1,33 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Use service role or fallback to the publishable key
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!
-);
+// Helper to get a robust admin client
+const getSupabaseAdmin = () => {
+    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 
+                process.env.SUPABASE_ANON_KEY || 
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
+                process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+
+    console.log('--- SUPABASE DIAGNOSTIC ---');
+    console.log('URL defined:', !!url);
+    console.log('Key defined:', !!key);
+    if (key) {
+        console.log('Key prefix:', key.substring(0, 10) + '...');
+        if (!key.startsWith('eyJ')) {
+            console.warn('CRITICAL: The API key does not start with "eyJ". It is likely invalid for Supabase.');
+        }
+    }
+    console.log('---------------------------');
+
+    if (!url || !key) {
+        throw new Error('Missing Supabase environment variables (URL or Key)');
+    }
+
+    return createClient(url, key);
+};
+
+const supabaseAdmin = getSupabaseAdmin();
 
 export async function GET(request: Request) {
     try {
