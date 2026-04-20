@@ -1,33 +1,29 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Helper to get a robust admin client
+// Lazy initialization of the admin client
+let _supabaseAdmin: any = null;
+
 const getSupabaseAdmin = () => {
+    if (_supabaseAdmin) return _supabaseAdmin;
+
     const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 
                 process.env.SUPABASE_ANON_KEY || 
                 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
                 process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 
-    console.log('--- SUPABASE DIAGNOSTIC ---');
-    console.log('URL defined:', !!url);
-    console.log('Key defined:', !!key);
-    if (key) {
-        console.log('Key prefix:', key.substring(0, 10) + '...');
-        if (!key.startsWith('eyJ')) {
-            console.warn('CRITICAL: The API key does not start with "eyJ". It is likely invalid for Supabase.');
-        }
-    }
-    console.log('---------------------------');
-
     if (!url || !key) {
-        throw new Error('Missing Supabase environment variables (URL or Key)');
+        console.error('--- SUPABASE ERROR ---');
+        console.error('URL defined:', !!url);
+        console.error('Key defined:', !!key);
+        console.error('----------------------');
+        return null;
     }
 
-    return createClient(url, key);
+    _supabaseAdmin = createClient(url, key);
+    return _supabaseAdmin;
 };
-
-const supabaseAdmin = getSupabaseAdmin();
 
 export async function GET(request: Request) {
     try {
@@ -36,6 +32,11 @@ export async function GET(request: Request) {
 
         if (!partnerId) {
             return NextResponse.json({ error: 'Partner ID required' }, { status: 400 });
+        }
+
+        const supabaseAdmin = getSupabaseAdmin();
+        if (!supabaseAdmin) {
+            return NextResponse.json({ error: 'Supabase configuration missing on server' }, { status: 500 });
         }
 
         const { data, error } = await supabaseAdmin
@@ -63,6 +64,15 @@ export async function POST(request: Request) {
         const { userId, slug, html, data } = body;
 
         console.log('API POST - Saving landing:', { slug, userId });
+
+        const supabaseAdmin = getSupabaseAdmin();
+        if (!supabaseAdmin) {
+            return NextResponse.json({ 
+                success: false, 
+                error: 'Configuration Error', 
+                details: 'Supabase URL or Key is not defined in the server environment.' 
+            }, { status: 500 });
+        }
 
         // Resolve the real partner_id (UUID)
         let realPartnerId = data.partnerId;
@@ -182,6 +192,11 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'Landing ID or Slug required' }, { status: 400 });
         }
 
+        const supabaseAdmin = getSupabaseAdmin();
+        if (!supabaseAdmin) {
+            return NextResponse.json({ error: 'Supabase configuration missing' }, { status: 500 });
+        }
+
         let query = supabaseAdmin.from('landings').delete();
         
         if (id) {
@@ -236,6 +251,11 @@ export async function PATCH(request: Request) {
 
         if (!id || !status) {
             return NextResponse.json({ error: 'Landing ID and Status required' }, { status: 400 });
+        }
+
+        const supabaseAdmin = getSupabaseAdmin();
+        if (!supabaseAdmin) {
+            return NextResponse.json({ error: 'Supabase configuration missing' }, { status: 500 });
         }
 
         const { data, error } = await supabaseAdmin
