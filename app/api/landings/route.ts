@@ -7,21 +7,27 @@ let _supabaseAdmin: any = null;
 const getSupabaseAdmin = () => {
     if (_supabaseAdmin) return _supabaseAdmin;
 
-    let url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-    let key = process.env.SUPABASE_SERVICE_ROLE_KEY || 
-                process.env.SUPABASE_ANON_KEY || 
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
-                process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+    // Función interna para limpiar placeholders
+    const clean = (val: string | undefined) => {
+        if (!val) return undefined;
+        const low = val.toLowerCase();
+        if (low.includes('tu_url') || low.includes('your_url') || 
+            low.includes('tu_llave') || low.includes('your_key') ||
+            low === 'undefined' || low === 'null' || low === '') return undefined;
+        return val;
+    };
 
-    // Protección contra placeholders de EasyPanel
-    if (url && (url.includes('tu_url') || url.includes('your_url'))) url = undefined;
-    if (key && (key.includes('tu_llave') || key.includes('your_key'))) key = undefined;
+    const url = clean(process.env.SUPABASE_URL) || clean(process.env.NEXT_PUBLIC_SUPABASE_URL);
+    const key = clean(process.env.SUPABASE_SERVICE_ROLE_KEY) || 
+                clean(process.env.SUPABASE_ANON_KEY) || 
+                clean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) || 
+                clean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY);
 
     if (!url || !key) {
-        console.error('--- SUPABASE ERROR ---');
-        console.error('URL defined:', !!url);
-        console.error('Key defined:', !!key);
-        console.error('----------------------');
+        console.error('--- SUPABASE CONFIG ERROR ---');
+        console.error('Final URL resolved:', !!url);
+        console.error('Final Key resolved:', !!key);
+        console.error('-----------------------------');
         return null;
     }
 
