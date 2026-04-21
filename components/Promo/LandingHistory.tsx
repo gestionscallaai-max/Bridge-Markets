@@ -16,7 +16,8 @@ import {
     FileText,
     ExternalLink,
     Trash2,
-    Info
+    Info,
+    Pencil
 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { formatDateUpperCase } from '@/lib/utils';
