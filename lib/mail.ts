@@ -1,6 +1,24 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy initialization of Resend client to avoid build errors when API key is missing
+let _resend: Resend | null = null;
+
+const getResend = () => {
+    if (_resend) return _resend;
+    
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey || apiKey === 'undefined' || apiKey === 'null' || apiKey === '') {
+        return null;
+    }
+    
+    try {
+        _resend = new Resend(apiKey);
+        return _resend;
+    } catch (e) {
+        console.error('Failed to initialize Resend:', e);
+        return null;
+    }
+};
 
 /**
  * Notifica a los administradores que se ha creado una nueva landing
@@ -11,7 +29,8 @@ export async function notifyAdminNewLanding(data: {
     landingType: string;
     adminEmails: string[];
 }) {
-    if (!process.env.RESEND_API_KEY || data.adminEmails.length === 0) return;
+    const resend = getResend();
+    if (!resend || data.adminEmails.length === 0) return;
 
     try {
         console.log('Resend: Sending email to admins...', data.adminEmails);
@@ -51,7 +70,8 @@ export async function notifyPartnerStatusUpdate(data: {
     status: 'approved' | 'rejected';
     adminNotes?: string;
 }) {
-    if (!process.env.RESEND_API_KEY || !data.partnerEmail) return;
+    const resend = getResend();
+    if (!resend || !data.partnerEmail) return;
 
     const isApproved = data.status === 'approved';
     const subject = isApproved 
