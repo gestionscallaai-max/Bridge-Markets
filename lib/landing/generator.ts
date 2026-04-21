@@ -692,7 +692,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Bridge Markets | ${template?.name || 'Trading Platform'}</title>
-    ${getSharedHead(template?.name || 'Trading Platform', 'Access institutional markets', data.language)}
+    ${getSharedHead(template?.name || 'Trading Platform', 'Access institutional markets')}
     ${translateScripts}
     <style>
         body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background: transparent; }
