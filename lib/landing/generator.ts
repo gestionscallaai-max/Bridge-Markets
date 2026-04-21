@@ -516,6 +516,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         instagram: data.instagram,
         telegram: data.telegram,
         tiktok: data.tiktok,
+        youtube: data.youtube,
         ctaLink: data.ctaLink,
         videoUrl: data.videoUrl,
         logoUrl: data.customLogoUrl || '/images/logo-bm-blanco.png',

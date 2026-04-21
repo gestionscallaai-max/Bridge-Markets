@@ -30,6 +30,7 @@ export interface BrandConfig {
     instagram?: string;
     telegram?: string;
     tiktok?: string;
+    youtube?: string;
     // Campo editable: Link personalizado de referido o CTA
     ctaLink?: string;
     // URL del logo del IB

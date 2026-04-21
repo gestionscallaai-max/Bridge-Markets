@@ -62,6 +62,7 @@ export interface LandingData {
     instagram?: string;
     telegram?: string;
     tiktok?: string;
+    youtube?: string;
     ctaLink?: string;
     videoUrl?: string;
     customLogoUrl?: string;
