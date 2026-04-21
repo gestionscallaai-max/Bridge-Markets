@@ -5,3 +5,4 @@
 
 export * from './landing/generator';
 export * from './landing/dictionary';
+export * from './landing/types';

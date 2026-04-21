@@ -14,7 +14,7 @@ import Tilt from 'react-parallax-tilt';
 import ModularPreview from '@/components/Landing/ModularPreview';
 import {
     generateLandingHTML, generateModularLandingHTML, openLandingPreview,
-    type LandingData, type ModularConfig
+    type LandingData, type ModularConfig, type BrandConfig
 } from '@/lib/landing-generator';
 import {
     SECTION_CATALOG, SECTION_CATEGORIES, SECTION_RENDERERS,
