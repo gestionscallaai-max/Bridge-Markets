@@ -58,7 +58,10 @@ export default function OverviewPage() {
         async function fetchStats() {
             setLoading(true);
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
+            if (!user) {
+                setLoading(false);
+                return;
+            }
 
             try {
                 // ── Parallelized Initial Queries: Partner identity and total counts
