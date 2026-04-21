@@ -598,7 +598,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                 telegram, tiktok, youtube, ctaLink, videoUrl,
                 logoUrl: customLogoUrl || '/images/logo-bm-blanco.png'
             };
-            const html = generateModularLandingHTML(data.modularConfig, brandConfig);
+            const html = generateModularLandingHTML(data.modularConfig!, brandConfig);
             setGeneratedHTML(html);
 
             // Save to Supabase
