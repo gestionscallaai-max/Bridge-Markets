@@ -498,6 +498,8 @@ export function generateModularLandingHTML(data: LandingData): string {
         telegram: data.telegram,
         tiktok: data.tiktok,
         ctaLink: data.ctaLink,
+        videoUrl: data.videoUrl,
+        logoUrl: data.customLogoUrl,
     };
 
     const theme = template?.theme || 'dark';
@@ -680,7 +682,12 @@ export function generateModularLandingHTML(data: LandingData): string {
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-[100] px-6 py-6 transition-all duration-300" id="main-nav">
         <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-full px-8 h-16 backdrop-blur-3xl">
-            <div class="text-2xl font-black tracking-tighter text-white font-headline">Bridge <span class="text-[#865BFF]">Markets</span></div>
+            <div class="flex items-center">
+                ${brandConfig.logoUrl ? 
+                    `<img src="${brandConfig.logoUrl}" alt="Logo" class="h-8 md:h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''
+                }
+                <div class="text-2xl font-black tracking-tighter text-white font-headline" style="${brandConfig.logoUrl ? 'display: none;' : ''}">Bridge <span class="text-[#865BFF]">Markets</span></div>
+            </div>
             <div class="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
                 <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.plat}</a>
                 <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.sec}</a>
@@ -708,6 +715,27 @@ export function generateModularLandingHTML(data: LandingData): string {
     </div>
 
     <script>
+        function openVideoModal(url) {
+            let videoId = '';
+            if (url.includes('youtube.com/watch?v=')) videoId = url.split('v=')[1].split('&')[0];
+            else if (url.includes('youtu.be/')) videoId = url.split('be/')[1].split('?')[0];
+            const embedUrl = videoId ? 'https://www.youtube.com/embed/' + videoId + '?autoplay=1' : url;
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-xl p-6';
+            modal.innerHTML = \`
+                <div class="relative w-full max-w-5xl aspect-video bg-black rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl scale-95 opacity-0 transition-all duration-500" id="video-container">
+                    <button onclick="this.parentElement.parentElement.remove()" class="absolute top-8 right-8 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all z-10">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                    <iframe src="\${embedUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            \`;
+            document.body.appendChild(modal);
+            setTimeout(() => {
+                const container = document.getElementById('video-container');
+                if (container) container.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
         document.addEventListener('DOMContentLoaded', () => {
             // ─── Reveal System ───
             const reveals = document.querySelectorAll('.section-reveal');

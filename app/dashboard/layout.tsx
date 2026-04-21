@@ -189,6 +189,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
             children: [
                 { href: '/dashboard/promo/overview', label: t.nav.materialPost },
                 { href: '/dashboard/landing', label: t.nav.landingTools },
+                { href: '/dashboard/promo/history', label: 'Mis Landings' },
                 { href: '/dashboard/links', label: t.nav.referralLinks },
                 { href: '/dashboard/promo/guidelines', label: t.nav.guidelines },
             ]
@@ -216,6 +217,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
         if (pathname?.startsWith('/dashboard/support')) return { main: t.nav.support, accent: '' };
         if (pathname?.startsWith('/dashboard/landing')) return { main: t.landing.title, accent: t.landing.subtitle };
         if (pathname?.startsWith('/dashboard/promo/overview')) return { main: t.nav.promo, accent: t.nav.materialPost };
+        if (pathname?.startsWith('/dashboard/marketing/generator')) return { main: 'Marketing', accent: 'AI Generator' };
         if (pathname?.startsWith('/dashboard/links')) return { main: t.nav.referralLinks, accent: '' };
         if (pathname?.startsWith('/dashboard/admin/partners')) return { main: t.nav.admin, accent: t.nav.partnerManagement };
         return { main: isAdmin ? t.overview.adminPanel : 'Dashboard', accent: '' };
@@ -248,11 +250,19 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                     <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '20px 20px' }} />
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[200px] bg-[#865BFF]/10 rounded-full blur-[100px]" />
                     <div className="absolute bottom-20 left-0 w-[200px] h-[200px] bg-indigo-500/5 rounded-full blur-[80px]" />
+                    
+                    {/* Sidebar Watermark */}
+                    <div className="absolute bottom-40 -left-10 w-64 h-64 opacity-[0.03] grayscale brightness-0 invert pointer-events-none rotate-12">
+                        <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                    </div>
 
                     {/* Logo */}
-                    <div className="relative z-10 flex items-center justify-between px-6 h-[72px]">
-                        <img src="/images/logo.png" alt="Bridge Markets" className="h-9 object-contain" />
-                        <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden text-white/50 hover:text-white">
+                    <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-8 px-6">
+                        <img src="/images/logo BM blanco.png" alt="Bridge Markets" className="w-full max-w-[220px] h-auto object-contain transition-transform duration-500 hover:scale-105" />
+                        <button 
+                            onClick={() => setIsMobileMenuOpen(false)} 
+                            className="lg:hidden absolute top-8 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all"
+                        >
                             <X className="w-6 h-6" />
                         </button>
                     </div>
@@ -260,7 +270,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                     <div className="relative z-10 mx-5"><div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" /></div>
 
                     {/* Navigation */}
-                    <div className="relative z-10 flex-1 overflow-y-auto py-5 px-3" style={{ scrollbarWidth: 'none' }}>
+                    <nav className="relative z-10 flex-1 overflow-y-auto py-5 px-3 pointer-events-auto" style={{ scrollbarWidth: 'none' }}>
                         <nav className="space-y-0.5">
                             {filteredMenu.map((item) => {
                                 const Icon = item.icon;
@@ -322,7 +332,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                                 );
                             })}
                         </nav>
-                    </div>
+                    </nav>
 
                     <div className="relative z-10 mx-5"><div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" /></div>
 
@@ -380,9 +390,10 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#865BFF]/40 to-transparent" />
 
                         <div className="flex items-center gap-3 lg:gap-4">
-                            <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">
+                            <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 shrink-0">
                                 <Menu className="w-5 h-5" />
                             </button>
+                            <img src="/images/LOGO BM NEGRO.png" alt="Logo" className="lg:hidden h-8 object-contain shrink-0" />
                             <div>
                                 <h1 className="text-sm lg:text-lg font-medium tracking-tight text-slate-800 leading-tight">
                                     {title.main}{' '}

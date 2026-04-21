@@ -6,7 +6,8 @@ import {
     ChevronRight, Layout, Download,
     Image as ImageIcon, Upload, Sparkles, Search,
     ArrowRight, Languages, Link2, TrendingUp, Rocket, Play,
-    Pencil, Plus, BarChart3, Shield, Zap, Briefcase, Cpu, Coins, Crown, Sparkle, FileText
+    Pencil, Plus, BarChart3, Shield, Zap, Briefcase, Cpu, Coins, Crown, Sparkle, FileText,
+    History as HistoryIcon
 } from 'lucide-react';
 import {
     generateModularLandingHTML, openLandingPreview,
@@ -158,6 +159,11 @@ export default function PromoMaterialsPage() {
                 }} />
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#865BFF]/15 rounded-full blur-[150px] -translate-y-1/3 translate-x-1/4" />
                 <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-indigo-500/10 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4" />
+                
+                {/* Watermark Logo */}
+                <div className="absolute right-10 bottom-0 w-64 h-64 opacity-[0.05] grayscale brightness-0 invert pointer-events-none">
+                    <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                </div>
 
                 <div className="relative z-10 px-8 pt-8 pb-6">
                     <div className="flex items-start justify-between gap-8">
@@ -224,14 +230,23 @@ export default function PromoMaterialsPage() {
                                 <FileText className="w-4 h-4" /> {t.promo.documentsTab}
                             </button>
                         </div>
-                        <button
-                            onClick={() => router.push('/dashboard/landing')}
-                            className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[#865BFF] to-[#6635de] text-white shadow-lg shadow-[#865BFF]/30 hover:shadow-[#865BFF]/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
-                        >
-                            <Plus className="w-4 h-4" />
-                            <span>{t.landing.title} +</span>
-                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => router.push('/dashboard/promo/history')}
+                                className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-white text-[#0d0221] shadow-lg border border-slate-200 hover:bg-slate-50 transition-all"
+                            >
+                                <HistoryIcon className="w-4 h-4" />
+                                <span>{t.landing.history}</span>
+                            </button>
+                            <button
+                                onClick={() => router.push('/dashboard/landing')}
+                                className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-[#865BFF] to-[#6635de] text-white shadow-lg shadow-[#865BFF]/30 hover:shadow-[#865BFF]/50 hover:scale-[1.02] active:scale-[0.98] transition-all group"
+                            >
+                                <Plus className="w-4 h-4" />
+                                <span>{t.landing.title} +</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -378,7 +393,9 @@ export default function PromoMaterialsPage() {
 
             {/* ─── BANNERS TAB ─── */}
             {mainTab === 'banners' && (
-                <MaterialGallery userRole={userRole} />
+                <div className="space-y-6">
+                    <MaterialGallery userRole={userRole} />
+                </div>
             )}
 
             {/* ─── DOCUMENTS TAB ─── */}

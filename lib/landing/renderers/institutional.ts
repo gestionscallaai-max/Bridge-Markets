@@ -7,143 +7,178 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
     const ctaLink = brand.ctaLink || '#registro';
 
     return `
-    <section class="relative min-h-screen flex items-center pt-24 pb-32 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Fondo Institucional Premium -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-32 px-8 overflow-hidden bg-[#05010f]">
+        <!-- Fondo Arquitectónico -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-[-20%] right-[-10%] w-[1200px] h-[1200px] bg-[#865BFF]/10 rounded-full blur-[200px] animate-pulse"></div>
-            <div class="absolute bottom-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[180px]"></div>
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full text-[25vw] font-black text-white/[0.02] uppercase tracking-tighter leading-none select-none pointer-events-none flex items-center justify-center overflow-hidden">
+                INSTITUTIONAL
+            </div>
+            <div class="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-[#865BFF]/10 rounded-full blur-[150px]"></div>
+            <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px]"></div>
         </div>
-        
+
         <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+            <div class="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-0">
                 
-                <!-- Columna Izquierda: El Mensaje de Poder -->
-                <div class="lg:col-span-7 section-reveal">
-                    <div class="flex items-center gap-6 mb-16">
-                        <img src="/logo.png" alt="BM" class="h-10 brightness-[10]">
-                        <div class="h-8 w-[1px] bg-white/20"></div>
-                        <div class="flex flex-col">
-                            <span class="text-[9px] font-black uppercase tracking-[0.5em] text-[#865BFF] mb-1">PARTNER OFICIAL</span>
-                            <span class="text-sm font-bold text-white/80">${ibName}</span>
-                        </div>
+                <!-- Columna de Contenido Principal -->
+                <div class="lg:w-7/12 section-reveal z-20">
+                    <div class="inline-flex items-center gap-6 px-6 py-3 bg-white/5 border border-white/10 rounded-full mb-16 backdrop-blur-xl">
+                        <div class="w-2 h-2 rounded-full bg-[#865BFF] animate-ping"></div>
+                        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Official Institutional Partner — ${ibName}</span>
                     </div>
-                    
-                    <h1 class="text-7xl md:text-9xl lg:text-[10rem] font-black font-headline leading-[0.82] mb-12 tracking-tightest text-white uppercase">
+
+                    <h1 class="text-6xl md:text-8xl lg:text-[9rem] font-black leading-[0.85] mb-12 tracking-tightest text-white uppercase mix-blend-difference">
                         ${c.title.split(' ').slice(0, 2).join(' ')} <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/50">${c.title.split(' ').slice(2).join(' ')}</span>
+                        <span class="relative inline-block">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#865BFF] to-white">${c.title.split(' ').slice(2).join(' ')}</span>
+                            <div class="absolute -bottom-4 left-0 w-full h-2 bg-[#865BFF]/30 blur-sm rounded-full"></div>
+                        </span>
                     </h1>
-                    
-                    <p class="text-2xl md:text-3xl text-white/40 leading-relaxed max-w-2xl mb-16 font-light">
-                        ${c.subtitle}
-                    </p>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-20">
-                        <div class="p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-3xl shadow-2xl">
-                            <div class="flex items-center gap-4 mb-4">
-                                <span class="material-symbols-outlined text-[#865BFF]">security</span>
-                                <span class="text-[11px] font-black text-white uppercase tracking-widest">REGULACIÓN GLOBAL</span>
-                            </div>
-                            <p class="text-sm text-white/40 font-medium">UK & Marshall Islands Compliance standards.</p>
-                        </div>
-                        <div class="p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-3xl shadow-2xl">
-                            <div class="flex items-center gap-4 mb-4">
-                                <span class="material-symbols-outlined text-[#865BFF]">speed</span>
-                                <span class="text-[11px] font-black text-white uppercase tracking-widest">EJECUCIÓN ECN</span>
-                            </div>
-                            <p class="text-sm text-white/40 font-medium">Servidores BridgeMarkets-MT5 de baja latencia.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-8">
-                        <a href="${ctaLink}" class="group relative px-12 py-6 bg-[#865BFF] text-white font-black rounded-3xl shadow-[0_0_60px_rgba(134,91,255,0.4)] hover:shadow-[0_0_100px_rgba(134,91,255,0.6)] transition-all transform hover:-translate-y-2 flex items-center justify-center gap-6 text-xl">
-                            <span class="uppercase tracking-widest">${c.cta1}</span>
-                            <span class="material-symbols-outlined group-hover:translate-x-3 transition-transform text-3xl">trending_up</span>
-                        </a>
-                        <a href="#ecosistema" class="px-12 py-6 bg-white/5 border border-white/10 text-white font-black rounded-3xl hover:bg-white/10 hover:text-black hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-xl uppercase tracking-widest backdrop-blur-3xl">
-                            ${c.cta2}
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Columna Derecha: El Activo Institucional -->
-                <div class="lg:col-span-5 relative lg:block hidden section-reveal">
-                    <div class="relative group">
-                        <div class="absolute -inset-20 bg-[#865BFF]/10 rounded-full blur-[150px] animate-pulse"></div>
-                        <div class="absolute -inset-10 bg-blue-600/5 rounded-full blur-[120px]"></div>
+                    <div class="max-w-xl">
+                        <p class="text-2xl md:text-3xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight border-l-2 border-[#865BFF] pl-10">
+                            ${c.phrase}
+                        </p>
                         
-                        <div class="relative z-10 rounded-[6rem] overflow-hidden border border-white/10 shadow-[0_60px_120px_rgba(0,0,0,0.6)] transform rotate-2 group-hover:rotate-0 transition-all duration-1000 aspect-[3/4] bg-black">
-                            <img src="/institutional_hero_3d.png" alt="Bridge Markets Institutional" class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000 opacity-90">
+                        <div class="flex flex-wrap gap-12 items-center">
+                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden transform hover:-translate-y-2 transition-all duration-500 shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-[0_0_80px_rgba(134,91,255,0.4)]">
+                                <div class="absolute inset-0 bg-[#865BFF] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                                <span class="relative z-10 uppercase tracking-[0.5em] text-sm group-hover:text-white">${c.ctaText}</span>
+                            </a>
                             
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#05010f] via-transparent to-transparent"></div>
-                            
-                            <!-- Overlay Card: Market Stats -->
-                            <div class="absolute bottom-12 left-12 right-12 p-8 bg-black/40 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-2xl">
-                                <div class="flex justify-between items-center mb-6">
-                                    <p class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">LIVE VOLUMEN (24H)</p>
-                                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            ${c.videoUrl ? `
+                            <button onclick="openVideoModal('${c.videoUrl}')" class="group flex items-center gap-6">
+                                <div class="w-20 h-20 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#865BFF] group-hover:scale-110 transition-all duration-500 relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[#865BFF] opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                                    <span class="material-symbols-outlined text-3xl text-white group-hover:text-[#865BFF]">play_arrow</span>
                                 </div>
-                                <p class="text-5xl font-black text-white tracking-tighter mb-2">$2,450,189,200</p>
-                                <div class="flex gap-4">
-                                    <span class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Global Aggregation</span>
-                                    <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">+4.2%</span>
+                                <div class="flex flex-col">
+                                    <span class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] mb-1">Corporate Reveal</span>
+                                    <span class="text-[11px] font-black text-white uppercase tracking-widest group-hover:text-[#865BFF] transition-colors">WATCH VIDEO</span>
                                 </div>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                <!-- Composición Visual Asimétrica -->
+                <div class="lg:w-5/12 relative section-reveal">
+                    <div class="relative w-full aspect-square lg:aspect-auto lg:h-[800px] flex items-center justify-center">
+                        
+                        <!-- Main 3D Asset -->
+                        <div class="relative z-10 w-full h-full flex items-center justify-center transform lg:-translate-x-20">
+                            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Premium 3D" class="w-full h-full object-contain filter drop-shadow-[0_0_50px_rgba(134,91,255,0.3)] animate-float">
+                        </div>
+
+                        <!-- Floating Tech Card -->
+                        <div class="absolute top-1/4 -right-10 lg:right-0 z-20 p-8 bg-[#05010f]/80 backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-700 max-w-[280px]">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-10 h-10 rounded-xl bg-[#865BFF]/20 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[#865BFF] text-xl">account_balance</span>
+                                </div>
+                                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest leading-none">Security Protocol</span>
+                            </div>
+                            <p class="text-sm text-white font-medium leading-relaxed mb-4">Institutional Liquidity aggregated through Tier-1 prime brokers.</p>
+                            <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full w-[85%] bg-[#865BFF] rounded-full shadow-[0_0_10px_rgba(134,91,255,0.5)]"></div>
                             </div>
                         </div>
+
+                        <!-- Floating Performance Card -->
+                        <div class="absolute bottom-1/4 -left-10 lg:-left-20 z-0 p-8 bg-white/5 backdrop-blur-md border border-white/10 rounded-[3rem] shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-700 min-w-[240px]">
+                            <div class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-4 text-center">Server Latency</div>
+                            <div class="text-4xl font-black text-white text-center mb-2 tracking-tighter">0.02ms</div>
+                            <div class="flex justify-center">
+                                <div class="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black rounded-full uppercase tracking-widest">Optimized</div>
+                            </div>
+                        </div>
+
+                        <!-- Background Elements -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#865BFF]/20 via-transparent to-transparent rounded-full blur-3xl opacity-30"></div>
                     </div>
                 </div>
 
             </div>
         </div>
-    </section>`;
+
+        <style>
+            @keyframes float {
+                0%, 100% { transform: translateY(0) rotate(0); }
+                50% { transform: translateY(-30px) rotate(2deg); }
+            }
+            .animate-float {
+                animation: float 8s ease-in-out infinite;
+            }
+        </style>
+    </section>
+    `;
 }
 
 export function renderInstAbout(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-48 bg-[#05010f] relative border-y border-white/5">
+    <section class="py-64 bg-[#05010f] relative overflow-hidden">
+        <!-- Fondo Arquitectónico -->
+        <div class="absolute inset-0 z-0 opacity-30">
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-900/50"></div>
+            <img src="/images/imagenes%20nuevas/caballo%20negro.png" class="absolute top-1/2 left-0 -translate-y-1/2 w-[60%] h-auto object-contain opacity-5 grayscale pointer-events-none" alt="Background">
+        </div>
+
         <div class="max-w-7xl mx-auto px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center section-reveal">
-                <div>
-                    <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em] mb-10 block">Institucional</span>
-                    <h2 class="text-6xl md:text-8xl font-black text-white leading-[0.85] mb-16 uppercase tracking-tightest">QUIÉNES <br><span class="text-white/20">SOMOS</span></h2>
+            <div class="flex flex-col lg:flex-row items-center gap-24 lg:gap-40">
+                <div class="lg:w-6/12 section-reveal">
+                    <div class="flex items-center gap-4 mb-12">
+                        <div class="w-12 h-[1px] bg-[#865BFF]"></div>
+                        <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.8em]">Core Identity</span>
+                    </div>
                     
-                    <div class="space-y-10 text-2xl text-white/50 font-light leading-relaxed">
-                        <p>Bridge Markets es un broker internacional con presencia en múltiples mercados globales. Operamos desde el Reino Unido y las Islas Marshall, ofreciendo acceso a los mercados financieros con tecnología de nivel institucional.</p>
-                        <p>Nuestra misión es conectar traders disciplinados con oportunidades reales de capital, ofreciendo un ecosistema completo que incluye trading personal, gestión de capital e instrumentos sintéticos exclusivos.</p>
-                        <div class="p-8 border-l-8 border-[#865BFF] bg-white/5 rounded-r-3xl">
-                             <p class="text-white font-medium italic italic text-xl">"Creemos que el verdadero talento en los mercados no se mide por la suerte, sino por la disciplina, la consistencia y la gestión profesional del riesgo."</p>
+                    <h2 class="text-7xl md:text-[8rem] font-black text-white leading-[0.85] mb-16 uppercase tracking-tightest italic">
+                        REDEFINING <br><span class="text-white/20">THE STANDARD.</span>
+                    </h2>
+                    
+                    <div class="space-y-12 text-2xl text-white/50 font-light leading-relaxed max-w-xl">
+                        <p class="first-letter:text-6xl first-letter:font-black first-letter:text-[#865BFF] first-letter:mr-3 first-letter:float-left">
+                            Bridge Markets es una arquitectura financiera global. Operamos con tecnología de nivel institucional, conectando el talento real con infraestructuras de capital sólidas en los mercados más dinámicos del mundo.
+                        </p>
+                        <div class="p-10 border-l-4 border-[#865BFF] bg-white/[0.02] backdrop-blur-xl">
+                             <p class="text-white font-medium italic text-xl leading-relaxed">"La disciplina es el único algoritmo que garantiza la consistencia en los mercados financieros."</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-8">
+                <div class="lg:w-6/12 grid grid-cols-2 gap-10 section-reveal">
                      ${[
-                         { val: '2021', label: 'Fundación' },
-                         { val: '9+', label: 'Idiomas' },
-                         { val: '4', label: 'Mercados' },
-                         { val: '24/7', label: 'Soporte' }
-                     ].map(stat => `
-                        <div class="p-12 bg-gradient-to-b from-[#865BFF]/10 to-transparent border border-white/10 rounded-[3rem] text-center hover:border-[#865BFF]/50 transition-all duration-500 group backdrop-blur-2xl relative overflow-hidden">
-                            <div class="absolute inset-0 bg-[#865BFF] opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                            <div class="text-5xl font-black text-white mb-4 group-hover:-translate-y-2 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(134,91,255,0.5)]">${stat.val}</div>
-                            <div class="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] group-hover:text-white/90 transition-colors">${stat.label}</div>
+                         { val: '2021', label: 'Foundation' },
+                         { val: '9+', label: 'Languages' },
+                         { val: '4', label: 'Global Markets' },
+                         { val: '24/7', label: 'Expert Support' }
+                     ].map((stat, i) => `
+                        <div class="p-12 bg-white/[0.02] border border-white/5 rounded-none text-center hover:bg-[#865BFF] hover:text-white transition-all duration-700 group relative overflow-hidden ${i % 2 !== 0 ? 'lg:translate-y-20' : ''}">
+                            <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                            <div class="relative z-10">
+                                <div class="text-6xl font-black mb-4 tracking-tighter">${stat.val}</div>
+                                <div class="text-[9px] font-black uppercase tracking-[0.4em] opacity-40 group-hover:opacity-100">${stat.label}</div>
+                            </div>
                         </div>
                      `).join('')}
-                     
-                     <div class="col-span-2 p-10 bg-white/5 border border-white/10 rounded-[3rem] mt-8">
-                        <div class="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-8">Entidades Registradas</div>
-                        <div class="space-y-6">
-                            <div>
-                                <h4 class="text-white font-black text-sm uppercase mb-2">Bridge Markets Limited — Reino Unido</h4>
-                                <p class="text-[10px] text-white/40 leading-relaxed uppercase">Registro 15159310. Hessle, HU13 9PD, Yorkshire, United Kingdom.</p>
-                            </div>
-                            <div class="h-px w-full bg-white/10"></div>
-                            <div>
-                                <h4 class="text-white font-black text-sm uppercase mb-2">Bridge Markets Ltd. — Islas Marshall</h4>
-                                <p class="text-[10px] text-white/40 leading-relaxed uppercase">Registro 113891. Estructura de expansión global del grupo.</p>
-                            </div>
-                        </div>
-                     </div>
+                </div>
+            </div>
+
+            <!-- Legals Card -->
+            <div class="mt-40 grid grid-cols-1 lg:grid-cols-12 gap-10 section-reveal">
+                <div class="lg:col-span-4 p-12 bg-[#865BFF] text-white flex flex-col justify-between">
+                    <h3 class="text-4xl font-black uppercase tracking-tightest leading-none mb-10 italic">LEGAL <br>FRAMEWORK</h3>
+                    <span class="material-symbols-outlined text-6xl opacity-30">gavel</span>
+                </div>
+                <div class="lg:col-span-8 p-12 bg-white/5 border border-white/10 backdrop-blur-3xl grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h4 class="text-white font-black text-[11px] uppercase tracking-widest mb-4 opacity-40">United Kingdom</h4>
+                        <p class="text-white font-bold mb-2">Bridge Markets Limited</p>
+                        <p class="text-[10px] text-white/30 uppercase tracking-widest leading-relaxed">Registration 15159310. Yorkshire, United Kingdom.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-black text-[11px] uppercase tracking-widest mb-4 opacity-40">Marshall Islands</h4>
+                        <p class="text-white font-bold mb-2">Bridge Markets Ltd.</p>
+                        <p class="text-[10px] text-white/30 uppercase tracking-widest leading-relaxed">Registration 113891. Business Trust structure.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -157,24 +192,30 @@ export function renderInstWhy(content: Record<string, any>, brand: BrandConfig):
         { t: 'Tecnología Institucional', d: 'Servidores MT5 ultra rápidos con spreads competitivos desde 0.0 pips.' },
         { t: 'PropFirm Propio', d: 'Accede a capital financiado real: OBSIDIAN, BASALT, ELITE y ULTRA.' },
         { t: 'Cuentas para cada Perfil', d: 'Desde traders independientes hasta gestores institucionales de alto nivel.' },
-        { t: 'Red Global de IBs', d: 'Presencia en México, Nigeria, Filipinas, India y expansión continua.' },
-        { t: 'Índices Propios', d: 'Fortune, Vortex, BullX, BearX y FomoX: desarrollado por nuestro equipo.' },
-        { t: 'Soporte 24/7 Multilingüe', d: 'Atención especializada en los idiomas más importantes de la red global.' },
-        { t: 'Transparencia Total', d: 'Fondos segregados y operación bajo estrictos estándares institucionales.' }
+        { t: 'Red Global de IBs', d: 'Presencia en México, Nigeria, Filipinas, India y expansión continua.' }
     ];
 
     return `
-    <section class="py-48 bg-[#05010f] relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal text-center">
-            <h2 class="text-6xl md:text-8xl font-black text-white mb-32 uppercase tracking-tightest leading-none">POR QUÉ <br><span class="text-[#865BFF]">ELEGIRNOS</span></h2>
+    <section class="py-64 bg-[#05010f] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal">
+            <div class="flex flex-col lg:flex-row justify-between items-end mb-32 gap-12">
+                <h2 class="text-7xl md:text-9xl font-black text-white uppercase tracking-tightest leading-[0.8] italic">
+                    WHY <br><span class="text-[#865BFF]">BRIDGE?</span>
+                </h2>
+                <p class="text-xl text-white/30 max-w-sm uppercase tracking-widest font-black border-l-2 border-[#865BFF] pl-8 italic">
+                    The infrastructure of the next generation of institutional traders.
+                </p>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                 ${reasons.map((r, i) => `
-                    <div class="p-12 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-[4rem] hover:border-[#865BFF]/40 hover:shadow-[0_20px_60px_-15px_rgba(134,91,255,0.3)] transition-all duration-500 group backdrop-blur-3xl relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[#865BFF]/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="text-[#865BFF] text-5xl font-black mb-8 opacity-20 outline-text group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500 drop-shadow-[0_0_15px_rgba(134,91,255,0.4)]">0${i+1}</div>
-                        <h3 class="text-2xl font-black text-white mb-6 uppercase tracking-tighter leading-tight relative z-10">${r.t}</h3>
-                        <p class="text-white/50 text-lg leading-relaxed font-medium relative z-10">${r.d}</p>
+                    <div class="group p-16 bg-white/[0.02] border border-white/5 hover:bg-[#865BFF] transition-all duration-700 relative overflow-hidden h-[450px] flex flex-col justify-end">
+                        <div class="absolute top-12 left-12 text-7xl font-black text-white/5 group-hover:text-white/20 transition-colors italic">0${i+1}</div>
+                        <div class="relative z-10">
+                            <h3 class="text-3xl font-black text-white mb-6 uppercase tracking-tighter leading-none group-hover:scale-110 origin-left transition-transform italic">${r.t}</h3>
+                            <p class="text-white/40 text-lg leading-relaxed font-light group-hover:text-white transition-colors">${r.d}</p>
+                        </div>
+                        <div class="absolute bottom-0 right-0 w-32 h-32 bg-white/5 translate-x-16 translate-y-16 rotate-45 group-hover:bg-white/20 transition-all"></div>
                     </div>
                 `).join('')}
             </div>

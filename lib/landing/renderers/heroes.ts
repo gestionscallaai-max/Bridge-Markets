@@ -124,8 +124,16 @@ export function renderHeroOfficial(content: Record<string, any>, brand: BrandCon
                     ${c.fixedTitle} <br><span class="text-gradient-purple">${c.highlight}</span>
                 </h1>
                 <p class="text-2xl text-white/50 leading-relaxed max-w-2xl mb-12 font-light">${subtitle}</p>
-                <div class="flex flex-wrap gap-8">
+                <div class="flex flex-wrap gap-8 items-center">
                     <a href="#register" class="px-12 py-6 bg-primary text-white font-black asym-card text-xl hover:shadow-[0_0_50px_rgba(102,53,222,0.4)] transition-all transform hover:scale-105">${c.ctaText}</a>
+                    
+                    ${brand.videoUrl ? `
+                    <button onclick="openVideoModal('${brand.videoUrl}')" class="px-8 py-6 glass-panel border border-white/10 text-white font-black asym-card text-lg hover:bg-white/10 transition-all flex items-center gap-4">
+                        <span class="material-symbols-outlined text-3xl text-primary">play_circle</span>
+                        Ver Video
+                    </button>
+                    ` : ''}
+
                     <div class="flex items-center gap-6 glass-panel px-8 py-4 asym-card border-white/10">
                         <div class="flex -space-x-4">
                             ${[1, 2, 3].map(i => `<div class="w-10 h-10 rounded-full border-2 border-dark-bg bg-primary/20 flex items-center justify-center text-[10px] font-bold text-white overflow-hidden"><img src="https://i.pravatar.cc/100?u=${i}" alt="user"></div>`).join('')}
@@ -135,16 +143,14 @@ export function renderHeroOfficial(content: Record<string, any>, brand: BrandCon
                 </div>
             </div>
             <div class="lg:w-1/3 relative group section-reveal" style="animation-delay: 0.2s;">
-                <div class="relative glass-panel asym-card p-6 border-white/5 shadow-2xl overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="w-full aspect-square rounded-[2rem_0.5rem_2rem_0.5rem] bg-dark-bg flex items-center justify-center relative z-10 border border-white/5">
-                        <span class="text-[120px] font-black text-white/5">BM</span>
-                        <div class="absolute inset-8 border border-primary/20 rounded-[1.5rem_0.3rem_1.5rem_0.3rem] flex items-center justify-center">
-                            <span class="material-symbols-outlined text-8xl text-primary/40">signal_cellular_alt</span>
-                        </div>
+                <div class="relative glass-panel asym-card p-4 border-white/5 shadow-2xl overflow-hidden bg-[#05010f]">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                    <div class="relative z-10 w-full aspect-square flex items-center justify-center">
+                        <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Premium 3D" class="w-full h-full object-contain p-8 transform group-hover:scale-110 transition-transform duration-1000">
                     </div>
                 </div>
             </div>
         </div>
+
     </section>`;
 }

@@ -15,6 +15,19 @@ function LandingPageContent() {
     
     const [activeTab, setActiveTab] = useState<'generator' | 'history'>('generator');
     const [partnerId, setPartnerId] = useState<string>('');
+    const [editingLanding, setEditingLanding] = useState<any>(null);
+
+    const handleEdit = (landing: any) => {
+        setEditingLanding(landing);
+        setActiveTab('generator');
+    };
+
+    const handleTabChange = (tab: 'generator' | 'history') => {
+        if (tab === 'generator' && activeTab === 'history') {
+            setEditingLanding(null); // Clear edit state when manually going to new generator
+        }
+        setActiveTab(tab);
+    };
 
     useEffect(() => {
         const loadPartner = async () => {
@@ -58,7 +71,7 @@ function LandingPageContent() {
             {/* Tabs Header */}
             <div className="flex items-center gap-2 bg-white/50 p-1.5 rounded-2xl border border-slate-200 w-fit">
                 <button
-                    onClick={() => setActiveTab('generator')}
+                    onClick={() => handleTabChange('generator')}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${
                         activeTab === 'generator' 
                         ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
@@ -66,10 +79,10 @@ function LandingPageContent() {
                     }`}
                 >
                     <Layout className="w-4 h-4" />
-                    {t.landing.step2 || 'Generador'}
+                    {editingLanding ? 'Editando Landing' : (t.landing.step2 || 'Generador')}
                 </button>
                 <button
-                    onClick={() => setActiveTab('history')}
+                    onClick={() => handleTabChange('history')}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all ${
                         activeTab === 'history' 
                         ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
@@ -87,11 +100,12 @@ function LandingPageContent() {
                     <div className="space-y-6">
                         <LandingTypeform 
                             initialTemplate={templateId} 
-                            onGoToHistory={() => setActiveTab('history')} 
+                            editData={editingLanding}
+                            onGoToHistory={() => handleTabChange('history')} 
                         />
                     </div>
                 ) : (
-                    <LandingHistory partnerId={partnerId} />
+                    <LandingHistory partnerId={partnerId} onEdit={handleEdit} />
                 )}
             </div>
         </div>

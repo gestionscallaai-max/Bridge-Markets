@@ -2,89 +2,84 @@ import { BrandConfig } from '../types';
 import { SECTION_CATALOG } from '../catalog';
 
 export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'lx12_hero')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
+    const title = content.title || "FORCE";
+    const highlight = content.highlight || "MULTIPLIER";
+    const subtitle = content.subtitle || brand.heroPhrase || "Apalancamiento profesional para traders de alto rendimiento.";
+    const ctaText = content.ctaText || "Activate Power";
+    const ctaLink = brand.ctaLink || "#register";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-28 pb-32 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Animación de Fondo Premium -->
+    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#0a0515]">
+        <!-- Fondo Force Multiplier -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-[#865BFF]/10 rounded-full blur-[150px] animate-pulse"></div>
-            <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px]"></div>
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+            <!-- Grid de velocidad -->
+            <div class="absolute inset-0 opacity-[0.05]" style="background-image: repeating-linear-gradient(90deg, #865BFF 0px, #865BFF 1px, transparent 1px, transparent 100px), repeating-linear-gradient(0deg, #865BFF 0px, #865BFF 1px, transparent 1px, transparent 100px);"></div>
+            
+            <!-- Texto de Fondo Rayado -->
+            <div class="absolute top-1/2 left-0 -translate-y-1/2 w-full text-center opacity-[0.02] select-none pointer-events-none">
+                <span class="text-[50vw] font-black text-white uppercase tracking-[-0.05em] leading-none italic">POWER</span>
+            </div>
         </div>
 
-        <div class="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div class="section-reveal">
-                <div class="flex items-center gap-4 mb-10">
-                    <img src="/logo.png" alt="BM" class="h-6 opacity-80">
-                    <div class="h-4 w-[1px] bg-white/20"></div>
-                    <span class="text-[10px] font-black uppercase tracking-[0.4em] text-[#865BFF]">Presentado por ${ibName}</span>
-                </div>
-
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#865BFF] rounded-full mb-8 shadow-[0_0_30px_rgba(134,91,255,0.4)]">
-                    <span class="material-symbols-outlined text-white text-sm">verified</span>
-                    <span class="text-[10px] font-black text-white uppercase tracking-widest">PRO LEVERAGE X12</span>
-                </div>
-
-                <h1 class="text-6xl md:text-8xl font-black font-headline leading-[0.9] text-white mb-10 tracking-tightest uppercase">
-                    ${c.title}
-                </h1>
+        <div class="max-w-[1600px] mx-auto w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                <p class="text-xl md:text-2xl text-white/50 leading-relaxed max-w-xl mb-12 font-medium">
-                    ${c.subtitle}
-                </p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 py-8 border-y border-white/5">
-                    <div>
-                        <div class="text-4xl font-black text-white mb-1">100%</div>
-                        <div class="text-[9px] font-black text-[#865BFF] uppercase tracking-widest">División de Beneficios</div>
+                <!-- Columna: Force Info -->
+                <div class="lg:col-span-7 section-reveal">
+                    <div class="flex items-center gap-4 mb-12">
+                        <div class="flex gap-1">
+                            ${[1,2,3,4].map(i => `<div class="w-2 h-8 bg-[#865BFF]/20 rounded-full"></div>`).join('')}
+                        </div>
+                        <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.8em] italic">Level 10 Leverage</span>
                     </div>
-                    <div>
-                        <div class="text-4xl font-black text-white mb-1">X12</div>
-                        <div class="text-[9px] font-black text-[#865BFF] uppercase tracking-widest">Apalancamiento Real</div>
-                    </div>
-                    <div>
-                        <div class="text-4xl font-black text-white mb-1">DÍA 3</div>
-                        <div class="text-[9px] font-black text-[#865BFF] uppercase tracking-widest">Retiro de Ganancias</div>
-                    </div>
-                </div>
 
-                ${brand.heroPhrase ? `<p class="text-lg text-white/70 italic mb-12 pl-6 border-l-2 border-[#865BFF]">${brand.heroPhrase}</p>` : ''}
+                    <h1 class="text-7xl md:text-[12rem] lg:text-[16rem] font-black leading-[0.7] text-white mb-16 tracking-tightest uppercase italic">
+                        ${title} <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/20 italic">${highlight}</span>
+                    </h1>
 
-                <div class="flex flex-col sm:flex-row gap-6">
-                    <a href="#pricing" class="group px-12 py-6 bg-[#865BFF] text-white font-black rounded-2xl shadow-[0_20px_40px_rgba(134,91,255,0.3)] hover:shadow-[0_25px_60px_rgba(134,91,255,0.5)] hover:-translate-y-1 transition-all flex items-center justify-center gap-3 text-lg uppercase tracking-widest">
-                        ${c.ctaText} <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">rocket_launch</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="relative section-reveal lg:block hidden">
-                <div class="relative p-2 bg-gradient-to-br from-white/20 to-transparent rounded-[4rem] shadow-2xl">
-                    <div class="bg-[#05010f] rounded-[3.8rem] overflow-hidden p-10 border border-white/5 relative">
-                        <!-- Simulated Chart Interface -->
-                        <div class="space-y-6 opacity-40">
-                            <div class="h-4 w-1/3 bg-white/10 rounded-full"></div>
-                            <div class="h-64 bg-gradient-to-t from-transparent via-[#865BFF]/10 to-transparent rounded-2xl border border-white/5 relative overflow-hidden">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-full h-[1px] bg-[#865BFF]/30"></div>
-                                </div>
-                                <div class="absolute bottom-10 left-10 text-white font-black text-4xl">X12</div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="h-20 bg-white/5 rounded-2xl"></div>
-                                <div class="h-20 bg-[#865BFF]/20 rounded-2xl"></div>
+                    <div class="max-w-2xl">
+                        <p class="text-2xl md:text-3xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight">
+                            ${subtitle}
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-12 items-center">
+                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-[0_0_60px_rgba(134,91,255,0.4)]">
+                                <span class="relative z-10 uppercase tracking-[0.5em] text-xs font-black italic">${ctaText}</span>
+                            </a>
+                            
+                            <div class="flex flex-col border-l border-white/10 pl-10">
+                                <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-2">Max. Multiplier</span>
+                                <span class="text-4xl font-black text-white italic tracking-tighter">1:1000</span>
                             </div>
                         </div>
-                        <!-- Centered Badge -->
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="px-8 py-4 bg-white text-black font-black rounded-2xl shadow-4xl rotate-[-5deg] text-xl tracking-tighter">INSTANT ACCESS</div>
-                        </div>
                     </div>
                 </div>
+
+                <!-- Columna: Visual Force -->
+                <div class="lg:col-span-5 relative flex justify-center items-center section-reveal">
+                    <div class="relative w-full aspect-square flex items-center justify-center">
+                        
+                        <!-- Main 3D Asset (Caballo Rosa) -->
+                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-[1.8] translate-x-10">
+                            <img src="/images/imagenes%20nuevas/caballo%20rosa.png" alt="Force Horse" class="w-full h-full object-contain filter drop-shadow-[0_0_150px_rgba(134,91,255,0.4)] animate-power-vibe">
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
-    </section>`;
+
+        <style>
+            @keyframes power-vibe {
+                0%, 100% { transform: translateY(0) scale(1.8) rotate(0deg); filter: drop-shadow(0 0 100px rgba(134,91,255,0.3)); }
+                50% { transform: translateY(-20px) scale(1.85) rotate(1deg); filter: drop-shadow(0 0 180px rgba(134,91,255,0.6)); }
+            }
+            .animate-power-vibe { animation: power-vibe 6s ease-in-out infinite; }
+        </style>
+    </section>
+    `;
 }
 
 export function renderLX12Intro(content: Record<string, any>, brand: BrandConfig): string {
@@ -106,7 +101,7 @@ export function renderLX12Intro(content: Record<string, any>, brand: BrandConfig
 
 export function renderLX12TableCompare(content: Record<string, any>, brand: BrandConfig): string {
     const rows = [
-        { c: '¿Requiere evaluación?', lx: '❌ No. Acceso directo', pf: '✅ Sí. Challenge previo' },
+        { c: '¿Requiere evaluación?', lx: '<span class="material-symbols-outlined text-red-500 align-middle mr-2 text-sm">close</span> No. Acceso directo', pf: '<span class="material-symbols-outlined text-emerald-500 align-middle mr-2 text-sm">check_circle</span> Sí. Challenge previo' },
         { c: 'Tipo de mercado', lx: 'CFDs (Forex, índices, commodities)', pf: 'Forex/CFDs o Sintéticos' },
         { c: 'Apalancamiento', lx: '12x el depósito real', pf: 'Capital asignado por BM' },
         { c: 'División de beneficios', lx: '100% para el trader', pf: '70–80% para el trader' },

@@ -10,6 +10,12 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, error: 'Name and email are required' }, { status: 400 });
         }
 
+        // Detectar país desde headers si no viene en el body
+        const detectedCountry = countryCode || 
+                               request.headers.get('x-vercel-ip-country') || 
+                               request.headers.get('cf-ipcountry') || 
+                               null;
+
         // 1. Guardar el Lead en Supabase
         const { error } = await supabase
             .from('leads')
@@ -20,7 +26,7 @@ export async function POST(request: Request) {
                 landing_slug: landingSlug,
                 partner_id: partnerId,
                 click_id: clickId || null,
-                country: countryCode || null,
+                country: detectedCountry,
                 source: source || 'direct'
             });
 

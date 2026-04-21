@@ -1,78 +1,98 @@
 import { BrandConfig } from '../types';
 
 export function renderPropHero(content: Record<string, any>, brand: BrandConfig): string {
-    const subtitle = content.ibPhrase || brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
-    const ctaText = content.ctaText || "Empieza tu Challenge";
+    const title = content.title || "FUNDED";
+    const highlight = content.highlight || "NEXUS";
+    const subtitle = content.subtitle || brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
+    const ctaText = content.ctaText || "Start Challenge";
     const ctaLink = brand.ctaLink || "#register";
     const communityName = content.communityName || brand.communityName || brand.fullName || "Partner Certificado";
-    
+
     return `
-    <section class="relative min-h-[95vh] flex items-center pt-20 pb-32 px-8 overflow-hidden bg-[#050505]">
+    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#05010f]">
+        <!-- Fondo Prestigioso -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-[#0a0a0a] bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-5"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(134,91,255,0.15),transparent_50%)]"></div>
-            <div class="absolute bottom-0 left-[20%] w-[500px] h-[500px] bg-[#865BFF]/10 rounded-full blur-[150px] animate-pulse pointer-events-none"></div>
+            <!-- Patrón de líneas finas -->
+            <div class="absolute inset-0 opacity-[0.05]" style="background-image: linear-gradient(to right, #865BFF 1px, transparent 1px); background-size: 150px 100%;"></div>
+            
+            <!-- Tipografía de Fondo Gigante -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-[0.02] select-none pointer-events-none">
+                <span class="text-[45vw] font-black text-white uppercase tracking-tightest leading-none italic">ELITE</span>
+            </div>
         </div>
 
-        <div class="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div class="section-reveal">
-                <div class="flex items-center gap-4 mb-10 p-2 bg-white/5 border border-white/10 rounded-full w-fit pr-6 backdrop-blur-md">
-                    <img src="/logo.png" alt="Bridge Markets" class="h-6 ml-4 opacity-90 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
-                    <div class="w-px h-5 bg-white/20"></div>
-                    <span class="text-[9px] font-black text-[#865BFF] uppercase tracking-[0.4em]">Por ${communityName}</span>
-                </div>
-
-                <h1 class="text-6xl md:text-8xl lg:text-[7rem] font-black font-headline leading-[0.9] mb-8 tracking-tighter text-white uppercase drop-shadow-2xl">
-                    TRADER <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/50">FINANCIADO</span> <br>CERTIFICADO.
-                </h1>
+        <div class="max-w-[1600px] mx-auto w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
                 
-                <p class="text-xl md:text-2xl text-white/50 leading-relaxed max-w-xl mb-12 font-medium">
-                    ${subtitle}
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-6 mb-16">
-                    <a href="${ctaLink}" class="group relative px-12 py-6 bg-white text-black font-black rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(134,91,255,0.4)] hover:-translate-y-1 transition-all flex items-center justify-center gap-4">
-                        <span class="relative z-10 text-xl uppercase tracking-tighter">${ctaText}</span>
-                        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-2 transition-transform">sports_score</span>
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#865BFF]/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
-                    </a>
-                </div>
-
-                <div class="flex items-center gap-6 p-6 bg-[#0a0a0a]/80 border border-white/5 rounded-3xl max-w-md backdrop-blur-xl group hover:border-[#865BFF]/30 transition-colors">
-                    <div class="w-12 h-12 bg-[#050505] border border-white/10 rounded-full flex shrink-0 items-center justify-center text-[#865BFF] shadow-[0_0_15px_rgba(134,91,255,0.3)] group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined">help</span>
+                <!-- Columna: Funded Info -->
+                <div class="lg:col-span-6 section-reveal">
+                    <div class="flex items-center gap-6 mb-16">
+                        <div class="w-12 h-12 rounded-full border border-[#865BFF] flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[#865BFF] text-xl">verified</span>
+                        </div>
+                        <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.8em]">Official Certification</span>
                     </div>
-                    <p class="text-xs font-bold text-white/60 uppercase tracking-widest leading-relaxed">
-                        ¿Qué es PropTrading? — <span class="text-white">Bridge Markets te financia</span> para operar en mercados reales.
-                    </p>
-                </div>
-            </div>
 
-            <div class="relative section-reveal lg:block hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-[#865BFF]/30 to-transparent blur-[80px] rounded-full opacity-50"></div>
-                <div class="relative z-10 glass-panel p-2 rounded-[3.5rem] border-white/10 bg-gradient-to-br from-white/10 to-transparent backdrop-blur-sm transform rotate-3 hover:rotate-0 transition-transform duration-700 shadow-2xl">
-                    <div class="rounded-[3.3rem] overflow-hidden bg-[#050505] border border-[#865BFF]/20 flex justify-center items-center h-[550px] w-full relative group">
-                         <div class="absolute inset-0 opacity-60 bg-[url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay group-hover:scale-110 transition-transform duration-[10s]"></div>
-                         <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                         
-                         <div class="relative z-10 flex flex-col items-center mt-32">
-                            <span class="material-symbols-outlined text-[180px] text-white drop-shadow-[0_0_40px_rgba(134,91,255,0.8)] mb-6">chess</span>
-                            <div class="px-6 py-2 border border-white/20 bg-black/50 backdrop-blur-md rounded-full shadow-[0_0_20px_rgba(134,91,255,0.3)]">
-                                <p class="text-[10px] font-black text-white uppercase tracking-[0.4em]">Official Certification</p>
+                    <h1 class="text-7xl md:text-[11rem] lg:text-[15rem] font-black leading-[0.8] text-white mb-16 tracking-tightest uppercase italic">
+                        ${title} <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/20 italic">${highlight}</span>
+                    </h1>
+
+                    <div class="max-w-xl">
+                        <p class="text-2xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight">
+                            ${subtitle}
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-12 items-center">
+                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-2xl">
+                                <span class="relative z-10 uppercase tracking-[0.5em] text-xs">${ctaText}</span>
+                            </a>
+                            
+                            <div class="flex flex-col">
+                                <span class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] mb-1 italic">Certified by</span>
+                                <span class="text-sm font-black text-white uppercase tracking-widest">${communityName}</span>
                             </div>
-                         </div>
+                        </div>
                     </div>
                 </div>
-                <div class="absolute -bottom-8 -left-12 glass-panel p-8 border-[#865BFF]/30 bg-[#050505]/90 backdrop-blur-2xl rotate-[-5deg] shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:rotate-0 transition-transform duration-500 rounded-3xl z-20">
-                    <div class="flex items-center gap-4 mb-2">
-                        <span class="material-symbols-outlined text-[#865BFF] text-3xl">verified_user</span>
-                        <span class="text-sm font-black text-white uppercase tracking-widest leading-tight">Garantía<br>Institucional</span>
+
+                <!-- Columna: Visual Nexus -->
+                <div class="lg:col-span-6 relative flex justify-center items-center section-reveal">
+                    <div class="relative w-full aspect-square flex items-center justify-center">
+                        
+                        <!-- Main 3D Asset (Reyna Rosa) -->
+                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-[1.6]">
+                            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Funded Queen" class="w-full h-full object-contain filter drop-shadow-[0_0_120px_rgba(134,91,255,0.3)] animate-float-slow">
+                        </div>
+
+                        <!-- Certificate HUD Overlay -->
+                        <div class="absolute bottom-10 left-0 z-20 p-12 bg-white/[0.02] backdrop-blur-[40px] border border-white/10 rounded-[3rem] shadow-2xl animate-gentle-float max-w-xs">
+                            <div class="flex justify-between items-center mb-8">
+                                <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">Status: Active</span>
+                                <div class="w-2 h-2 bg-[#865BFF] rounded-full animate-pulse"></div>
+                            </div>
+                            <p class="text-sm text-white font-bold leading-relaxed opacity-60 uppercase tracking-widest italic">Institutional capital successfully allocated for global distribution.</p>
+                        </div>
                     </div>
-                    <p class="text-[9px] text-white/40 uppercase tracking-[0.3em] pl-11">BM Official Program</p>
                 </div>
+
             </div>
         </div>
-    </section>`;
+
+        <style>
+            @keyframes float-slow {
+                0%, 100% { transform: translateY(0) scale(1.6); }
+                50% { transform: translateY(-30px) scale(1.65); }
+            }
+            @keyframes gentle-float {
+                0%, 100% { transform: translate(0, 0); }
+                50% { transform: translate(15px, -15px); }
+            }
+            .animate-float-slow { animation: float-slow 10s ease-in-out infinite; }
+            .animate-gentle-float { animation: gentle-float 8s ease-in-out infinite; }
+        </style>
+    </section>
+    `;
 }
 
 export function renderPropAbout(content: Record<string, any>, brand: BrandConfig): string {

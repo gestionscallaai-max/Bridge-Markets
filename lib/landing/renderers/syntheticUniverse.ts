@@ -2,88 +2,102 @@ import { BrandConfig } from '../types';
 import { SECTION_CATALOG } from '../catalog';
 
 export function renderSNUHero(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'snu_hero')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
-    const ctaLink = brand.ctaLink || '#registro';
+    const title = content.title || "UNIVERSAL";
+    const highlight = content.highlight || "GATEWAY";
+    const subtitle = content.subtitle || brand.heroPhrase || "Acceso ilimitado a los mercados globales con tecnología de próxima generación.";
+    const ctaText = content.ctaText || "Enter Gateway";
+    const ctaLink = brand.ctaLink || "#register";
+    const ibName = brand.communityName || brand.fullName || "IB Oficial";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-24 pb-32 px-8 overflow-hidden bg-[#0a0614]">
-        <!-- Fondo Galáctico Dinámico -->
+    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#05010f]">
+        <!-- Fondo Arquitectónico Universal -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
-            <div class="absolute top-[-20%] right-[-10%] w-[1200px] h-[1200px] bg-[#865BFF]/10 rounded-full blur-[200px] animate-pulse"></div>
-            <div class="absolute bottom-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[180px]"></div>
+            <!-- Texto Vertical Gigante -->
+            <div class="absolute top-0 right-10 h-full flex items-center opacity-[0.03] select-none pointer-events-none">
+                <span class="text-[25vh] font-black text-white uppercase tracking-tightest leading-none rotate-90 origin-center whitespace-nowrap">UNIVERSE</span>
+            </div>
             
-            <!-- Estrellas fugaces o partículas (CSS simple) -->
-            <div class="absolute top-1/4 left-1/4 w-px h-px bg-white shadow-[0_0_10px_2px_white] rounded-full animate-ping"></div>
-            <div class="absolute top-2/3 right-1/3 w-px h-px bg-white shadow-[0_0_15px_3px_white] rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
+            <!-- Gradiente de profundidad -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(134,91,255,0.1),transparent_60%)]"></div>
         </div>
-        
-        <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                
-                <!-- Columna Izquierda: El Mensaje Universal -->
-                <div class="lg:col-span-7 section-reveal">
-                    <div class="inline-flex items-center gap-4 mb-10 px-6 py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-3xl shadow-2xl">
-                        <span class="material-symbols-outlined text-[#865BFF] animate-spin-slow">star_half</span>
-                        <span class="text-[11px] font-black uppercase tracking-[0.5em] text-white/90">LA TRINIDAD SINTÉTICA: DERIV + WELTRADE + BM</span>
-                    </div>
-                    
-                    <h1 class="text-6xl md:text-8xl lg:text-[9.5rem] font-black font-headline leading-[0.82] mb-12 tracking-tightest text-white uppercase drop-shadow-[0_0_80px_rgba(134,91,255,0.4)]">
-                        TODO TU <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/50">UNIVERSO.</span>
-                    </h1>
-                    
-                    <p class="text-2xl md:text-3xl text-white/40 leading-relaxed max-w-2xl mb-16 font-light">
-                        ${c.subtitle}
-                    </p>
 
-                    <div class="flex flex-col sm:flex-row gap-8 items-center">
-                        <a href="${ctaLink}" class="group relative px-12 py-6 bg-[#865BFF] text-white font-black rounded-3xl shadow-[0_0_60px_rgba(134,91,255,0.5)] hover:shadow-[0_0_100px_rgba(134,91,255,0.7)] transition-all transform hover:-translate-y-2 flex items-center justify-center gap-6 text-xl">
-                            <span class="uppercase tracking-widest">${c.cta}</span>
-                            <span class="material-symbols-outlined group-hover:translate-x-3 transition-transform text-3xl">rocket</span>
-                        </a>
-                        
-                        <div class="flex items-center gap-6 p-5 border border-white/5 rounded-[2.5rem] bg-white/[0.02] backdrop-blur-2xl">
-                            <div class="w-14 h-14 rounded-2xl bg-black/50 border border-[#865BFF]/30 flex items-center justify-center overflow-hidden">
-                                <img src="${brand.logoUrl || '/logo.png'}" alt="IB" class="w-10 object-contain">
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-[0.5em] text-[#865BFF] mb-1">PROYECTO LIDERADO POR</p>
-                                <p class="text-lg font-black text-white uppercase tracking-tighter">${ibName}</p>
-                            </div>
+        <div class="max-w-[1600px] mx-auto w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+                
+                <!-- Columna: Gateway Info -->
+                <div class="lg:col-span-7 section-reveal order-2 lg:order-1">
+                    <div class="mb-16">
+                        <div class="w-20 h-1 bg-[#865BFF] mb-12"></div>
+                        <h1 class="text-7xl md:text-[11rem] lg:text-[15rem] font-black leading-[0.8] text-white mb-16 tracking-tightest uppercase italic">
+                            ${title} <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/20 italic">${highlight}</span>
+                        </h1>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-16 items-start md:items-end">
+                        <div class="max-w-md border-l border-white/10 pl-12">
+                            <p class="text-2xl text-white/30 leading-relaxed font-light uppercase tracking-tighter italic">
+                                ${subtitle}
+                            </p>
                         </div>
+                        
+                        <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-2xl">
+                            <span class="relative z-10 uppercase tracking-[0.5em] text-xs">${ctaText}</span>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Columna Derecha: El Orbe Galáctico -->
-                <div class="lg:col-span-5 relative lg:block hidden section-reveal">
-                    <div class="relative group">
-                        <div class="absolute -inset-16 bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
-                        <div class="absolute -inset-8 bg-[#865BFF]/15 rounded-full blur-[100px] group-hover:bg-[#865BFF]/25 transition-all duration-1000"></div>
+                <!-- Visual -->
+                <div class="lg:w-6/12 relative section-reveal">
+                    <div class="relative w-full aspect-square flex items-center justify-center">
                         
-                        <div class="relative z-10 rounded-[5rem] overflow-hidden border border-white/5 shadow-[0_50px_100px_rgba(0,0,0,0.8)] transform rotate-[-2deg] group-hover:rotate-0 transition-all duration-1000 aspect-square bg-[#0a0614]">
-                            <img src="/synthetic_universe_3d.png" alt="Synthetic Universe" class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000 opacity-80">
-                            
-                            <!-- Floating Info Tags -->
-                            <div class="absolute top-12 left-12 p-5 bg-white/5 backdrop-blur-3xl rounded-3xl border border-white/10 shadow-2xl animate-bounce-slow">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-3 h-3 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></div>
-                                    <span class="text-[10px] font-black text-white uppercase tracking-widest">LIVE SYNC ACTIVE</span>
+                        <!-- Main Asset -->
+                        <div class="relative z-10 w-full h-full flex items-center justify-center transform lg:translate-x-10">
+                            <img src="/images/imagenes%20nuevas/reyna%20negra.png" alt="Universal Queen" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.2)] animate-float-slow">
+                        </div>
+
+                        <!-- Data Card -->
+                        <div class="absolute bottom-0 -right-4 lg:-right-10 z-20 p-10 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-2xl min-w-[320px]">
+                            <div class="flex items-center gap-6 mb-8">
+                                <div class="w-14 h-14 rounded-2xl bg-black border border-white/10 flex items-center justify-center overflow-hidden">
+                                    <img src="${brand.logoUrl || '/logo.png'}" alt="IB" class="w-full h-full object-contain p-2" onerror="this.src='/logo.png'">
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black uppercase tracking-[0.4em] text-[#865BFF] mb-1">Project Leader</p>
+                                    <p class="text-xl font-black text-white uppercase tracking-tighter">${ibName}</p>
                                 </div>
                             </div>
-
-                            <div class="absolute bottom-12 right-12 p-6 bg-black/60 backdrop-blur-3xl rounded-3xl border border-[#865BFF]/20 shadow-2xl">
-                                <p class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-2">NETWORK LATENCY</p>
-                                <p class="text-3xl font-black text-white tracking-tighter">0.005 ms</p>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-white/30">
+                                    <span>Sync Accuracy</span>
+                                    <span class="text-white">99.9%</span>
+                                </div>
+                                <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full w-[99.9%] bg-gradient-to-r from-[#865BFF] to-white shadow-[0_0_10px_rgba(134,91,255,0.5)]"></div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Background Halo -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#865BFF]/10 to-transparent rounded-full blur-[120px] opacity-30"></div>
                     </div>
                 </div>
 
             </div>
         </div>
-    </section>`;
+
+        <style>
+            @keyframes float-slow {
+                0%, 100% { transform: translateY(0) scale(1); }
+                50% { transform: translateY(-20px) scale(1.02); }
+            }
+            .animate-float-slow {
+                animation: float-slow 10s ease-in-out infinite;
+            }
+        </style>
+    </section>
+    `;
 }
 
 

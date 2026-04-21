@@ -19,7 +19,11 @@ export default function ReportsClientsPage() {
     const [totalCount, setTotalCount] = useState(0);
     const pageSize = 15;
 
-    useEffect(() => { fetchLeads(); }, [isAdmin, currentPage]);
+    // Filters state
+    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [showFilters, setShowFilters] = useState(false);
+
+    useEffect(() => { fetchLeads(); }, [isAdmin, currentPage, statusFilter]);
 
     const fetchLeads = async () => {
         setLoading(true);
@@ -36,6 +40,10 @@ export default function ReportsClientsPage() {
                 query = query.eq('partner_id', user.id);
             }
 
+            if (statusFilter !== 'all') {
+                query = query.eq('status', statusFilter);
+            }
+
             const { data, count, error } = await query
                 .order('created_at', { ascending: false })
                 .range(start, end);
@@ -50,6 +58,34 @@ export default function ReportsClientsPage() {
         setLoading(false);
     };
 
+    const handleExportLeads = () => {
+        if (leads.length === 0) return;
+        
+        const headers = ['ID', 'Nombre', 'Email', 'WhatsApp', 'Estatus', 'Origen', 'Fecha'];
+        if (isAdmin) headers.push('Partner');
+
+        const rows = leads.map(l => [
+            l.id,
+            `"${l.name || ''}"`,
+            l.email,
+            l.whatsapp || '',
+            l.status || 'registered',
+            l.link_id ? 'Referral' : 'Landing',
+            new Date(l.created_at).toLocaleString(),
+            isAdmin ? `"${l.partners?.name || 'N/A'}"` : null
+        ].filter(v => v !== null).join(','));
+
+        const csvContent = [headers.join(','), ...rows].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `leads_bridge_markets_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const localeMap: Record<string, string> = { es: 'es-ES', en: 'en-US', zh: 'zh-CN', hi: 'hi-IN', fr: 'fr-FR', ar: 'ar-SA', bn: 'bn-BD', pt: 'pt-BR', ru: 'ru-RU', ja: 'ja-JP' };
 
     const filtered = leads.filter(lead =>
@@ -61,10 +97,14 @@ export default function ReportsClientsPage() {
     return (
         <div className="space-y-8 pb-20 max-w-7xl mx-auto">
             {/* ── Header Banner */}
-            <div className={`relative overflow-hidden rounded-[2.5rem] p-8 text-white shadow-2xl border ${
+            <div className={`relative rounded-[2.5rem] p-8 text-white shadow-2xl border z-20 ${
                 isAdmin ? 'bg-gradient-to-br from-[#1a0f00] to-[#2d1900] border-amber-500/20' : 'bg-[#0d0221] border-white/5'
             }`}>
-                <div className={`absolute top-0 right-0 w-96 h-96 opacity-10 blur-[100px] -mr-48 -mt-48 ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
+                {/* Background Effects Container */}
+                <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
+                    <div className={`absolute top-0 right-0 w-96 h-96 opacity-10 blur-[100px] -mr-48 -mt-48 ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
+                </div>
+
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="flex items-center gap-5">
                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border shadow-lg ${
@@ -88,7 +128,7 @@ export default function ReportsClientsPage() {
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 flex-wrap">
+                    <div className="flex items-center gap-3 flex-wrap relative">
                         {isAdmin && (
                             <div className={`bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 text-right`}>
                                 <div className="text-[10px] font-medium uppercase tracking-widest text-amber-400/60">Total Red</div>
@@ -101,10 +141,71 @@ export default function ReportsClientsPage() {
                                 <div className="text-xl font-medium text-white">{totalCount}</div>
                             </div>
                         )}
-                        <button className="flex items-center justify-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-sm font-normal border border-white/10 transition-all">
-                            <Filter className="w-4 h-4" /> {t.reports.filters}
-                        </button>
-                        <button className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-[#0d0221] rounded-xl text-sm font-medium hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl">
+                        
+                        <div className="relative">
+                            <button 
+                                onClick={() => setShowFilters(!showFilters)}
+                                className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-normal border transition-all ${
+                                    showFilters || statusFilter !== 'all' 
+                                        ? 'bg-white text-[#0d0221] border-white' 
+                                        : 'bg-white/5 hover:bg-white/10 text-white border-white/10'
+                                }`}
+                            >
+                                <Filter className="w-4 h-4" /> 
+                                {statusFilter === 'all' ? t.reports.filters : statusFilter.toUpperCase()}
+                            </button>
+
+                                {showFilters && (
+                                    <div className="absolute top-full right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden z-[100] animate-in slide-in-from-top-4 fade-in duration-300">
+                                        <div className="p-4 border-b border-slate-50 bg-slate-50/50">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Filtrar por Estatus</span>
+                                        </div>
+                                        <div className="p-2 space-y-1">
+                                            {[
+                                                { id: 'all', label: 'Todos los leads', icon: <Users className="w-4 h-4" />, color: 'text-slate-600' },
+                                                { id: 'registered', label: 'Registrados', icon: <Calendar className="w-4 h-4" />, color: 'text-amber-500' },
+                                                { id: 'funded', label: 'Fondeados', icon: <UserCheck className="w-4 h-4" />, color: 'text-emerald-500' }
+                                            ].map(f => (
+                                                <button
+                                                    key={f.id}
+                                                    onClick={() => {
+                                                        setStatusFilter(f.id);
+                                                        setShowFilters(false);
+                                                        setCurrentPage(1);
+                                                    }}
+                                                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold transition-all group ${
+                                                        statusFilter === f.id 
+                                                            ? (isAdmin ? 'bg-amber-500 text-white' : 'bg-[#865BFF] text-white shadow-lg') 
+                                                            : 'text-slate-600 hover:bg-slate-50'
+                                                    }`}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`p-2 rounded-xl transition-colors ${
+                                                            statusFilter === f.id ? 'bg-white/20' : 'bg-slate-100 group-hover:bg-white'
+                                                        }`}>
+                                                            {React.cloneElement(f.icon as React.ReactElement, { 
+                                                                className: `w-3.5 h-3.5 ${statusFilter === f.id ? 'text-white' : f.color}` 
+                                                            })}
+                                                        </div>
+                                                        {f.label}
+                                                    </div>
+                                                    {statusFilter === f.id && <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <div className="p-4 bg-slate-50/50 border-t border-slate-50">
+                                            <p className="text-[9px] text-slate-400 font-bold leading-tight uppercase tracking-widest">
+                                                Selecciona una categoría para segmentar tu red de clientes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                        <button 
+                            onClick={handleExportLeads}
+                            className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-[#0d0221] rounded-xl text-sm font-medium hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl"
+                        >
                             <Download className="w-4 h-4" /> {t.reports.exportLeads}
                         </button>
                     </div>
@@ -220,7 +321,7 @@ export default function ReportsClientsPage() {
                                         )}
                                     </td>
                                     <td className="px-8 py-5 text-[11px] text-slate-400 font-medium uppercase tracking-tighter">
-                                        {new Date(lead.created_at).toLocaleString(localeMap[lang] || 'es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        {new Date(lead.created_at).toLocaleString(localeMap[lang] || 'es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).toUpperCase()}
                                     </td>
                                 </motion.tr>
                             ))}

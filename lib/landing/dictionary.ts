@@ -63,6 +63,8 @@ export interface LandingData {
     telegram?: string;
     tiktok?: string;
     ctaLink?: string;
+    videoUrl?: string;
+    customLogoUrl?: string;
 }
 
 export const DEFAULT_SECTIONS: SectionConfig = {

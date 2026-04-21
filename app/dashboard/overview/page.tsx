@@ -4,9 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    BarChart as RechartsBarChart, Bar, Cell
+} from 'recharts';
+import {
     Users, Globe2, MousePointerClick,
     Activity, ChevronRight, ExternalLink,
-    Globe, Zap, BarChart2, Award, Clock, TrendingUp,
+    Globe, Zap, BarChart2, Award, Clock, TrendingUp, Sparkles,
     Shield, Crown, Network, Target, Star, Eye, Pencil, Link2
 } from 'lucide-react';
 import { useAdmin, useRole } from '@/lib/context';
@@ -206,15 +210,16 @@ export default function OverviewPage() {
     const statCards = isAdmin ? adminStatCards : partnerStatCards;
 
     const COUNTRY_COORDS: Record<string, { top: string; left: string }> = {
-        'Mexico': { top: '48%', left: '22%' }, 'México': { top: '48%', left: '22%' },
-        'Colombia': { top: '56%', left: '26%' }, 'Argentina': { top: '75%', left: '30%' },
-        'Spain': { top: '35%', left: '50%' }, 'España': { top: '35%', left: '50%' },
-        'United Kingdom': { top: '28%', left: '46%' }, 'Japan': { top: '40%', left: '80%' },
-        'Peru': { top: '65%', left: '23%' }, 'United States': { top: '35%', left: '15%' },
-        'USA': { top: '35%', left: '15%' }, 'Brazil': { top: '65%', left: '32%' },
-        'Chile': { top: '75%', left: '22%' }, 'India': { top: '45%', left: '68%' },
-        'China': { top: '38%', left: '76%' }, 'Russia': { top: '28%', left: '68%' },
-        'Bangladesh': { top: '47%', left: '71%' }, 'France': { top: '32%', left: '49%' },
+        'Mexico': { top: '52%', left: '21%' }, 'México': { top: '52%', left: '21%' },
+        'Colombia': { top: '62%', left: '28%' }, 'Argentina': { top: '82%', left: '32%' },
+        'Spain': { top: '38%', left: '48%' }, 'España': { top: '38%', left: '48%' },
+        'Peru': { top: '70%', left: '25%' }, 'United States': { top: '40%', left: '22%' },
+        'USA': { top: '40%', left: '22%' }, 'Brazil': { top: '68%', left: '35%' },
+        'Chile': { top: '82%', left: '26%' }, 'India': { top: '52%', left: '72%' },
+        'China': { top: '42%', left: '80%' }, 'Russia': { top: '25%', left: '75%' },
+        'France': { top: '36%', left: '49%' }, 'Ecuador': { top: '62%', left: '25%' },
+        'Venezuela': { top: '58%', left: '29%' }, 'Bolivia': { top: '72%', left: '30%' },
+        'Panama': { top: '56%', left: '24%' },
     };
 
     const dynamicHotspots = stats.countryData.map((c: any) => ({
@@ -254,96 +259,81 @@ export default function OverviewPage() {
     };
 
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 pb-10">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 pb-10 relative">
+            {/* Background Watermark */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none opacity-[0.03] grayscale select-none -translate-y-20 translate-x-20 overflow-hidden">
+                <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+            </div>
 
-            {/* ── Welcome Banner — Visual diferente por rol */}
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-                {isAdmin ? (
-                    /* ADMIN Banner — dorado/oscuro */
-                    <div className="relative overflow-hidden rounded-2xl p-5 border border-amber-500/20" style={{ background: 'linear-gradient(135deg, #1a0f00 0%, #2d1a00 50%, #1a0f00 100%)' }}>
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none" />
-                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-amber-600/5 rounded-full blur-[60px] pointer-events-none" />
-                        <div className="relative z-10 flex items-center justify-between gap-4 flex-wrap">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-500/10">
-                                    <Crown className="w-6 h-6 text-amber-400" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-widest text-amber-500/60 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
-                                            <Shield className="w-2.5 h-2.5" /> {t.overview.adminPanel}
-                                        </span>
-                                    </div>
-                                    <h1 className="text-base font-normal text-white">{t.overview.adminPanel}</h1>
-                                    <p className="text-xs text-white/40 mt-0.5">{t.overview.realtimeData} · {t.overview.network}</p>
-                                </div>
+            {/* ── Header Banner */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="relative z-10">
+                <div className={`relative rounded-[2.5rem] p-8 text-white shadow-2xl border z-20 ${
+                    isAdmin ? 'bg-gradient-to-br from-[#1a0f00] to-[#2d1900] border-amber-500/20' : 'bg-[#0d0221] border-white/5'
+                }`}>
+                    {/* Background Effects Container */}
+                    <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
+                        <div className={`absolute top-0 right-0 w-96 h-96 opacity-10 blur-[100px] -mr-48 -mt-48 ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
+                    </div>
+
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="flex items-center gap-5">
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border shadow-lg ${
+                                isAdmin ? 'bg-amber-500/10 border-amber-500/30 shadow-amber-500/10' : 'bg-[#865BFF]/10 border-[#865BFF]/30 shadow-[#865BFF]/10'
+                            }`}>
+                                {isAdmin ? <Crown className="w-7 h-7 text-amber-400" /> : <TrendingUp className="w-7 h-7 text-[#865BFF]" />}
                             </div>
-                            <div className="flex items-center gap-3 flex-wrap">
-                                <div className="flex items-center gap-1.5 text-xs text-amber-300/60 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
-                                    <Clock className="w-3.5 h-3.5" />
-                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                            <div>
+                                <div className={`text-[9px] font-medium uppercase tracking-widest mb-1 px-2 py-0.5 rounded-md border inline-block ${
+                                    isAdmin ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' : 'text-[#865BFF] bg-[#865BFF]/10 border-[#865BFF]/20'
+                                }`}>
+                                    {isAdmin
+                                        ? <><Shield className="w-3 h-3" /><span>{t.overview.adminPanel} — {t.overview.network}</span></>
+                                        : <><Eye className="w-3 h-3" /><span>Partner View — {t.overview.personalMetrics}</span></>}
                                 </div>
-                                <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
-                                    <Network className="w-3.5 h-3.5 text-amber-400" />
-                                    <span className="text-xs font-normal font-mono text-amber-400">{totalPartners} Partners</span>
-                                </div>
+                                <h1 className="text-2xl font-medium tracking-tight mt-1">
+                                    {isAdmin 
+                                        ? t.overview.adminPanel 
+                                        : (partnerName ? `${t.overview.hello}, ${partnerName.split(' ')[0]}!` : t.overview.welcomePartner)}
+                                </h1>
+                                <p className="text-white/50 text-sm font-medium">
+                                    {t.overview.realtimeData} · {isAdmin ? t.overview.network : t.overview.personalMetrics}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
+                                <Clock className="w-4 h-4" />
+                                <span className="text-xs font-bold uppercase tracking-wider">
+                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                                </span>
+                            </div>
+                            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>
+                                {isAdmin ? <Network className="w-4 h-4" /> : <Award className="w-4 h-4 text-[#865BFF]" />}
+                                <span className="text-xs font-mono font-bold tracking-tight">
+                                    {isAdmin ? `${totalPartners} PARTNERS` : partnerId}
+                                </span>
                             </div>
                         </div>
                     </div>
-                ) : (
-                    /* PARTNER VIEW Banner — morado */
-                    <div className="card px-6 py-5">
-                        <div className="flex items-center justify-between gap-4 flex-wrap">
-                            <div className="flex items-center gap-4">
-                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#865BFF] to-[#5b3fd6] flex items-center justify-center shadow-lg shadow-[#865BFF]/20">
-                                    <TrendingUp className="w-5 h-5 text-white" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="inline-flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-widest text-[#865BFF] bg-[#865BFF]/8 px-2 py-0.5 rounded-md border border-[#865BFF]/15">
-                                            <Eye className="w-2.5 h-2.5" /> Partner View
-                                        </span>
-                                    </div>
-                                    <h1 className="text-base font-normal text-slate-800">
-                                        {partnerName ? `${t.overview.hello}, ${partnerName.split(' ')[0]}!` : t.overview.welcomePartner}
-                                    </h1>
-                                    <p className="text-xs text-slate-400 mt-0.5">{t.overview.realtimeData} · {t.overview.personalMetrics}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3 flex-wrap">
-                                <div className="flex items-center gap-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                                    <Clock className="w-3.5 h-3.5" />
-                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-                                </div>
-                                <div className="flex items-center gap-1.5 bg-[#865BFF]/8 border border-[#865BFF]/20 rounded-lg px-3 py-2">
-                                    <Award className="w-3.5 h-3.5 text-[#865BFF]" />
-                                    <span className="text-xs font-normal font-mono text-[#865BFF]">{partnerId}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                </div>
             </motion.div>
 
-            {/* ── Stat Cards */}
-            <div className={`grid grid-cols-1 gap-4 ${isAdmin ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}>
+            <div className={`grid grid-cols-1 gap-6 ${isAdmin ? 'md:grid-cols-4' : 'md:grid-cols-4'}`}>
                 {statCards.map((s, i) => {
                     const Icon = s.icon;
                     return (
                         <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.08 }}
-                            className={`card p-5 flex items-start gap-4 hover:shadow-md transition-all ${isAdmin ? 'border-amber-500/10' : ''}`}>
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${s.iconBg} ${s.iconColor}`}>
-                                <Icon className="w-5 h-5" strokeWidth={1.8} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <h3 className="text-slate-400 text-[11px] font-normal uppercase tracking-wide">{s.title}</h3>
-                                <div className="text-lg font-normal text-slate-800 tracking-tight mt-0.5">{s.value}</div>
-                                <span className={`text-[10px] font-normal px-1.5 py-0.5 rounded mt-1.5 inline-block ${
-                                    isAdmin ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
-                                }`}>
+                            className={`bg-white rounded-[2rem] p-6 border shadow-sm hover:shadow-xl transition-all duration-300 group ${isAdmin ? 'border-amber-500/10 hover:shadow-amber-500/5' : 'border-slate-100 hover:shadow-[#865BFF]/5'}`}>
+                            <div className="flex items-start justify-between mb-4">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 ${s.iconBg} ${s.iconColor}`}>
+                                    <Icon className="w-5 h-5" strokeWidth={1.5} />
+                                </div>
+                                <div className={`flex items-center gap-1 text-[9px] font-medium px-2 py-0.5 rounded-lg ${isAdmin ? 'bg-amber-50 text-amber-600' : 'bg-[#865BFF]/5 text-[#865BFF]'}`}>
                                     {isAdmin ? (s as any).badge || t.overview.global : t.overview.realTime}
-                                </span>
+                                </div>
                             </div>
+                            <div className="text-xl font-semibold text-slate-800 tracking-tight mb-0.5">{s.value}</div>
+                            <div className="text-[11px] font-normal text-slate-400 uppercase tracking-wide">{s.title}</div>
                         </motion.div>
                     );
                 })}
@@ -372,47 +362,47 @@ export default function OverviewPage() {
                     })}
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="card p-6 lg:col-span-3">
-                    <div className="flex items-center justify-between mb-5">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} 
+                    className={`rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden flex flex-col min-h-[450px] lg:col-span-3 ${
+                        isAdmin ? 'bg-gradient-to-br from-[#1a0f00] to-[#2d1900]' : 'bg-[#0d0221]'
+                    }`}>
+                    <div className={`absolute top-0 right-0 w-96 h-96 opacity-10 blur-[100px] -mr-48 -mt-48 ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
+                    
+                    <div className="relative z-10 flex items-center justify-between mb-8">
                         <div>
-                            <h3 className="text-sm font-normal text-slate-800 flex items-center gap-1.5">
-                                {isAdmin ? <><BarChart2 className="w-4 h-4 text-amber-500" /><span>{t.overview.consolidatedVolumeAdmin}</span></> : t.overview.dailyLeads}
+                            <h3 className="text-lg font-medium flex items-center gap-2">
+                                {isAdmin ? <><BarChart2 className="w-5 h-5 text-amber-500" /><span>{t.overview.consolidatedVolumeAdmin}</span></> : <><TrendingUp className="w-5 h-5 text-[#865BFF]" /><span>{t.overview.dailyLeads}</span></>}
                             </h3>
-                            <p className="text-xs text-slate-400 mt-0.5">
+                            <p className="text-white/40 text-xs mt-1">
                                 {isAdmin ? t.overview.consolidatedVolumeAdminDesc : t.overview.realTrafficNote}
                             </p>
                         </div>
-                        <button className="px-3 py-1.5 text-[11px] font-normal text-slate-500 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                        <button className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-xl border border-white/10 hover:bg-white/5 transition-colors ${isAdmin ? 'text-amber-400' : 'text-[#865BFF]'}`}>
                             {t.overview.thisWeek}
                         </button>
                     </div>
-                    <div className="h-[220px] flex items-end justify-between gap-2 px-2 pt-4">
-                        {stats.weeklyData.length > 0 ? stats.weeklyData.map((d, i) => {
-                            const maxCount = Math.max(...stats.weeklyData.map(x => x.count), 1);
-                            const heightPercentage = (d.count / maxCount) * 100;
-                            return (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-2 group cursor-default">
-                                    <div className="relative w-full flex flex-col items-center justify-end h-full">
-                                        <div className="absolute -top-6 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[10px] px-2 py-0.5 rounded pointer-events-none whitespace-nowrap z-20">{d.count} leads</div>
-                                        <motion.div
-                                            initial={{ height: 0 }}
-                                            animate={{ height: `${Math.max(heightPercentage, d.count > 0 ? 5 : 0)}%` }}
-                                            transition={{ duration: 0.6, delay: 0.4 + (i * 0.05) }}
-                                            className={`w-full max-w-[32px] rounded-t-lg transition-colors shadow-sm ${d.count > 0
-                                                ? isAdmin
-                                                    ? 'bg-gradient-to-t from-amber-500 to-amber-300 group-hover:from-amber-600 group-hover:to-amber-400'
-                                                    : 'bg-gradient-to-t from-[#865BFF] to-[#a88bff] group-hover:from-[#6b3fd6] group-hover:to-[#865BFF]'
-                                                : 'bg-slate-100'}`}
-                                        />
-                                    </div>
-                                    <span className="text-[10px] font-normal text-slate-400 uppercase tracking-tight">{d.day}</span>
-                                </div>
-                            );
-                        }) : (
-                            <div className="w-full h-full flex items-center justify-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
-                                <div className="text-center">
-                                    <Activity className="w-7 h-7 text-slate-300 mx-auto mb-2" />
-                                    <span className="text-xs font-medium text-slate-400">{t.overview.noHistory}</span>
+
+                    <div className="flex-1 w-full min-h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={stats.weeklyData}>
+                                <defs>
+                                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor={isAdmin ? '#f59e0b' : '#865BFF'} stopOpacity={0.8} />
+                                        <stop offset="95%" stopColor={isAdmin ? '#f59e0b' : '#865BFF'} stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 500 }} dy={10} />
+                                <YAxis hide />
+                                <Tooltip contentStyle={{ backgroundColor: '#0d0221', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', fontSize: '12px' }} />
+                                <Area type="monotone" dataKey="count" stroke={isAdmin ? '#f59e0b' : '#865BFF'} strokeWidth={4} fillOpacity={1} fill="url(#colorCount)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                        {stats.weeklyData.every(d => d.count === 0) && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div className="text-center opacity-40">
+                                    <Activity className="w-8 h-8 mx-auto mb-2 text-white/20" />
+                                    <p className="text-[10px] uppercase tracking-widest font-medium">{t.overview.noHistory}</p>
                                 </div>
                             </div>
                         )}
@@ -423,38 +413,40 @@ export default function OverviewPage() {
             {/* ── ADMIN ONLY: Top Partners Table */}
             {isAdmin && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38 }}
-                    className="card p-6 border-amber-500/10">
-                    <div className="flex items-center justify-between mb-5">
+                    className={`rounded-[2.5rem] p-8 bg-white border shadow-sm ${isAdmin ? 'border-amber-500/10 shadow-amber-500/5' : 'border-slate-100'}`}>
+                    <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2">
-                                <Star className="w-4 h-4 text-amber-500" />
+                            <h3 className="text-lg font-medium text-slate-800 flex items-center gap-2">
+                                <Crown className={`w-5 h-5 ${isAdmin ? 'text-amber-500' : 'text-[#865BFF]'}`} />
                                 {t.overview.topPartnersWeek}
                             </h3>
-                            <p className="text-xs text-slate-400 mt-0.5">{t.overview.topPartnersWeekDesc}</p>
+                            <p className="text-xs text-slate-400 mt-1">{t.overview.topPartnersWeekDesc}</p>
                         </div>
-                        <button onClick={() => router.push('/dashboard/admin/partners')} className="text-xs font-normal text-[#865BFF] hover:text-[#6b3fd6] flex items-center gap-1">
-                            {t.overview.viewAll} <ChevronRight className="w-3 h-3" />
+                        <button onClick={() => router.push('/dashboard/admin/partners')} className={`text-xs font-bold uppercase tracking-widest flex items-center gap-1 transition-colors ${isAdmin ? 'text-amber-600 hover:text-amber-700' : 'text-[#865BFF] hover:text-[#6b3fd6]'}`}>
+                            {t.overview.viewAll} <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
                     {topPartners.length === 0 ? (
-                        <div className="text-center py-8 text-slate-400 text-sm">{t.overview.noPartnerData}</div>
+                        <div className="text-center py-10 text-slate-400 text-sm italic">{t.overview.noPartnerData}</div>
                     ) : (
-                        <div className="space-y-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {topPartners.map((p, i) => (
-                                <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
-                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-medium ${
+                                <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-[#865BFF]/20 transition-all group">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black shadow-sm ${
                                         i === 0 ? 'bg-amber-100 text-amber-600' :
-                                        i === 1 ? 'bg-slate-100 text-slate-600' :
+                                        i === 1 ? 'bg-slate-200 text-slate-600' :
                                         i === 2 ? 'bg-orange-100 text-orange-600' :
-                                        'bg-slate-50 text-slate-400'
+                                        'bg-white text-slate-400'
                                     }`}>#{i + 1}</div>
-                                    <div className="flex-1">
-                                        <div className="text-sm font-normal text-slate-800">{p.name}</div>
-                                    </div>
-                                    <div className="text-sm font-normal text-[#865BFF]">{p.count} leads</div>
-                                    <div className="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
-                                        <div className="h-full bg-gradient-to-r from-[#865BFF] to-[#a88bff] rounded-full"
-                                            style={{ width: `${(p.count / (topPartners[0]?.count || 1)) * 100}%` }} />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-sm font-bold text-slate-800 truncate">{p.name}</div>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                                <div className={`h-full rounded-full ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`}
+                                                    style={{ width: `${(p.count / (topPartners[0]?.count || 1)) * 100}%` }} />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 uppercase">{p.count} leads</span>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -490,70 +482,112 @@ export default function OverviewPage() {
                 </motion.div>
             )}
 
-            {/* ── Heatmap */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="card p-6">
-                <div className="flex items-center justify-between mb-6">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} 
+                className={`rounded-[2.5rem] p-8 bg-white border shadow-sm ${isAdmin ? 'border-amber-500/10 shadow-amber-500/5' : 'border-slate-100 shadow-slate-200/50'}`}>
+                <div className="flex items-center justify-between mb-8">
                     <div>
-                        <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2">
-                            {isAdmin ? <><Globe2 className="w-4 h-4 text-amber-500" /><span>{t.overview.globalDistribution}</span></> : t.overview.heatmapTitle}
+                        <h3 className="text-lg font-medium text-slate-800 flex items-center gap-2">
+                            {isAdmin ? <><Globe2 className="w-5 h-5 text-amber-500" /><span>{t.overview.globalDistribution}</span></> : <><Globe className="w-5 h-5 text-[#865BFF]" /><span>{t.overview.heatmapTitle}</span></>}
                         </h3>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <p className="text-xs text-slate-400 mt-1">
                             {isAdmin ? t.overview.globalDistributionDesc : t.overview.heatmapSubtitle}
                         </p>
                     </div>
                 </div>
-                <div className="relative w-full h-[340px] bg-slate-900 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg" alt="World Map" className="absolute w-[90%] h-[90%] object-contain opacity-[0.15] filter invert pointer-events-none" />
-                    <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-                    {displayHotspots.map((point, i) => (
-                        <div key={i} className="absolute group z-10" style={{ top: point.top, left: point.left }}>
-                            <div className="relative flex items-center justify-center">
-                                <div className={`absolute ${point.size} ${point.color} rounded-full animate-ping opacity-75`} />
-                                <div className={`relative ${point.size} ${point.color} rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] ${point.shadow} border border-slate-900 group-hover:scale-150 transition-transform cursor-pointer`} />
-                            </div>
-                            <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 backdrop-blur-md text-slate-800 px-4 py-3 rounded-2xl shadow-2xl flex flex-col items-center pointer-events-none min-w-[160px] z-20 border border-slate-200 translate-y-2 group-hover:translate-y-0">
-                                <div className="w-full flex justify-between items-center mb-2 border-b border-slate-100 pb-1.5">
-                                    <span className="text-[10px] uppercase font-medium tracking-widest text-[#865BFF]">{point.label}</span>
-                                    <span className="text-[9px] font-normal bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 uppercase">
-                                        {point.count > 100 ? t.overview.highDensity?.split('(')[0]?.trim() || 'Alto' : t.overview.medDensity?.split('(')[0]?.trim() || 'Medio'}
-                                    </span>
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <span className="text-lg font-medium text-slate-800 leading-none">+{point.count}</span>
-                                    <span className="text-[9px] text-slate-400 font-normal uppercase tracking-tight mt-1">Leads</span>
-                                </div>
-                                {isAdmin && (
-                                    <div className="w-full mt-2 pt-2 border-t border-slate-100 text-center">
-                                        <div className="text-[8px] text-slate-400 font-normal uppercase mb-1">{t.overview.topPartner}</div>
-                                        <div className="text-[10px] font-normal text-[#865BFF] truncate w-full">{(point as any).topPartner}</div>
+                <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                    {/* Lista de Países Lateral */}
+                    <div className="xl:col-span-1 space-y-3">
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-2">Top Países</h4>
+                        <div className="space-y-2">
+                            {stats.countryData.length > 0 ? stats.countryData.sort((a: any, b: any) => b.leads - a.leads).slice(0, 6).map((c: any, i: any) => (
+                                <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 group hover:border-[#865BFF]/30 hover:bg-white hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-2 h-2 rounded-full ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
+                                        <span className="text-xs font-bold text-slate-700">{c.country}</span>
                                     </div>
-                                )}
-                                <div className="mt-2 pt-2 border-t border-slate-100 w-full flex justify-around">
-                                    <div className="flex flex-col items-center">
-                                        <span className="text-xs font-normal text-emerald-500">{point.conversion || '0%'}</span>
-                                        <span className="text-[8px] text-slate-400 font-normal uppercase">{t.overview.conversion}</span>
-                                    </div>
-                                    <div className="flex flex-col items-center">
-                                        <span className="text-xs font-normal text-blue-500">↑ 5%</span>
-                                        <span className="text-[8px] text-slate-400 font-normal uppercase">{t.overview.growth}</span>
+                                    <div className="text-right">
+                                        <div className={`text-xs font-black ${isAdmin ? 'text-amber-600' : 'text-[#865BFF]'}`}>{c.leads}</div>
+                                        <div className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">CR: {c.conversion}</div>
                                     </div>
                                 </div>
-                            </div>
+                            )) : (
+                                <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-[2rem]">
+                                    <Globe className="w-8 h-8 text-slate-200 mx-auto mb-3" />
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sin datos aún</p>
+                                </div>
+                            )}
                         </div>
-                    ))}
+                    </div>
+
+                    {/* Mapa Interactivo */}
+                    <div className="xl:col-span-3 relative bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5 group/map">
+                        <div className="aspect-[2/1] w-full relative bg-[#070214]">
+                            {/* Map Background */}
+                            <img 
+                                src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg" 
+                                alt="World Map" 
+                                className="absolute inset-0 w-full h-full object-cover opacity-30 filter brightness-150 grayscale invert pointer-events-none group-hover/map:scale-105 transition-transform duration-[20s] ease-linear" 
+                            />
+                            
+                            {/* Glow effects */}
+                            <div className={`absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-[100px] opacity-20 pointer-events-none ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
+                            <div className={`absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-[100px] opacity-10 pointer-events-none ${isAdmin ? 'bg-amber-600' : 'bg-[#5b3fd6]'}`} />
+                            
+                            {/* Grid overlay */}
+                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(134,91,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(134,91,255,0.2) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                            
+                            {dynamicHotspots.map((point, i) => (
+                                <div key={i} className="absolute group z-10" style={{ top: point.top, left: point.left }}>
+                                    <div className="relative flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
+                                        <div className={`absolute ${point.size} ${point.color} rounded-full animate-ping opacity-75`} />
+                                        <div className={`relative ${point.size} ${point.color} rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] ${point.shadow} border-2 border-white/20 group-hover:scale-150 transition-all duration-300 cursor-pointer`} />
+                                    </div>
+                                    <div className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white text-slate-800 px-5 py-4 rounded-[1.5rem] shadow-2xl flex flex-col items-center pointer-events-none min-w-[180px] z-20 border border-slate-100 translate-y-2 group-hover:translate-y-0">
+                                        <div className="w-full flex justify-between items-center mb-2 pb-2 border-b border-slate-50">
+                                            <span className={`text-[10px] uppercase font-black tracking-widest ${isAdmin ? 'text-amber-500' : 'text-[#865BFF]'}`}>{point.label}</span>
+                                            <span className="text-[9px] font-black bg-slate-100 px-2 py-0.5 rounded-lg text-slate-500 uppercase">
+                                                {point.count > 50 ? 'Hot' : 'Active'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-center">
+                                                <div className="text-xl font-black text-slate-800 leading-none">{point.count}</div>
+                                                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter mt-1">Leads</div>
+                                            </div>
+                                            <div className="w-px h-6 bg-slate-100" />
+                                            <div className="text-center">
+                                                <div className="text-xs font-black text-emerald-500 leading-none">{point.conversion}</div>
+                                                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter mt-1">Conv.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {dynamicHotspots.length === 0 && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
+                                    <div className="flex flex-col items-center">
+                                        <div className={`w-12 h-12 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center animate-spin-slow mb-4`}>
+                                            <Globe className="w-6 h-6 text-white/20" />
+                                        </div>
+                                        <p className="text-white text-[10px] font-black uppercase tracking-[0.4em] bg-white/5 border border-white/10 px-8 py-3 rounded-full backdrop-blur-md shadow-2xl">Esperando Tráfico Global</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </motion.div>
 
-            {/* ── Mejores Landings Table */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.42 }}
-                className="card p-6">
-                <div className="flex items-center justify-between mb-6">
+                className={`rounded-[2.5rem] p-8 bg-white border shadow-sm ${isAdmin ? 'border-amber-500/10 shadow-amber-500/5' : 'border-slate-100'}`}>
+                <div className="flex items-center justify-between mb-8">
                     <div>
-                        <h3 className="text-sm font-normal text-slate-800 flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-[#865BFF]" />
+                        <h3 className="text-lg font-medium text-slate-800 flex items-center gap-2">
+                            <Activity className={`w-5 h-5 ${isAdmin ? 'text-amber-500' : 'text-[#865BFF]'}`} />
                             {t.overview.topLandings || 'Rendimiento por Landing'}
                         </h3>
-                        <p className="text-xs text-slate-400 mt-0.5">{t.overview.topLandingsDesc || 'Análisis detallado de conversión por página generada.'}</p>
+                        <p className="text-xs text-slate-400 mt-1">{t.overview.topLandingsDesc || 'Análisis detallado de conversión por página generada.'}</p>
                     </div>
                 </div>
 
@@ -561,41 +595,41 @@ export default function OverviewPage() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-slate-100">
-                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400">{t.landing.title || 'Landing'}</th>
-                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-center">{t.overview.trafficClicks || 'Clicks'}</th>
-                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-center">{t.overview.myLeads || 'Leads'}</th>
-                                <th className="pb-3 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-right">{t.overview.conversion || 'Rendimiento'}</th>
+                                <th className="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{t.landing.title || 'Landing'}</th>
+                                <th className="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">{t.overview.trafficClicks || 'Clicks'}</th>
+                                <th className="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">{t.overview.myLeads || 'Leads'}</th>
+                                <th className="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right">{t.overview.conversion || 'Rendimiento'}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
                             {stats.landingPerformance.length > 0 ? stats.landingPerformance.map((lp, i) => (
-                                <tr key={i} className="group hover:bg-slate-50/50 transition-colors">
-                                    <td className="py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[#865BFF]">
-                                                <Globe className="w-4 h-4" />
+                                <tr key={i} className="group hover:bg-slate-50/50 transition-all duration-300">
+                                    <td className="py-5">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm ${isAdmin ? 'bg-amber-50 text-amber-600' : 'bg-[#865BFF]/5 text-[#865BFF]'}`}>
+                                                <Globe className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <div className="text-sm font-normal text-slate-800 group-hover:text-[#865BFF] transition-colors">{lp.slug}</div>
-                                                <div className="text-[10px] text-slate-400 font-medium">/l/{lp.slug}</div>
+                                                <div className="text-sm font-bold text-slate-800 group-hover:text-[#865BFF] transition-colors">{lp.slug}</div>
+                                                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter mt-0.5">/l/{lp.slug}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="py-4 text-center">
-                                        <span className="text-sm font-normal text-slate-600">{lp.clicks}</span>
+                                    <td className="py-5 text-center">
+                                        <span className="text-sm font-bold text-slate-600 bg-slate-50 px-3 py-1 rounded-lg border border-slate-100">{lp.clicks}</span>
                                     </td>
-                                    <td className="py-4 text-center">
-                                        <span className="text-sm font-normal text-slate-800">{lp.leads}</span>
+                                    <td className="py-5 text-center">
+                                        <span className="text-sm font-black text-slate-800">{lp.leads}</span>
                                     </td>
-                                    <td className="py-4 text-right">
-                                        <div className="flex flex-col items-end">
-                                            <span className={`text-sm font-medium ${lp.cr > 15 ? 'text-emerald-500' : 'text-[#865BFF]'}`}>
+                                    <td className="py-5 text-right">
+                                        <div className="flex flex-col items-end gap-2">
+                                            <span className={`text-xs font-black px-2 py-0.5 rounded-md ${lp.cr > 15 ? 'bg-emerald-50 text-emerald-600' : 'bg-[#865BFF]/5 text-[#865BFF]'}`}>
                                                 {lp.cr.toFixed(1)}%
                                             </span>
-                                            <div className="w-16 h-1 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
+                                            <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
                                                 <div 
-                                                    className={`h-full rounded-full ${lp.cr > 15 ? 'bg-emerald-500' : 'bg-[#865BFF]'}`}
-                                                    style={{ width: `${Math.min(lp.cr * 2, 100)}%` }}
+                                                    className={`h-full rounded-full transition-all duration-1000 ${lp.cr > 15 ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]' : 'bg-[#865BFF] shadow-[0_0_8px_rgba(134,91,255,0.3)]'}`}
+                                                    style={{ width: `${Math.min(lp.cr * 2.5, 100)}%` }}
                                                 />
                                             </div>
                                         </div>
@@ -603,7 +637,7 @@ export default function OverviewPage() {
                                 </tr>
                             )) : (
                                 <tr>
-                                    <td colSpan={4} className="py-10 text-center text-slate-400 text-xs italic">
+                                    <td colSpan={4} className="py-12 text-center text-slate-400 text-xs italic font-medium tracking-wide">
                                         {t.overview.noLandingData || 'No hay datos de rendimiento suficientes aún.'}
                                     </td>
                                 </tr>

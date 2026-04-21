@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { CreditCard, Loader2, User, Mail, Calendar, Diamond, ShieldCheck, Activity, Crown, Shield, Search, Eye } from 'lucide-react';
+import { CreditCard, Loader2, User, Mail, Calendar, Diamond, ShieldCheck, Activity, Crown, Shield, Search, Eye, Clock, Award, Network } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/context';
 import { useAdmin } from '@/lib/context';
@@ -13,27 +13,32 @@ export default function ReportsAccountsPage() {
     const [leads, setLeads] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [mounted, setMounted] = useState(false);
+    const [partnerId, setPartnerId] = useState('');
+    const [totalNetwork, setTotalNetwork] = useState(0);
 
     useEffect(() => {
+        setMounted(true);
         async function fetchData() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { setLoading(false); return; }
 
             if (isAdmin) {
                 // Admin: all accounts from entire network
-                const { data } = await supabase
-                    .from('leads')
-                    .select('*, partners(name, email)')
-                    .order('created_at', { ascending: false });
-                setLeads(data || []);
+                const [lRes, pRes] = await Promise.all([
+                    supabase.from('leads').select('*, partners(name, email)').order('created_at', { ascending: false }),
+                    supabase.from('partners').select('*', { count: 'exact', head: true })
+                ]);
+                setLeads(lRes.data || []);
+                setTotalNetwork(pRes.count || 0);
             } else {
                 // Partner View: only their own accounts
-                const { data } = await supabase
-                    .from('leads')
-                    .select('*')
-                    .eq('partner_id', user.id)
-                    .order('created_at', { ascending: false });
-                setLeads(data || []);
+                const [lRes, pRes] = await Promise.all([
+                    supabase.from('leads').select('*').eq('partner_id', user.id).order('created_at', { ascending: false }),
+                    supabase.from('partners').select('partner_id').eq('id', user.id).single()
+                ]);
+                setLeads(lRes.data || []);
+                if (pRes.data?.partner_id) setPartnerId(pRes.data.partner_id);
             }
             setLoading(false);
         }
@@ -84,15 +89,19 @@ export default function ReportsAccountsPage() {
                             </p>
                         </div>
                     </div>
-                    <div className={`rounded-2xl p-4 flex items-center gap-4 ${isAdmin ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-white/5 backdrop-blur-md border border-white/10'}`}>
-                        <div className="text-right">
-                            <div className={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${isAdmin ? 'text-amber-400/60' : 'text-white/30'}`}>
-                                {isAdmin ? 'Total Red' : t.reports.totalAccounts}
-                            </div>
-                            <div className={`text-xl font-black ${isAdmin ? 'text-amber-300' : 'text-white'}`}>{leads.length}</div>
+                    <div className="flex items-center gap-3">
+                        <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
+                            <Clock className="w-4 h-4" />
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                                {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                            </span>
                         </div>
-                        <div className="w-px h-8 bg-white/10 mx-2" />
-                        {isAdmin ? <Crown className="w-8 h-8 text-amber-400 opacity-50" /> : <ShieldCheck className="w-8 h-8 text-[#865BFF] opacity-50" />}
+                        <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>
+                            {isAdmin ? <Network className="w-4 h-4" /> : <Award className="w-4 h-4 text-[#865BFF]" />}
+                            <span className="text-xs font-mono font-bold tracking-tight">
+                                {isAdmin ? `${totalNetwork} PARTNERS` : partnerId}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -181,7 +190,7 @@ export default function ReportsAccountsPage() {
                                         <td className="px-8 py-5">
                                             <div className="flex items-center gap-2 text-[11px] text-slate-400 font-black uppercase tracking-tighter">
                                                 <Calendar className="w-3.5 h-3.5 text-slate-300" />
-                                                {new Date(lead.created_at).toLocaleDateString(localeMap[lang] || 'es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                {new Date(lead.created_at).toLocaleDateString(localeMap[lang] || 'es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()}
                                             </div>
                                         </td>
                                     </motion.tr>

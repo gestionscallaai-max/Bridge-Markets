@@ -161,37 +161,56 @@ function RegisterPageContent() {
             <div className="relative w-1/2 hidden lg:flex flex-col items-center justify-center overflow-hidden">
                 {/* Vanta Background - Dark purple like login */}
                 <div ref={vantaRef} className="absolute inset-0 z-0" style={{ background: '#0d0221' }} />
-                <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(160deg, rgba(13,2,33,0.85) 0%, rgba(20,6,51,0.6) 50%, rgba(134,91,255,0.15) 100%)' }} />
+                <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(160deg, rgba(13,2,33,0.95) 0%, rgba(20,6,51,0.8) 50%, rgba(134,91,255,0.2) 100%)' }} />
+                
+                {/* Large Background Watermark */}
+                <div className="absolute -left-20 -bottom-20 w-[600px] h-[600px] opacity-[0.05] grayscale brightness-0 invert pointer-events-none rotate-12">
+                    <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                </div>
 
                 {/* Content */}
-                <div className="relative z-10 text-center px-12 max-w-lg">
+                <div className="relative z-10 text-center px-12 w-full max-w-2xl">
                     {/* Logo */}
-                    <div className="mx-auto mb-8">
-                        <img src="/images/logo.png" alt="Bridge Markets" className="h-16 object-contain drop-shadow-2xl" />
-                    </div>
+                    <motion.div 
+                        initial={{ opacity: 0, y: -20 }} 
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mx-auto mb-12"
+                    >
+                        <img src="/images/logo BM blanco.png" alt="Bridge Markets" className="h-40 mx-auto object-contain drop-shadow-[0_0_30px_rgba(134,91,255,0.3)]" />
+                    </motion.div>
 
-                    <h2 className="text-xl font-normal text-white tracking-tight mb-3">
-                        Únete al Programa
-                    </h2>
-                    <p className="text-white/70 text-sm leading-relaxed mb-10">
-                        Solicita tu cuenta de Partner y accede a la plataforma de generación y captura de leads más avanzada.
-                    </p>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <h2 className="text-3xl font-black text-white tracking-tighter mb-4 uppercase">
+                            Bridge Markets <span className="text-[#865BFF]">Internal Panel</span>
+                        </h2>
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#865BFF] to-transparent mx-auto mb-6 rounded-full" />
+                        <p className="text-purple-100/60 text-base leading-relaxed mb-12 font-medium max-w-md mx-auto">
+                            Plataforma premium para IB&apos;S &quot;Broker&quot;. Genera piezas gráficas multilenguaje y landing pages con IA en minutos.
+                        </p>
+                    </motion.div>
 
                     {/* Feature Cards Grid */}
-                    <div className="grid grid-cols-2 gap-3">
-                        {features.map((feat) => {
+                    <div className="grid grid-cols-2 gap-4">
+                        {features.map((feat, i) => {
                             const Icon = feat.icon;
                             return (
-                                <div
+                                <motion.div
                                     key={feat.title}
-                                    className="bg-white/10 backdrop-blur-md border border-white/15 rounded-xl p-4 text-left hover:bg-white/15 transition-colors"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 + (i * 0.1) }}
+                                    className="group bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-5 text-left hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300"
                                 >
-                                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${feat.color} flex items-center justify-center mb-2.5 shadow-sm`}>
-                                        <Icon className="w-4 h-4 text-white" />
+                                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feat.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                                        <Icon className="w-5 h-5 text-white" />
                                     </div>
-                                    <div className="text-white text-[13px] font-normal">{feat.title}</div>
-                                    <div className="text-white/50 text-[11px] mt-0.5">{feat.desc}</div>
-                                </div>
+                                    <div className="text-white text-sm font-bold tracking-wide">{feat.title}</div>
+                                    <div className="text-white/40 text-[11px] mt-1 font-medium leading-tight">{feat.desc}</div>
+                                </motion.div>
                             );
                         })}
                     </div>

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/genai": "^1.50.1",
+    "@google/generative-ai": "^0.24.1",
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.101.0",
     "clsx": "^2.1.1",
@@ -19,6 +21,7 @@
     "react-dom": "^18",
     "react-parallax-tilt": "^1.7.234",
     "recharts": "^3.8.1",
+    "resend": "^6.12.2",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {

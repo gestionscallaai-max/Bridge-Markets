@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { BarChart2, Loader2, MousePointerClick, Users, Globe, TrendingUp, ArrowUpRight, ArrowDownRight, Activity, Zap, Crown, Shield, Network, Eye } from 'lucide-react';
+import { BarChart2, Loader2, MousePointerClick, Users, Globe, TrendingUp, ArrowUpRight, ArrowDownRight, Activity, Zap, Crown, Shield, Network, Eye, Pencil, Check, Clock, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -18,11 +18,22 @@ export default function ReportsStatsPage() {
     const [chartData, setChartData] = useState<any[]>([]);
     const [partnerRankings, setPartnerRankings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [monthlyGoal, setMonthlyGoal] = useState(100);
+    const [isEditingGoal, setIsEditingGoal] = useState(false);
+    const [savingGoal, setSavingGoal] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    const [partnerId, setPartnerId] = useState('');
 
     useEffect(() => {
+        setMounted(true);
         async function fetchData() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { setLoading(false); return; }
+
+            // Fetch current goal and identity
+            const { data: partnerData } = await supabase.from('partners').select('monthly_goal, partner_id').eq('id', user.id).single();
+            if (partnerData?.monthly_goal) setMonthlyGoal(partnerData.monthly_goal);
+            if (partnerData?.partner_id) setPartnerId(partnerData.partner_id);
 
             if (isAdmin) {
                 // Admin: global network stats
@@ -51,13 +62,37 @@ export default function ReportsStatsPage() {
                     setPartnerRankings(Object.values(map).sort((a, b) => b.count - a.count).slice(0, 8));
                 }
 
-                const days = [t.reports.dayMon, t.reports.dayTue, t.reports.dayWed, t.reports.dayThu, t.reports.dayFri, t.reports.daySat, t.reports.daySun];
-                const mockData = days.map((day) => ({
-                    name: day,
-                    clicks: Math.floor(clicksCount / 7 * (0.8 + Math.random() * 0.4)),
-                    leads: Math.floor(leadsCount / 7 * (0.7 + Math.random() * 0.6))
-                }));
-                setChartData(mockData);
+                // Aggregating real daily data for the chart (Global)
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+                const [clicksRes, leadsRes] = await Promise.all([
+                    supabase.from('clicks')
+                        .select('created_at')
+                        .gte('created_at', sevenDaysAgo.toISOString()),
+                    supabase.from('leads')
+                        .select('created_at')
+                        .gte('created_at', sevenDaysAgo.toISOString())
+                ]);
+
+                const dayMap: any[] = [];
+                const now = new Date();
+                
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date(now);
+                    d.setDate(d.getDate() - i);
+                    const dateStr = d.toISOString().split('T')[0];
+                    
+                    const dayClicks = clicksRes.data?.filter(c => c.created_at.startsWith(dateStr)).length || 0;
+                    const dayLeads = leadsRes.data?.filter(l => l.created_at.startsWith(dateStr)).length || 0;
+                    
+                    dayMap.push({
+                        name: d.toLocaleDateString(undefined, { weekday: 'short' }).toUpperCase(),
+                        clicks: dayClicks,
+                        leads: dayLeads
+                    });
+                }
+                setChartData(dayMap);
             } else {
                 // Partner View: only their data
                 const [l, c, ln] = await Promise.all([
@@ -71,24 +106,65 @@ export default function ReportsStatsPage() {
                 const rate = clicksCount > 0 ? ((leadsCount / clicksCount) * 100).toFixed(1) + '%' : '0%';
                 setStats({ leads: leadsCount, clicks: clicksCount, landings: ln.count || 0, conversionRate: rate, totalPartners: 0 });
 
+                // Aggregating real daily data for the chart
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+                const [clicksRes, leadsRes] = await Promise.all([
+                    supabase.from('clicks')
+                        .select('created_at')
+                        .gte('created_at', sevenDaysAgo.toISOString())
+                        .eq('partner_id', user.id),
+                    supabase.from('leads')
+                        .select('created_at')
+                        .gte('created_at', sevenDaysAgo.toISOString())
+                        .eq('partner_id', user.id)
+                ]);
+
                 const days = [t.reports.dayMon, t.reports.dayTue, t.reports.dayWed, t.reports.dayThu, t.reports.dayFri, t.reports.daySat, t.reports.daySun];
-                const mockData = days.map((day) => ({
-                    name: day,
-                    clicks: Math.floor(clicksCount / 7 * (0.8 + Math.random() * 0.4)),
-                    leads: Math.floor(leadsCount / 7 * (0.7 + Math.random() * 0.6))
-                }));
-                setChartData(mockData);
+                const dayMap: any[] = [];
+                const now = new Date();
+                
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date(now);
+                    d.setDate(d.getDate() - i);
+                    const dateStr = d.toISOString().split('T')[0];
+                    
+                    const dayClicks = clicksRes.data?.filter(c => c.created_at.startsWith(dateStr)).length || 0;
+                    const dayLeads = leadsRes.data?.filter(l => l.created_at.startsWith(dateStr)).length || 0;
+                    
+                    dayMap.push({
+                        name: d.toLocaleDateString(undefined, { weekday: 'short' }).toUpperCase(),
+                        clicks: dayClicks,
+                        leads: dayLeads
+                    });
+                }
+                setChartData(dayMap);
             }
             setLoading(false);
         }
         fetchData();
     }, [t, isAdmin]);
 
+    const handleSaveGoal = async () => {
+        setSavingGoal(true);
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                await supabase.from('partners').update({ monthly_goal: monthlyGoal }).eq('id', user.id);
+                setIsEditingGoal(false);
+            }
+        } catch (error) {
+            console.error('Error saving goal:', error);
+        }
+        setSavingGoal(false);
+    };
+
     // Admin metrics (4 cards including network total)
     const adminMetrics = [
         { label: 'Clicks Totales — Red', value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
         { label: 'Leads Capturados — Red', value: stats.leads, icon: Users, color: '#f59e0b', trend: '+5%', isUp: true },
-        { label: 'Tasa Conversión Global', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
+        { label: 'TASA REGISTROS', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
         { label: 'Partners Activos', value: stats.totalPartners, icon: Network, color: '#3B82F6', trend: 'Red', isUp: true },
     ];
 
@@ -96,7 +172,7 @@ export default function ReportsStatsPage() {
     const partnerMetrics = [
         { label: t.reports.totalClicks, value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
         { label: t.reports.leadsCapt, value: stats.leads, icon: Users, color: '#FF5B86', trend: '+5%', isUp: true },
-        { label: t.reports.convRate, value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
+        { label: 'TASA REGISTROS', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
         { label: 'Landings', value: stats.landings, icon: Globe, color: '#3B82F6', trend: 'N/A', isUp: true },
     ];
 
@@ -110,38 +186,52 @@ export default function ReportsStatsPage() {
 
     return (
         <div className="space-y-8 pb-20 max-w-7xl mx-auto">
-            {/* ── Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
-                <div>
-                    <div className="flex items-center gap-3 mb-1">
-                        {isAdmin
-                            ? <Crown className="w-7 h-7 text-amber-500" />
-                            : <BarChart2 className="w-8 h-8 text-[#865BFF]" />
-                        }
-                        <h1 className="text-3xl font-black text-slate-800 tracking-tight">
-                            {isAdmin ? 'Estadísticas — Red Global' : t.reports.statsTitle}
-                        </h1>
-                    </div>
-                    <div className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border ${
-                        isAdmin ? 'text-amber-500 bg-amber-50 border-amber-200' : 'text-[#865BFF] bg-[#865BFF]/5 border-[#865BFF]/20'
-                    }`}>
-                        {isAdmin
-                            ? <><Shield className="w-3 h-3" /><span>Vista Administrador — Métricas de toda la red</span></>
-                            : <><Eye className="w-3 h-3" /><span>Partner View — Tus métricas personales</span></>}
-                    </div>
-                    <p className="text-slate-500 font-medium mt-2">
-                        {isAdmin ? 'Métricas consolidadas de todos los partners y la red completa' : t.reports.statsSubtitle}
-                    </p>
+            {/* ── Header Banner */}
+            <div className={`relative rounded-[2.5rem] p-8 text-white shadow-2xl border z-20 ${
+                isAdmin ? 'bg-gradient-to-br from-[#1a0f00] to-[#2d1900] border-amber-500/20' : 'bg-[#0d0221] border-white/5'
+            }`}>
+                {/* Background Effects Container */}
+                <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
+                    <div className={`absolute top-0 right-0 w-96 h-96 opacity-10 blur-[100px] -mr-48 -mt-48 ${isAdmin ? 'bg-amber-500' : 'bg-[#865BFF]'}`} />
                 </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex -space-x-2">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className={`w-8 h-8 rounded-full border-2 border-white ${isAdmin ? 'bg-amber-200' : 'bg-slate-200'}`} />
-                        ))}
+
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-5">
+                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border shadow-lg ${
+                            isAdmin ? 'bg-amber-500/10 border-amber-500/30 shadow-amber-500/10' : 'bg-[#865BFF]/10 border-[#865BFF]/30 shadow-[#865BFF]/10'
+                        }`}>
+                            {isAdmin ? <Crown className="w-7 h-7 text-amber-400" /> : <BarChart2 className="w-7 h-7 text-[#865BFF]" />}
+                        </div>
+                        <div>
+                            <div className={`text-[9px] font-medium uppercase tracking-widest mb-1 px-2 py-0.5 rounded-md border inline-block ${
+                                isAdmin ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' : 'text-[#865BFF] bg-[#865BFF]/10 border-[#865BFF]/20'
+                            }`}>
+                                {isAdmin
+                                    ? <><Shield className="w-3 h-3" /><span>Vista Administrador — Red Global</span></>
+                                    : <><Eye className="w-3 h-3" /><span>Partner View — Tus Métricas</span></>}
+                            </div>
+                            <h1 className="text-2xl font-medium tracking-tight mt-1">
+                                {isAdmin ? 'Análisis de Red' : t.reports.statsTitle}
+                            </h1>
+                            <p className="text-white/50 text-sm font-medium">
+                                {isAdmin ? 'Métricas consolidadas de todos los partners y la red completa' : t.reports.statsSubtitle}
+                            </p>
+                        </div>
                     </div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        {isAdmin ? `${stats.totalPartners} Partners` : `+500 ${t.reports.activeTraders}`}
-                    </span>
+                    <div className="flex items-center gap-3">
+                        <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
+                            <Clock className="w-4 h-4" />
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                                {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                            </span>
+                        </div>
+                        <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>
+                            {isAdmin ? <Network className="w-4 h-4" /> : <Award className="w-4 h-4 text-[#865BFF]" />}
+                            <span className="text-xs font-mono font-bold tracking-tight">
+                                {isAdmin ? `${stats.totalPartners} PARTNERS` : partnerId}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -152,18 +242,18 @@ export default function ReportsStatsPage() {
                         className={`bg-white rounded-[2.5rem] p-8 border shadow-sm hover:shadow-xl transition-all duration-300 group ${
                             isAdmin ? 'border-amber-500/10 hover:shadow-amber-500/5' : 'border-slate-100 hover:shadow-[#865BFF]/5'
                         }`}>
-                        <div className="flex items-start justify-between mb-6">
-                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}
+                        <div className="flex items-start justify-between mb-4">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}
                                 style={{ backgroundColor: `${m.color}10`, color: m.color }}>
-                                <m.icon className="w-7 h-7" />
+                                <m.icon className="w-5 h-5" strokeWidth={1.5} />
                             </div>
-                            <div className={`flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full ${m.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
-                                {m.isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                            <div className={`flex items-center gap-1 text-[9px] font-medium px-2 py-0.5 rounded-lg ${m.isUp ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                                {m.isUp ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}
                                 {m.trend}
                             </div>
                         </div>
-                        <div className="text-4xl font-black text-slate-800 tracking-tighter mb-1">{m.value}</div>
-                        <div className="text-xs font-bold text-slate-400 uppercase tracking-[0.1em]">{m.label}</div>
+                        <div className="text-xl font-semibold text-slate-800 tracking-tight mb-0.5">{m.value}</div>
+                        <div className="text-[11px] font-normal text-slate-400 uppercase tracking-wide">{m.label}</div>
                     </motion.div>
                 ))}
             </div>
@@ -254,11 +344,46 @@ export default function ReportsStatsPage() {
                                 <div>
                                     <div className="flex justify-between text-xs font-bold mb-2 uppercase tracking-tighter">
                                         <span className="text-slate-400">{t.reports.monthlyGoal}</span>
-                                        <span className="text-[#865BFF]">{stats.leads} / 100</span>
+                                        <div className="flex items-center gap-2">
+                                            {isEditingGoal ? (
+                                                <div className="flex items-center gap-2 bg-white shadow-lg border border-[#865BFF]/20 rounded-xl px-2 py-1 -mt-1">
+                                                    <input 
+                                                        type="number" 
+                                                        value={monthlyGoal} 
+                                                        onChange={(e) => setMonthlyGoal(parseInt(e.target.value))}
+                                                        className="w-16 bg-transparent text-sm font-black text-[#865BFF] focus:outline-none"
+                                                        autoFocus
+                                                    />
+                                                    <button 
+                                                        onClick={handleSaveGoal} 
+                                                        disabled={savingGoal} 
+                                                        className="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center hover:bg-emerald-600 transition-colors shadow-sm"
+                                                    >
+                                                        {savingGoal ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-4 h-4" />}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-sm font-black text-[#865BFF] bg-[#865BFF]/5 px-2 py-0.5 rounded-lg border border-[#865BFF]/10">
+                                                        {stats.leads} / {monthlyGoal}
+                                                    </span>
+                                                    <button 
+                                                        onClick={() => setIsEditingGoal(true)} 
+                                                        className="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-[#865BFF] hover:text-white transition-all shadow-sm"
+                                                        title="Editar meta"
+                                                    >
+                                                        <Pencil className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="w-full h-3 bg-slate-50 rounded-full overflow-hidden border border-slate-100 p-0.5">
-                                        <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(stats.leads, 100)}%` }}
-                                            className="h-full bg-gradient-to-r from-[#865BFF] to-[#6335f8] rounded-full" />
+                                    <div className="w-full h-3 bg-slate-50 rounded-full overflow-hidden border border-slate-100 p-0.5 shadow-inner">
+                                        <motion.div 
+                                            initial={{ width: 0 }} 
+                                            animate={{ width: `${Math.min((stats.leads / (monthlyGoal || 1)) * 100, 100)}%` }}
+                                            className="h-full bg-gradient-to-r from-[#865BFF] to-[#6335f8] rounded-full shadow-[0_0_10px_rgba(134,91,255,0.3)]" 
+                                        />
                                     </div>
                                 </div>
                                 <div className="pt-4 grid grid-cols-2 gap-4">
@@ -274,23 +399,6 @@ export default function ReportsStatsPage() {
                             </div>
                         </div>
                     )}
-
-                    <div className={`rounded-[2.5rem] p-8 text-white shadow-xl relative overflow-hidden group cursor-pointer ${
-                        isAdmin
-                            ? 'bg-gradient-to-br from-amber-500 to-amber-600 shadow-amber-500/20'
-                            : 'bg-gradient-to-br from-[#865BFF] to-[#6335f8] shadow-[#865BFF]/20'
-                    }`}>
-                        <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-700" />
-                        <h4 className="text-xl font-black mb-2 relative z-10 leading-tight">
-                            {isAdmin ? 'Exportar Reporte Completo' : t.reports.improveTitle}
-                        </h4>
-                        <p className="text-white/70 text-xs font-medium mb-6 relative z-10">
-                            {isAdmin ? 'Descarga métricas de toda la red en CSV' : t.reports.improveDesc}
-                        </p>
-                        <button className="bg-white text-[#865BFF] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl group-hover:translate-x-2 transition-all relative z-10">
-                            {isAdmin ? 'Exportar CSV' : t.reports.goToAcademy}
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

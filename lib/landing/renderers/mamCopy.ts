@@ -2,79 +2,86 @@ import { BrandConfig } from '../types';
 import { SECTION_CATALOG } from '../catalog';
 
 export function renderMCHero(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'mc_hero')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
+    const title = content.title || "ALPHA";
+    const highlight = content.highlight || "WEALTH";
+    const subtitle = content.subtitle || brand.heroPhrase || "Gestión de capital de alto nivel con transparencia total y tecnología MAM/PAMM.";
+    const ctaText = content.ctaText || "Join Alpha";
+    const ctaLink = brand.ctaLink || "#register";
 
     return `
-    <section class="relative min-h-[95vh] flex flex-col pt-10 pb-32 px-8 overflow-hidden bg-white">
-        <!-- Blobs de Profundidad -->
+    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#05010f]">
+        <!-- Fondo Alpha Wealth -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-[#865BFF]/5 rounded-full blur-[120px] animate-pulse"></div>
-            <div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px]"></div>
-            <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#140633 1px, bg-white 1px); background-size: 40px 40px;"></div>
-        </div>
-        
-        <div class="max-w-7xl mx-auto w-full relative z-10 flex-grow flex flex-col pt-24">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center flex-grow">
-                <div class="section-reveal">
-                    <div class="flex items-center gap-4 mb-12">
-                        <span class="inline-block px-5 py-2 rounded-full bg-[#865BFF]/10 text-[#865BFF] text-[10px] font-black uppercase tracking-[0.4em] border border-[#865BFF]/20 shadow-sm">Partner Certificado: ${ibName}</span>
-                    </div>
-                    
-                    <h1 class="text-6xl md:text-8xl lg:text-[7.5rem] font-black font-headline leading-[0.85] mb-12 tracking-tightest text-[#140633] uppercase drop-shadow-sm">
-                        ${c.title}
-                    </h1>
-                    
-                    <div class="max-w-xl mb-16 relative">
-                        <div class="absolute left-0 top-0 w-1.5 h-full bg-[#865BFF] rounded-full"></div>
-                        <p class="text-2xl text-gray-500 leading-relaxed font-medium pl-10">
-                            ${c.subtitle}
-                        </p>
-                    </div>
-
-                    ${brand.heroPhrase ? `<p class="text-xl text-[#865BFF] mb-16 font-black italic opacity-80 decoration-[#865BFF]/30 underline underline-offset-8">"${brand.heroPhrase}"</p>` : ''}
-                    
-                    <div class="flex flex-col sm:flex-row gap-8">
-                        <a href="#register" class="group relative px-14 py-7 bg-[#865BFF] text-white font-black rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(134,91,255,0.5)] hover:shadow-[0_45px_90px_-15px_rgba(134,91,255,0.6)] hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-xl">
-                            <span class="uppercase tracking-tighter">${c.cta1}</span>
-                            <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">bolt</span>
-                        </a>
-                        <a href="#learn" class="group px-14 py-7 bg-white border-2 border-slate-100 text-[#140633] font-black rounded-[2rem] shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:border-[#140633] hover:-translate-y-2 transition-all flex items-center justify-center gap-4 text-xl uppercase tracking-tighter">
-                            ${c.cta2}
-                        </a>
-                    </div>
-                </div>
-
-                <div class="relative section-reveal lg:block hidden" style="animation-delay: 0.2s;">
-                    <div class="relative z-10 p-8 border border-white bg-white/60 backdrop-blur-3xl rounded-[5rem] shadow-[0_60px_120px_-20px_rgba(20,6,51,0.15)]">
-                        <div class="aspect-square bg-[#140633] rounded-[4.5rem] p-4 shadow-2xl relative group overflow-hidden">
-                             <div class="absolute inset-0 bg-gradient-to-tr from-[#865BFF]/40 to-transparent mix-blend-overlay opacity-50"></div>
-                             <div class="absolute inset-0 border-[20px] border-white/5 rounded-[4rem]"></div>
-                             <div class="w-full h-full flex flex-col justify-center items-center gap-8 relative z-10">
-                                <span class="material-symbols-outlined text-[180px] text-white/5 drop-shadow-[0_0_40px_rgba(134,91,255,0.5)]">shield_person</span>
-                                <div class="text-center">
-                                    <div class="text-xs font-black text-[#865BFF] uppercase tracking-[0.6em] mb-4">Bridge Markets</div>
-                                    <div class="text-5xl font-black text-white uppercase tracking-tighter leading-none">Institutional <br>Standard</div>
-                                </div>
-                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute -bottom-12 -right-12 p-10 bg-white rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.1)] border border-slate-50 flex flex-col gap-4 z-20">
-                        <div class="flex items-center gap-5">
-                            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shadow-inner">
-                                <span class="material-symbols-outlined text-4xl">terminal</span>
-                            </div>
-                            <div>
-                                <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-2">V3 Core Systems</div>
-                                <div class="text-2xl font-black text-[#140633]">Trading Active</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Patrón de malla elegante -->
+            <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(rgba(134,91,255,0.2) 1px, transparent 1px); background-size: 40px 40px;"></div>
+            
+            <!-- Tipografía de Fondo Sutil -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-[0.02] select-none pointer-events-none">
+                <span class="text-[40vw] font-black text-white uppercase tracking-tightest leading-none italic">ESTATE</span>
             </div>
         </div>
-    </section>`;
+
+        <div class="max-w-[1600px] mx-auto w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+                
+                <!-- Columna: Wealth Info -->
+                <div class="lg:col-span-6 section-reveal">
+                    <div class="flex items-center gap-6 mb-16">
+                        <div class="w-16 h-[2px] bg-gradient-to-r from-[#865BFF] to-transparent"></div>
+                        <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em]">Private Management</span>
+                    </div>
+
+                    <h1 class="text-7xl md:text-[11rem] lg:text-[14rem] font-black leading-[0.8] text-white mb-16 tracking-tightest uppercase italic">
+                        ${title} <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#865BFF] via-white to-white/20 italic">${highlight}</span>
+                    </h1>
+
+                    <div class="max-w-xl">
+                        <p class="text-2xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight">
+                            ${subtitle}
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-12 items-center">
+                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+                                <span class="relative z-10 uppercase tracking-[0.5em] text-xs font-black italic">${ctaText}</span>
+                            </a>
+                            
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-2 italic">Minimum Entry</span>
+                                <span class="text-2xl font-black text-white italic tracking-tighter">$10,000.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna: Visual Alpha -->
+                <div class="lg:col-span-6 relative flex justify-center items-center section-reveal">
+                    <div class="relative w-full aspect-square flex items-center justify-center">
+                        
+                        <!-- Main 3D Asset (Caballo Negro) -->
+                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-150">
+                            <img src="/images/imagenes%20nuevas/caballo%20negro.png" alt="Alpha Wealth Horse" class="w-full h-full object-contain filter drop-shadow-[0_0_120px_rgba(134,91,255,0.2)] animate-float-slow">
+                        </div>
+
+                        <!-- Elegant HUD Detail -->
+                        <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-20 rotate-90 opacity-20 hidden lg:block">
+                            <span class="text-[100px] font-black text-white uppercase tracking-[1em] leading-none whitespace-nowrap">PRESTIGE</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <style>
+            @keyframes float-slow {
+                0%, 100% { transform: translateY(0) scale(1.3); }
+                50% { transform: translateY(-40px) scale(1.35); }
+            }
+            .animate-float-slow { animation: float-slow 12s ease-in-out infinite; }
+        </style>
+    </section>
+    `;
 }
 
 export function renderMCIntro(content: Record<string, any>, brand: BrandConfig): string {

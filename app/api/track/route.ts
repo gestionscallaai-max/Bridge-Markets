@@ -12,10 +12,10 @@ export async function GET(req: Request) {
     }
 
     try {
-        // En un entorno real, extraeríamos IP y User Agent de los headers
         const ip = req.headers.get('x-forwarded-for') || '0.0.0.0';
         const ua = req.headers.get('user-agent') || 'unknown';
         const referer = req.headers.get('referer') || '';
+        const country = req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry') || null;
 
         // Registrar el clic
         // Nota: partnerId aquí debe ser el UUID de Supabase. 
@@ -38,7 +38,8 @@ export async function GET(req: Request) {
             ip_address: ip,
             user_agent: ua,
             referer: referer,
-            source: source
+            source: source,
+            country: country
         });
 
     } catch (err) {

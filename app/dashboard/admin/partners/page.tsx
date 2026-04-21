@@ -8,6 +8,7 @@ import {
     ChevronLeft, ChevronRight, Loader2, Award
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { formatDateUpperCase } from '@/lib/utils';
 
 export default function PartnersManagementPage() {
     const [partners, setPartners] = useState<any[]>([]);
@@ -124,7 +125,7 @@ export default function PartnersManagementPage() {
                                             </div>
                                             <div className="flex items-center gap-1 text-[11px] text-slate-400">
                                                 <Calendar className="w-3 h-3" />
-                                                {new Date(partner.created_at).toLocaleDateString()}
+                                                {formatDateUpperCase(partner.created_at)}
                                             </div>
                                         </div>
                                     </td>

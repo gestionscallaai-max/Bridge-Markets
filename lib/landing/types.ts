@@ -36,4 +36,5 @@ export interface BrandConfig {
     logoUrl?: string;
     // Nombre del IB (fallback para communityName)
     ibName?: string;
+    videoUrl?: string;
 }

@@ -3,10 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { 
     Download, Upload, Trash2, RefreshCcw, 
     Image as ImageIcon, Check, Loader2, Plus,
-    ExternalLink, Search, Filter
+    ExternalLink, Search, Filter, Languages
 } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { useLanguage } from '@/lib/i18n/context';
+import LocalizerModal from '@/components/Modals/LocalizerModal';
+import { motion } from 'framer-motion';
+import { formatDateUpperCase } from '@/lib/utils';
 
 interface MaterialPost {
     id: string;
@@ -30,6 +33,16 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
     const [uploading, setUploading] = useState(false);
     const [syncing, setSyncing] = useState(false);
     const [filter, setFilter] = useState('');
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+    
+    // AI Translation Modal
+    const [isLocalizerOpen, setIsLocalizerOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+    const openLocalizer = (url: string) => {
+        setSelectedImage(url);
+        setIsLocalizerOpen(true);
+    };
 
     const fetchAssets = async () => {
         setLoading(true);
@@ -59,16 +72,18 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
         document.body.removeChild(link);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!window.confirm('¿Eliminar este material?')) return;
+    const handleDelete = async () => {
+        if (!itemToDelete) return;
         try {
-            const res = await fetch(`/api/promo/assets?id=${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/promo/assets?id=${itemToDelete}`, { method: 'DELETE' });
             const json = await res.json();
             if (json.success) {
-                setAssets(prev => prev.filter(a => a.id !== id));
+                setAssets(prev => prev.filter(a => a.id !== itemToDelete));
             }
         } catch (error) {
             console.error('Error deleting asset:', error);
+        } finally {
+            setItemToDelete(null);
         }
     };
 
@@ -121,10 +136,18 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
 
     // Special function to seed existing images (one-time use for Admin)
     const handleSync = async () => {
+        if (!window.confirm('¿Eliminar todos los materiales actuales y sincronizar con la carpeta /public/images/post?')) return;
         setSyncing(true);
         try {
-            // Existing images found in public/images/post during research
-            const existingImages = [
+            // 1. Clear current database entries
+            for (const asset of assets) {
+                await fetch(`/api/promo/assets?id=${asset.id}`, { method: 'DELETE' });
+            }
+
+            // 2. New list from public/images/post
+            const postImages = [
+                "1.2.jpg", "1.3.jpg", "1.4.jpg", "2.1.jpg", "2.2.jpg", "2.3.jpg",
+                "3.1.jpg", "3.2.jpg", "4.1.jpg", "4.2.jpg", "4.3.jpg",
                 "565335905_17966788319960408_7328447827544933734_n.jpg",
                 "633716288_17980057172960408_1799203224339714297_n.jpg",
                 "641778364_17980875920960408_6917174705232821628_n.jpg",
@@ -145,12 +168,12 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                 "HISTORIA CUPON.jpg"
             ];
 
-            for (const img of existingImages) {
+            for (const img of postImages) {
                 await fetch('/api/promo/assets', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        title: img.split('.')[0],
+                        title: img.split('.')[0].substring(0, 30), // Clean title
                         url: `/images/post/${img}`,
                         filename: img,
                         mime_type: img.endsWith('.png') ? 'image/png' : 'image/jpeg',
@@ -161,6 +184,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
             fetchAssets();
         } catch (error) {
             console.error('Sync error:', error);
+            alert('Error durante la sincronización');
         } finally {
             setSyncing(false);
         }
@@ -194,15 +218,6 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                     
                     {isAdmin && (
                         <>
-                            <button 
-                                onClick={handleSync}
-                                disabled={syncing}
-                                className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
-                                title={t.gallery.syncExistingImages}
-                            >
-                                {syncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />}
-                                <span className="hidden sm:inline">Sync</span>
-                            </button>
                             
                             <label className="flex items-center gap-2 px-4 py-2 bg-[#865BFF] hover:bg-[#7349e5] text-white rounded-xl text-sm font-bold shadow-lg shadow-[#865BFF]/20 cursor-pointer transition-all">
                                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
@@ -221,9 +236,13 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                     <p className="font-bold text-slate-400">{t.gallery.loadingGallery}</p>
                 </div>
             ) : filteredAssets.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
                     {filteredAssets.map(asset => (
-                        <div key={asset.id} className="group relative bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300">
+                        <motion.div 
+                            key={asset.id} 
+                            whileHover={{ y: -5 }}
+                            className="group relative bg-white/70 backdrop-blur-md rounded-3xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-500 shadow-sm"
+                        >
                             {/* Image Container */}
                             <div className="aspect-square bg-slate-100 overflow-hidden relative">
                                 <img 
@@ -232,32 +251,39 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                                 
-                                {/* Hover Overlay */}
-                                <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-                                    <button 
-                                        onClick={() => window.open(asset.url, '_blank')}
-                                        className="p-3 bg-white/20 backdrop-blur-md rounded-xl text-white hover:bg-white/40 transition-all shadow-xl"
-                                        title={t.gallery.viewFullSize}
-                                    >
-                                        <ExternalLink className="w-5 h-5" />
-                                    </button>
-                                    <button 
-                                        onClick={() => handleDownload(asset)}
-                                        className="p-3 bg-white text-slate-900 rounded-xl hover:scale-105 transition-all shadow-xl"
-                                        title={t.gallery.downloadMaterial}
-                                    >
-                                        <Download className="w-5 h-5" />
-                                    </button>
-                                    {isAdmin && (
-                                        <button 
-                                            onClick={() => handleDelete(asset.id)}
-                                            className="p-3 bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl"
-                                            title={t.gallery.deleteFromGallery}
-                                        >
-                                            <Trash2 className="w-5 h-5" />
-                                        </button>
-                                    )}
-                                </div>
+                                 {/* Hover Overlay */}
+                                 <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 z-20">
+                                     <button 
+                                         onClick={() => window.open(asset.url, '_blank')}
+                                         className="p-3 bg-white/20 backdrop-blur-md rounded-xl text-white hover:bg-white/40 transition-all shadow-xl cursor-pointer"
+                                         title={t.gallery.viewFullSize}
+                                     >
+                                         <ExternalLink className="w-5 h-5" />
+                                     </button>
+                                     <button 
+                                         onClick={() => handleDownload(asset)}
+                                         className="p-3 bg-white text-slate-900 rounded-xl hover:scale-105 transition-all shadow-xl cursor-pointer"
+                                         title={t.gallery.downloadMaterial}
+                                     >
+                                         <Download className="w-5 h-5" />
+                                     </button>
+                                     <button 
+                                         onClick={() => openLocalizer(asset.url)}
+                                         className="p-3 bg-[#865BFF] text-white rounded-xl hover:bg-[#7349e5] hover:scale-105 transition-all shadow-xl cursor-pointer"
+                                         title={t.gallery?.translateIA || 'Traducir con IA'}
+                                     >
+                                         <Languages className="w-5 h-5" />
+                                     </button>
+                                     {isAdmin && (
+                                         <button 
+                                             onClick={() => setItemToDelete(asset.id)}
+                                             className="p-3 bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition-all shadow-xl cursor-pointer"
+                                             title={t.gallery.deleteFromGallery}
+                                         >
+                                             <Trash2 className="w-5 h-5" />
+                                         </button>
+                                     )}
+                                 </div>
                             </div>
 
                             {/* Info */}
@@ -267,7 +293,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                                         {asset.mime_type.split('/')[1]}
                                     </span>
                                     <span className="text-[10px] text-slate-400 font-medium">
-                                        {new Date(asset.created_at).toLocaleDateString()}
+                                        {formatDateUpperCase(asset.created_at)}
                                     </span>
                                 </div>
                                 <button 
@@ -277,7 +303,7 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                                     {t.gallery.downloadBtn}
                                 </button>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             ) : (
@@ -289,16 +315,47 @@ export default function MaterialGallery({ userRole }: MaterialGalleryProps) {
                     <p className="text-slate-500 max-w-sm mx-auto mb-8">
                         {t.gallery.noMaterialAvailable}
                     </p>
-                    {isAdmin && (
-                        <button 
-                            onClick={handleSync}
-                            disabled={syncing}
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white rounded-xl font-bold shadow-lg shadow-[#865BFF]/20 hover:scale-105 transition-all"
-                        >
-                            {syncing ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCcw className="w-5 h-5" />}
-                            {t.gallery.syncBtn}
-                        </button>
-                    )}
+                </div>
+            )}
+
+            {/* AI Localization Modal */}
+            <LocalizerModal 
+                isOpen={isLocalizerOpen}
+                onClose={() => setIsLocalizerOpen(false)}
+                imageUrl={selectedImage || ''}
+            />
+
+            {/* Custom Delete Confirmation Modal */}
+            {itemToDelete && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0d0221]/40 backdrop-blur-md animate-in fade-in duration-300">
+                    <motion.div 
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-white max-w-sm w-full rounded-[32px] overflow-hidden border border-slate-200 shadow-2xl p-8 text-center"
+                    >
+                        <div className="w-20 h-20 bg-rose-50 rounded-[30px] flex items-center justify-center mx-auto mb-6">
+                            <Trash2 className="w-10 h-10 text-rose-500" />
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-3">¿Confirmar eliminación?</h3>
+                        <p className="text-slate-500 font-bold text-sm leading-relaxed mb-8">
+                            Esta acción es permanente y el material dejará de estar disponible en la galería de promoción.
+                        </p>
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                            <button 
+                                onClick={() => setItemToDelete(null)}
+                                className="py-4 px-6 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-black text-xs uppercase tracking-widest transition-all"
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                onClick={handleDelete}
+                                className="py-4 px-6 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-rose-500/25"
+                            >
+                                Sí, Eliminar
+                            </button>
+                        </div>
+                    </motion.div>
                 </div>
             )}
         </div>

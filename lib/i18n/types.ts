@@ -38,6 +38,7 @@ export type TranslationKeys = {
         actions: string;
         noDocsFound: string;
         copyLink: string;
+        translateIA: string;
     };
     templates: {
         synthetic_edu_name: string;
@@ -270,6 +271,10 @@ export type TranslationKeys = {
         activeSections: string;
         backToEditor: string;
         processing: string;
+        stepPackaging: string;
+        stepSecurity: string;
+        stepDeploying: string;
+        stepFinalizing: string;
         deployLanding: string;
         // Step 5
         landingGenerated: string;
@@ -285,6 +290,9 @@ export type TranslationKeys = {
         totalProgress: string;
         autoSaveNote: string;
         livePreviewLabel: string;
+        reviewStatusTitle: string;
+        reviewStatusDesc: string;
+        reviewNote: string;
         // Section picker modal
         modularLibrary: string;
         modularLibraryDesc: string;

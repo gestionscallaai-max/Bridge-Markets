@@ -9,6 +9,7 @@ import {
 import { supabase } from '@/lib/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/context';
+import { formatDateUpperCase } from '@/lib/utils';
 
 interface LibraryDoc {
     id: string;
@@ -299,7 +300,7 @@ export default function LibraryDocuments() {
                                         <td className="px-8 py-4">
                                             <div className="flex flex-col">
                                                 <span className="font-bold text-slate-800 text-sm mb-0.5">{doc.title}</span>
-                                                <span className="text-[10px] text-slate-400 font-medium">{new Date(doc.created_at).toLocaleDateString()}</span>
+                                                <span className="text-[10px] text-slate-400 font-medium">{formatDateUpperCase(doc.created_at)}</span>
                                             </div>
                                         </td>
                                         <td className="px-8 py-4">

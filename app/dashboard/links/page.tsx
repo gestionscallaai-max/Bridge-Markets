@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { Link2, Copy, Plus, Search, Check, ExternalLink, Loader2, Trash2, X, MousePointer2, TrendingUp, Calendar, Hash } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/context';
+import { formatDateUpperCase } from '@/lib/utils';
 
 export default function ReferralLinksPage() {
     const { t } = useLanguage();
@@ -231,7 +232,7 @@ export default function ReferralLinksPage() {
                                             )}
                                             <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
                                                 <Calendar className="w-3 h-3" />
-                                                {new Date(link.created_at).toLocaleDateString()}
+                                                {formatDateUpperCase(link.created_at)}
                                             </span>
                                         </div>
                                     </div>

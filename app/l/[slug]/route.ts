@@ -14,6 +14,46 @@ export async function GET(request: Request, { params }: { params: { slug: string
         return new NextResponse('Not Found', { status: 404 });
     }
 
+    // ─── Click Tracking Logic ───
+    try {
+        const { searchParams } = new URL(request.url);
+        const ref = searchParams.get('ref');
+        
+        if (ref) {
+            let targetUserId = ref;
+            // Si es un partner_id (BM_XXX), buscar el UUID
+            if (ref.startsWith('BM_')) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('id')
+                    .eq('partner_id', ref)
+                    .single();
+                if (profile) targetUserId = profile.id;
+            }
+
+            const ip = request.headers.get('x-forwarded-for') || '0.0.0.0';
+            const ua = request.headers.get('user-agent') || 'unknown';
+            const referer = request.headers.get('referer') || '';
+            const country = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || null;
+
+            // Guardar el clic de forma asíncrona para no retrasar la carga de la página
+            supabase.from('clicks').insert({
+                partner_id: targetUserId,
+                landing_slug: slug,
+                ip_address: ip,
+                user_agent: ua,
+                referer: referer,
+                source: searchParams.get('source') || 'direct',
+                country: country
+            }).then(({ error }) => {
+                if (error) console.error('Error tracking click in /l/[slug]:', error);
+            });
+        }
+    } catch (e) {
+        console.error('Error in click tracking:', e);
+    }
+    // ───────────────────────────
+
     if (data.status !== 'approved') {
         return new NextResponse(`
             <!DOCTYPE html>

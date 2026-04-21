@@ -6,104 +6,128 @@ import { BrandConfig } from '../types';
  */
 
 export function renderPSHero(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "POTENCIALIZA";
-    const highlight = content.highlight || "TU TRADING";
-    const subtitle = content.subtitle || brand.heroPhrase || "Opera con capital institucional en el mercado más dinámico del mundo.";
-    const ctaText = content.ctaText || "Empieza Ahora";
+    const title = content.title || "SYNTHETIC";
+    const highlight = content.highlight || "NEXUS";
+    const subtitle = content.subtitle || brand.heroPhrase || "Ecosistema Algorítmico de Grado Institucional.";
+    const ctaText = content.ctaText || "Deploy Now";
     const ctaLink = brand.ctaLink || "#register";
-    const badgeText = content.badgeText || "EL MEJOR CHALLENGE DEL MERCADO";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-24 pb-32 px-6 overflow-hidden bg-[#0C0027]">
-        <!-- Fondo Dinámico Premium -->
+    <section class="relative min-h-[110vh] flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#0a0614]">
+        <!-- Fondo Tecnológico Avanzado -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-[#865BFF]/10 rounded-full blur-[150px] opacity-80"></div>
-            <div class="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-[#B086FF]/5 rounded-full blur-[120px] opacity-50"></div>
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
+            <!-- Grid de fondo dinámico -->
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(134,91,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(134,91,255,0.1) 1px, transparent 1px); background-size: 80px 80px;"></div>
+            
+            <!-- Tipografía de Fondo Desfasada -->
+            <div class="absolute top-1/2 left-0 -translate-y-1/2 w-full opacity-[0.02] flex flex-col gap-0 select-none pointer-events-none italic font-black text-[25vw] leading-[0.7] uppercase tracking-tightest">
+                <span>ALGO</span>
+                <span class="ml-[20%]">CORE</span>
+            </div>
+
+            <!-- Mancha de luz central -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[#865BFF]/5 rounded-full blur-[200px]"></div>
         </div>
 
-        <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="max-w-[1600px] mx-auto w-full relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-32">
                 
-                <!-- Columna Izquierda: Textos Impactantes -->
-                <div class="lg:col-span-7 section-reveal">
-                    <div class="inline-flex items-center gap-3 px-5 py-2.5 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full mb-12 shadow-2xl">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#865BFF] animate-ping"></span>
-                        <span class="text-[11px] font-black text-white uppercase tracking-[0.4em]">${badgeText}</span>
+                <!-- Columna: Tech Info -->
+                <div class="lg:w-7/12 section-reveal">
+                    <div class="inline-flex items-center gap-4 px-6 py-2 bg-white/5 border border-white/10 rounded-none mb-16 group hover:border-[#865BFF] transition-all">
+                        <span class="w-2 h-2 bg-[#865BFF] animate-force-pulse"></span>
+                        <span class="text-[10px] font-black text-white/50 uppercase tracking-[0.5em] group-hover:text-white transition-colors italic">High-Frequency Environment</span>
                     </div>
 
-                    <h1 class="text-7xl md:text-9xl lg:text-[9.5rem] font-black leading-[0.82] text-white mb-10 tracking-tighter uppercase font-headline">
+                    <h1 class="text-7xl md:text-[11rem] lg:text-[14rem] font-black leading-[0.75] text-white mb-16 tracking-tightest uppercase italic">
                         ${title} <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#865BFF] via-[#B086FF] to-white">${highlight}</span>
+                        <span class="text-[#865BFF] drop-shadow-[0_0_50px_rgba(134,91,255,0.4)] italic">${highlight}</span>
                     </h1>
 
-                    <p class="text-xl md:text-2xl text-white/50 leading-relaxed max-w-2xl mb-14 font-light">
-                        ${subtitle}
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-8">
-                        <a href="${ctaLink}" class="group relative px-12 py-6 bg-[#865BFF] text-white font-black rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(134,91,255,0.4)] hover:shadow-[0_0_80px_rgba(134,91,255,0.6)] transition-all transform hover:-translate-y-1.5 flex items-center justify-center gap-4">
-                            <span class="relative z-10 text-xl uppercase tracking-[0.1em]">${ctaText}</span>
-                            <span class="material-symbols-outlined relative z-10 group-hover:translate-x-2 transition-transform text-2xl">rocket_launch</span>
-                        </a>
-                        
-                        <div class="flex items-center gap-6 px-8 py-5 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl">
-                           <div class="flex -space-x-4">
-                                ${[1, 2, 3, 4].map(i => `<div class="w-10 h-10 rounded-full border-2 border-[#0C0027] overflow-hidden"><img src="https://i.pravatar.cc/100?u=${i+10}" alt="trader"></div>`).join('')}
-                           </div>
-                           <p class="text-[11px] font-bold text-white/40 uppercase tracking-[0.2em] leading-tight">
-                               <span class="text-white text-lg font-black block mb-0.5">+2.5k Traders</span> Operando hoy
-                           </p>
+                    <div class="flex flex-col md:flex-row gap-16 items-start md:items-center">
+                        <div class="max-w-md">
+                            <p class="text-xl md:text-2xl text-white/30 leading-relaxed font-light uppercase tracking-tighter mb-0">
+                                ${subtitle}
+                            </p>
                         </div>
+                        
+                        <div class="flex gap-10 items-center">
+                            <a href="${ctaLink}" class="group relative px-16 py-8 bg-[#865BFF] text-white font-black overflow-hidden hover:scale-105 transition-all duration-500 shadow-[0_0_40px_rgba(134,91,255,0.3)]">
+                                <div class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                                <span class="relative z-10 uppercase tracking-[0.4em] text-xs">${ctaText}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Tech HUD Elements -->
+                    <div class="mt-24 grid grid-cols-3 gap-12 max-w-2xl opacity-40">
+                        ${['LTC_SYNC: ACTIVE', 'BUF_OVERFLOW: CLEAR', 'EXEC_PRIORITY: MAX'].map(txt => `
+                            <div class="flex flex-col gap-3">
+                                <div class="h-[1px] w-full bg-white/20 relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[#865BFF] animate-scan-line"></div>
+                                </div>
+                                <span class="text-[8px] font-black text-white/50 tracking-[0.2em] italic">${txt}</span>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
 
-                <!-- Columna Derecha: 3D Visual Asset -->
-                <div class="lg:col-span-5 relative lg:block hidden section-reveal">
-                    <div class="relative group">
-                        <div class="absolute -inset-10 bg-[#865BFF]/20 rounded-full blur-[100px] group-hover:bg-[#865BFF]/30 transition-all duration-1000"></div>
+                <!-- Columna: Visual Nexus -->
+                <div class="lg:w-5/12 relative section-reveal">
+                    <div class="relative w-full aspect-square flex items-center justify-center">
                         
-                        <!-- Visualización de la imagen generada -->
-                        <div class="relative z-10 rounded-[4rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] transform rotate-2 group-hover:rotate-0 transition-all duration-1000 aspect-[4/5] bg-black">
-                            <img src="/propfirm_sinteticos_hero_3d.png" alt="Bridge Markets Premium" class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000 opacity-90">
-                            
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0C0027] via-transparent to-transparent"></div>
-                            
-                            <!-- Overlay Card -->
-                            <div class="absolute bottom-10 left-10 right-10 p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                                <div class="flex justify-between items-start mb-6">
-                                    <div>
-                                        <p class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-2">BM Capital Allocated</p>
-                                        <p class="text-4xl font-black text-white tracking-tighter">$10,450,000</p>
-                                    </div>
-                                    <div class="px-4 py-2 bg-[#865BFF]/20 rounded-xl border border-[#865BFF]/30">
-                                        <span class="material-symbols-outlined text-white">verified</span>
-                                    </div>
-                                </div>
-                                <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                    <div class="w-[75%] h-full bg-[#865BFF] shadow-[0_0_10px_#865BFF]"></div>
-                                </div>
+                        <!-- Main 3D Asset (Caballo Rosa) -->
+                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-150">
+                            <img src="/images/imagenes%20nuevas/caballo%20rosa.png" alt="Synthetic Nexus" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.3)] animate-float-rotate">
+                        </div>
+
+                        <!-- Technical HUD Overlays -->
+                        <div class="absolute -top-10 -right-10 z-20 p-12 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[4rem] hidden xl:block animate-gentle-float shadow-2xl">
+                            <div class="text-[9px] font-black text-[#865BFF] uppercase tracking-[0.5em] mb-4">Core Algorithm</div>
+                            <div class="text-5xl font-black text-white italic tracking-tightest leading-none">V.8.0</div>
+                            <div class="mt-6 flex gap-1">
+                                ${[1,2,3,4,5,6,7].map(i => `<div class="w-1 h-4 bg-[#865BFF] animate-pulse" style="animation-delay: ${i*0.1}s"></div>`).join('')}
                             </div>
                         </div>
+
                     </div>
                 </div>
 
             </div>
         </div>
-    </section>`;
+
+        <style>
+            @keyframes float-rotate {
+                0%, 100% { transform: translateY(0) rotate(0deg) scale(1.3); }
+                50% { transform: translateY(-40px) rotate(3deg) scale(1.35); }
+            }
+            @keyframes scan-line {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
+            @keyframes force-pulse {
+                0%, 100% { opacity: 1; transform: scale(1); }
+                50% { opacity: 0.3; transform: scale(1.5); }
+            }
+            .animate-float-rotate { animation: float-rotate 12s ease-in-out infinite; }
+            .animate-scan-line { animation: scan-line 3s linear infinite; }
+            .animate-force-pulse { animation: force-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        </style>
+    </section>
+    `;
 }
 
 export function renderPSBanner(content: Record<string, any>, brand: BrandConfig): string {
     const items = content.items || ['Ejecución Instantánea', 'Spread 0.0', 'Soporte 24/7', 'Retiros cada 14 días'];
     
     return `
-    <div class="bg-[#0C0027] py-12 border-y border-white/5 relative z-20">
+    <div class="bg-white py-10 relative z-20 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-wrap justify-center md:justify-between items-center gap-12 md:gap-4">
                 ${items.map((item: string, i: number) => `
-                    <div class="flex items-center gap-5 group">
-                        <div class="w-2 h-2 rounded-full bg-[#865BFF] shadow-[0_0_15px_#865BFF] animate-pulse"></div>
-                        <span class="text-[12px] font-black text-white/40 uppercase tracking-[0.5em] group-hover:text-white group-hover:tracking-[0.6em] transition-all duration-300">${item}</span>
+                    <div class="flex items-center gap-4 group">
+                        <span class="text-[9px] font-black text-black uppercase tracking-[0.6em] group-hover:text-[#865BFF] transition-colors italic">${item}</span>
+                        ${i < items.length - 1 ? '<div class="w-1.5 h-1.5 bg-[#865BFF] rotate-45"></div>' : ''}
                     </div>
                 `).join('')}
             </div>
@@ -112,34 +136,36 @@ export function renderPSBanner(content: Record<string, any>, brand: BrandConfig)
 }
 
 export function renderPSFeatures(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "¿Por qué elegir nuestro reto?";
+    const title = content.title || "OPERATIVE EXCELLENCE";
     const features = content.features || [
-        { icon: 'bolt', title: 'Velocidad', desc: 'Conectividad directa con los servidores de baja latencia.' },
-        { icon: 'security', title: 'Seguridad', desc: 'Fondos segregados y protección contra saldo negativo.' },
-        { icon: 'analytics', title: 'Analítica', desc: 'Dashboard avanzado para monitorear tu operativa.' }
+        { icon: 'bolt', title: 'HYPER-SPEED', desc: 'Direct connectivity with low-latency servers globally.' },
+        { icon: 'security', title: 'INSTITUTIONAL SAFETY', desc: 'Segregated funds and negative balance protection for all tiers.' },
+        { icon: 'analytics', title: 'CORE ANALYTICS', desc: 'Advanced dashboard to monitor your operational efficiency.' }
     ];
 
     return `
-    <section class="py-40 px-6 bg-[#0C0027] relative overflow-hidden">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-[#865BFF]/50 to-transparent"></div>
+    <section class="py-64 px-6 bg-[#0a0515] relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(134,91,255,0.05),transparent_70%)]"></div>
         
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="text-center mb-32 section-reveal">
-                <span class="text-[11px] font-black text-[#865BFF] uppercase tracking-[0.6em] mb-6 block italic">EXCELENCIA OPERATIVA</span>
-                <h2 class="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none">${title}</h2>
+            <div class="flex flex-col lg:flex-row items-end justify-between mb-40 gap-12 section-reveal">
+                <div class="lg:w-7/12">
+                    <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.8em] mb-10 block italic">The Architecture of Power</span>
+                    <h2 class="text-7xl md:text-9xl font-black text-white uppercase tracking-tightest leading-[0.8] italic">${title}</h2>
+                </div>
+                <div class="lg:w-4/12 border-t-4 border-white/5 pt-12">
+                    <p class="text-white/30 text-lg uppercase font-black italic tracking-tighter leading-tight">We don't just provide capital, we provide the infrastructure for legends.</p>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
                 ${features.map((f: any, i: number) => `
-                    <div class="section-reveal group relative p-12 bg-white/5 border border-white/5 rounded-[3rem] hover:bg-white/10 hover:border-[#865BFF]/30 transition-all duration-700 overflow-hidden">
-                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-[#865BFF]/5 rounded-full blur-3xl group-hover:bg-[#865BFF]/10 transition-all"></div>
-                        
-                        <div class="relative z-10">
-                            <div class="w-20 h-20 bg-[#865BFF] rounded-2xl flex items-center justify-center text-white mb-12 shadow-[0_15px_30px_rgba(134,91,255,0.4)] group-hover:rotate-[360deg] transition-transform duration-1000">
-                                <span class="material-symbols-outlined text-4xl">${f.icon}</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-white mb-8 uppercase tracking-tight">${f.title}</h3>
-                            <p class="text-white/40 font-medium text-lg leading-relaxed group-hover:text-white/60 transition-colors">${f.desc}</p>
+                    <div class="section-reveal group p-16 bg-white/[0.02] border border-white/5 hover:bg-white transition-all duration-700 flex flex-col justify-between h-[500px]">
+                        <div class="text-7xl font-black text-white/5 group-hover:text-black/5 transition-colors italic">0${i+1}</div>
+                        <div>
+                            <div class="w-16 h-[2px] bg-[#865BFF] mb-12 group-hover:w-full transition-all duration-700"></div>
+                            <h3 class="text-4xl font-black text-white mb-8 uppercase tracking-tighter italic group-hover:text-black transition-colors">${f.title}</h3>
+                            <p class="text-white/30 font-light text-xl leading-relaxed group-hover:text-black/60 transition-colors">${f.desc}</p>
                         </div>
                     </div>
                 `).join('')}
@@ -149,7 +175,6 @@ export function renderPSFeatures(content: Record<string, any>, brand: BrandConfi
 }
 
 export function renderPSMatrix(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "REGLAS BM 2 FASES";
     const plans = content.plans || [
         { size: '$5,000', price: '$49' },
         { size: '$10,000', price: '$89' },
@@ -160,48 +185,40 @@ export function renderPSMatrix(content: Record<string, any>, brand: BrandConfig)
     const ctaLink = brand.ctaLink || "#register";
 
     return `
-    <section class="py-40 px-6 bg-[#09001D] relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-full h-[800px] bg-gradient-to-b from-[#865BFF]/5 to-transparent"></div>
+    <section class="py-64 px-6 bg-[#05010f] relative overflow-hidden">
+        <!-- Background Asset Subtle -->
+        <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="absolute bottom-0 right-0 w-[40%] opacity-[0.02] grayscale pointer-events-none" alt="BG">
         
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="flex flex-col lg:flex-row justify-between items-center gap-16 mb-32 section-reveal">
-                <div class="max-w-3xl text-center lg:text-left">
-                    <h2 class="text-6xl md:text-[7rem] font-black text-white uppercase tracking-tighter leading-[0.9] mb-8">
-                        ELIGE TU <br> <span class="text-[#865BFF]">CAPITAL</span>
-                    </h2>
-                    <p class="text-white/40 font-medium text-xl uppercase tracking-[0.3em]">Cuentas institucionales listas para operar.</p>
-                </div>
-                <div class="flex items-center gap-8 p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl">
-                    <div class="text-center">
-                        <p class="text-4xl font-black text-white mb-1">98%</p>
-                        <p class="text-[9px] font-bold text-white/30 uppercase tracking-widest">Payout Ratio</p>
-                    </div>
-                    <div class="w-px h-12 bg-white/10"></div>
-                    <div class="text-center">
-                        <p class="text-4xl font-black text-[#865BFF] mb-1">Instant</p>
-                        <p class="text-[9px] font-bold text-white/30 uppercase tracking-widest">Verification</p>
-                    </div>
+            <div class="text-center mb-40 section-reveal">
+                <h2 class="text-7xl md:text-[10rem] font-black text-white uppercase tracking-tightest leading-[0.8] italic mb-12">
+                    SELECT YOUR <br> <span class="text-[#865BFF]">TIER.</span>
+                </h2>
+                <div class="flex items-center justify-center gap-6">
+                    <div class="h-px w-20 bg-white/10"></div>
+                    <p class="text-white/30 font-black text-[10px] uppercase tracking-[0.5em] italic">Institutional Grade Capital</p>
+                    <div class="h-px w-20 bg-white/10"></div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-1">
                 ${plans.map((p: any, i: number) => `
-                    <div class="section-reveal group relative p-12 bg-white/[0.03] border border-white/5 rounded-[3.5rem] hover:bg-[#865BFF] hover:border-[#865BFF] transition-all duration-500 shadow-2xl overflow-hidden">
-                        <div class="absolute -right-12 -top-12 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/20 transition-all"></div>
+                    <div class="section-reveal group p-12 bg-white/[0.02] border border-white/5 hover:bg-[#865BFF] transition-all duration-700 flex flex-col justify-between items-center text-center h-[550px] relative overflow-hidden">
+                        <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                        <div class="relative z-10 w-full">
+                            <p class="text-[9px] font-black text-[#865BFF] uppercase tracking-[0.6em] mb-12 group-hover:text-white italic">Level 0${i+1}</p>
+                            <h3 class="text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform italic">${p.size}</h3>
+                            <div class="w-10 h-1 bg-white/10 mx-auto mt-6 group-hover:bg-white/40"></div>
+                        </div>
                         
-                        <div class="relative z-10 text-center">
-                            <p class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.5em] mb-6 group-hover:text-white/60">Cuenta Pro</p>
-                            <h3 class="text-4xl font-black text-white mb-12 group-hover:scale-110 transition-transform origin-center">${p.size}</h3>
-                            
-                            <div class="mb-14 h-px w-full bg-white/10 group-hover:bg-white/20"></div>
-
-                            <div class="mb-14">
-                                <p class="text-[10px] font-black text-white/20 uppercase tracking-widest group-hover:text-white/40 mb-3">Acceso Único</p>
-                                <p class="text-5xl font-black text-white group-hover:text-black transition-colors">${p.price}</p>
+                        <div class="relative z-10 w-full">
+                            <div class="mb-12">
+                                <p class="text-[9px] font-black text-white/20 uppercase tracking-widest mb-2 group-hover:text-white/40 italic">Entry Fee</p>
+                                <p class="text-6xl font-black text-white group-hover:text-black transition-colors italic">${p.price}</p>
                             </div>
 
-                            <a href="${ctaLink}" class="w-full py-5 bg-white/5 border border-white/10 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl text-center group-hover:bg-black group-hover:border-black transition-all block shadow-lg">
-                                Adquirir
+                            <a href="${ctaLink}" class="block w-full py-6 bg-white text-black font-black text-[10px] uppercase tracking-[0.4em] hover:bg-black hover:text-white transition-all italic">
+                                SECURE CAPITAL
                             </a>
                         </div>
                     </div>
@@ -210,6 +227,7 @@ export function renderPSMatrix(content: Record<string, any>, brand: BrandConfig)
         </div>
     </section>`;
 }
+
 
 export function renderPSCalculator(content: Record<string, any>, brand: BrandConfig): string {
     const title = content.title || "Calcula tus ganancias";

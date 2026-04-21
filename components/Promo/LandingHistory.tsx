@@ -15,8 +15,11 @@ import {
     Loader2,
     FileText,
     ExternalLink,
-    Trash2
+    Trash2,
+    Info
 } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
+import { formatDateUpperCase } from '@/lib/utils';
 
 interface Landing {
     id: string;
@@ -38,13 +41,17 @@ interface Landing {
 interface LandingHistoryProps {
     partnerId: string;
     onViewHistory?: () => void;
+    onEdit?: (landing: Landing) => void;
 }
 
-export default function LandingHistory({ partnerId }: LandingHistoryProps) {
+export default function LandingHistory({ partnerId, onEdit }: LandingHistoryProps) {
     const [landings, setLandings] = useState<Landing[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [copying, setCopying] = useState<string | null>(null);
+    const [landingToDelete, setLandingToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const extractMetadata = (html: string, existingData: any) => {
         try {
@@ -93,37 +100,34 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
         setTimeout(() => setCopying(null), 2000);
     };
 
-    const handleDelete = async (id: string) => {
-        console.log('Attempting to delete landing with ID:', id);
+    const handleDelete = (id: string) => {
+        setLandingToDelete(id);
+    };
 
-        if (!id || id === 'undefined') {
-            alert('Error: ID de landing no válido. Intenta refrescar la página.');
-            return;
-        }
-
-        if (!window.confirm('¿Estás seguro de que deseas eliminar esta landing? Esta acción no se puede deshacer.')) {
-            return;
-        }
+    const confirmDelete = async () => {
+        const id = landingToDelete;
+        if (!id) return;
+        
+        setIsDeleting(true);
 
         try {
-            // Pasamos tanto el id como el slug por si hay desajustes en la base de datos
-            const res = await fetch(`/api/landings?id=${id}&slug=${id}`, { method: 'DELETE' });
-            const json = await res.json();
-            
-            console.log('Delete API response:', json);
+            const { error: deleteError } = await supabase
+                .from('landings')
+                .delete()
+                .eq('id', id);
 
-            if (json.success) {
-                if (json.count === 0) {
-                    console.warn('No se encontró el registro en la DB, pero lo removemos de la UI.');
-                }
+            if (!deleteError) {
                 // Remove from local state
-                setLandings(prev => prev.filter(l => l.id !== id && l.slug !== id));
+                setLandings(prev => prev.filter(l => l.id !== id));
             } else {
-                alert(`Error al eliminar: ${json.error}\nDetalles: ${json.details || ''}`);
+                setErrorMsg(`Error al eliminar: ${deleteError.message}`);
             }
         } catch (error) {
             console.error('Error deleting landing:', error);
-            alert('Error de conexión al intentar eliminar la landing.');
+            setErrorMsg('Error de conexión al intentar eliminar la landing.');
+        } finally {
+            setIsDeleting(false);
+            setLandingToDelete(null);
         }
     };
 
@@ -202,7 +206,7 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
                                     </div>
                                     <div className="flex items-center gap-1 text-slate-400 text-[10px] font-bold">
                                         <Calendar className="w-3 h-3" />
-                                        {new Date(landing.created_at).toLocaleDateString()}
+                                        {formatDateUpperCase(landing.created_at)}
                                     </div>
                                 </div>
                                 <h3 className="text-lg font-black text-slate-800 mb-1 group-hover:text-[#865BFF] transition-colors">
@@ -238,25 +242,39 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
                             {/* Actions */}
                             <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 grid grid-cols-3 gap-2">
                                 <button 
-                                    onClick={() => landing.status === 'approved' && window.open(`/l/${landing.slug}`, '_blank')}
-                                    disabled={landing.status !== 'approved'}
+                                    onClick={() => landing.status !== 'rejected' && window.open(`/l/${landing.slug}`, '_blank')}
+                                    disabled={landing.status === 'rejected'}
                                     className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
-                                        landing.status === 'approved' 
+                                        landing.status !== 'rejected' 
                                             ? 'hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]' 
                                             : 'opacity-40 cursor-not-allowed text-slate-400'
                                     }`}
-                                    title={landing.status === 'approved' ? "Ver en vivo" : "Pendiente de aprobación"}
+                                    title={landing.status === 'rejected' ? 'Landing rechazada' : 'Ver Landing'}
                                 >
                                     <Eye className="w-4 h-4" />
-                                    <span className="text-[9px] font-black uppercase">Ver</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-tight">Ver</span>
                                 </button>
+                                
                                 <button 
-                                    onClick={() => handleCopyLink(landing.slug)}
-                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl hover:bg-white hover:shadow-sm transition-all text-slate-600 hover:text-[#865BFF]"
-                                    title="Copiar enlace"
+                                    onClick={() => landing.status !== 'rejected' && handleCopyLink(landing.slug)}
+                                    disabled={landing.status === 'rejected'}
+                                    className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
+                                        landing.status !== 'rejected'
+                                            ? 'hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]'
+                                            : 'opacity-40 cursor-not-allowed text-slate-400'
+                                    }`}
+                                    title={landing.status === 'rejected' ? 'No disponible' : 'Copiar Link'}
                                 >
                                     {copying === landing.slug ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                                    <span className="text-[9px] font-black uppercase">{copying === landing.slug ? 'Listo' : 'Link'}</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-tight">Link</span>
+                                </button>
+                                <button 
+                                    onClick={() => onEdit && onEdit(landing)}
+                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl hover:bg-slate-50 hover:shadow-sm transition-all text-slate-400 hover:text-indigo-500"
+                                    title="Editar Landing"
+                                >
+                                    <Pencil className="w-4 h-4" />
+                                    <span className="text-[9px] font-black uppercase">Editar</span>
                                 </button>
                                 <button 
                                     onClick={() => handleDelete(landing.id)}
@@ -269,6 +287,90 @@ export default function LandingHistory({ partnerId }: LandingHistoryProps) {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Premium Delete Confirmation Modal */}
+            {landingToDelete && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-[#0d0221]/80 backdrop-blur-md animate-in fade-in duration-300"
+                        onClick={() => !isDeleting && setLandingToDelete(null)}
+                    />
+                    
+                    {/* Modal Content */}
+                    <div className="relative w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-300">
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
+                        
+                        <div className="p-8 sm:p-10 text-center">
+                            <div className="w-20 h-20 bg-rose-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-inner border border-rose-100/50">
+                                <Trash2 className="w-10 h-10 text-rose-500" />
+                            </div>
+                            
+                            <h3 className="text-2xl font-black text-slate-800 mb-3 tracking-tight">¿Eliminar Landing?</h3>
+                            <p className="text-slate-500 text-sm font-medium leading-relaxed mb-8">
+                                Estás a punto de eliminar permanentemente esta landing page. Esta acción no se puede deshacer y perderás todos los accesos.
+                            </p>
+                            
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <button
+                                    onClick={() => setLandingToDelete(null)}
+                                    disabled={isDeleting}
+                                    className="flex-1 px-6 py-4 rounded-2xl bg-slate-100 text-slate-600 font-black text-[11px] uppercase tracking-widest hover:bg-slate-200 transition-all disabled:opacity-50"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    onClick={confirmDelete}
+                                    disabled={isDeleting}
+                                    className="flex-[1.5] px-6 py-4 rounded-2xl bg-rose-500 text-white font-black text-[11px] uppercase tracking-widest hover:bg-rose-600 shadow-xl shadow-rose-500/20 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {isDeleting ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Eliminando...
+                                        </>
+                                    ) : (
+                                        'Sí, Eliminar Ahora'
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Close button top right */}
+                        <button 
+                            onClick={() => !isDeleting && setLandingToDelete(null)}
+                            className="absolute top-6 right-6 w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
+                        >
+                            <span className="text-xl">×</span>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Premium Error Modal */}
+            {errorMsg && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                    <div 
+                        className="absolute inset-0 bg-[#0d0221]/40 backdrop-blur-sm animate-in fade-in duration-300"
+                        onClick={() => setErrorMsg(null)}
+                    />
+                    <div className="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl border border-rose-100 overflow-hidden animate-in slide-in-from-bottom-8 duration-300">
+                        <div className="p-8 text-center">
+                            <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <Info className="w-8 h-8 text-rose-500" />
+                            </div>
+                            <h4 className="text-lg font-black text-slate-800 mb-2">¡Ops! Algo salió mal</h4>
+                            <p className="text-sm text-slate-500 font-medium mb-6">{errorMsg}</p>
+                            <button 
+                                onClick={() => setErrorMsg(null)}
+                                className="w-full py-3.5 bg-slate-800 text-white font-black text-[11px] uppercase tracking-widest rounded-xl hover:bg-slate-900 transition-all"
+                            >
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

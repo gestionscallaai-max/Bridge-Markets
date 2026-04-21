@@ -7,7 +7,7 @@ import {
     Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
     Pencil, Eye, X, Download, ToggleLeft, ToggleRight,
     Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play,
-    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone
+    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone, Clock, Bell
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
@@ -313,9 +313,10 @@ function PhoneMockup({ html }: { html: string }) {
 interface LandingTypeformProps {
     initialTemplate?: string;
     onGoToHistory?: () => void;
+    editData?: any;
 }
 
-export default function LandingTypeform({ initialTemplate, onGoToHistory }: LandingTypeformProps) {
+export default function LandingTypeform({ initialTemplate, onGoToHistory, editData }: LandingTypeformProps) {
     const { t, lang } = useLanguage();
 
     // Dynamic languages: keep static list but translate the SOON label
@@ -338,6 +339,8 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
     const [telegram, setTelegram] = useState('');
     const [tiktok, setTiktok] = useState('');
     const [ctaLink, setCtaLink] = useState('');
+    const [videoUrl, setVideoUrl] = useState('');
+    const [customLogoUrl, setCustomLogoUrl] = useState('');
     
     // Sync portal language to landing generator language representation
     const getLandingLangFromPortal = (pLang: string) => {
@@ -379,8 +382,11 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
 
     // Step 4-5: Generate
     const [isGenerating, setIsGenerating] = useState(false);
+    const [processStep, setProcessStep] = useState<'idle' | 'packaging' | 'security' | 'deploying' | 'finalizing'>('idle');
     const [generatedHTML, setGeneratedHTML] = useState('');
+    const [finalSlug, setFinalSlug] = useState('');
     const [copied, setCopied] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     // Load user
     useEffect(() => {
@@ -420,12 +426,31 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
         }
     }, [selectedTemplate]);
 
-    // Pre-select if initialTemplate passed
+    // Pre-select if initialTemplate or editData passed
     useEffect(() => {
-        if (initialTemplate) {
+        if (editData) {
+            setStep(3); // Go straight to editor
+            setFullName(editData.config?.fullName || '');
+            setCountry(editData.config?.country || '');
+            setWhatsapp(editData.config?.whatsapp || '');
+            setEmail(editData.config?.email || '');
+            setCommunityName(editData.config?.communityName || '');
+            setHeroPhrase(editData.config?.heroPhrase || '');
+            setInstagram(editData.config?.instagram || '');
+            setTelegram(editData.config?.telegram || '');
+            setTiktok(editData.config?.tiktok || '');
+            setCtaLink(editData.config?.ctaLink || '');
+            setVideoUrl(editData.config?.videoUrl || '');
+            setCustomLogoUrl(editData.config?.customLogoUrl || '');
+            setLanguage(editData.config?.language || 'ES');
+            setSelectedTemplate(editData.template_id);
+            setSelectedSections(editData.sections || []);
+            setSectionOverrides(editData.config?.sectionOverrides || {});
+        } else if (initialTemplate) {
             setSelectedTemplate(initialTemplate);
+            setStep(2);
         }
-    }, [initialTemplate]);
+    }, [editData, initialTemplate]);
 
     const toggleSection = useCallback((sectionId: string) => {
         setSelectedSections(prev =>
@@ -471,6 +496,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
     }, []);
 
     const handleGenerate = async () => {
+        setProcessStep('packaging');
         setIsGenerating(true);
 
         const data: LandingData = {
@@ -481,13 +507,15 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             email,
             landingType: selectedTemplate,
             partnerId,
-            slug: `${selectedTemplate}-${language.toLowerCase()}-${Date.now()}`,
+            slug: editData?.slug || `${selectedTemplate}-${language.toLowerCase()}-${Date.now()}`,
             communityName,
             heroPhrase,
             instagram,
             telegram,
             tiktok,
             ctaLink,
+            videoUrl,
+            customLogoUrl,
             modularConfig: {
                 templateId: selectedTemplate,
                 selectedSections,
@@ -496,6 +524,13 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
         };
 
         try {
+            // Simulated professional phases
+            await new Promise(r => setTimeout(r, 1200));
+            setProcessStep('security');
+            await new Promise(r => setTimeout(r, 1500));
+            setProcessStep('deploying');
+
+            setFinalSlug(data.slug);
             const html = generateModularLandingHTML(data);
             setGeneratedHTML(html);
 
@@ -517,15 +552,17 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             if (!res.ok) {
                 const errorData = await res.json();
                 console.error('Failed to save landing:', errorData.details || errorData.error);
-                // Also show an alert to the user for immediate feedback if they are looking
-                alert("Error al guardar: " + (errorData.details || errorData.error));
+                setErrorMsg(errorData.details || errorData.error || "Error desconocido al guardar");
             } else {
+                setProcessStep('finalizing');
+                await new Promise(r => setTimeout(r, 1000));
                 setStep(5);
             }
         } catch (err) {
             console.error('Error generating:', err);
         } finally {
             setIsGenerating(false);
+            setProcessStep('idle');
         }
     };
 
@@ -573,10 +610,12 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
             telegram,
             tiktok,
             ctaLink,
+            videoUrl,
+            customLogoUrl,
             modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
         };
         return generateModularLandingHTML(data);
-    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, ctaLink]);
+    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, ctaLink, videoUrl, customLogoUrl]);
 
     return (
         <div className="max-w-[1600px] mx-auto pb-12">
@@ -731,6 +770,24 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                                             type="text" value={heroPhrase}
                                             onChange={(e) => setHeroPhrase(e.target.value)}
                                             placeholder={t.landing.heroPlaceholder}
+                                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Video URL (YouTube/Vimeo)</label>
+                                        <input
+                                            type="text" value={videoUrl}
+                                            onChange={(e) => setVideoUrl(e.target.value)}
+                                            placeholder="https://www.youtube.com/watch?v=..."
+                                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Custom Logo URL</label>
+                                        <input
+                                            type="text" value={customLogoUrl}
+                                            onChange={(e) => setCustomLogoUrl(e.target.value)}
+                                            placeholder="https://..."
                                             className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
                                         />
                                     </div>
@@ -1185,7 +1242,14 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                             className="flex-[2] flex items-center justify-center gap-4 px-10 py-4 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] disabled:opacity-50 transition-all text-sm uppercase tracking-[0.2em] shadow-2xl shadow-[#865BFF]/30 active:scale-[0.98]"
                         >
                             {isGenerating ? (
-                                <><Loader2 className="w-5 h-5 animate-spin" /> {t.landing.processing}</>
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    {processStep === 'packaging' ? t.landing.stepPackaging :
+                                     processStep === 'security' ? t.landing.stepSecurity :
+                                     processStep === 'deploying' ? t.landing.stepDeploying :
+                                     processStep === 'finalizing' ? t.landing.stepFinalizing :
+                                     t.landing.processing}
+                                </>
                             ) : (
                                 <><Rocket className="w-5 h-5 shadow-lg" /> {t.landing.deployLanding}</>
                             )}
@@ -1194,58 +1258,85 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 </div>
             )}
 
-            {/* ─── STEP 5: Success ─── */}
+            {/* ─── STEP 5: Success & Review Info ─── */}
             {step === 5 && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm text-center">
-                    <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <Check className="w-8 h-8 text-emerald-500" />
-                    </div>
-                    <h2 className="text-2xl font-black text-slate-800 mb-2">{t.landing.landingGenerated}</h2>
-                    <p className="text-sm text-slate-400 mb-8">{t.landing.landingReadyToShare}</p>
+                <div className="bg-white rounded-[3rem] border border-slate-200 p-12 shadow-2xl shadow-indigo-500/5 text-center relative overflow-hidden">
+                    {/* Decorative Background */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[#865BFF] to-transparent" />
+                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#865BFF]/5 rounded-full blur-3xl" />
+                    <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/5 rounded-full blur-3xl" />
 
-                    <div className="flex flex-wrap gap-3 justify-center">
-                        <button
-                            onClick={() => openLandingPreview(generatedHTML)}
-                            className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
-                        >
-                            <Eye className="w-4 h-4" /> {t.landing.viewLive}
-                        </button>
-                        <button
-                            onClick={() => {
-                                navigator.clipboard.writeText(`${window.location.origin}/l/${selectedTemplate}-${language.toLowerCase()}`);
-                                setCopied(true);
-                                setTimeout(() => setCopied(false), 2000);
-                            }}
-                            className="flex items-center gap-2 px-6 py-3 border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all"
-                        >
-                            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                            {copied ? t.landing.copiedLink : t.landing.copyLink}
-                        </button>
+                    <div className="relative z-10">
+                        <div className="w-24 h-24 bg-amber-50 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-inner border border-amber-100/50">
+                            <Clock className="w-10 h-10 text-amber-500 animate-pulse" />
+                        </div>
+                        
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
+                            {t.landing.reviewStatusTitle}
+                        </div>
 
-                        {onGoToHistory && (
+                        <h2 className="text-3xl font-black text-slate-800 mb-4 tracking-tight leading-tight max-w-md mx-auto">
+                            {t.landing.landingGenerated}
+                        </h2>
+                        
+                        <p className="text-sm text-slate-500 mb-8 max-w-lg mx-auto leading-relaxed font-medium">
+                            {t.landing.reviewStatusDesc}
+                        </p>
+
+                        <div className="bg-slate-50 border border-slate-100 p-6 rounded-3xl mb-10 max-w-md mx-auto flex items-start gap-4 text-left">
+                            <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 border border-slate-100">
+                                <Bell className="w-5 h-5 text-[#865BFF]" />
+                            </div>
+                            <p className="text-[11px] text-slate-400 font-bold leading-relaxed">
+                                {t.landing.reviewNote}
+                            </p>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button
+                                onClick={() => openLandingPreview(generatedHTML)}
+                                className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-slate-800 text-white font-black rounded-2xl hover:bg-slate-900 transition-all text-xs uppercase tracking-widest shadow-xl shadow-slate-900/10"
+                            >
+                                <Eye className="w-4 h-4" /> {t.landing.viewLive}
+                            </button>
+                            
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(`${window.location.origin}/l/${finalSlug}`);
+                                    setCopied(true);
+                                    setTimeout(() => setCopied(false), 2000);
+                                }}
+                                className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 border-2 border-slate-200 text-slate-700 font-black rounded-2xl hover:bg-slate-50 transition-all text-xs uppercase tracking-widest"
+                            >
+                                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                                {copied ? t.landing.copiedLink : t.landing.copyLink}
+                            </button>
+
                             <button
                                 onClick={onGoToHistory}
-                                className="flex items-center gap-2 px-6 py-3 bg-[#865BFF] text-white font-bold rounded-xl hover:bg-[#7349e5] transition-all shadow-lg shadow-[#865BFF]/20"
+                                className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] transition-all text-xs uppercase tracking-widest shadow-xl shadow-indigo-500/20"
                             >
                                 <HistoryIcon className="w-4 h-4" />
                                 {t.landing.viewHistory}
                             </button>
-                        )}
-                    </div>
+                        </div>
 
-                    <div className="mt-8 pt-8 border-t border-slate-100 flex justify-center">
-                        <button
-                            onClick={() => {
-                                setStep(1);
-                                setSelectedTemplate('');
-                                setSelectedSections([]);
-                                setSectionOverrides({});
-                                setGeneratedHTML('');
-                            }}
-                            className="text-slate-400 hover:text-[#865BFF] text-sm font-black uppercase tracking-wider transition-all"
-                        >
-                            {t.landing.createAnother}
-                        </button>
+                        <div className="mt-12 pt-8 border-t border-slate-100 flex justify-center">
+                            <button
+                                onClick={() => {
+                                    setStep(1);
+                                    setSelectedTemplate('');
+                                    setSelectedSections([]);
+                                    setSectionOverrides({});
+                                    setGeneratedHTML('');
+                                }}
+                                className="group flex items-center gap-2 text-slate-400 hover:text-[#865BFF] text-[10px] font-black uppercase tracking-widest transition-all"
+                            >
+                                <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
+                                {t.landing.createAnother}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -1291,6 +1382,44 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory }: Land
                 </div>
             </div>
         </div>
+
+        {/* Error Modal */}
+        <AnimatePresence>
+            {errorMsg && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setErrorMsg(null)}
+                        className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+                    />
+                    <motion.div 
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        className="relative w-full max-w-md bg-white rounded-[3rem] p-10 shadow-2xl border border-slate-100 overflow-hidden"
+                    >
+                        <div className="absolute top-0 left-0 w-full h-2 bg-red-500" />
+                        <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-8 mx-auto">
+                            <AlertCircle className="w-10 h-10 text-red-500" />
+                        </div>
+                        <h3 className="text-2xl font-black text-slate-800 text-center mb-4 uppercase tracking-tight">
+                            {t.common.error || 'Error'}
+                        </h3>
+                        <p className="text-slate-500 text-center mb-10 font-medium leading-relaxed">
+                            {errorMsg}
+                        </p>
+                        <button
+                            onClick={() => setErrorMsg(null)}
+                            className="w-full py-5 bg-slate-900 text-white font-black rounded-2xl hover:bg-red-500 transition-all uppercase tracking-widest text-xs shadow-xl"
+                        >
+                            {t.common.close || 'Cerrar'}
+                        </button>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
     </div>
 </div>
 );

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { notifyAdminNewLanding, notifyPartnerStatusUpdate } from '@/lib/mail';
 
 // Lazy initialization of the admin client
 let _supabaseAdmin: any = null;
@@ -159,24 +160,43 @@ export async function POST(request: Request) {
             }, { status: 500 });
         }
 
-        // --- Notificar a los Admins ---
+        // --- Notificar a los Admins (Dashboard + Email) ---
         const { data: admins } = await supabaseAdmin
             .from('partners')
-            .select('id')
+            .select('id, email, name')
             .eq('role', 'admin');
 
-        const adminNotifTitle = 'Nueva Landing Pendiente';
-        const adminNotifMessage = `El socio ha creado la landing "${slug}". Necesita revisión.`;
-        
+        // Dashboard Notification for Admins
         if (admins && admins.length > 0) {
             const notifications = admins.map((admin: any) => ({
                 user_id: admin.id,
-                title: adminNotifTitle,
-                message: adminNotifMessage,
+                title: 'Nueva Landing Pendiente',
+                message: `El socio ha creado la landing "${slug}".`,
                 type: 'warning',
                 link: '/dashboard/admin/landings'
             }));
             await supabaseAdmin.from('notifications').insert(notifications);
+        }
+
+        // Email Notification for Admins
+        let adminEmails = admins?.map((a: any) => a.email).filter(Boolean) || [];
+        if (adminEmails.length === 0 && process.env.ADMIN_EMAIL) {
+            adminEmails = [process.env.ADMIN_EMAIL];
+        }
+
+        if (adminEmails.length > 0) {
+            const { data: partner } = await supabaseAdmin
+                .from('partners')
+                .select('name')
+                .eq('id', realPartnerId)
+                .single();
+
+            await notifyAdminNewLanding({
+                partnerName: partner?.name || 'Un socio',
+                landingSlug: slug,
+                landingType: data.landingType || 'Custom',
+                adminEmails
+            });
         }
 
         return NextResponse.json({ success: true, url: `/l/${slug}` });
@@ -280,14 +300,23 @@ export async function PATCH(request: Request) {
 
         if (error) throw error;
 
-        // --- Notificar al socio ---
+        // --- Notificar al socio (Dashboard + Email) ---
         if (data && data.length > 0) {
             const landing = data[0];
+            
+            // Fetch partner data (email and name)
+            const { data: partner } = await supabaseAdmin
+                .from('partners')
+                .select('name, email')
+                .eq('id', landing.partner_id)
+                .single();
+
             const notifTitle = status === 'approved' ? '¡Landing Aprobada!' : 'Landing Rechazada';
             const notifMessage = status === 'approved' 
                 ? `Tu landing "${landing.slug}" ha sido aprobada y ya es pública.`
                 : `Tu landing "${landing.slug}" requiere cambios. Nota: ${adminNotes || 'Ver detalles'}`;
             
+            // Dashboard Notification
             await supabaseAdmin
                 .from('notifications')
                 .insert({
@@ -297,6 +326,31 @@ export async function PATCH(request: Request) {
                     type: status === 'approved' ? 'success' : 'error',
                     link: '/dashboard/promo/overview'
                 });
+
+            // Email Notification
+            console.log('DEBUG PATCH: Fetching partner email fallback...');
+            const partnerEmail = partner?.email || (landing.data as any)?.email;
+            const partnerName = partner?.name || (landing.data as any)?.fullName || 'Socio';
+            
+            console.log('DEBUG PATCH: Partner Info Found:', { partnerEmail, partnerName });
+
+            if (partnerEmail) {
+                console.log(`DEBUG PATCH: Sending ${status} email to: ${partnerEmail}`);
+                try {
+                    await notifyPartnerStatusUpdate({
+                        partnerEmail: partnerEmail,
+                        partnerName: partnerName,
+                        landingSlug: landing.slug,
+                        status: status as 'approved' | 'rejected',
+                        adminNotes
+                    });
+                    console.log('DEBUG PATCH: Email sent successfully');
+                } catch (emailErr) {
+                    console.error('DEBUG PATCH: Email sending failed:', emailErr);
+                }
+            } else {
+                console.warn('DEBUG PATCH: No partner email found. Landing Data:', JSON.stringify(landing.data).substring(0, 100));
+            }
         }
 
         return NextResponse.json({ success: true, data: data[0] });
