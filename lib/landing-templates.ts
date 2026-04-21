@@ -179,6 +179,31 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         badgeColor: '#865BFF',
         theme: 'light',
     },
+    {
+        id: 'prop_official_v3',
+        name: '✨ Bridge Markets PropFirm — FOREX/CFDs & Synthetic PropTrading ✨',
+        category: 'Official',
+        description: 'La landing oficial para cuentas fondeadas. Incluye todas las tablas comparativas, reglas operativas y sección de comunidad personalizada.',
+        sourceFile: 'Blueprint 2',
+        sections: [
+            'prop_hero',
+            'prop_about',
+            'prop_matrix_forex',
+            'prop_matrix_synthetic',
+            'prop_workflow',
+            'prop_rules',
+            'prop_benefits',
+            'prop_community',
+            'prop_faq',
+            'prop_final_cta',
+            'prop_footer'
+        ],
+        gradient: 'linear-gradient(135deg, #050505 0%, #1a1a1a 50%, #D4AF37 100%)',
+        accentColor: '#D4AF37',
+        badge: 'Premium',
+        badgeColor: '#D4AF37',
+        theme: 'dark'
+    },
 ];
 
 // Helper: get template by ID

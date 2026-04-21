@@ -1072,6 +1072,8 @@ export function renderSntCTA(content: Record<string, any>, brand: BrandConfig): 
                     ${ctaSecondary}
                 </a>
             </div>
+            <div class="mt-20 border-t border-white/5 pt-10">
+                <p class="text-[10px] text-white/20 uppercase tracking-[0.2em] font-black">
                     ⚠️ Riesgo: La operativa en índices sintéticos conlleva un alto riesgo. Asegúrate de comprender la gestión de capital antes de operar con fondos reales.
                 </p>
             </div>

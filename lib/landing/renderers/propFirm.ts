@@ -1,469 +1,513 @@
 import { BrandConfig } from '../types';
 
+// ─── PROP HERO ──────────────────────────────────────────────
 export function renderPropHero(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "FUNDED";
-    const highlight = content.highlight || "NEXUS";
-    const subtitle = content.subtitle || brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
-    const ctaText = content.ctaText || "Start Challenge";
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ctaText = content.ctaText || "Empieza tu Challenge";
     const ctaLink = brand.ctaLink || "#register";
-    const communityName = content.communityName || brand.communityName || brand.fullName || "Partner Certificado";
+    const heroPhrase = brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Fondo Prestigioso -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#050505]">
+        <!-- Background elements -->
         <div class="absolute inset-0 z-0">
-            <!-- Patrón de líneas finas -->
-            <div class="absolute inset-0 opacity-[0.05]" style="background-image: linear-gradient(to right, #865BFF 1px, transparent 1px); background-size: 150px 100%;"></div>
-            
-            <!-- Tipografía de Fondo Gigante -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-[0.02] select-none pointer-events-none">
-                <span class="text-[45vw] font-black text-white uppercase tracking-tightest leading-none italic">ELITE</span>
-            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1642388691919-400d9841315b?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 grayscale"></div>
         </div>
 
-        <div class="max-w-[1600px] mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="max-w-4xl">
+                <!-- IB Badge -->
+                <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8 backdrop-blur-md animate-fade-in-up">
+                    <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
+                    <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Presentado por <span class="text-white">${ibName}</span></span>
+                </div>
+
+                <h1 class="text-5xl md:text-8xl font-black font-headline text-white mb-8 tracking-tighter leading-[0.9] uppercase italic italic-none">
+                    Conviértete en <span class="text-gradient-gold">Trader Financiado</span> Certificado
+                </h1>
                 
-                <!-- Columna: Funded Info -->
-                <div class="lg:col-span-6 section-reveal">
-                    <div class="flex items-center gap-6 mb-16">
-                        <div class="w-12 h-12 rounded-full border border-[#865BFF] flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[#865BFF] text-xl">verified</span>
+                <p class="text-xl md:text-2xl text-white/60 font-light mb-12 max-w-2xl leading-relaxed">
+                    ${heroPhrase}
+                </p>
+
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="flex flex-col md:flex-row items-center gap-6">
+                        <a href="${ctaLink}" class="group relative px-10 py-6 bg-[#D4AF37] text-black font-black rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(212,175,55,0.2)]">
+                            <span class="relative z-10 uppercase tracking-widest text-sm">${ctaText}</span>
+                        </a>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">¿Qué es PropTrading?</span>
+                            <span class="text-xs font-bold text-white/80 italic">Bridge Markets te financia para operar en mercados reales.</span>
                         </div>
-                        <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.8em]">Official Certification</span>
                     </div>
-
-                    <h1 class="text-7xl md:text-[11rem] lg:text-[15rem] font-black leading-[0.8] text-white mb-16 tracking-tightest uppercase italic">
-                        ${title} <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/20 italic">${highlight}</span>
-                    </h1>
-
-                    <div class="max-w-xl">
-                        <p class="text-2xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight">
-                            ${subtitle}
-                        </p>
-                        
-                        <div class="flex flex-wrap gap-12 items-center">
-                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-2xl">
-                                <span class="relative z-10 uppercase tracking-[0.5em] text-xs">${ctaText}</span>
-                            </a>
-                            
-                            <div class="flex flex-col">
-                                <span class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] mb-1 italic">Certified by</span>
-                                <span class="text-sm font-black text-white uppercase tracking-widest">${communityName}</span>
-                            </div>
-                        </div>
+                    
+                    <!-- 3D Horse Asset -->
+                    <div class="relative hidden lg:block">
+                        <div class="absolute inset-0 bg-[#D4AF37]/20 rounded-full blur-[80px] animate-pulse"></div>
+                        <img src="/images/imagenes%20nuevas/caballo%20negro.png" alt="Horse" class="w-48 h-auto object-contain relative z-10 animate-[heroFloat_6s_ease-in-out_infinite] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                     </div>
                 </div>
-
-                <!-- Columna: Visual Nexus -->
-                <div class="lg:col-span-6 relative flex justify-center items-center section-reveal">
-                    <div class="relative w-full aspect-square flex items-center justify-center">
-                        
-                        <!-- Main 3D Asset (Reyna Rosa) -->
-                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-[1.6]">
-                            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Funded Queen" class="w-full h-full object-contain filter drop-shadow-[0_0_120px_rgba(134,91,255,0.3)] animate-float-slow">
-                        </div>
-
-                        <!-- Certificate HUD Overlay -->
-                        <div class="absolute bottom-10 left-0 z-20 p-12 bg-white/[0.02] backdrop-blur-[40px] border border-white/10 rounded-[3rem] shadow-2xl animate-gentle-float max-w-xs">
-                            <div class="flex justify-between items-center mb-8">
-                                <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">Status: Active</span>
-                                <div class="w-2 h-2 bg-[#865BFF] rounded-full animate-pulse"></div>
-                            </div>
-                            <p class="text-sm text-white font-bold leading-relaxed opacity-60 uppercase tracking-widest italic">Institutional capital successfully allocated for global distribution.</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
-        <style>
-            @keyframes float-slow {
-                0%, 100% { transform: translateY(0) scale(1.6); }
-                50% { transform: translateY(-30px) scale(1.65); }
-            }
-            @keyframes gentle-float {
-                0%, 100% { transform: translate(0, 0); }
-                50% { transform: translate(15px, -15px); }
-            }
-            .animate-float-slow { animation: float-slow 10s ease-in-out infinite; }
-            .animate-gentle-float { animation: gentle-float 8s ease-in-out infinite; }
-        </style>
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-20">
+            <span class="material-symbols-outlined text-white text-4xl font-light">expand_more</span>
+        </div>
+    </section>
+
+    <style>
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #FFF 0%, #D4AF37 50%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    `;
+}
+
+// ─── WHAT IS PROPTRADING ─────────────────────────────────────
+export function renderPropEducation(content: Record<string, any>, brand: BrandConfig): string {
+    return `
+    <section class="py-32 px-8 bg-[#080808] relative overflow-hidden border-y border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="section-reveal">
+                    <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-4 block">El Modelo de Éxito</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 leading-[1.1] uppercase italic italic-none">Tú pones el talento. <br>Nosotros el capital.</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4 p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
+                            <span class="material-symbols-outlined text-[#D4AF37] text-3xl">analytics</span>
+                            <p class="text-white/60 font-medium leading-relaxed">Bridge Markets evalúa tu operativa a través de un Challenge simulado.</p>
+                        </div>
+                        <div class="flex items-start gap-4 p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
+                            <span class="material-symbols-outlined text-[#D4AF37] text-3xl">verified</span>
+                            <p class="text-white/60 font-medium leading-relaxed">Si superas los objetivos, accedes a una Cuenta Financiada en Mercado Real.</p>
+                        </div>
+                        <div class="flex items-start gap-4 p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
+                            <span class="material-symbols-outlined text-[#D4AF37] text-3xl">payments</span>
+                            <p class="text-white/60 font-medium leading-relaxed">Opera con capital de la firma y cobra hasta el 80% de las ganancias.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative section-reveal flex justify-center">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-[#D4AF37]/10 rounded-full blur-[100px] animate-pulse"></div>
+                        <img src="/images/imagenes%20nuevas/hourglass.png" alt="Hourglass" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_8s_ease-in-out_infinite] drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] grayscale hover:grayscale-0 transition-all duration-700">
+                        
+                        <div class="absolute -bottom-10 -right-10 w-full h-full rounded-[4rem] flex flex-col items-center justify-center p-12 text-center pointer-events-none">
+                            <div class="text-7xl font-black text-white mb-4">0% <span class="text-xl block text-white/40 uppercase font-black tracking-widest mt-2">Riesgo Propio</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     `;
 }
 
-export function renderPropAbout(content: Record<string, any>, brand: BrandConfig): string {
-    const items = [
-        { icon: 'ads_click', title: 'Challenge', desc: 'Bridge Markets evalúa tu operativa a través de un Challenge simulado de alta precisión y condiciones estrictas en MetaTrader.' },
-        { icon: 'account_balance', title: 'Flujo Institucional', desc: 'Si superas los objetivos, accedes a una Cuenta Financiada con capital certificado de la firma para operar sin arriesgar tu patrimonio personal.' },
-        { icon: 'payments', title: 'Distribución 80/20', desc: 'Opera con el capital de la firma y cobra hasta el 80% de los beneficios generados en tus cuentas de trading certificadas.' }
-    ];
-
-    return `
-    <section class="py-32 px-8 bg-[#0a0a0a] border-y border-white/5 relative overflow-hidden">
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-[#865BFF]/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto section-reveal relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                ${items.map((item, i) => `
-                    <div class="flex flex-col group p-8 lg:p-10 asym-card border border-white/5 bg-[#050505] hover:bg-white/5 transition-colors relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-[#865BFF]/5 rounded-bl-[100px] transition-colors group-hover:bg-[#865BFF]/20 z-0"></div>
-                        <div class="w-16 h-16 bg-[#0a0a0a] border border-white/10 rounded-2xl flex items-center justify-center text-[#865BFF] mb-8 group-hover:text-white group-hover:bg-[#865BFF] transition-all transform group-hover:rotate-6 shadow-xl relative z-10">
-                            <span class="material-symbols-outlined text-3xl font-light">${item.icon}</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-white mb-4 uppercase tracking-tighter relative z-10">${item.title}</h3>
-                        <p class="text-sm text-white/40 leading-relaxed font-medium relative z-10">${item.desc}</p>
-                        <div class="w-12 h-1 bg-[#865BFF]/20 mt-8 group-hover:w-full transition-all duration-500 relative z-10"></div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderPropMatrix(content: Record<string, any>, brand: BrandConfig): string {
-    const ctaLink = brand.ctaLink || "#register";
-    const renderGrid = (title: string, subtitle: string, plans: any[]) => `
-        <div class="mb-32 last:mb-0 relative z-10">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-white/10">
-                <div>
-                    <h3 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-2">${title}</h3>
-                    <p class="text-[#865BFF] text-xs font-black uppercase tracking-[0.4em]">${subtitle}</p>
-                </div>
-                <div class="px-6 py-2 bg-[#865BFF]/10 border border-[#865BFF]/20 rounded-full flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="text-[9px] font-black text-white uppercase tracking-[0.3em] whitespace-nowrap">Datos Oficiales BM</span>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                ${plans.map((p, idx) => `
-                    <div class="glass-panel p-10 lg:p-14 asym-card border-${idx === 0 ? 'white/10' : '[#865BFF]/30'} bg-gradient-to-br from-[#0a0a0a] to-[#050505] hover:-translate-y-2 transition-transform duration-500 relative overflow-hidden group shadow-2xl">
-                        ${idx === 1 ? `<div class="absolute top-0 right-0 px-6 py-1 bg-[#865BFF] font-black text-[9px] text-white uppercase tracking-widest rounded-bl-xl shadow-lg z-20">Popular</div>` : ''}
-                        
-                        <div class="absolute -right-20 -top-20 w-64 h-64 bg-[#865BFF]/5 rounded-full blur-3xl pointer-events-none group-hover:bg-[#865BFF]/10 transition-colors"></div>
-                        
-                        <div class="flex justify-between items-start mb-12 relative z-10">
-                            <div>
-                                <span class="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[9px] font-black text-white uppercase tracking-[0.3em] mb-6 block w-fit">${p.phases}</span>
-                                <h4 class="text-4xl lg:text-5xl font-black text-white tracking-widest uppercase mb-1">${p.name}</h4>
-                            </div>
-                            <div class="text-right pl-4">
-                                <span class="text-[9px] font-bold text-[#865BFF] uppercase tracking-[0.3em] block mb-2">Profit Split</span>
-                                <span class="text-4xl lg:text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">${p.split}</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-y-10 gap-x-12 mb-16 relative z-10">
-                            ${[
-                                ['Objetivo F1', p.obj1],
-                                ['Objetivo F2', p.obj2],
-                                ['Pérdida Total', p.lossT, 'text-rose-500'],
-                                ['Pérdida Diaria', p.lossD, 'text-rose-500'],
-                                ['Días Mínimos', '5 / 7 Días'],
-                                ['Retiros', 'Cada 14 Días', 'text-emerald-400']
-                            ].map(item => `
-                                <div class="pb-4 border-b border-white/5 group-hover:border-white/10 transition-colors">
-                                    <p class="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-2">${item[0]}</p>
-                                    <p class="text-xl lg:text-2xl font-black ${item[2] || 'text-white'}">${item[1]}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-
-                        <a href="${ctaLink}" class="w-full relative px-8 py-5 block ${idx === 1 ? 'bg-[#865BFF] text-white' : 'bg-white text-black'} font-black text-center uppercase text-sm tracking-[0.2em] rounded-xl hover:scale-[1.02] transition-all shadow-xl z-10 overflow-hidden">
-                            <span class="relative z-10">Comprar Reto ${p.name}</span>
-                        </a>
-                        <p class="text-center mt-6 text-[9px] font-bold text-white/20 uppercase tracking-[0.3em] relative z-10">Certificación Trader Financiado Incluida</p>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-
-    const forexPlans = [
-        { name: 'OBSIDIAN', phases: '1 Fase evaluación', obj1: '8%', obj2: 'N/A', lossT: '8%', lossD: '4%', split: '80%' },
-        { name: 'BASALT', phases: '2 Fases evaluación', obj1: '8%', obj2: '8%', lossT: '10%', lossD: '5%', split: '80%' }
-    ];
-
-    const sntPlans = [
-        { name: 'ELITE', phases: '1 Fase evaluación', obj1: '8%', obj2: 'N/A', lossT: '8%', lossD: '4%', split: '80%' },
-        { name: 'ULTRA', phases: '2 Fases evaluación', obj1: '4%', obj2: '8%', lossT: '10%', lossD: '5%', split: '80%' }
-    ];
-
-    return `
-    <section class="py-32 px-8 bg-[#050505] relative overflow-hidden">
-        <div class="absolute top-[20%] right-0 w-[800px] h-screen bg-[#865BFF]/5 skew-y-12 pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto relative z-10 section-reveal">
-            <div class="text-center mb-32">
-                <h2 class="text-5xl md:text-7xl font-black font-headline text-white mb-6 uppercase tracking-tighter">Elije tu <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#865BFF]">Programa</span></h2>
-                <div class="inline-flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-md">
-                    <span class="material-symbols-outlined text-[#865BFF] animate-pulse">public</span>
-                    <p class="text-xs font-black text-white uppercase tracking-[0.5em]">Professional Funded Account Ecosystem</p>
-                </div>
-            </div>
-
-            ${renderGrid('Forex & CFDs', 'Institutional Liquidity Market', forexPlans)}
-            <div class="my-24 h-px w-full bg-gradient-to-r from-transparent via-[#865BFF]/20 to-transparent"></div>
-            ${renderGrid('Synthetic Indices', '24/7 Algorithmic Trading', sntPlans)}
-
-            <div class="mt-20 p-8 md:p-12 glass-panel border-[#865BFF]/20 bg-[#865BFF]/5 text-center max-w-4xl mx-auto rounded-[2rem]">
-                <p class="text-sm font-bold text-white/50 leading-relaxed uppercase tracking-widest">
-                    *Los precios varían según el tamaño de la cuenta seleccionada en el portal. <br>
-                    <span class="text-white mt-2 block font-black border-t border-white/10 pt-4">Bridge Markets no cobra comisiones ocultas en la compra de retos.</span>
-                </p>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderPropWorkflow(content: Record<string, any>, brand: BrandConfig): string {
-    const steps = [
-        { title: 'Elige el Plan', desc: 'Selecciona Forex (Obsidian/Basalt) o Synthetic (Elite/Ultra).' },
-        { title: 'Supera el Reto', desc: 'Cumple los objetivos de beneficio respetando los límites de pérdida.' },
-        { title: 'Verificación', desc: 'Nuestro equipo valida tu consistencia y cumplimiento de reglas.' },
-        { title: 'FONDEO REAL', desc: 'Recibe tu cuenta certificada y empieza a retirar beneficios al 80%.' }
-    ];
-
-    return `
-    <section class="py-32 px-8 bg-[#0a0a0a] relative overflow-hidden border-t border-white/5">
-        <div class="max-w-7xl mx-auto relative z-10">
-            <h2 class="text-4xl md:text-6xl font-black text-white mb-24 text-center uppercase tracking-tighter section-reveal">Camino a la <br><span class="text-[#865BFF]">Certificación</span></h2>
-            
-            <div class="relative">
-                <div class="hidden lg:block absolute top-[60px] left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#865BFF]/30 to-transparent z-0"></div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-                    ${steps.map((s, i) => `
-                        <div class="section-reveal group" style="animation-delay: ${i * 0.1}s">
-                            <div class="flex flex-col items-center lg:items-start p-8 asym-card bg-[#050505] border border-white/5 hover:border-[#865BFF]/40 hover:-translate-y-2 transition-all h-full shadow-2xl">
-                                <div class="w-20 h-20 rounded-[1.5rem] bg-[#0a0a0a] border border-white/10 flex items-center justify-center text-3xl font-black text-white mb-8 group-hover:border-[#865BFF] group-hover:bg-[#865BFF] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                                    0${i + 1}
-                                </div>
-                                <h3 class="text-xl lg:text-2xl font-black text-white mb-4 uppercase tracking-tighter leading-tight group-hover:text-[#865BFF] transition-colors text-center lg:text-left">${s.title}</h3>
-                                <p class="text-sm text-white/40 leading-relaxed font-medium text-center lg:text-left">${s.desc}</p>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderPropRules(content: Record<string, any>, brand: BrandConfig): string {
-    const rules = [
-        { icon: 'timer', title: 'Duración Mínima', desc: '2 min (FX) / 3 min (SNT) por operación.' },
-        { icon: 'shield', title: 'SL Obligatorio', desc: 'Obligatorio en fase financiada (máx 2 min).' },
-        { icon: 'analytics', title: 'Consistencia (30%)', desc: 'Ninguna operación > 30% del beneficio neto.' },
-        { icon: 'content_copy', title: 'Copy Trading', desc: 'Solo permitido entre cuentas propias (máx 5).' },
-        { icon: 'gavel', title: 'Prohibiciones', desc: 'All-in, Grid, Martingala y Arbitraje prohibidos.' },
-        { icon: 'campaign', title: 'Noticias', desc: 'Cierre prohibido 5 min antes/después de alta volatilidad.' },
-        { icon: 'public', title: 'Regla de IP', desc: 'KYC e IP deben coincidir estrictamente. VPN no permitida.' },
-        { icon: 'format_list_numbered', title: 'Límites', desc: 'Máx 5 posiciones por par / 30 lotes totales en todo momento.' }
-    ];
+// ─── CHOOSE PROGRAM (OBSIDIAN & BASALT) ───────────────────────
+export function renderPropProgramsForex(content: Record<string, any>, brand: BrandConfig): string {
+    const ctaObsidianText = content.ctaObsidianText || "Comprar OBSIDIAN";
+    const ctaBasaltText = content.ctaBasaltText || "Comprar BASALT";
+    const ctaObsidianLink = brand.ctaLink || "#";
+    const ctaBasaltLink = brand.ctaLink || "#";
 
     return `
     <section class="py-32 px-8 bg-[#050505]">
-        <div class="max-w-7xl mx-auto section-reveal">
-            <div class="flex flex-col lg:flex-row justify-between items-end gap-12 mb-20 bg-[#0a0a0a] p-10 asym-card border border-white/5">
-                <div class="max-w-2xl">
-                    <div class="flex items-center gap-3 mb-6">
-                        <span class="w-3 h-3 bg-rose-500 rounded-full animate-pulse"></span>
-                        <span class="text-[10px] text-rose-500 uppercase tracking-[0.4em] font-black">Reglas Estrictas</span>
-                    </div>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6">Protocolos de <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-orange-400">Riesgo</span></h2>
-                    <p class="text-white/50 font-medium text-lg">Reglas oficiales diseñadas para proteger la liquidez institucional de la firma y fomentar hábitos del trader profesional.</p>
-                </div>
-                <div class="lg:text-right w-full lg:w-auto p-6 bg-[#050505] rounded-2xl border border-white/10">
-                    <span class="material-symbols-outlined text-[40px] text-white/20 mb-4 block lg:inline-block">gavel</span>
-                    <span class="text-[10px] font-black text-white/20 uppercase tracking-[0.5em] block mb-2">Bridge Markets Compliance</span>
-                    <span class="text-sm font-black text-white uppercase tracking-widest">Tolerancia Cero a Fraude</span>
-                </div>
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <h2 class="text-3xl md:text-5xl font-black font-headline text-white mb-4 uppercase tracking-tight">FOREX / CFDs PropTrading</h2>
+                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic italic-none italic italic-none italic italic-none italic italic-none italic italic-none">Mercados Reales Internacionales</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                ${rules.map(r => `
-                    <div class="glass-panel p-10 asym-card border-white/5 bg-[#0a0a0a]/80 hover:border-[#865BFF]/30 hover:bg-[#865BFF]/5 transition-all group overflow-hidden relative shadow-lg">
-                        <div class="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 group-hover:scale-150 transition-all duration-700">
-                            <span class="material-symbols-outlined text-[100px] text-white">${r.icon}</span>
+            <div class="overflow-x-auto section-reveal">
+                <table class="w-full border-collapse min-w-[800px] bg-white/[0.02] border border-white/10 rounded-[2rem] overflow-hidden">
+                    <thead>
+                        <tr class="bg-white/5">
+                            <th class="p-8 text-left text-[10px] font-black text-white/40 uppercase tracking-widest border-b border-white/10">Característica</th>
+                            <th class="p-8 text-center bg-[#D4AF37]/10 border-b border-[#D4AF37]/20">
+                                <span class="block text-2xl font-black text-[#D4AF37] mb-1 italic italic-none">OBSIDIAN</span>
+                                <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest">(1 Fase)</span>
+                            </th>
+                            <th class="p-8 text-center bg-white/5 border-b border-white/10">
+                                <span class="block text-2xl font-black text-white mb-1 italic italic-none italic italic-none">BASALT</span>
+                                <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest">(2 Fases)</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm font-medium">
+                        ${[
+                            ['Modelo de evaluación', '1 Fase (One Phase)', '2 Fases (Two Phase)'],
+                            ['Objetivo Fase 1', '8%', '8%'],
+                            ['Objetivo Fase 2', 'No aplica', '8%'],
+                            ['Días mínimos (Evaluación)', '5 días', '7 días (F1) + 5 días (F2)'],
+                            ['Pérdida total (Evaluación)', '8%', '10%'],
+                            ['Pérdida diaria (Evaluación)', '4%', '5%'],
+                            ['Días mínimos (Cuenta Real)', '5 días', '7 días'],
+                            ['Pérdida total (Cuenta Real)', '8%', '10%'],
+                            ['Pérdida diaria (Cuenta Real)', '4%', '5%'],
+                            ['Profit Split', '80% Trader', '70% Trader'],
+                            ['Retiros', 'Cada 14 días', 'Cada 14 días'],
+                            ['Máximo pago acumulado', '10% del valor de la cuenta', '10% del valor de la cuenta'],
+                            ['Certificación', 'Insignia Trader Financiado', 'Insignia Trader Financiado']
+                        ].map(row => `
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td class="p-6 text-white/40 border-r border-white/5">${row[0]}</td>
+                                <td class="p-6 text-center text-[#D4AF37] font-bold border-r border-white/5">${row[1]}</td>
+                                <td class="p-6 text-center text-white/80">${row[2]}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 section-reveal">
+                <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center group hover:border-[#D4AF37]/40 transition-all">
+                    <h3 class="text-2xl font-black text-white mb-6 uppercase italic italic-none">Programa OBSIDIAN</h3>
+                    <a href="${ctaObsidianLink}" class="inline-block w-full py-5 bg-[#D4AF37] text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest text-sm shadow-xl">${ctaObsidianText}</a>
+                    <p class="mt-6 text-[10px] text-white/30 italic italic-none italic italic-none italic italic-none italic italic-none">"Los precios varían según el tamaño de cuenta. Consulta tu portal de cliente."</p>
+                </div>
+                <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center group hover:border-white/40 transition-all">
+                    <h3 class="text-2xl font-black text-white mb-6 uppercase italic italic-none">Programa BASALT</h3>
+                    <a href="${ctaBasaltLink}" class="inline-block w-full py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest text-sm shadow-xl">${ctaBasaltText}</a>
+                    <p class="mt-6 text-[10px] text-white/30 italic italic-none">"Los precios varían según el tamaño de cuenta. Consulta tu portal de cliente."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── CHOOSE PROGRAM (ELITE & ULTRA) ─────────────────────────
+export function renderPropProgramsSynthetic(content: Record<string, any>, brand: BrandConfig): string {
+    const ctaEliteText = content.ctaEliteText || "Comprar ELITE";
+    const ctaUltraText = content.ctaUltraText || "Comprar ULTRA";
+    const ctaEliteLink = brand.ctaLink || "#";
+    const ctaUltraLink = brand.ctaLink || "#";
+
+    return `
+    <section class="py-32 px-8 bg-[#080808] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <h2 class="text-3xl md:text-5xl font-black font-headline text-white mb-4 uppercase tracking-tight italic italic-none">Synthetic PropTrading</h2>
+                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic italic-none italic italic-none italic italic-none italic italic-none italic italic-none">Índices Sintéticos 24/7</p>
+            </div>
+
+            <div class="overflow-x-auto section-reveal">
+                <table class="w-full border-collapse min-w-[800px] bg-white/[0.02] border border-white/10 rounded-[2rem] overflow-hidden">
+                    <thead>
+                        <tr class="bg-white/5">
+                            <th class="p-8 text-left text-[10px] font-black text-white/40 uppercase tracking-widest border-b border-white/10">Característica</th>
+                            <th class="p-8 text-center bg-blue-500/10 border-b border-blue-500/20">
+                                <span class="block text-2xl font-black text-blue-400 mb-1 italic italic-none italic italic-none">ELITE</span>
+                                <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest">(1 Fase)</span>
+                            </th>
+                            <th class="p-8 text-center bg-purple-500/10 border-b border-purple-500/20">
+                                <span class="block text-2xl font-black text-purple-400 mb-1 italic italic-none italic italic-none italic italic-none">ULTRA</span>
+                                <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest">(2 Fases)</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm font-medium">
+                        ${[
+                            ['Modelo de evaluación', '1 Fase (One Phase)', '2 Fases (Two Phase)'],
+                            ['Objetivo Fase 1', '8%', '4%'],
+                            ['Objetivo Fase 2', 'No aplica', '8%'],
+                            ['Días mínimos (Evaluación)', '5 días', '7 días (F1) + 5 días (F2)'],
+                            ['Pérdida total (Evaluación)', '8%', '10%'],
+                            ['Pérdida diaria (Evaluación)', '4%', '5%'],
+                            ['Días mínimos (Cuenta Real)', '5 días', '7 días'],
+                            ['Pérdida total (Cuenta Real)', '8%', '10%'],
+                            ['Pérdida diaria (Cuenta Real)', '4%', '5%'],
+                            ['Profit Split', '80% Trader / 20% BM', '70% Trader / 30% BM'],
+                            ['Retiros', 'Cada 14 días', 'Cada 14 días'],
+                            ['Máximo pago acumulado', '10% del valor de la cuenta', '10% del valor de la cuenta'],
+                            ['Certificación', 'Insignia Trader Financiado', 'Insignia Trader Financiado']
+                        ].map(row => `
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td class="p-6 text-white/40 border-r border-white/5">${row[0]}</td>
+                                <td class="p-6 text-center text-blue-400 font-bold border-r border-white/5">${row[1]}</td>
+                                <td class="p-6 text-center text-purple-400 font-bold">${row[2]}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 section-reveal">
+                <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center group hover:border-blue-500/40 transition-all">
+                    <h3 class="text-2xl font-black text-white mb-6 uppercase italic italic-none italic italic-none">Programa ELITE</h3>
+                    <a href="${ctaEliteLink}" class="inline-block w-full py-5 bg-blue-600 text-white font-black rounded-2xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest text-sm shadow-xl shadow-blue-600/20">${ctaEliteText}</a>
+                    <p class="mt-6 text-[10px] text-white/30 italic italic-none">"Los precios varían según el tamaño de cuenta. Consulta tu portal de cliente."</p>
+                </div>
+                <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] text-center group hover:border-purple-500/40 transition-all">
+                    <h3 class="text-2xl font-black text-white mb-6 uppercase italic italic-none italic italic-none italic italic-none">Programa ULTRA</h3>
+                    <a href="${ctaUltraLink}" class="inline-block w-full py-5 bg-purple-600 text-white font-black rounded-2xl hover:scale-105 active:scale-95 transition-all uppercase tracking-widest text-sm shadow-xl shadow-purple-600/20">${ctaUltraText}</a>
+                    <p class="mt-6 text-[10px] text-white/30 italic italic-none">"Los precios varían según el tamaño de cuenta. Consulta tu portal de cliente."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── STEP BY STEP ──────────────────────────────────────────
+export function renderPropSteps(content: Record<string, any>, brand: BrandConfig): string {
+    const steps = [
+        { title: 'Elige tu programa', desc: 'Selecciona entre OBSIDIAN, BASALT (Forex/CFDs) o ELITE, ULTRA (Synthetic). Cada uno tiene diferentes fases y condiciones.', icon: 'ads_click' },
+        { title: 'Supera el Challenge', desc: 'Opera en cuenta simulada cumpliendo los objetivos de rentabilidad, días mínimos y límites de riesgo establecidos.', icon: 'trending_up' },
+        { title: 'Recibe tu Cuenta Financiada', desc: 'Una vez validado, accedes a una cuenta en mercado real como Trader Financiado Certificado Bridge Markets.', icon: 'workspace_premium' },
+        { title: 'Opera y cobra', desc: 'Opera bajo los parámetros de la cuenta financiada y solicita tu distribución de beneficios cada 14 días.', icon: 'payments' }
+    ];
+
+    return `
+    <section class="py-32 px-8 bg-[#050505] relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24 section-reveal">
+                <span class="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4 block">El Camino al Éxito</span>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white uppercase italic italic-none">Proceso Paso a Paso</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative section-reveal">
+                ${steps.map((step, i) => `
+                    <div class="group relative p-10 bg-white/[0.02] border border-white/5 rounded-[2.5rem] hover:bg-white/[0.04] transition-all duration-500">
+                        <div class="w-16 h-16 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-[#D4AF37] group-hover:text-black transition-all duration-500">
+                            <span class="material-symbols-outlined text-3xl transition-colors">${step.icon}</span>
                         </div>
-                        <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white mb-6 group-hover:text-[#865BFF] transition-colors relative z-10">
-                            <span class="material-symbols-outlined">${r.icon}</span>
-                        </div>
-                        <h3 class="text-sm font-black text-white uppercase tracking-[0.2em] mb-4 relative z-10">${r.title}</h3>
-                        <p class="text-xs text-white/50 leading-relaxed font-bold relative z-10">${r.desc}</p>
+                        <div class="text-xs font-black text-[#D4AF37] mb-4 uppercase tracking-widest">Paso ${i + 1}</div>
+                        <h3 class="text-xl font-black text-white mb-4 uppercase italic italic-none">${step.title}</h3>
+                        <p class="text-white/40 text-sm leading-relaxed font-medium">${step.desc}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
-export function renderPropBenefits(content: Record<string, any>, brand: BrandConfig): string {
-    const perks = [
-        'Insignia Oficial de Trader Financiado',
-        'Acceso a Pool de Liquidez Directa A-Book',
-        'Validación bajo Estándar Institucional Estricto',
-        'Distribución de Ganancias cada 14 días (Bimensual)',
-        'Profit Split Fijo en 80% (Sin escalados confusos)'
+// ─── RULES (ACCORDION) ──────────────────────────────────────
+export function renderPropRules(content: Record<string, any>, brand: BrandConfig): string {
+    const rules = [
+        { title: 'Duración mínima de operaciones', desc: 'Forex/CFDs: mín. 2 minutos por operación. Synthetic: mín. 3 minutos por operación.' },
+        { title: 'Stop Loss obligatorio', desc: 'Solo en fase financiada. Cada operación debe tener Stop Loss activo en máximo 2 minutos desde su apertura.' },
+        { title: 'Regla de consistencia (30%)', desc: 'Ninguna operación individual puede representar el 30% o más del beneficio neto acumulado al momento del retiro (solo fase financiada).' },
+        { title: 'Copy Trading', desc: 'Permitido solo entre cuentas propias del mismo titular (máx. 5 cuentas). Prohibido copiar entre cuentas de terceros.' },
+        { title: 'Estrategias prohibidas', desc: 'Gambling, All-in, Grid/Martingala, Arbitraje, Quick Strike. Tolerancia cero.' },
+        { title: 'Noticias económicas', desc: 'Prohibido abrir posiciones 5 minutos antes o después de una noticia de alto impacto.' },
+        { title: 'Control de IP y acceso', desc: 'Prohibido uso de VPN o operación por terceros. Los EAs deben ejecutarse desde la IP del KYC.' },
+        { title: 'Límite de posiciones', desc: 'Máx. 5 posiciones simultáneas por instrumento. Máx. 30 lotes totales (solo fase financiada).' }
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#0a0a0a] relative overflow-hidden border-t border-white/5">
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-[#865BFF]/5 blur-[200px] rounded-full z-0 pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-24 section-reveal relative z-10">
-            <div class="lg:w-1/2">
-                <div class="h-1 w-20 bg-[#865BFF] mb-12 rounded-full"></div>
-                <h2 class="text-5xl md:text-7xl font-black text-white mb-10 uppercase tracking-tighter leading-[0.9]">Beneficios de la <br><span class="text-[#865BFF]">Certificación</span></h2>
-                <div class="space-y-8">
-                    ${perks.map(p => `
-                        <div class="flex items-start gap-6 group">
-                            <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:bg-[#865BFF] group-hover:border-[#865BFF] transition-all shrink-0 mt-1">
-                                <span class="material-symbols-outlined text-[10px] font-black">done</span>
-                            </div>
-                            <span class="text-lg font-bold text-white/60 group-hover:text-white transition-colors uppercase tracking-tight leading-relaxed">${p}</span>
-                        </div>
-                    `).join('')}
-                </div>
+    <section class="py-32 px-8 bg-[#080808] border-y border-white/5">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="material-symbols-outlined text-6xl text-[#D4AF37] mb-6">gavel</span>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white uppercase italic italic-none">Reglas Clave</h2>
+                <p class="text-white/40 mt-4 font-medium uppercase tracking-[0.2em] text-[10px]">Parámetros Operativos Oficiales 2026</p>
             </div>
-            <div class="lg:w-1/2 relative w-full">
-                <div class="glass-panel p-16 asym-card border border-white/10 bg-gradient-to-br from-white/5 to-[#050505] relative z-10 text-center shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-20 Mix-blend-overlay"></div>
-                    <div class="w-32 h-32 bg-[#050505] border-4 border-[#865BFF] mx-auto rounded-full flex items-center justify-center text-white mb-10 shadow-[0_0_60px_rgba(134,91,255,0.4)] relative z-10">
-                        <span class="material-symbols-outlined text-[60px]">shield_person</span>
-                        <div class="absolute -right-2 -top-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-[#050505] flex items-center justify-center"><span class="material-symbols-outlined text-black text-[12px] font-black">check</span></div>
+
+            <div class="space-y-4 section-reveal">
+                ${rules.map((rule, i) => `
+                    <div class="group bg-white/[0.02] border border-white/5 rounded-3xl overflow-hidden">
+                        <details class="w-full">
+                            <summary class="flex items-center justify-between p-8 cursor-pointer list-none group-hover:bg-white/[0.02] transition-colors">
+                                <span class="text-lg font-black text-white uppercase italic italic-none">${rule.title}</span>
+                                <span class="material-symbols-outlined text-[#D4AF37] transition-transform duration-300">add</span>
+                            </summary>
+                            <div class="px-8 pb-8 text-white/50 font-medium leading-relaxed border-t border-white/5 pt-6">
+                                ${rule.desc}
+                            </div>
+                        </details>
                     </div>
-                    <h3 class="text-4xl font-black text-white mb-6 uppercase tracking-tighter relative z-10">Trader Verificado</h3>
-                    <div class="flex items-center justify-center gap-3 relative z-10">
-                        <span class="w-1.5 h-1.5 bg-[#865BFF] rounded-full"></span>
-                        <p class="text-white/40 text-[10px] font-black uppercase tracking-[0.5em]">Bridge Markets Elite Program</p>
-                        <span class="w-1.5 h-1.5 bg-[#865BFF] rounded-full"></span>
-                    </div>
-                </div>
+                `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    <style>
+        details[open] summary span:last-child { transform: rotate(45deg); }
+        summary::-webkit-details-marker { display: none; }
+    </style>
+    `;
 }
 
+// ─── IB COMMUNITY (EDITABLE) ────────────────────────────────
 export function renderPropCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const communityName = content.communityName || brand.communityName || brand.fullName;
-    const message = content.welcomeMessage || brand.heroPhrase || "Únete a nuestra comunidad y deja que Bridge Markets financie tu talento.";
-    const telegram = content.telegramLink || brand.telegram || "#";
-    const whatsapp = content.whatsappNumber || brand.whatsapp || "#";
-    const instagram = content.instagramUrl || brand.instagram || "#";
+    const communityName = brand.communityName || brand.ibName || "Nuestra Comunidad";
+    const welcomeMsg = content.welcomeMsg || "Únete a un entorno diseñado para el crecimiento mutuo. Aquí no solo operamos, sino que construimos el futuro del trading institucional juntos.";
+    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80";
+    
+    const whatsapp = content.socialWhatsApp || brand.whatsapp || "";
+    const telegram = content.socialTelegram || brand.telegram || "";
+    const instagram = content.socialInstagram || brand.instagram || "";
+    const youtube = content.socialYouTube || brand.youtube || "";
     
     return `
-    <section class="py-32 px-8 bg-[#050505] relative section-reveal overflow-hidden">
-        <div class="max-w-5xl mx-auto bg-[#0a0a0a]/80 border border-white/5 p-12 md:p-24 asym-card relative z-10 group shadow-2xl backdrop-blur-3xl hover:border-white/10 transition-colors">
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03),transparent_60%)]"></div>
-            <div class="absolute top-0 right-0 w-64 h-64 bg-[#865BFF]/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+    <section class="py-32 px-8 bg-[#050505] overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="relative section-reveal order-2 lg:order-1">
+                    <div class="aspect-[4/5] rounded-[4rem] overflow-hidden border border-white/10 shadow-2xl">
+                        <img src="${photoUrl}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Community">
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 p-12 bg-[#D4AF37] rounded-[3rem] text-black shadow-2xl animate-float hidden md:block">
+                        <div class="text-4xl font-black italic italic-none italic-none italic-none">Soporte 1:1</div>
+                        <div class="text-sm font-bold uppercase tracking-widest opacity-60">Asistencia para IBs</div>
+                    </div>
+                </div>
 
-            <div class="text-center relative z-10">
-                <div class="relative w-32 h-32 mx-auto mb-12">
-                   <div class="absolute inset-0 bg-white/5 animate-pulse rounded-full"></div>
-                   <div class="relative w-full h-full bg-[#050505] rounded-full border-2 border-white/10 flex items-center justify-center text-5xl text-white font-black overflow-hidden group-hover:border-white/30 transition-colors">
-                        ${brand.logoUrl ? `<img src="${brand.logoUrl}" alt="IB Logo" class="w-full h-full object-cover">` : communityName.charAt(0)}
-                   </div>
-                </div>
-                
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 uppercase tracking-tighter">Comunidad <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#865BFF]">${communityName}</span></h2>
-                
-                <div class="mx-auto mb-16 text-center max-w-2xl">
-                   <p class="text-xl text-white/50 leading-relaxed font-medium italic">"${message}"</p>
-                </div>
-                
-                <div class="flex flex-wrap justify-center gap-6">
-                    ${telegram && telegram !== '#' ? `<a href="${telegram}" target="_blank" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-black rounded-xl flex items-center gap-3 hover:-translate-y-1 hover:bg-[#229ED9] hover:border-[#229ED9] transition-all shadow-lg text-sm uppercase tracking-widest"><span class="w-2 h-2 rounded-full bg-[#229ED9]"></span>Telegram</a>` : ''}
-                    ${whatsapp && whatsapp !== '#' ? `<a href="${whatsapp.includes('http') ? whatsapp : `https://wa.me/${whatsapp.replace(/\D/g,'')}`}" target="_blank" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-black rounded-xl flex items-center gap-3 hover:-translate-y-1 hover:bg-[#25D366] hover:border-[#25D366] transition-all shadow-lg text-sm uppercase tracking-widest"><span class="w-2 h-2 rounded-full bg-[#25D366]"></span>WhatsApp</a>` : ''}
-                    ${instagram && instagram !== '#' ? `<a href="${instagram.includes('http') ? instagram : `https://instagram.com/${instagram.replace('@','')}`}" target="_blank" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-black rounded-xl flex items-center gap-3 hover:-translate-y-1 hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:to-[#ee2a7b] transition-all shadow-lg text-sm uppercase tracking-widest"><span class="w-2 h-2 rounded-full bg-[#ee2a7b]"></span>Instagram</a>` : ''}
+                <div class="section-reveal order-1 lg:order-2">
+                    <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-4 block">Liderazgo & Comunidad</span>
+                    <h2 class="text-4xl md:text-7xl font-black font-headline text-white mb-8 uppercase leading-[0.9] italic italic-none italic-none italic-none">${communityName}</h2>
+                    <div class="prose prose-invert max-w-none mb-12">
+                        <p class="text-xl text-white/60 font-light leading-relaxed italic italic-none italic-none italic-none">
+                            ${welcomeMsg}
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-6">
+                        ${whatsapp ? `<a href="https://wa.me/${whatsapp}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined">chat</span></a>` : ''}
+                        ${telegram ? `<a href="${telegram}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined">send</span></a>` : ''}
+                        ${instagram ? `<a href="${instagram}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#E1306C] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined">photo_camera</span></a>` : ''}
+                        ${youtube ? `<a href="${youtube}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#FF0000] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined">play_circle</span></a>` : ''}
+                    </div>
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FAQ (FIXED) ────────────────────────────────────────────
 export function renderPropFAQ(content: Record<string, any>, brand: BrandConfig): string {
     const faqs = [
-        { q: '¿OBSIDIAN o BASALT?', a: 'OBSIDIAN: 1 sola fase de evaluación para fondeo rápido. BASALT: 2 fases con reglas ligeramente más holgadas para gestión progresiva.' },
-        { q: 'Distribución de Beneficios', a: 'Bridge Markets ofrece hasta un 80% fijo de profit split sobre las ganancias generadas, sin comisiones ocultas.' },
-        { q: 'Tiempo de Retiro', a: 'Puedes solicitar tus pagos cada 14 días calendario si cumples con todas las métricas de consistencia.' },
-        { q: '¿Necesito mi propio dinero tras ser fondeado?', a: 'No, operarás exclusivamente con el capital de liquidez provisto por Bridge Markets PropFirm.' }
+        { q: '¿Qué diferencia hay entre OBSIDIAN y BASALT?', a: 'OBSIDIAN evalúa en 1 sola fase (más rápido). BASALT evalúa en 2 fases (más progresivo y con mayor tolerancia al riesgo).' },
+        { q: '¿Cuánto puedo ganar?', a: 'Con OBSIDIAN/ELITE el 80% de los beneficios netos son tuyos. Con BASALT/ULTRA el 70%. El límite máximo pagado es el 10% del valor de la cuenta.' },
+        { q: '¿Cada cuánto puedo retirar?', a: 'Cada 14 días calendario, cumpliendo todas las condiciones del programa.' },
+        { q: '¿Puedo usar robots o EAs?', a: 'Sí, siempre que cumplan las reglas operativas. Deben ejecutarse desde la IP de tu KYC verificado.' }
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#0a0a0a] border-t border-white/5">
-        <div class="max-w-4xl mx-auto section-reveal">
-            <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-20 text-center uppercase tracking-tighter">Consultas <span class="text-white/50">Técnicas</span></h2>
-            <div class="grid grid-cols-1 gap-4">
-                ${faqs.map(f => `
-                    <div class="bg-[#050505] border border-white/5 p-8 md:px-10 asym-card hover:border-[#865BFF]/40 hover:bg-white/5 transition-all group cursor-pointer">
-                        <div class="flex justify-between items-center text-left">
-                            <span class="text-sm md:text-base font-black text-white uppercase tracking-widest group-hover:text-white transition-colors pr-8 leading-relaxed">${f.q}</span>
-                            <span class="material-symbols-outlined text-white/20 group-hover:text-[#865BFF] group-hover:rotate-180 transition-all">add</span>
-                        </div>
-                        <div class="mt-0 pt-0 opacity-0 max-h-0 overflow-hidden group-hover:mt-6 group-hover:pt-6 group-hover:opacity-100 group-hover:max-h-96 border-t border-white/0 group-hover:border-white/10 transition-all duration-500 ease-in-out">
-                            <p class="text-sm text-white/50 leading-relaxed font-medium">${f.a}</p>
-                        </div>
+    <section class="py-32 px-8 bg-[#080808]">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="section-reveal">
+                    <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-12 uppercase italic italic-none italic-none">Preguntas Frecuentes</h2>
+                    <div class="space-y-6">
+                        ${faqs.map((faq, i) => `
+                            <div class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl hover:bg-white/[0.03] transition-colors">
+                                <h3 class="text-lg font-black text-white mb-3 italic italic-none italic-none">${faq.q}</h3>
+                                <p class="text-white/40 text-sm font-medium leading-relaxed">${faq.a}</p>
+                            </div>
+                        `).join('')}
                     </div>
-                `).join('')}
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderPropCTA(content: Record<string, any>, brand: BrandConfig): string {
-    const ctaLink = brand.ctaLink || "#register";
-    return `
-    <section class="py-40 bg-[#050505] relative overflow-hidden section-reveal">
-        <div class="absolute inset-0 z-0">
-             <div class="absolute inset-0 bg-[#865BFF]/5 bg-[url('https://www.transparenttextures.com/patterns/crossed-stripes.png')] opacity-10"></div>
-             <div class="absolute bottom-0 left-[50%] -translate-x-[50%] w-full max-w-4xl h-full bg-[#865BFF]/10 rounded-t-full blur-[120px] pointer-events-none"></div>
-        </div>
-        
-        <div class="max-w-6xl mx-auto px-8 relative z-10 text-center text-white">
-            <h2 class="text-6xl md:text-8xl lg:text-[7rem] font-black font-headline mb-16 uppercase tracking-tighter leading-[0.9]">DOMINA EL <br><span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-[#865BFF] italic">MERCADO</span></h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-4xl mx-auto mb-16">
-                ${['OBSIDIAN', 'BASALT', 'ELITE', 'ULTRA'].map(p => `
-                    <a href="${ctaLink}" class="px-6 py-8 asym-card border border-white/10 bg-[#0a0a0a]/80 text-white hover:bg-white/10 hover:text-black font-black text-sm tracking-widest transition-all text-center uppercase shadow-xl hover:-translate-y-2 group backdrop-blur-md">
-                        <span class="block text-[9px] text-[#865BFF] uppercase tracking-[0.3em] mb-2 group-hover:text-black/50">Challenge Plan</span>
-                        QUIERO ${p}
-                    </a>
-                `).join('')}
-            </div>
-            
-            <p class="text-[10px] text-white/30 uppercase tracking-[0.4em] font-black max-w-2xl mx-auto">Selecciona tu programa en el portal de cliente. BridgeMarkets LTD.</p>
-        </div>
-    </section>`;
-}
-
-export function renderPropFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const year = new Date().getFullYear();
-    const communityName = content.communityName || brand.communityName || brand.fullName;
-    
-    return `
-    <footer class="py-24 bg-[#050505] text-white px-8 border-t border-white/5 relative z-10">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-20 mb-20">
-            <div class="md:col-span-2">
-                <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-8 mb-10 opacity-60 grayscale">
-                <p class="text-[10px] text-white/20 max-w-sm leading-relaxed uppercase tracking-[0.2em] font-bold">
-                    Infraestructura de Grado Mercantil. Bridge Markets Certification Program es un proveedor de evaluación y fondeo simulado.
-                </p>
-            </div>
-            <div class="md:col-start-4">
-                <h4 class="text-[9px] font-black text-white/30 uppercase tracking-[0.5em] mb-8">Partner Certificado</h4>
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-black text-white/50">${communityName.charAt(0)}</div>
-                    <span class="text-[11px] font-black text-white/50 uppercase tracking-widest">${communityName}</span>
+                </div>
+                <div class="relative section-reveal flex justify-center order-first lg:order-last">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-white/5 rounded-full blur-[100px] animate-pulse"></div>
+                        <img src="/images/imagenes%20nuevas/peones%20negro.png" alt="Pawns" class="w-96 h-auto object-contain relative z-10 animate-[heroFloat_7s_ease-in-out_infinite] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-[9px] font-black text-white/20 uppercase tracking-[0.5em] text-center md:text-left">© ${year} BRIDGE MARKETS GLOBAL. ALL RIGHTS RESERVED.</p>
-            <div class="flex gap-4">
-                <p class="text-[9px] font-black text-emerald-500/50 uppercase tracking-widest"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block mr-2"></span>Systems Operational</p>
+    </section>
+    `;
+}
+
+// ─── CERTIFICATION & BENEFITS ───────────────────────
+export function renderPropBenefits(content: Record<string, any>, brand: BrandConfig): string {
+    return `
+    <section class="py-32 px-8 bg-[#050505] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="section-reveal">
+                    <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 uppercase italic italic-none italic-none">Certificación y Beneficios</h2>
+                    <ul class="space-y-6">
+                        ${[
+                            'Insignia Oficial de Certificación — Trader Financiado Certificado',
+                            'Acceso a una Cuenta Financiada en Mercado Real',
+                            'Validación como operador de estándares institucionales',
+                            'Distribución de beneficios cada 14 días calendario',
+                            'Profit Split de hasta el 80% (OBSIDIAN / ELITE)'
+                        ].map(item => `
+                            <li class="flex items-center gap-4 text-white/60 font-medium italic italic-none">
+                                <span class="material-symbols-outlined text-[#D4AF37]">check_circle</span>
+                                ${item}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                <div class="relative section-reveal flex justify-center">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-[#D4AF37]/20 rounded-full blur-[100px] animate-pulse"></div>
+                        <img src="/images/imagenes%20nuevas/reyna%20negra.png" alt="Queen" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_5s_ease-in-out_infinite] drop-shadow-[0_40px_80px_rgba(0,0,0,0.9)]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── FINAL CTA ──────────────────────────────────────────────
+export function renderPropFinalCTA(content: Record<string, any>, brand: BrandConfig): string {
+    const ctaLink = brand.ctaLink || "#";
+    return `
+    <section class="py-40 px-8 bg-[#050505] relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D4AF37]/10 blur-[120px] rounded-full"></div>
+        </div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10 section-reveal">
+            <h2 class="text-5xl md:text-8xl font-black font-headline text-white mb-8 tracking-tighter uppercase italic italic-none italic-none">¿Listo para operar con <span class="text-[#D4AF37]">capital real?</span></h2>
+            <p class="text-xl md:text-2xl text-white/50 font-light mb-12 italic italic-none italic-none">Elige tu programa y demuestra tu talento como trader</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="${ctaLink}" class="p-6 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-widest text-[10px] hover:bg-[#D4AF37] hover:text-black transition-all">OBSIDIAN</a>
+                <a href="${ctaLink}" class="p-6 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-widest text-[10px] hover:bg-white hover:text-black transition-all">BASALT</a>
+                <a href="${ctaLink}" class="p-6 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-widest text-[10px] hover:bg-blue-600 hover:text-white transition-all">ELITE</a>
+                <a href="${ctaLink}" class="p-6 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-widest text-[10px] hover:bg-purple-600 hover:text-white transition-all">ULTRA</a>
+            </div>
+            
+            <p class="mt-12 text-[10px] text-white/20 uppercase tracking-[0.4em] font-black">"Los resultados del trading implican riesgo. El desempeño pasado no garantiza resultados futuros."</p>
+        </div>
+    </section>
+    `;
+}
+
+// ─── FOOTER (EDITABLE) ──────────────────────────────────────
+export function renderPropFooter(content: Record<string, any>, brand: BrandConfig): string {
+    const ibName = brand.communityName || brand.ibName || "Partner Oficial";
+    const supportLink = brand.ctaLink || "#";
+
+    return `
+    <footer class="py-20 px-8 bg-[#020202] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+                <div>
+                    <div class="text-2xl font-black text-white mb-6 uppercase tracking-tighter">Bridge <span class="text-[#D4AF37]">Markets</span></div>
+                    <p class="text-white/30 text-xs leading-relaxed uppercase tracking-widest font-black">Presentado por ${ibName}</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Contacto Corporativo</div>
+                    <p class="text-sm text-white/60 font-medium">corporate@bridgemarkets.global</p>
+                    <p class="text-sm text-white/60 font-medium">+1 (786) 979-3392</p>
+                </div>
+                <div class="space-y-4 text-right md:text-right">
+                    <div class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Portal Oficial</div>
+                    <a href="https://www.bridgemarkets.global" class="text-sm text-white/60 hover:text-[#D4AF37] transition-colors block font-medium">www.bridgemarkets.global</a>
+                    <a href="${supportLink}" class="text-sm text-white/60 hover:text-[#D4AF37] transition-colors block font-medium">Soporte del IB</a>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[10px] text-white/20 uppercase tracking-widest font-black">© 2026 Bridge Markets. Todos los derechos reservados.</p>
+                <div class="flex gap-8">
+                    <a href="#" class="text-[10px] text-white/20 uppercase tracking-widest hover:text-white transition-colors font-black">Aviso Legal</a>
+                    <a href="#" class="text-[10px] text-white/20 uppercase tracking-widest hover:text-white transition-colors font-black">Privacidad</a>
+                </div>
             </div>
         </div>
     </footer>`;

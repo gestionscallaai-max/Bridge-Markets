@@ -571,61 +571,64 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
     // Registration form
     const formHtml = `
     <section id="register" class="py-32 px-8 relative z-30" style="background: transparent; margin-top: -6rem;">
-        <div class="max-w-xl mx-auto glass-panel rounded-[3rem] p-12 md:p-16 relative section-reveal shadow-2xl backdrop-blur-3xl border border-white/20">
+        <div class="max-w-xl mx-auto ${isLight ? 'bg-white shadow-[0_40px_100px_rgba(0,0,0,0.05)] border border-slate-100' : 'glass-panel border border-white/20'} rounded-[3rem] p-12 md:p-16 relative section-reveal shadow-2xl backdrop-blur-3xl">
             <div class="text-center mb-10">
-                <h2 class="text-4xl font-extrabold font-headline text-white mb-4">${dict.form.title}</h2>
-                <p class="text-white/60 text-sm font-medium">${dict.form.sub}</p>
+                <h2 class="text-4xl font-extrabold font-headline ${isLight ? 'text-slate-900' : 'text-white'} mb-4">${dict.form.title}</h2>
+                <p class="${isLight ? 'text-slate-500' : 'text-white/60'} text-sm font-medium">${dict.form.sub}</p>
             </div>
             <form id="landing-form" class="space-y-6" onsubmit="return false;">
                 <input type="hidden" name="partner_id" value="${data.partnerId}" />
                 <div>
-                    <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2">${dict.form.name}</label>
-                    <input name="name" type="text" class="w-full bg-white/5 border-white/10 text-white border rounded-2xl p-5 placeholder:text-white/20 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="John Doe" required />
+                    <label class="text-[10px] font-black ${isLight ? 'text-slate-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${dict.form.name}</label>
+                    <input name="name" type="text" class="w-full ${isLight ? 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-300' : 'bg-white/5 border-white/10 text-white placeholder:text-white/20'} border rounded-2xl p-5 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="John Doe" required />
                 </div>
                 <div>
-                    <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2">${dict.form.email}</label>
-                    <input name="email" type="email" class="w-full bg-white/5 border-white/10 text-white border rounded-2xl p-5 placeholder:text-white/20 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="john@example.com" required />
+                    <label class="text-[10px] font-black ${isLight ? 'text-slate-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${dict.form.email}</label>
+                    <input name="email" type="email" class="w-full ${isLight ? 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-300' : 'bg-white/5 border-white/10 text-white placeholder:text-white/20'} border rounded-2xl p-5 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="john@example.com" required />
                 </div>
                 <div>
-                    <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2">${dict.form.phone}</label>
-                    <input name="phone" type="tel" class="w-full bg-white/5 border-white/10 text-white border rounded-2xl p-5 placeholder:text-white/20 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="+1 234 567 8900" required />
+                    <label class="text-[10px] font-black ${isLight ? 'text-slate-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${dict.form.phone}</label>
+                    <input name="phone" type="tel" class="w-full ${isLight ? 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-300' : 'bg-white/5 border-white/10 text-white placeholder:text-white/20'} border rounded-2xl p-5 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="+1 234 567 8900" required />
                 </div>
                 <button type="submit" class="w-full py-5 bg-gradient-to-r from-[#865BFF] to-blue-600 hover:from-blue-600 hover:to-[#865BFF] text-white font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-95 text-lg uppercase tracking-widest mt-4">${dict.form.btn}</button>
-                <p class="text-[10px] text-white/30 text-center italic mt-4 font-medium">${dict.form.disc}</p>
+                <p class="text-[10px] ${isLight ? 'text-slate-400' : 'text-white/30'} text-center italic mt-4 font-medium">${dict.form.disc}</p>
             </form>
         </div>
     </section>`;
 
     const footerHtml = `
-    <footer class="border-t border-white/5 pt-24 pb-12 bg-[#05010f] text-white relative z-20">
+    <footer class="border-t ${isLight ? 'border-slate-100' : 'border-white/5'} pt-24 pb-12 ${isLight ? 'bg-white text-slate-900' : 'bg-[#05010f] text-white'} relative z-20">
         <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
             <div class="max-w-xs">
-                <div class="text-3xl font-black font-headline mb-6 text-white tracking-tighter">Bridge <span class="text-[#865BFF]">Markets</span></div>
-                <p class="text-white/40 text-sm leading-relaxed font-medium">${dict.foot.desc}</p>
+                <div class="text-3xl font-black font-headline mb-6 ${isLight ? 'text-slate-900' : 'text-white'} tracking-tighter">
+                    Bridge <span class="text-[#865BFF]">Markets</span>
+                </div>
+                <p class="${isLight ? 'text-slate-500' : 'text-white/40'} text-sm leading-relaxed font-medium">${dict.foot.desc}</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-sm font-medium w-full md:w-auto">
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col1}</p>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">Copy Trading</a>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">MAM Engine</a>
+                    <p class="${isLight ? 'text-slate-400' : 'text-white/20'} uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col1}</p>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">Copy Trading</a>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">MAM Engine</a>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col2}</p>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col2_1}</a>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col2_2}</a>
+                    <p class="${isLight ? 'text-slate-400' : 'text-white/20'} uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col2}</p>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">${dict.foot.col2_1}</a>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">${dict.foot.col2_2}</a>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col3}</p>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col3_1}</a>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col3_2}</a>
+                    <p class="${isLight ? 'text-slate-400' : 'text-white/20'} uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col3}</p>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">${dict.foot.col3_1}</a>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">${dict.foot.col3_2}</a>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-white/20 uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col4}</p>
-                    <a class="text-white/60 hover:text-[#865BFF] transition-colors" href="#">${dict.foot.col4_1}</a>
+                    <p class="${isLight ? 'text-slate-400' : 'text-white/20'} uppercase tracking-[0.3em] text-[10px] font-black mb-2">${dict.foot.col4}</p>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">${dict.foot.col4_1}</a>
+                    <a class="${isLight ? 'text-slate-600 hover:text-[#865BFF]' : 'text-white/60 hover:text-[#865BFF]'} transition-colors" href="#">Legal</a>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-8 text-center text-[10px] text-white/20 leading-loose border-t border-white/5 pt-12 uppercase tracking-widest font-bold">
+        <div class="max-w-7xl mx-auto px-8 text-center text-[10px] ${isLight ? 'text-slate-400' : 'text-white/20'} leading-loose border-t ${isLight ? 'border-slate-100' : 'border-white/5'} pt-12 uppercase tracking-widest font-bold">
             ${dict.foot.warn}
         </div>
     </footer>`;
@@ -637,7 +640,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
                 ${brandConfig.logoUrl ? 
                     `<img src="${brandConfig.logoUrl}" alt="Logo" class="h-8 md:h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''
                 }
-                <div class="text-2xl font-black tracking-tighter text-white font-headline" style="${brandConfig.logoUrl ? 'display: none;' : ''}">Bridge <span class="text-[#865BFF]">Markets</span></div>
+                <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-8 md:h-10 object-contain" style="${brandConfig.logoUrl ? 'display: none;' : ''}">
             </div>
             <div class="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
                 <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#platforms">${dict.nav.plat}</a>

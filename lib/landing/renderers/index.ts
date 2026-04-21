@@ -2,7 +2,7 @@ import { BrandConfig } from '../types';
 import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
 import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator, renderSyntheticFamilies, renderChallengeMatrix, renderDualSteps, renderLeverageSpecs, renderUniverseLogic, renderSntHero, renderSntAbout, renderSntAdvantages, renderSntFamilies, renderSntWorkflow, renderSntSpecs, renderSntPlatforms, renderSntCommunity, renderSntFAQ, renderSntCTA } from './features';
 import { renderTestimonials, renderSntFooter } from './forms';
-import { renderPropHero, renderPropAbout, renderPropMatrix, renderPropWorkflow, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropCTA, renderPropFooter } from './propFirm';
+import { renderPropHero, renderPropEducation, renderPropProgramsForex, renderPropProgramsSynthetic, renderPropSteps, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropFinalCTA, renderPropFooter } from './propFirm';
 import { renderMCHero, renderMCIntro, renderMCMamBlock, renderMCCopyBlock, renderMCComparison, renderMCBenefits, renderMCDualSteps, renderMCCommunity, renderMCFaq, renderMCFinalCTA, renderMCFooter } from './mamCopy';
 import { renderLX12Hero, renderLX12Intro, renderLX12TableCompare, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA } from './proLeverage';
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
@@ -45,14 +45,15 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     snt_cta: renderSntCTA,
     snt_footer: renderSntFooter,
     prop_hero: renderPropHero,
-    prop_about: renderPropAbout,
-    prop_matrix: renderPropMatrix,
-    prop_workflow: renderPropWorkflow,
+    prop_about: renderPropEducation,
+    prop_matrix_forex: renderPropProgramsForex,
+    prop_matrix_synthetic: renderPropProgramsSynthetic,
+    prop_workflow: renderPropSteps,
     prop_rules: renderPropRules,
     prop_benefits: renderPropBenefits,
     prop_community: renderPropCommunity,
     prop_faq: renderPropFAQ,
-    prop_cta: renderPropCTA,
+    prop_final_cta: renderPropFinalCTA,
     prop_footer: renderPropFooter,
     mc_hero: renderMCHero,
     mc_intro: renderMCIntro,
