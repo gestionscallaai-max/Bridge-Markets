@@ -8,6 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDateUpperCase(date: string | Date, locale: string = 'es-ES') {
     const d = typeof date === 'string' ? new Date(date) : date;
     return d.toLocaleDateString(locale, {
+        weekday: 'long',
         day: '2-digit',
         month: 'short',
         year: 'numeric'

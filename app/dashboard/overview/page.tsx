@@ -39,15 +39,15 @@ export default function OverviewPage() {
     const [mounted, setMounted] = useState(false);
 
     const DAY_NAMES: Record<string, string[]> = {
-        es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-        en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        es: ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'],
+        en: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
         zh: ['日', '一', '二', '三', '四', '五', '六'],
         hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
-        fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+        fr: ['DIM', 'LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM'],
         ar: ['أحد', 'اثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'],
         bn: ['রবি', 'সোম', 'মঙ্গ', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'],
-        pt: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-        ru: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        pt: ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'],
+        ru: ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'],
         ja: ['日', '月', '火', '水', '木', '金', '土'],
     };
 
@@ -203,7 +203,7 @@ export default function OverviewPage() {
     const partnerStatCards = [
         { title: t.overview.myLeads, value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF' },
         { title: t.overview.trafficClicks, value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6' },
-        { title: 'TASA CONVERSIÓN REGISTRADO', value: stats.conversionRate.toFixed(1) + '%', icon: Target, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981' },
+        { title: t.reports.convRate, value: stats.conversionRate.toFixed(1) + '%', icon: Target, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981' },
         { title: t.overview.myLandings, value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b' },
     ];
 
@@ -304,7 +304,7 @@ export default function OverviewPage() {
                             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
                                 <Clock className="w-4 h-4" />
                                 <span className="text-xs font-bold uppercase tracking-wider">
-                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase().replace('.', '')}
+                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase().replace('.', '')}
                                 </span>
                             </div>
                             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>

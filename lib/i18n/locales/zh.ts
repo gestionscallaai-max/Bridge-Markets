@@ -54,7 +54,7 @@ export const zh: TranslationKeys = {
         adminZone: '管理专区', manageNetwork: '管理合作伙伴网络',
         manageNetworkDesc: '查看每个合作伙伴的角色、活动和统计数据',
         viewPartnersList: '查看合作伙伴', hello: '你好', personalMetrics: '你的个人指标',
-        conversionRate: '转化率',
+        conversionRate: '注册转换率',
         topLandings: '落地页绩效',
         topLandingsDesc: '按生成的落地页进行的详细转化分析。',
         noLandingData: '暂无足够的绩效数据。'
@@ -169,7 +169,7 @@ export const zh: TranslationKeys = {
         syncedWithMT: '数据已与MetaTrader同步', statusTrading: '交易中',
         statsTitle: '绩效分析', statsSubtitle: '实时监控您的活动增长和有效性。',
         activeTraders: '活跃交易者', totalClicks: '总点击', leadsCapt: '捕获线索',
-        convRate: '转化率', weeklyTrend: '每周趋势',
+        convRate: '注册转换率', weeklyTrend: '每周趋势',
         weeklyTrendDesc: '过去7天的点击和捕获分布。',
         week: '周', month: '月', proPerfTitle: '专业绩效', monthlyGoal: '月度目标',
         impact: '影响力', reach: '覆盖范围', improveTitle: '想提升您的数据？',

@@ -161,18 +161,18 @@ export default function ReportsStatsPage() {
 
     // Admin metrics (4 cards including network total)
     const adminMetrics = [
-        { label: 'Clicks Totales - Red', value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
-        { label: 'Leads Capturados - Red', value: stats.leads, icon: Users, color: '#f59e0b', trend: '+5%', isUp: true },
-        { label: 'TASA CONVERSIÓN REGISTRADO', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
-        { label: 'Partners Activos', value: stats.totalPartners, icon: Network, color: '#3B82F6', trend: 'Red', isUp: true },
+        { label: t.overview.adminStatClicks, value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
+        { label: t.overview.adminStatLeads, value: stats.leads, icon: Users, color: '#f59e0b', trend: '+5%', isUp: true },
+        { label: t.reports.convRate, value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
+        { label: t.overview.adminStatPartners, value: stats.totalPartners, icon: Network, color: '#3B82F6', trend: 'Red', isUp: true },
     ];
 
     // Partner View metrics (personal)
     const partnerMetrics = [
         { label: t.reports.totalClicks, value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
         { label: t.reports.leadsCapt, value: stats.leads, icon: Users, color: '#FF5B86', trend: '+5%', isUp: true },
-        { label: 'TASA CONVERSIÓN REGISTRADO', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
-        { label: 'Landings', value: stats.landings, icon: Globe, color: '#3B82F6', trend: 'N/A', isUp: true },
+        { label: t.reports.convRate, value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
+        { label: t.overview.myLandings, value: stats.landings, icon: Globe, color: '#3B82F6', trend: 'N/A', isUp: true },
     ];
 
     const metrics = isAdmin ? adminMetrics : partnerMetrics;
@@ -206,8 +206,8 @@ export default function ReportsStatsPage() {
                                 isAdmin ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' : 'text-[#865BFF] bg-[#865BFF]/10 border-[#865BFF]/20'
                             }`}>
                                 {isAdmin
-                                    ? <><Shield className="w-3 h-3" /><span>Vista Administrador - Red Global</span></>
-                                    : <><Eye className="w-3 h-3" /><span>Partner View - Tus Métricas</span></>}
+                                    ? <><Shield className="w-3 h-3" /><span>{t.topbar.adminView} - {t.overview.network}</span></>
+                                    : <><Eye className="w-3 h-3" /><span>{t.topbar.partnerView}</span></>}
                             </div>
                             <h1 className="text-2xl font-medium tracking-tight mt-1">
                                 {isAdmin ? 'Análisis de Red' : t.reports.statsTitle}
@@ -221,13 +221,13 @@ export default function ReportsStatsPage() {
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
                             <Clock className="w-4 h-4" />
                             <span className="text-xs font-bold uppercase tracking-wider">
-                                {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase().replace('.', '')}
+                                {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase().replace('.', '')}
                             </span>
                         </div>
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>
                             {isAdmin ? <Network className="w-4 h-4" /> : <Award className="w-4 h-4 text-[#865BFF]" />}
                             <span className="text-xs font-mono font-bold tracking-tight">
-                                {isAdmin ? `${stats.totalPartners} PARTNERS` : partnerId}
+                                {isAdmin ? `${stats.totalPartners} ${t.overview.adminStatPartners.toUpperCase()}` : partnerId}
                             </span>
                         </div>
                     </div>
@@ -313,7 +313,7 @@ export default function ReportsStatsPage() {
                             </h4>
                             <div className="space-y-3">
                                 {partnerRankings.length === 0 ? (
-                                    <div className="text-center py-4 text-slate-400 text-sm">Sin datos aún</div>
+                                    <div className="text-center py-4 text-slate-400 text-sm">{t.common.noData}</div>
                                 ) : partnerRankings.map((p, i) => (
                                     <div key={i} className="flex items-center gap-3">
                                         <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black flex-shrink-0 ${

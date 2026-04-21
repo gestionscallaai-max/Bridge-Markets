@@ -10,6 +10,7 @@ import {
     ChevronRight,
     Loader2
 } from 'lucide-react';
+
 const Button = ({ children, className, ...props }: any) => (
     <button 
         className={`inline-flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none ${className}`}
@@ -28,14 +29,14 @@ interface LocalizerModalProps {
 const LANGUAGES = [
     { id: 'es', name: 'Español', code: 'ES', market: 'Spanish' },
     { id: 'en', name: 'English', code: 'GB', market: 'English' },
-    { id: 'cn', name: '中文', code: 'CN', market: 'Chinese' },
-    { id: 'in', name: 'हिन्दी', code: 'IN', market: 'Hindi' },
+    { id: 'zh', name: '中文', code: 'CN', market: 'Chinese' },
+    { id: 'pt', name: 'Português', code: 'BR', market: 'Portuguese' },
     { id: 'fr', name: 'Français', code: 'FR', market: 'French' },
-    { id: 'sa', name: 'العربية', code: 'SA', market: 'Arabic' },
-    { id: 'bd', name: 'বাংলা', code: 'BD', market: 'Bengali' },
-    { id: 'br', name: 'Português', code: 'BR', market: 'Portuguese' },
+    { id: 'hi', name: 'हिन्दी', code: 'IN', market: 'Hindi' },
+    { id: 'ja', name: '日本語', code: 'JP', market: 'Japanese' },
     { id: 'ru', name: 'Русский', code: 'RU', market: 'Russian' },
-    { id: 'jp', name: '日本語', code: 'JP', market: 'Japanese' }
+    { id: 'ar', name: 'العربية', code: 'SA', market: 'Arabic' },
+    { id: 'bn', name: 'বাংলা', code: 'BD', market: 'Bengali' }
 ];
 
 const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageUrl }) => {
@@ -190,9 +191,9 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                                 </div>
                             </section>
 
-                            <section className="flex-1 min-h-0">
+                            <section className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block">Idiomas de Destino</label>
-                                <div className="grid grid-cols-2 gap-1.5">
+                                <div className="grid grid-cols-2 gap-1.5 pb-4">
                                     {LANGUAGES.map(lang => (
                                         <button
                                             key={lang.id}
@@ -204,15 +205,15 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                                             }`}
                                         >
                                             <span className="text-base opacity-90">
-                                                {lang.code === 'ES' ? '🇪🇸' :
-                                                 lang.code === 'GB' ? '🇬🇧' : 
-                                                 lang.code === 'CN' ? '🇨🇳' : 
-                                                 lang.code === 'IN' ? '🇮🇳' : 
-                                                 lang.code === 'FR' ? '🇫🇷' : 
-                                                 lang.code === 'SA' ? '🇸🇦' : 
-                                                 lang.code === 'BD' ? '🇧🇩' : 
-                                                 lang.code === 'BR' ? '🇧🇷' : 
-                                                 lang.code === 'RU' ? '🇷🇺' : '🇯🇵'}
+                                                {lang.id === 'es' ? '🇪🇸' :
+                                                 lang.id === 'en' ? '🇬🇧' : 
+                                                 lang.id === 'zh' ? '🇨🇳' : 
+                                                 lang.id === 'pt' ? '🇧🇷' : 
+                                                 lang.id === 'fr' ? '🇫🇷' : 
+                                                 lang.id === 'hi' ? '🇮🇳' : 
+                                                 lang.id === 'ja' ? '🇯🇵' : 
+                                                 lang.id === 'ru' ? '🇷🇺' : 
+                                                 lang.id === 'ar' ? '🇸🇦' : '🇧🇩'}
                                             </span>
                                             {lang.name}
                                         </button>
@@ -231,7 +232,7 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                                     ) : (
                                         <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                     )}
-                                    <span className="font-black uppercase tracking-widest text-[11px]">Traducir con IA</span>
+                                    <span className="font-black uppercase tracking-widest text-[11px]">Traducir Flyer</span>
                                 </div>
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                             </Button>
@@ -287,7 +288,7 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                                                     <div className="w-24 h-24 border-4 border-slate-100 rounded-full animate-[spin_4s_linear_infinite]" />
                                                     <Loader2 className="w-14 h-14 text-[#865BFF] animate-spin absolute top-5 left-5" />
                                                     <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#865BFF] rounded-full flex items-center justify-center animate-bounce shadow-lg shadow-[#865BFF]/30">
-                                                        <Sparkles className="w-3 h-3 text-white" />
+                                                        <Sparkles className="w-3.5 h-3.5 text-white" />
                                                     </div>
                                                 </div>
                                                 <div className="text-center px-8">
@@ -383,6 +384,21 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                     </div>
                 </div>
             </div>
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #e2e8f0;
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #cbd5e1;
+                }
+            `}</style>
         </div>
     );
 };
