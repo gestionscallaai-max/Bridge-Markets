@@ -3,7 +3,7 @@ import { BrandConfig } from '../types';
 // ─── MAM & COPY HERO (SHARED) ───────────────────────────────
 export function renderMamCopyHero(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
-    const ibPhrase = brand.heroPhrase || "";
+    const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaMamText = content.ctaMamText || "Quiero una cuenta MAM";
     const ctaCopyText = content.ctaCopyText || "Quiero hacer Copy Trading";
     const ctaMamLink = content.ctaMamLink || brand.ctaLink || "#";
@@ -14,7 +14,7 @@ export function renderMamCopyHero(content: Record<string, any>, brand: BrandConf
         <!-- Background logic -->
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]"></div>
-            <div class="absolute top-0 left-0 w-full h-full bg-[url('/images/imagenes%20nuevas/8d25cf7f49c36716ee118242656ba3e722258a6f.png')] bg-cover bg-center opacity-20 grayscale"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20 grayscale"></div>
         </div>
 
         <div class="container mx-auto px-8 relative z-10">
@@ -36,7 +36,7 @@ export function renderMamCopyHero(content: Record<string, any>, brand: BrandConf
                     Accede a las Cuentas MAM y al Copy Trading de Bridge Markets. Dos soluciones. Un mismo ecosistema profesional.
                 </p>
 
-                ${ibPhrase ? `<p class="text-lg text-blue-400/80 font-medium mb-12 tracking-wide">${ibPhrase}</p>` : ''}
+                ${ibPhrase ? `<p class="text-lg text-blue-400/80 font-medium mb-12 tracking-wide italic">${ibPhrase}</p>` : ''}
 
                 <!-- Product Badges -->
                 <div class="flex flex-wrap justify-center gap-4 mb-12">
@@ -65,6 +65,14 @@ export function renderMamCopyHero(content: Record<string, any>, brand: BrandConf
             <span class="material-symbols-outlined text-white text-4xl">expand_more</span>
         </div>
     </section>
+
+    <style>
+        .text-gradient-mamcopy {
+            background: linear-gradient(135deg, #FFF 0%, #3b82f6 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
     `;
 }
 
@@ -605,21 +613,41 @@ export function renderMamCopyFinalCTA(content: Record<string, any>, brand: Brand
 export function renderMCCommunity(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
     const message = content.communityMessage || 'Únete a nuestro ecosistema y conecta con traders profesionales.';
-    const telegram = brand.telegram || '#';
-    const whatsapp = brand.whatsapp || '#';
+    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80";
+    
+    const telegram = content.socialTelegram || brand.telegram || "#";
+    const whatsapp = content.socialWhatsApp || brand.whatsapp || "#";
+    const instagram = content.socialInstagram || brand.instagram || "#";
+    const youtube = content.socialYouTube || brand.youtube || "#";
+    
+    const ctaText = content.ctaText || "Únete a mi comunidad";
+    const ctaLink = brand.ctaLink || "#";
 
     return `
     <section id="comunidad" class="py-32 px-8 bg-[#050505] relative overflow-hidden border-t border-white/5">
         <div class="max-w-7xl mx-auto relative z-10">
-            <div class="bg-gradient-to-br from-blue-600/10 via-transparent to-emerald-600/10 border border-white/10 rounded-[3rem] p-10 md:p-20 backdrop-blur-3xl">
-                <div class="max-w-3xl">
-                    <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">Comunidad Exclusiva</span>
-                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase">${ibName}</h2>
-                    <p class="text-white/60 text-lg md:text-xl leading-relaxed mb-12">${message}</p>
-                    
-                    <div class="flex flex-wrap gap-4">
-                        <a href="${telegram}" class="px-8 py-4 bg-[#24A1DE] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">Telegram</a>
-                        <a href="${whatsapp}" class="px-8 py-4 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">WhatsApp</a>
+            <div class="bg-gradient-to-br from-blue-600/10 via-transparent to-emerald-600/10 border border-white/10 rounded-[3rem] p-10 md:p-20 backdrop-blur-3xl overflow-hidden relative">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">Comunidad Exclusiva</span>
+                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase">${ibName}</h2>
+                        <p class="text-white/60 text-lg md:text-xl leading-relaxed mb-12">${message}</p>
+                        
+                        <div class="flex flex-wrap gap-4 mb-12">
+                            ${whatsapp !== '#' ? `<a href="https://wa.me/${whatsapp}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#25D366] transition-all"><span class="material-symbols-outlined text-sm">chat</span></a>` : ''}
+                            ${telegram !== '#' ? `<a href="${telegram}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#24A1DE] transition-all"><span class="material-symbols-outlined text-sm">send</span></a>` : ''}
+                            ${instagram !== '#' ? `<a href="${instagram}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#E1306C] transition-all"><span class="material-symbols-outlined text-sm">photo_camera</span></a>` : ''}
+                            ${youtube !== '#' ? `<a href="${youtube}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#FF0000] transition-all"><span class="material-symbols-outlined text-sm">play_circle</span></a>` : ''}
+                        </div>
+
+                        <a href="${ctaLink}" class="inline-block px-10 py-5 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-xs hover:bg-blue-500 hover:text-white transition-all shadow-2xl">
+                            ${ctaText}
+                        </a>
+                    </div>
+                    <div class="relative hidden lg:block">
+                        <div class="aspect-square rounded-[3rem] overflow-hidden border border-white/10">
+                            <img src="${photoUrl}" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Community">
+                        </div>
                     </div>
                 </div>
             </div>

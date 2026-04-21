@@ -29,18 +29,26 @@ export const SECTION_CATALOG: LandingProduct[] = [
     { id: 'prop_footer', name: 'PropFirm: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página con branding Bridge Markets', sourceTemplate: 2, defaultContent: {} },
 
     // ─── MAM & COPY (Blueprint 3) ────────────────────────
-    { id: 'mc_hero', name: 'MAM & Copy Hero', icon: 'hub', category: 'Official', description: 'Encabezado para servicios de gestión de capital.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_tabs_nav', name: 'MC Navegación Tabs', icon: 'tab', category: 'Official', description: 'Selector de pestañas para MAM/Copy.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_intro', name: 'Introducción MC', icon: 'info', category: 'Official', description: 'Breve intro a MAM y Copy Trading.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_mam_block', name: 'Bloque MAM', icon: 'account_balance_wallet', category: 'Official', description: 'Detalles técnicos de cuentas MAM.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_copy_block', name: 'Bloque Copy', icon: 'content_copy', category: 'Official', description: 'Detalles del sistema de Copy Trading.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_comparison', name: 'Tabla Comparativa MC', icon: 'compare', category: 'Official', description: 'MAM vs Copy Trading.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_benefits', name: 'MC Beneficios', icon: 'award_star', category: 'Official', description: 'Ventajas del sistema de inversión.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_steps', name: 'MC Pasos', icon: 'step', category: 'Official', description: 'Cómo empezar a invertir.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_faq', name: 'MC FAQ', icon: 'help_center', category: 'Official', description: 'Preguntas de inversión.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_registration', name: 'MC Registro', icon: 'how_to_reg', category: 'Official', description: 'Formulario de registro Inversor.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_final_cta', name: 'MC Final CTA', icon: 'touch_app', category: 'Official', description: 'CTA de cierre para inversores.', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_footer', name: 'MC Footer', icon: 'dock', category: 'Official', description: 'Pie de página especializado MC.', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_hero', name: 'MAM & Copy: Hero', icon: 'hub', category: 'Official', description: 'Hero dual para MAM y Copy Trading', sourceTemplate: 3, defaultContent: { ibPhrase: '', ctaMamText: 'Quiero una cuenta MAM', ctaCopyText: 'Quiero hacer Copy Trading' } },
+    { id: 'mc_tabs_nav', name: 'MAM & Copy: Navegación', icon: 'tab', category: 'Official', description: 'Selector de pestañas fijo', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_intro', name: 'MAM & Copy: Intro', icon: 'info', category: 'Official', description: 'Introducción unificada fija', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_mam_block', name: 'Bloque: Cuentas MAM', icon: 'account_balance_wallet', category: 'Official', description: 'Detalles técnicos fijos de MAM', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_copy_block', name: 'Bloque: Copy Trading', icon: 'content_copy', category: 'Official', description: 'Detalles técnicos fijos de Copy', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_comparison', name: 'MAM vs Copy: Tabla', icon: 'compare', category: 'Official', description: 'Tabla comparativa fija', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_benefits', name: 'MAM & Copy: Ventajas', icon: 'award_star', category: 'Official', description: 'Beneficios generales fijos', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_steps', name: 'MAM & Copy: Proceso', icon: 'step', category: 'Official', description: 'Pasos para traders e inversores', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_faq', name: 'MAM & Copy: FAQ', icon: 'help_center', category: 'Official', description: 'Preguntas oficiales resueltas', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_registration', name: 'MAM & Copy: Registro', icon: 'how_to_reg', category: 'Official', description: 'Captura de leads dual', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_community', name: 'MAM & Copy: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable de conexión IB', sourceTemplate: 3, defaultContent: { 
+        communityMessage: 'Únete a nuestro ecosistema y conecta con traders profesionales.', 
+        socialWhatsApp: '',
+        socialTelegram: '',
+        socialInstagram: '',
+        socialYouTube: '',
+        ctaText: 'Únete a mi comunidad'
+    } },
+    { id: 'mc_final_cta', name: 'MAM & Copy: CTA Final', icon: 'touch_app', category: 'Official', description: 'Cierre con botones duales', sourceTemplate: 3, defaultContent: { ctaMamText: 'Quiero una cuenta MAM', ctaCopyText: 'Quiero hacer Copy Trading' } },
+    { id: 'mc_footer', name: 'MAM & Copy: Footer', icon: 'dock', category: 'Official', description: 'Pie de página unificado', sourceTemplate: 3, defaultContent: {} },
 
     // ─── PRO LEVERAGE X12 (Blueprint 4) ──────────────────
     { id: 'lx12_hero', name: 'LX12 Hero', icon: 'bolt', category: 'Official', description: 'Hero potente para apalancamiento x12.', sourceTemplate: 4, defaultContent: {} },
