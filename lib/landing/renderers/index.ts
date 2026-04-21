@@ -1,49 +1,13 @@
 import { BrandConfig } from '../types';
-import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
-import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator, renderSyntheticFamilies, renderChallengeMatrix, renderDualSteps, renderLeverageSpecs, renderUniverseLogic, renderSntHero, renderSntAbout, renderSntAdvantages, renderSntFamilies, renderSntWorkflow, renderSntSpecs, renderSntPlatforms, renderSntCommunity, renderSntFAQ, renderSntCTA } from './features';
-import { renderTestimonials, renderSntFooter } from './forms';
-import { renderPropHero, renderPropEducation, renderPropProgramsForex, renderPropProgramsSynthetic, renderPropSteps, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropFinalCTA, renderPropFooter } from './propFirm';
-import { renderMCHero, renderMCIntro, renderMCMamBlock, renderMCCopyBlock, renderMCComparison, renderMCBenefits, renderMCDualSteps, renderMCCommunity, renderMCFaq, renderMCFinalCTA, renderMCFooter } from './mamCopy';
-import { renderLX12Hero, renderLX12Intro, renderLX12TableCompare, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA } from './proLeverage';
+import { renderPropHero, renderPropEducation, renderPropProgramsForex, renderPropProgramsSynthetic, renderPropSteps, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropFinalCTA, renderPropFooter, renderPropRegistration } from './propFirm';
+import { renderMamCopyHero, renderMamCopyNav, renderMamCopyIntro, renderMamBlock, renderCopyBlock, renderMamCopyComparison, renderMamCopyBenefits, renderMamCopySteps, renderMamCopyFAQ, renderMamCopyFinalCTA, renderMCCommunity, renderMCFooter, renderMCRegistration } from './mamCopy';
+import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA } from './proLeverage';
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
 import { renderSNUHero, renderSNUMetrics, renderSNUUniversesIntro, renderSNUU1BM, renderSNUU2Deriv, renderSNUU3Welt, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUCTA, renderSNUFooter } from './syntheticUniverse';
-import { renderPSHero, renderPSBanner, renderPSFeatures, renderPSMatrix, renderPSCalculator, renderPSRules, renderPSContact, renderPSFooter } from './propfirmSinteticos';
 import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
 
-
 export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, brand: BrandConfig) => string> = {
-    hero_dark: renderHeroDark,
-    hero_light: renderHeroLight,
-    hero_gradient: renderHeroGradient,
-    bento_grid: renderBentoGrid,
-    feature_split: renderFeatureSplit,
-    stats_row: renderStatsRow,
-    risk_grid: renderRiskGrid,
-    leaderboard: renderLeaderboard,
-    testimonials: renderTestimonials,
-    trust_badges: renderTrustBadges,
-    multi_asset: renderMultiAsset,
-    workflow_steps: renderWorkflowSteps,
-    security_fees: renderSecurityFees,
-    cta_community: renderCtaCommunity,
-    calculator: renderCalculator,
-    hero_official: renderHeroOfficial,
-    synthetic_families: renderSyntheticFamilies,
-    challenge_matrix: renderChallengeMatrix,
-    dual_steps: renderDualSteps,
-    leverage_specs: renderLeverageSpecs,
-    universe_logic: renderUniverseLogic,
-    snt_hero: renderSntHero,
-    snt_about: renderSntAbout,
-    snt_advantages: renderSntAdvantages,
-    snt_families: renderSntFamilies,
-    snt_workflow: renderSntWorkflow,
-    snt_specs: renderSntSpecs,
-    snt_platforms: renderSntPlatforms,
-    snt_community: renderSntCommunity,
-    snt_faq: renderSntFAQ,
-    snt_cta: renderSntCTA,
-    snt_footer: renderSntFooter,
+    // PROPFIRM
     prop_hero: renderPropHero,
     prop_about: renderPropEducation,
     prop_matrix_forex: renderPropProgramsForex,
@@ -55,20 +19,26 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     prop_faq: renderPropFAQ,
     prop_final_cta: renderPropFinalCTA,
     prop_footer: renderPropFooter,
-    mc_hero: renderMCHero,
-    mc_intro: renderMCIntro,
-    mc_mam_block: renderMCMamBlock,
-    mc_copy_block: renderMCCopyBlock,
-    mc_comparison: renderMCComparison,
-    mc_benefits: renderMCBenefits,
-    mc_dual_steps: renderMCDualSteps,
+    prop_registration: renderPropRegistration,
+
+    // MAM & COPY
+    mc_hero: renderMamCopyHero,
+    mc_tabs_nav: renderMamCopyNav,
+    mc_intro: renderMamCopyIntro,
+    mc_mam_block: renderMamBlock,
+    mc_copy_block: renderCopyBlock,
+    mc_comparison: renderMamCopyComparison,
+    mc_benefits: renderMamCopyBenefits,
+    mc_steps: renderMamCopySteps,
+    mc_faq: renderMamCopyFAQ,
+    mc_final_cta: renderMamCopyFinalCTA,
     mc_community: renderMCCommunity,
-    mc_faq: renderMCFaq,
-    mc_final_cta: renderMCFinalCTA,
     mc_footer: renderMCFooter,
+    mc_registration: renderMCRegistration,
+
+    // PRO LEVERAGE X12
     lx12_hero: renderLX12Hero,
     lx12_intro: renderLX12Intro,
-    lx12_table_compare: renderLX12TableCompare,
     lx12_pricing: renderLX12Pricing,
     lx12_example: renderLX12Example,
     lx12_rules: renderLX12Rules,
@@ -77,6 +47,8 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     lx12_community: renderLX12Community,
     lx12_faq: renderLX12Faq,
     lx12_final_cta: renderLX12FinalCTA,
+
+    // INSTITUTIONAL
     inst_hero: renderInstHero,
     inst_about: renderInstAbout,
     inst_why: renderInstWhy,
@@ -89,6 +61,8 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     inst_faq: renderInstFAQ,
     inst_final_cta: renderInstFinalCTA,
     inst_footer: renderInstFooter,
+
+    // SYNTHETIC UNIVERSE
     snu_hero: renderSNUHero,
     snu_metrics: renderSNUMetrics,
     snu_universes_intro: renderSNUUniversesIntro,
@@ -101,14 +75,8 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     snu_faq: renderSNUFAQ,
     snu_cta: renderSNUCTA,
     snu_footer: renderSNUFooter,
-    ps_hero: renderPSHero,
-    ps_banner: renderPSBanner,
-    ps_features: renderPSFeatures,
-    ps_matrix: renderPSMatrix,
-    ps_calculator: renderPSCalculator,
-    ps_rules: renderPSRules,
-    ps_contact: renderPSContact,
-    ps_footer: renderPSFooter,
+
+    // V3 PREMIUM
     v3_hero: renderV3Hero,
     v3_features: renderV3Features,
     v3_header: renderV3Header,

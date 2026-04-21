@@ -1,71 +1,67 @@
-// ─────────────────────────────────────────────────────────────
-// Landing Templates — 14 presets from bocetos
-// Each template is a predefined combination of sections
-// ─────────────────────────────────────────────────────────────
-
-export interface LandingTemplate {
-    id: string;
-    name: string;
-    category: string;
-    description: string;
-    sourceFile: string;
-    sections: string[];  // Array of section IDs from landing-sections.ts
-    gradient: string;    // For UI card display
-    accentColor: string;
-    badge: string | null;
-    badgeColor: string;
-    theme?: 'light' | 'dark';
-}
+import { LandingTemplate } from './landing/types';
 
 export const LANDING_TEMPLATES: LandingTemplate[] = [
     {
-        id: 'synthetic_edu',
-        name: '✨ Índices Sintéticos PRO V3 (FINAL) ✨',
+        id: 'prop_official_v3',
+        name: 'Bridge Markets PropFirm — FOREX/CFDs & Synthetic PropTrading',
         category: 'Official',
-        description: 'La landing oficial y definitiva de Bridge Markets para Índices Sintéticos. Diseño premium y corporativo con elementos 3D.',
-        sourceFile: 'Blueprint 1',
-        sections: ['snt_hero', 'snt_about', 'snt_advantages', 'snt_families', 'snt_workflow', 'snt_specs', 'snt_platforms', 'snt_community', 'snt_faq', 'snt_cta', 'snt_footer'],
-        gradient: 'linear-gradient(135deg, #0A051A 0%, #1a0545 50%, #7c3aed 100%)',
-        accentColor: '#8b5cf6',
+        description: 'La landing oficial para cuentas fondeadas. Incluye todas las tablas comparativas, reglas operativas y sección de comunidad personalizada.',
+        sourceFile: 'Blueprint 2',
+        sections: [
+            'prop_hero',
+            'prop_about',
+            'prop_matrix_forex',
+            'prop_matrix_synthetic',
+            'prop_workflow',
+            'prop_rules',
+            'prop_benefits',
+            'prop_community',
+            'prop_faq',
+            'prop_final_cta',
+            'prop_registration',
+            'prop_footer'
+        ],
+        gradient: 'linear-gradient(135deg, #050505 0%, #1a1a1a 50%, #D4AF37 100%)',
+        accentColor: '#D4AF37',
         badge: 'Premium',
-        badgeColor: '#8b5cf6',
+        badgeColor: '#D4AF37',
         theme: 'dark'
     },
     {
-        id: 'unified_copy_mam',
-        name: 'MAM & Copy Trading (Unificada)',
+        id: 'unified_copy_mam_template',
+        name: 'Cuentas MAM y Copy Trading — Bridge Markets | Para uso de IBs',
         category: 'Official',
-        description: 'Landing dual que explica tanto el sistema MAM como el Copy Trading con tablas comparativas.',
+        description: 'Hub unificado para gestión de capital MAM y sistema de Copy Trading con tablas comparativas y registro.',
         sourceFile: 'Blueprint 3',
         sections: [
             'mc_hero', 
+            'mc_tabs_nav', 
             'mc_intro', 
             'mc_mam_block', 
             'mc_copy_block', 
             'mc_comparison', 
             'mc_benefits', 
-            'mc_dual_steps', 
-            'mc_community', 
+            'mc_steps', 
             'mc_faq', 
+            'mc_registration',
             'mc_final_cta', 
             'mc_footer'
         ],
-        gradient: 'linear-gradient(135deg, #0f081d 0%, #2a1b4d 50%, #6635de 100%)',
-        accentColor: '#a78bfa',
-        badge: 'Hot',
-        badgeColor: '#ef4444',
-        theme: 'light',
+        gradient: 'linear-gradient(135deg, #050505 0%, #0c1a33 50%, #10b981 100%)',
+        accentColor: '#3b82f6',
+        badge: 'Hub',
+        badgeColor: '#3b82f6',
+        theme: 'dark',
     },
     {
         id: 'pro_leverage_x12',
-        name: 'Pro Leverage X12',
+        name: 'Cuentas Apalancadas PRO LEVERAGE X12 — Bridge Markets | Para uso de IBs',
         category: 'Official',
-        description: 'Especializada en cuentas con apalancamiento x12 sin evaluación. Sin límites de tiempo.',
+        description: 'Multiplica tu capital hasta x12 y opera directamente en mercados CFDs sin fases de evaluación.',
         sourceFile: 'Blueprint 4',
         sections: [
             'lx12_hero', 
             'lx12_intro', 
-            'lx12_table_compare', 
             'lx12_pricing', 
             'lx12_example', 
             'lx12_rules', 
@@ -73,17 +69,18 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
             'lx12_benefits', 
             'lx12_community', 
             'lx12_faq', 
-            'lx12_final_cta'
+            'lx12_final_cta',
+            'mc_footer'
         ],
         gradient: 'linear-gradient(135deg, #0c0015 0%, #1a0a33 50%, #3b0d99 100%)',
         accentColor: '#c084fc',
         badge: 'Official',
-        badgeColor: '#10b981',
+        badgeColor: '#c084fc',
         theme: 'dark',
     },
     {
         id: 'institutional_mother',
-        name: 'Landing Institucional (Madre)',
+        name: 'Bridge Markets — Landing Institucional del Broker | Para uso de IBs',
         category: 'Official',
         description: 'La landing principal corporativa de Bridge Markets con todos los servicios integrados.',
         sourceFile: 'Blueprint 5',
@@ -109,7 +106,7 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
     },
     {
         id: 'synthetic_universe_total',
-        name: 'Universo Total de Sintéticos',
+        name: 'Universo Total de Sintéticos — Bridge Markets | Para uso de IBs',
         category: 'Official',
         description: 'Landing premium que muestra el ecosistema completo: Deriv + Weltrade + Bridge Markets.',
         sourceFile: 'Blueprint 6',
@@ -134,32 +131,10 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         theme: 'dark',
     },
     {
-        id: 'propfirm_sinteticos_premium',
-        name: 'PropFirm - Sintéticos (Premium)',
-        category: 'Official',
-        description: 'Diseño ultra-premium optimizado para retos de fondeo en índices sintéticos. Alta conversión y estética Cyber Purple.',
-        sourceFile: 'Blueprint 7',
-        sections: [
-            'ps_hero',
-            'ps_banner',
-            'ps_features',
-            'ps_matrix',
-            'ps_calculator',
-            'ps_rules',
-            'ps_contact',
-            'ps_footer'
-        ],
-        gradient: 'linear-gradient(135deg, #050112 0%, #0c0027 50%, #865BFF 100%)',
-        accentColor: '#865BFF',
-        badge: 'New',
-        badgeColor: '#865BFF',
-        theme: 'dark',
-    },
-    {
         id: 'bridge_v3_premium',
-        name: 'Bridge V3 Premium (Oficial)',
+        name: 'Índices Sintéticos PRO V3 (FINAL)',
         category: 'Official',
-        description: 'La experiencia definitiva de Bridge Markets. Diseño oficial V3 con estética de vanguardia, 3D y máxima conversión.',
+        description: 'La landing oficial definitiva de Bridge Markets. Diseño premium con elementos 3D y contenido institucional.',
         sourceFile: 'Blueprint V3',
         sections: [
             'v3_header',
@@ -173,37 +148,12 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
             'inst_faq',
             'v3_footer'
         ],
-        gradient: 'linear-gradient(135deg, #F8FAFC 0%, #E5D8FF 50%, #AA9AFF 100%)',
+        gradient: 'linear-gradient(135deg, #050505 0%, #0c0027 50%, #865BFF 100%)',
         accentColor: '#865BFF',
-        badge: 'Official V3',
-        badgeColor: '#865BFF',
-        theme: 'light',
-    },
-    {
-        id: 'prop_official_v3',
-        name: '✨ Bridge Markets PropFirm — FOREX/CFDs & Synthetic PropTrading ✨',
-        category: 'Official',
-        description: 'La landing oficial para cuentas fondeadas. Incluye todas las tablas comparativas, reglas operativas y sección de comunidad personalizada.',
-        sourceFile: 'Blueprint 2',
-        sections: [
-            'prop_hero',
-            'prop_about',
-            'prop_matrix_forex',
-            'prop_matrix_synthetic',
-            'prop_workflow',
-            'prop_rules',
-            'prop_benefits',
-            'prop_community',
-            'prop_faq',
-            'prop_final_cta',
-            'prop_footer'
-        ],
-        gradient: 'linear-gradient(135deg, #050505 0%, #1a1a1a 50%, #D4AF37 100%)',
-        accentColor: '#D4AF37',
         badge: 'Premium',
-        badgeColor: '#D4AF37',
-        theme: 'dark'
-    },
+        badgeColor: '#865BFF',
+        theme: 'dark',
+    }
 ];
 
 // Helper: get template by ID

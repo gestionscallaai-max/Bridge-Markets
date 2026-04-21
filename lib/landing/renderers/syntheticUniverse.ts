@@ -1,477 +1,365 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
+// ─── UNIVERSE HERO (TECH MINIMALIST + 3D ASSETS) ───────────
 export function renderSNUHero(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "UNIVERSAL";
-    const highlight = content.highlight || "GATEWAY";
-    const subtitle = content.subtitle || brand.heroPhrase || "Acceso ilimitado a los mercados globales con tecnología de próxima generación.";
-    const ctaText = content.ctaText || "Enter Gateway";
-    const ctaLink = brand.ctaLink || "#register";
-    const ibName = brand.communityName || brand.fullName || "IB Oficial";
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ctaText = content.ctaMainText || "Acceso Total";
+    const ctaLink = brand.ctaLink || "#";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Fondo Arquitectónico Universal -->
-        <div class="absolute inset-0 z-0">
-            <!-- Texto Vertical Gigante -->
-            <div class="absolute top-0 right-10 h-full flex items-center opacity-[0.03] select-none pointer-events-none">
-                <span class="text-[25vh] font-black text-white uppercase tracking-tightest leading-none rotate-90 origin-center whitespace-nowrap">UNIVERSE</span>
-            </div>
-            
-            <!-- Gradiente de profundidad -->
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(134,91,255,0.1),transparent_60%)]"></div>
-        </div>
+    <section class="relative min-h-screen flex items-center bg-[#000] overflow-hidden">
+        <div class="absolute inset-0 opacity-20" 
+             style="background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px); background-size: 50px 50px;"></div>
+        
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.05)_0%,_transparent_70%)]"></div>
 
-        <div class="max-w-[1600px] mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
-                
-                <!-- Columna: Gateway Info -->
-                <div class="lg:col-span-7 section-reveal order-2 lg:order-1">
-                    <div class="mb-16">
-                        <div class="w-20 h-1 bg-[#865BFF] mb-12"></div>
-                        <h1 class="text-7xl md:text-[11rem] lg:text-[15rem] font-black leading-[0.8] text-white mb-16 tracking-tightest uppercase italic">
-                            ${title} <br>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/20 italic">${highlight}</span>
-                        </h1>
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 section-reveal">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="h-px w-12 bg-indigo-500"></div>
+                        <span class="text-[10px] font-black text-indigo-500 uppercase tracking-[0.5em]">Infraestructura de Ejecución Unificada</span>
                     </div>
+                    
+                    <h1 class="text-6xl md:text-[100px] font-black font-montserrat text-white leading-[0.85] uppercase tracking-tighter mb-12">
+                        Todo el Mercado <br>
+                        <span class="text-transparent" style="-webkit-text-stroke: 1px rgba(255,255,255,0.4);">Sintético</span><br>
+                        en un solo Nodo.
+                    </h1>
+                    
+                    <p class="text-xl md:text-2xl text-white/30 font-light mb-16 max-w-2xl leading-relaxed italic">
+                        "Bridge Markets unifica los ecosistemas <span class="text-white">Deriv</span>, <span class="text-white">Weltrade</span> y sus propios <span class="text-white">índices exclusivos</span>. Más de 100 instrumentos centralizados."
+                    </p>
 
-                    <div class="flex flex-col md:flex-row gap-16 items-start md:items-end">
-                        <div class="max-w-md border-l border-white/10 pl-12">
-                            <p class="text-2xl text-white/30 leading-relaxed font-light uppercase tracking-tighter italic">
-                                ${subtitle}
-                            </p>
-                        </div>
-                        
-                        <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-2xl">
-                            <span class="relative z-10 uppercase tracking-[0.5em] text-xs">${ctaText}</span>
+                    <div class="flex flex-col md:flex-row items-center gap-10">
+                        <a href="${ctaLink}" class="group relative px-12 py-6 bg-indigo-600 text-white font-black uppercase tracking-widest text-xs overflow-hidden transition-all hover:bg-indigo-500 shadow-[0_0_40px_rgba(79,70,229,0.3)]">
+                            <span class="relative z-10">${ctaText}</span>
                         </a>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span class="text-[10px] font-black text-white/40 uppercase tracking-widest italic font-mono">NODE_STATUS: ACTIVE_MT5</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Visual -->
-                <div class="lg:w-6/12 relative section-reveal">
-                    <div class="relative w-full aspect-square flex items-center justify-center">
-                        
-                        <!-- Main Asset -->
-                        <div class="relative z-10 w-full h-full flex items-center justify-center transform lg:translate-x-10">
-                            <img src="/images/imagenes%20nuevas/reyna%20negra.png" alt="Universal Queen" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.2)] animate-float-slow">
-                        </div>
-
-                        <!-- Data Card -->
-                        <div class="absolute bottom-0 -right-4 lg:-right-10 z-20 p-10 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-2xl min-w-[320px]">
-                            <div class="flex items-center gap-6 mb-8">
-                                <div class="w-14 h-14 rounded-2xl bg-black border border-white/10 flex items-center justify-center overflow-hidden">
-                                    <img src="${brand.logoUrl || '/images/logo-bm-blanco.png'}" alt="IB" class="w-full h-full object-contain p-2" onerror="this.src='/images/logo-bm-blanco.png'">
-                                </div>
-                                <div>
-                                    <p class="text-[9px] font-black uppercase tracking-[0.4em] text-[#865BFF] mb-1">Project Leader</p>
-                                    <p class="text-xl font-black text-white uppercase tracking-tighter">${ibName}</p>
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center text-[9px] font-black uppercase tracking-widest text-white/30">
-                                    <span>Sync Accuracy</span>
-                                    <span class="text-white">99.9%</span>
-                                </div>
-                                <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <div class="h-full w-[99.9%] bg-gradient-to-r from-[#865BFF] to-white shadow-[0_0_10px_rgba(134,91,255,0.5)]"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Background Halo -->
-                        <div class="absolute inset-0 bg-gradient-to-tr from-[#865BFF]/10 to-transparent rounded-full blur-[120px] opacity-30"></div>
-                    </div>
+                <div class="lg:col-span-5 relative hidden lg:block section-reveal delay-300">
+                    <!-- Main 3D Asset: Full Chess Set -->
+                    <img src="/images/imagenes%20nuevas/8d25cf7f49c36716ee118242656ba3e722258a6f.png" 
+                         class="w-full h-auto animate-float drop-shadow-[0_35px_35px_rgba(99,102,241,0.2)]">
                 </div>
-
             </div>
         </div>
-
-        <style>
-            @keyframes float-slow {
-                0%, 100% { transform: translateY(0) scale(1); }
-                50% { transform: translateY(-20px) scale(1.02); }
-            }
-            .animate-float-slow {
-                animation: float-slow 10s ease-in-out infinite;
-            }
-        </style>
     </section>
     `;
 }
 
-
+// ─── METRICS (DATA COUNTERS + 3D COINS) ─────────────────────
 export function renderSNUMetrics(content: Record<string, any>, brand: BrandConfig): string {
+    const stats = [
+        { v: '100+', t: 'Instrumentos', d: 'Liquidez Algorítmica' },
+        { v: '3', t: 'Ecosistemas', d: 'Conexión Unificada' },
+        { v: '0.0ms', t: 'Latencia', d: 'Ejecución Directa' },
+        { v: '24/7', t: 'Uptime', d: 'Operativa Continua' }
+    ];
+
     return `
-    <section class="py-32 bg-[#0a0614] border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-8 section-reveal">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                ${[
-                    { val: '100+', label: 'Instrumentos', desc: 'Sintéticos Disponibles' },
-                    { val: '3', label: 'Universos', desc: 'En una sola cuenta' },
-                    { val: '24/7', label: 'Operación', desc: 'Los 365 días al año' },
-                    { val: '1', label: 'Sola Cuenta', desc: 'Acceso Total a MT5' }
-                ].map((m, i) => `
-                    <div class="p-12 bg-white/5 border border-white/10 rounded-[4rem] text-center hover:bg-[#865BFF]/10 transition-all group" style="animation-delay: ${i * 0.1}s;">
-                         <div class="text-[10rem] font-black text-white/5 absolute inset-0 flex items-center justify-center select-none group-hover:text-[#865BFF]/10 transition-colors">${m.val}</div>
-                         <div class="relative z-10">
-                            <div class="text-7xl font-black text-white mb-4 drop-shadow-[0_10px_30px_rgba(255,255,255,0.1)]">${m.val}</div>
-                            <div class="text-xl font-black text-[#865BFF] uppercase tracking-[0.4em] mb-2">${m.label}</div>
-                            <div class="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">${m.desc}</div>
-                         </div>
+    <section class="py-24 px-8 bg-[#000] border-y border-white/5 relative overflow-hidden">
+        <!-- Decoration: 3D Coins -->
+        <img src="/images/imagenes%20nuevas/72a15cb082711bd8b151d88794bbcaef5d89cd98.png" 
+             class="absolute -right-20 top-0 h-80 opacity-10 animate-float pointer-events-none">
+
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-4 section-reveal">
+                ${stats.map(s => `
+                    <div class="text-center lg:text-left">
+                        <div class="text-5xl md:text-7xl font-black text-white mb-2 font-montserrat tracking-tighter">${s.v}</div>
+                        <div class="text-[10px] text-indigo-500 font-black uppercase tracking-[0.3em] mb-2">${s.t}</div>
+                        <p class="text-[10px] text-white/20 uppercase tracking-widest font-medium">${s.d}</p>
                     </div>
                 `).join('')}
             </div>
-            
-            <div class="mt-24 p-12 bg-[#865BFF]/5 border border-[#865BFF]/20 rounded-[4rem] text-center">
-                 <p class="text-2xl text-white/60 font-medium leading-relaxed max-w-4xl mx-auto">
-                    "Antes necesitabas una cuenta en Deriv Y otra en Weltrade para acceder a todos estos índices. <br>
-                    <span class="text-white font-black">En Bridge Markets, tienes todo en una sola cuenta MT5.</span>"
-                 </p>
-            </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── THE 3 ECOSYSTEMS ───────────────────────────────────────
 export function renderSNUUniversesIntro(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-48 bg-[#0a0614] relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-8 section-reveal">
-            <h2 class="text-6xl md:text-8xl font-black text-white text-center mb-32 uppercase tracking-tightest leading-none">LA TRINIDAD <br><span class="text-[#865BFF]">SINTÉTICA</span></h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                ${[
-                    { id: 'u1', t: 'PROPIOS BM', d: 'Fortune, Vortex, BullX, BearX, FomoX. Desarrollados por Bridge Markets.', color: '#865BFF', icon: 'token' },
-                    { id: 'u2', t: 'DERIV SYNC', d: 'Boom, Crash, Volatility, Jump, Step, Range Break. El estándar del mercado.', color: '#3b82f6', icon: 'layers' },
-                    { id: 'u3', t: 'WELTRADE FX', d: 'VolFX, SpikeFX, FlipX, PainX/GainX. Volatilidad sobre pares mayores.', color: '#ef4444', icon: 'dynamic_feed' }
-                ].map(u => `
-                    <div class="relative p-20 rounded-[5rem] border border-white/10 bg-white/5 overflow-hidden group hover:-translate-y-4 transition-all duration-700">
-                        <div class="absolute inset-x-0 bottom-0 h-2" style="background-color: ${u.color}"></div>
-                        <span class="material-symbols-outlined text-[120px] absolute -right-10 -top-10 opacity-5 group-hover:opacity-20 transition-opacity" style="color: ${u.color}">${u.icon}</span>
-                        <div class="relative z-10">
-                            <span class="text-[10px] font-black uppercase tracking-[0.8em] mb-12 block" style="color: ${u.color}">UNIVERSO ${u.id.toUpperCase()}</span>
-                            <h3 class="text-4xl font-black text-white mb-8 uppercase tracking-tighter leading-none">${u.t}</h3>
-                            <p class="text-xl text-white/40 font-medium leading-relaxed">${u.d}</p>
-                        </div>
-                    </div>
-                `).join('')}
+    <section class="py-40 px-8 bg-[#000]">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-32 section-reveal">
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 leading-none italic">Triangulación <br>de Mercados.</h2>
+                <p class="text-white/30 text-lg max-w-2xl font-light italic">"Bridge Markets unifica tres universos de índices sintéticos en una sola cuenta profesional MT5."</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 section-reveal">
+                <div class="group relative p-12 bg-white/[0.02] border border-white/10 hover:border-purple-500/50 transition-all">
+                    <div class="text-[10px] font-black text-white/20 mb-16 italic tracking-widest">ECO-01 // BRIDGE PROPRIETARY</div>
+                    <h3 class="text-3xl font-black text-white mb-6 uppercase italic">Índices BM</h3>
+                    <p class="text-xs text-white/40 uppercase tracking-widest leading-relaxed mb-12 font-light italic">Fortune, Vortex, BullX, BearX, FomoX. Tecnología exclusiva de BM.</p>
+                    <div class="w-12 h-1 bg-purple-600 transition-all group-hover:w-full"></div>
+                </div>
+
+                <div class="group relative p-12 bg-white/[0.02] border border-white/10 hover:border-blue-500/50 transition-all">
+                    <div class="text-[10px] font-black text-white/20 mb-16 italic tracking-widest">ECO-02 // DERIV NETWORK</div>
+                    <h3 class="text-3xl font-black text-white mb-6 uppercase italic">Mercados Deriv</h3>
+                    <p class="text-xs text-white/40 uppercase tracking-widest leading-relaxed mb-12 font-light italic">Boom, Crash, Volatility, Jump, Step, Range Break. El estándar global.</p>
+                    <div class="w-12 h-1 bg-blue-600 transition-all group-hover:w-full"></div>
+                </div>
+
+                <div class="group relative p-12 bg-white/[0.02] border border-white/10 hover:border-red-500/50 transition-all">
+                    <div class="text-[10px] font-black text-white/20 mb-16 italic tracking-widest">ECO-03 // WELTRADE STREAM</div>
+                    <h3 class="text-3xl font-black text-white mb-6 uppercase italic">Mercados Weltrade</h3>
+                    <p class="text-xs text-white/40 uppercase tracking-widest leading-relaxed mb-12 font-light italic">VolFX, SpikeFX, FlipX, PainX/GainX. Índices de alta intensidad.</p>
+                    <div class="w-12 h-1 bg-red-600 transition-all group-hover:w-full"></div>
+                </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── UNIVERSE 1 (BM + PAWN) ─────────────────────────────────
 export function renderSNUU1BM(content: Record<string, any>, brand: BrandConfig): string {
-    const families = [
-        { id: 'FORTUNE', i: 'Fortune 100/250/500...', d: 'Movimiento escalonado step-by-step. Ideal para estructura y rangos.' },
-        { id: 'VORTEX', i: 'Vortex 20/40/60/80/100', d: 'Volatilidad constante y predecible. A mayor número, mayor amplitud.' },
-        { id: 'BULLX', i: 'BullX 400/777/900...', d: 'Tendencia bajista con spikes alcistas. Momentum e impulso direccional.' },
-        { id: 'BEARX', i: 'BearX 400/777/900...', d: 'Tendencia alcista con spikes bajistas. Reversiones y momentum bajista.' },
-        { id: 'FOMOX', i: 'FomoX 111/333/888/999', d: 'Tendencia aleatoria espontánea. Ideal para breakout y trend following.' }
-    ];
-
     return `
-    <section class="py-48 bg-[#0a0614] relative border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-8 section-reveal">
-            <div class="flex flex-col lg:flex-row justify-between items-end gap-12 mb-32">
-                <div class="max-w-3xl">
-                    <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em] mb-10 block">Universo 01</span>
-                    <h2 class="text-6xl md:text-8xl font-black text-white leading-[0.85] uppercase tracking-tightest">ÍNDICES PROPIOS <br><span class="text-[#865BFF]">BRIDGE MARKETS</span></h2>
-                </div>
-                <div class="px-8 py-3 bg-[#865BFF]/10 border border-[#865BFF]/20 rounded-full">
-                    <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.5em]">Operados exclusivamente por BM</span>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                ${families.map(f => `
-                    <div class="p-16 bg-white/5 border border-white/10 rounded-[4rem] group hover:bg-[#865BFF]/10 transition-all">
-                        <h4 class="text-4xl font-black text-[#865BFF] mb-8 uppercase tracking-widest">${f.id}</h4>
-                        <div class="h-1 w-12 bg-white/10 mb-8 group-hover:w-full transition-all duration-700"></div>
-                        <p class="text-white font-bold text-xs uppercase tracking-[0.2em] mb-6">${f.i}</p>
-                        <p class="text-white/40 text-[11px] uppercase tracking-widest leading-relaxed">${f.d}</p>
+    <section class="py-40 px-8 bg-[#020202] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center section-reveal">
+                <div class="lg:col-span-5">
+                    <h2 class="text-5xl md:text-8xl font-black text-white uppercase leading-[0.85] tracking-tighter mb-8">Índices <br><span class="text-purple-600">Propios.</span></h2>
+                    <p class="text-white/40 text-lg font-light leading-relaxed mb-12 italic">"Instrumentos desarrollados y operados exclusivamente por Bridge Markets. Sin influencias externas."</p>
+                    
+                    <div class="space-y-4">
+                        ${['Fortune 100/1000', 'Vortex 20/100', 'BullX / BearX', 'FomoX 111/999'].map(i => `
+                            <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-2">${i}</div>
+                        `).join('')}
                     </div>
-                `).join('')}
+                </div>
+                <div class="lg:col-span-7 relative">
+                    <!-- 3D Asset: Pawn on Silk -->
+                    <img src="/images/imagenes%20nuevas/0ba35ff58cd00d6aab66ae503b7d759320e40c7e.png" 
+                         class="w-full h-auto opacity-80 mix-blend-lighten">
+                </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── UNIVERSE 2 (DERIV) ─────────────────────────────────────
 export function renderSNUU2Deriv(content: Record<string, any>, brand: BrandConfig): string {
-    const families = [
-        { name: 'Boom (Impulso Alcista)', items: [['Boom 1000', 'B 1000 Idx'], ['Boom 500', 'B 500 Idx'], ['Boom 300', 'B 300 Idx']] },
-        { name: 'Crash (Impulso Bajista)', items: [['Crash 1000', 'C 1000 Idx'], ['Crash 500', 'C 500 Idx'], ['Crash 300', 'C 300 Idx']] },
-        { name: 'Range Break (Rupturas)', items: [['Range Break 100', 'R B100 Idx'], ['Range Break 200', 'R B200 Idx']] },
-        { name: 'Volatility (Volatilidad)', items: [['Volatility 75', 'V 75 Idx'], ['Volatility 100', 'V 100 Idx'], ['Volatility 10', 'V 10 Idx']] }
-    ];
-
     return `
-    <section class="py-48 bg-[#0a0614] relative border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-8 section-reveal">
-            <div class="flex flex-col lg:flex-row justify-between items-end gap-12 mb-32">
-                <div class="max-w-3xl">
-                    <span class="text-[#3b82f6] text-[11px] font-black uppercase tracking-[0.8em] mb-10 block">Universo 02</span>
-                    <h2 class="text-6xl md:text-8xl font-black text-white leading-[0.85] uppercase tracking-tightest">MERCADOS <br><span class="text-[#3b82f6]">DERIV</span></h2>
-                </div>
-                <div class="px-8 py-3 bg-blue-600/10 border border-blue-600/20 rounded-full">
-                    <span class="text-[10px] font-black text-[#3b82f6] uppercase tracking-[0.5em]">Equivalencia Directa en MT5</span>
-                </div>
+    <section class="py-40 px-8 bg-[#000]">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-24 section-reveal">
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 italic">Data Feed <br><span class="text-blue-600">Deriv Network.</span></h2>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                ${families.map(f => `
-                    <div class="bg-white/5 border border-white/5 rounded-[4rem] overflow-hidden">
-                        <div class="p-10 bg-blue-600/10 border-b border-white/5">
-                            <h4 class="text-xl font-black text-white uppercase tracking-widest leading-none">${f.name}</h4>
-                        </div>
-                        <div class="p-10">
-                            <table class="w-full text-left">
-                                <thead>
-                                    <tr class="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] border-b border-white/5">
-                                        <th class="pb-6">SOURCE DERIV</th>
-                                        <th class="pb-6">SYMBOL BRIDGE</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-white/5">
-                                    ${f.items.map(row => `
-                                        <tr class="group">
-                                            <td class="py-6 text-sm font-bold text-white/50 uppercase tracking-widest group-hover:text-white transition-colors">${row[0]} Index</td>
-                                            <td class="py-6 text-sm font-black text-[#3b82f6] uppercase tracking-widest">${row[1]}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `).join('')}
+            <div class="overflow-x-auto section-reveal">
+                <table class="w-full text-left border-collapse border border-white/10">
+                    <thead>
+                        <tr class="bg-white/5">
+                            <th class="p-8 text-[10px] font-black text-white/40 uppercase tracking-widest italic">Source (Deriv)</th>
+                            <th class="p-8 text-[10px] font-black text-white/40 uppercase tracking-widest italic">Symbol (Bridge Markets)</th>
+                            <th class="p-8 text-[10px] font-black text-white/40 uppercase tracking-widest italic">Live Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-white/60 font-mono text-xs">
+                        ${[
+                            ['Boom 1000 Index', 'B 1000 Idx', 'LIVE'],
+                            ['Crash 1000 Index', 'C 1000 Idx', 'LIVE'],
+                            ['Range Break 100', 'R B100 Idx', 'LIVE'],
+                            ['Jump 100 Index', 'J 100 Idx', 'LIVE'],
+                            ['Step Index 500', 'STP Idx 500', 'LIVE']
+                        ].map(row => `
+                            <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-all">
+                                <td class="p-8 italic">${row[0]}</td>
+                                <td class="p-8 text-blue-400 font-black">${row[1]}</td>
+                                <td class="p-8"><span class="px-2 py-1 bg-blue-500/10 text-blue-500 text-[8px] font-black rounded uppercase">ACTIVE</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
             </div>
-            
-            <p class="mt-20 text-center text-[10px] font-black text-white/20 uppercase tracking-[0.8em]">Más de 50 símbolos de Deriv adicionales disponibles en tu terminal MT5</p>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── UNIVERSE 3 (WELTRADE + BARREL) ─────────────────────────
 export function renderSNUU3Welt(content: Record<string, any>, brand: BrandConfig): string {
-    const families = [
-        { n: 'VolFX', s: 'FX Vol 20 / 40 / 60 / 80 / 99', d: 'Volatilidad calculada sobre pares de Forex.' },
-        { n: 'SpikeFX', s: 'SFX Vol 20 / 40 / 60 / 80 / 99', d: 'Picos extremos direccionales sobre FX.' },
-        { n: 'FlipX', s: 'FlipStatic / Rand2 / Rand3 / Rand4 / Rand5', d: 'Reversiones aleatorias de alta frecuencia.' },
-        { n: 'GainX & PainX', s: 'StepRise400 / StepDrop400 ...', d: 'Movimientos escalonados alcistas y bajistas.' }
-    ];
-
     return `
-    <section class="py-48 bg-[#0a0614] relative border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-8 section-reveal">
-            <div class="flex flex-col lg:flex-row justify-between items-end gap-12 mb-32">
-                <div class="max-w-3xl">
-                    <span class="text-[#ef4444] text-[11px] font-black uppercase tracking-[0.8em] mb-10 block">Universo 03</span>
-                    <h2 class="text-6xl md:text-8xl font-black text-white leading-[0.85] uppercase tracking-tightest">MERCADOS <br><span class="text-[#ef4444]">WELTRADE</span></h2>
+    <section class="py-40 px-8 bg-[#020202]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center section-reveal">
+                <div class="order-2 lg:order-1 relative">
+                    <!-- 3D Asset: Barrel -->
+                    <img src="/images/imagenes%20nuevas/8337d16df907b43ac2769334af6bc3b99adf821e.png" 
+                         class="w-full h-auto drop-shadow-[0_0_80px_rgba(239,68,68,0.2)]">
                 </div>
-                <div class="px-8 py-3 bg-red-600/10 border border-red-600/20 rounded-full">
-                    <span class="text-[10px] font-black text-[#ef4444] uppercase tracking-[0.5em]">Exclusividad Vía Bridge Markets</span>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                ${families.map(f => `
-                    <div class="p-12 bg-white/5 border border-white/5 rounded-[3.5rem] relative overflow-hidden group hover:bg-red-600/5 transition-all">
-                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-red-600/5 rounded-full blur-3xl"></div>
-                        <h4 class="text-3xl font-black text-white mb-8 uppercase tracking-widest border-b border-red-600/20 pb-6 group-hover:border-red-600 transition-all">${f.n}</h4>
-                        <p class="text-red-500 font-black text-[10px] uppercase tracking-widest mb-6">${f.s}</p>
-                        <p class="text-white/30 text-xs font-medium leading-relaxed">${f.d}</p>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-5xl md:text-8xl font-black text-white uppercase leading-[0.85] tracking-tighter mb-8 italic">Nodes <br><span class="text-red-600">Weltrade.</span></h2>
+                    <p class="text-white/40 text-lg font-light leading-relaxed mb-12 italic">Espejo de alta velocidad para VolFX, SpikeFX, FlipX y la serie Pain/Gain.</p>
+                    <div class="space-y-4">
+                        ${['VolFX 20/99', 'SpikeFX 20/99', 'FlipStatic/Rand', 'StepRise/Drop'].map(f => `
+                            <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-2">${f}</div>
+                        `).join('')}
                     </div>
-                `).join('')}
+                </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── WHY BM (TECH + CHART) ──────────────────────────────────
 export function renderSNUWhy(content: Record<string, any>, brand: BrandConfig): string {
-    const cards = [
-        { t: 'Único Ecosistema', d: 'El único broker donde Deriv, Weltrade y BM coexisten en una sola cuenta.' },
-        { t: 'Adiós Multibrokers', d: 'No más cuentas separadas. Centraliza tu operativa sintética con nosotros.' },
-        { t: 'Abundancia Total', d: 'Más de 100 instrumentos entre los tres ecosistemas garantizados.' },
-        { t: 'Operativa 24/7', d: 'Sin cierres de mercado, sin pausas. Los sintéticos no duermen nunca.' },
-        { t: 'Inmune a Noticias', d: 'Generados por algoritmos RNG auditados. Sin distorsiones macro.' },
-        { t: 'MT5 Profesional', d: 'Servidor BridgeMarkets-MT5: estabilidad institucional para retail.' }
+    const reasons = [
+        { t: 'Ecosistema Unificado', d: 'Deriv, Weltrade y BM en una sola terminal.' },
+        { t: 'Sin Fragmentación', d: 'Una sola cuenta, una sola MT5.' },
+        { t: 'Auditado RNG', d: 'Algoritmos verificados bajo estándares de élite.' }
     ];
 
     return `
-    <section class="py-48 bg-[#0a0614] relative border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center">
-             <h2 class="text-6xl md:text-8xl font-black text-white mb-32 uppercase tracking-tightest leading-none">LA VENTAJA <br><span class="text-gray-300">COMPETITIVA</span></h2>
-             
-             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                 ${cards.map((c, i) => `
-                    <div class="p-16 bg-white/5 border border-white/10 rounded-[5rem] hover:bg-white/10 hover:text-[#0a0614] transition-all duration-700 group">
-                        <span class="material-symbols-outlined text-6xl text-[#865BFF] mb-12 group-hover:text-[#0a0614] transition-colors">verified</span>
-                        <h3 class="text-4xl font-black mb-8 uppercase tracking-tighter leading-none">${c.t}</h3>
-                        <p class="text-white/40 font-medium text-lg leading-relaxed group-hover:text-[#0a0614]/60 transition-colors uppercase tracking-widest text-xs">${c.d}</p>
-                    </div>
-                 `).join('')}
-             </div>
-        </div>
-    </section>`;
-}
+    <section class="py-40 px-8 bg-[#000] relative overflow-hidden">
+        <!-- Decoration: 3D Chart -->
+        <img src="/images/imagenes%20nuevas/4239c55232278a1d611b9c3c88def10ad5d611de.png" 
+             class="absolute -left-20 bottom-0 h-[600px] opacity-10 rotate-12 pointer-events-none">
 
-export function renderSNUWorkflow(content: Record<string, any>, brand: BrandConfig): string {
-    const steps = ['Crea tu cuenta', 'Completa KYC', 'Deposita USD', 'Descarga MT5', 'Explora Universos', 'Elige Familia', 'Opera 24/7'];
-
-    return `
-    <section class="py-48 bg-[#0a0614] relative overflow-hidden border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center">
-            <h2 class="text-6xl md:text-8xl font-black text-white mb-32 uppercase tracking-tightest leading-none">CÓMO <br><span class="text-gray-300">ACTIVAR</span></h2>
-            
-            <div class="flex flex-wrap justify-center gap-6">
-                ${steps.map((s, i) => `
-                    <div class="p-10 bg-white/5 border border-white/10 rounded-[3rem] min-w-[200px] flex-grow hover:bg-[#865BFF] transition-all transform hover:-translate-y-4 group">
-                        <span class="text-6xl font-black text-white/5 absolute -top-5 -left-5 group-hover:visible invisible">${i+1}</span>
-                        <div class="relative z-10">
-                            <div class="text-[#865BFF] text-3xl font-black mb-6 group-hover:text-white transition-colors">0${i+1}</div>
-                            <h4 class="text-sm font-black text-white uppercase tracking-widest">${s}</h4>
-                        </div>
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5 section-reveal">
+                ${reasons.map(r => `
+                    <div class="p-16 bg-[#000] hover:bg-indigo-950/10 transition-all group">
+                        <h4 class="text-lg font-black text-white mb-6 uppercase tracking-tight italic">${r.t}</h4>
+                        <p class="text-[10px] text-white/30 leading-relaxed uppercase tracking-[0.2em] font-medium italic italic">${r.d}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
-export function renderSNUCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'snu_community')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
-    const message = brand.heroPhrase || c.welcomeMessage || 'Únete a nuestra comunidad de traders sintéticos.';
-    const logoUrl = brand.logoUrl || '/images/logo-bm-blanco.png';
+// ─── HOW TO START ───────────────────────────────────────────
+export function renderSNUWorkflow(content: Record<string, any>, brand: BrandConfig): string {
+    const steps = ['Registro Portal', 'KYC Verification', 'Fund Account', 'MT5 Download', 'Node Sync', 'Asset Choice', 'Execute 24/7'];
 
     return `
-    <section class="py-48 bg-[#0a0614] text-white section-reveal">
-        <div class="max-w-7xl mx-auto px-8">
-             <div class="bg-white/5 border border-white/10 rounded-[6rem] p-24 lg:p-40 relative overflow-hidden flex flex-col items-center text-center group">
-                <div class="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-transparent via-[#865BFF] to-transparent"></div>
-                
-                <div class="w-48 h-48 bg-black border-4 border-[#865BFF]/30 rounded-full overflow-hidden mb-16 shadow-[0_0_50px_rgba(134,91,255,0.3)]">
-                    <img src="${logoUrl}" alt="IB" class="w-full h-full object-contain">
-                </div>
-
-                <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[1em] mb-12 block">Synthetic Collective</span>
-                <h2 class="text-6xl md:text-8xl font-black text-white mb-16 uppercase tracking-tightest leading-none">${ibName}</h2>
-                <p class="text-3xl text-white/40 font-light italic leading-relaxed mb-16 max-w-4xl">
-                    "${message}"
-                </p>
-                
-                <div class="flex flex-wrap justify-center gap-8">
-                    ${brand.telegram ? `<a href="${brand.telegram}" class="px-14 py-7 bg-white/5 border border-white/10 text-white font-black rounded-3xl hover:bg-blue-600 transition-all text-xl uppercase tracking-widest">Telegram</a>` : ''}
-                    ${brand.whatsapp ? `<a href="https://wa.me/${brand.whatsapp}" class="px-14 py-7 bg-white/5 border border-white/10 text-white font-black rounded-3xl hover:bg-emerald-600 transition-all text-xl uppercase tracking-widest">WhatsApp</a>` : ''}
-                </div>
-             </div>
+    <section class="py-40 px-8 bg-[#000] border-t border-white/5 text-center">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-wrap justify-center gap-12 section-reveal">
+                ${steps.map((step, idx) => `
+                    <div class="flex flex-col items-center gap-4 group">
+                        <div class="text-[10px] font-black text-indigo-500 font-mono tracking-tighter">NODE_0${idx + 1}</div>
+                        <div class="text-[9px] font-black text-white uppercase tracking-[0.3em] italic group-hover:text-indigo-400 transition-colors">${step}</div>
+                    </div>
+                `).join('')}
+            </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── COMMUNITY ──────────────────────────────────────────────
+export function renderSNUCommunity(content: Record<string, any>, brand: BrandConfig): string {
+    const ibName = brand.communityName || brand.ibName || 'Partner Admin';
+    const message = content.communityMessage || 'Únete al hub de sintéticos más grande del mercado.';
+    const telegram = brand.telegram || '#';
+    const whatsapp = brand.whatsapp || '#';
+
+    return `
+    <section id="comunidad" class="py-40 px-8 bg-[#000]">
+        <div class="max-w-7xl mx-auto section-reveal">
+            <div class="border border-white/10 p-12 md:p-32 bg-white/[0.01] relative overflow-hidden text-center">
+                <div class="relative z-10 max-w-4xl mx-auto">
+                    <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Access Node: ${ibName.toUpperCase()}</span>
+                    <h2 class="text-5xl md:text-[90px] font-black text-white leading-none uppercase tracking-tighter mb-10 italic">${ibName}</h2>
+                    <p class="text-xl md:text-2xl text-white/40 font-light mb-16 leading-relaxed italic">"${message}"</p>
+                    
+                    <div class="flex flex-wrap justify-center gap-8">
+                        <a href="${telegram}" class="px-12 py-6 border border-white text-white font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all">Telegram Hub</a>
+                        <a href="${whatsapp}" class="px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-indigo-600 hover:text-white transition-all">WhatsApp Direct</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── FAQ ────────────────────────────────────────────────────
 export function renderSNUFAQ(content: Record<string, any>, brand: BrandConfig): string {
     const faqs = [
-        { q: '¿Cuántos sintéticos hay en total?', a: 'Más de 100 instrumentos integrando Deriv, Weltrade y exclusivos BM.' },
-        { q: '¿Están 24/7 los 3 universos?', a: 'Sí. Todos operan los 365 días del año sin cierres de mercado.' },
-        { q: '¿Necesito cuenta en Deriv o Weltrade?', a: 'No. Todo está integrado en tu cuenta de Bridge Markets. Un solo login en MT5.' },
-        { q: '¿Puedo usar robots (EAs)?', a: 'Sí. Los sintéticos son perfectos para algoritmos por su disponibilidad continua.' }
+        { q: '¿Qué es el Nodo Unificado?', a: 'Tecnología de BM que permite operar Deriv, Weltrade y BM desde una sola cuenta MT5.' },
+        { q: '¿Necesito cuentas externas?', a: 'No. Todos los feeds están integrados directamente en Bridge Markets.' },
+        { q: '¿Disponibilidad?', a: '24/7, 365 días al año. Sin pausas ni cierres de mercado.' },
+        { q: '¿Plataforma?', a: 'MetaTrader 5 (MT5). Desktop, Web, iOS y Android.' }
     ];
 
     return `
-    <section class="py-48 bg-[#0a0614] text-white border-t border-white/5">
-        <div class="max-w-4xl mx-auto px-8 section-reveal text-center">
-             <h2 class="text-6xl font-black text-white mb-32 uppercase tracking-tightest">FAQ <br><span class="text-white/20">TÉCNICA</span></h2>
-             
-             <div class="space-y-6 text-left">
-                 ${faqs.map(f => `
-                    <div class="bg-white/5 border border-white/5 p-12 rounded-[4rem] group hover:bg-[#865BFF]/10 transition-all">
-                        <h4 class="text-3xl font-black text-white mb-8 uppercase tracking-tighter flex items-center gap-8">
-                             <div class="w-1.5 h-10 bg-[#865BFF] rounded-full"></div> ${f.q}
-                        </h4>
-                        <p class="text-xl text-white/40 font-medium leading-relaxed pl-10 underline decoration-[#865BFF]/20 underline-offset-8">${f.a}</p>
+    <section class="py-40 px-8 bg-[#000] border-t border-white/5">
+        <div class="max-w-3xl mx-auto section-reveal">
+            <div class="space-y-12">
+                ${faqs.map(faq => `
+                    <div class="group border-l border-white/10 pl-8 hover:border-indigo-600 transition-all">
+                        <h4 class="text-white font-black uppercase tracking-widest text-xs mb-4 italic group-hover:text-indigo-400 transition-colors">${faq.q}</h4>
+                        <p class="text-white/30 text-[9px] leading-relaxed uppercase font-medium tracking-[0.2em] italic">${faq.a}</p>
                     </div>
-                 `).join('')}
-             </div>
+                `).join('')}
+            </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FINAL CTA (ROOK) ───────────────────────────────────────
 export function renderSNUCTA(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'snu_cta')!.defaultContent, ...content };
-    const ctaLink = brand.ctaLink || '#registro';
+    const ctaMainLink = brand.ctaLink || "#";
 
     return `
-    <section class="py-64 bg-[#0a0614] relative overflow-hidden section-reveal">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(134,91,255,0.15),transparent_70%)]"></div>
-        <div class="max-w-7xl mx-auto px-8 relative z-10 text-center">
-            <h2 class="text-7xl md:text-[12rem] font-black text-white mb-16 uppercase tracking-tightest leading-[0.8] drop-shadow-3xl italic">UN BROKER. <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#865BFF] via-white to-[#865BFF]">UNIVERSAL.</span></h2>
-            <p class="text-3xl text-white/30 mb-32 font-light uppercase tracking-[0.4em] max-w-5xl mx-auto leading-relaxed">
-                Antes necesitabas Deriv. Antes necesitabas Weltrade. <br>
-                <span class="text-white font-black">Ahora solo necesitas Bridge Markets.</span>
-            </p>
-            
-            <div class="flex flex-wrap justify-center gap-12">
-                <a href="${ctaLink}" class="px-24 py-10 bg-[#865BFF] text-white font-black rounded-full hover:shadow-[0_45px_100px_rgba(134,91,255,0.4)] hover:scale-110 transition-all uppercase text-2xl tracking-tighter shadow-3xl">${c.ctaPrimary}</a>
-                <a href="https://charts.bridgemarkets.global" class="px-24 py-10 bg-white/5 border border-white/10 text-white font-black rounded-full hover:bg-white/10 hover:text-black transition-all uppercase text-2xl tracking-tighter backdrop-blur-md">${c.ctaSecondary}</a>
-            </div>
+    <section class="py-60 px-8 bg-[#000] text-center border-t border-white/5 relative overflow-hidden">
+        <!-- Decoration: 3D Rook -->
+        <img src="/images/imagenes%20nuevas/a6167a17df2b6b1d32e1f9330b6cc672864ac12b.png" 
+             class="absolute right-0 bottom-0 h-[500px] opacity-10 hover:opacity-20 transition-opacity pointer-events-none">
 
-            <div class="mt-40">
-                 <p class="text-[10px] text-white/20 uppercase font-black tracking-[1em]">${brand.fullName || 'Bridge Markets'} — Risk Disclaimer Applied.</p>
-            </div>
+        <div class="max-w-6xl mx-auto relative z-10 section-reveal">
+            <h2 class="text-6xl md:text-[140px] font-black text-white uppercase leading-[0.8] tracking-tighter mb-16 italic">
+                Operativa <br>
+                <span class="text-indigo-600">Total.</span>
+            </h2>
+            
+            <a href="${ctaMainLink}" class="inline-block px-20 py-10 bg-white text-black font-black uppercase tracking-[0.4em] text-xs hover:bg-indigo-600 hover:text-white transition-all shadow-[0_0_80px_rgba(255,255,255,0.1)]">
+                Initialize Real Account
+            </a>
+            
+            <p class="text-[8px] text-white/10 uppercase tracking-[0.6em] font-black mt-20 italic">
+                SYSTEM STANDBY // READY FOR EXECUTION
+            </p>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FOOTER ─────────────────────────────────────────────────
 export function renderSNUFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.fullName || brand.ibName || 'IB Sintéticos';
-    const year = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
 
     return `
-    <footer class="py-48 bg-[#0a0614] text-white border-t border-white/5 relative z-10">
-        <div class="max-w-7xl mx-auto px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-40 mb-40 section-reveal">
-                <div class="col-span-1 lg:col-span-1 text-center lg:text-left">
-                    <img src="/images/logo-bm-blanco.png" alt="BM" class="h-10 mb-16 mx-auto lg:mx-0">
-                    <div class="p-10 border border-white/10 rounded-[3rem] bg-white/5">
-                        <span class="block text-[9px] font-black text-white/30 uppercase tracking-[0.6em] mb-4">Presented By</span>
-                        <span class="text-2xl font-black text-white uppercase tracking-tighter">${ibName}</span>
-                    </div>
+    <footer class="py-24 px-8 bg-[#000] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-12">
+                <img src="/images/logo-bm-blanco.png" class="h-5 opacity-50">
+                <div class="text-[9px] text-white/10 uppercase tracking-[0.4em] font-black italic">
+                    © ${currentYear} BridgeMarkets LTD // Unified Synthetic Protocol v4.0
                 </div>
-
-                <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.8em] mb-12 text-white/30">Productos</h4>
-                    <ul class="space-y-8 text-xs font-black uppercase tracking-widest text-white/60">
-                        <li>Índices Sintéticos</li>
-                        <li>PropFirm Pro</li>
-                        <li>Leverage X12</li>
-                        <li>MAM/Copy Trading</li>
-                    </ul>
+                <div class="flex gap-8">
+                    <span class="text-[8px] text-white/20 font-mono tracking-widest">BM_PROPRIETARY</span>
+                    <span class="text-[8px] text-white/20 font-mono tracking-widest">DERIV_SYNC</span>
+                    <span class="text-[8px] text-white/20 font-mono tracking-widest">WELT_MIRROR</span>
                 </div>
-
-                <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.8em] mb-12 text-white/30">Recursos</h4>
-                    <ul class="space-y-8 text-xs font-black uppercase tracking-widest text-white/60">
-                        <li><a href="https://charts.bridgemarkets.global" class="hover:text-[#865BFF]">Gráficos Live</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF]">Documentos</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF]">Portal Cliente</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF]">Soporte IB</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.8em] mb-12 text-white/30">Contacto</h4>
-                    <ul class="space-y-8 text-xs font-black uppercase tracking-widest text-white/40">
-                        <li>corporate@bridgemarkets.global</li>
-                        <li>@bridgemarketsbroker</li>
-                        <li>UK & Marshall Islands</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pt-24 border-t border-white/5 text-center">
-                <p class="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] mb-20 leading-loose max-w-5xl mx-auto">
-                    Advertencia: El trading conlleva riesgo para su capital. Bridge Markets LTD no garantiza rentabilidades. © ${year} BridgeMarkets All Rights Reserved.
-                </p>
-                <div class="text-[10px] font-black text-white/10 uppercase tracking-[2em]">SYNTHETIC UNIVERSE</div>
             </div>
         </div>
-    </footer>`;
+    </footer>
+    `;
 }

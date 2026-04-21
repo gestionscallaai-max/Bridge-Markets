@@ -1,139 +1,119 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
+// ─── PRO LEVERAGE HERO ──────────────────────────────────────
 export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "FORCE";
-    const highlight = content.highlight || "MULTIPLIER";
-    const subtitle = content.subtitle || brand.heroPhrase || "Apalancamiento profesional para traders de alto rendimiento.";
-    const ctaText = content.ctaText || "Activate Power";
-    const ctaLink = brand.ctaLink || "#register";
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibPhrase = brand.heroPhrase || "";
+    const ctaText = content.ctaText || "Quiero mi cuenta apalancada";
+    const ctaLink = brand.ctaLink || "#";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#0a0515]">
-        <!-- Fondo Force Multiplier -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#050505]">
+        <!-- Purple Glow Effects -->
+        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-600/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-900/10 blur-[120px] rounded-full"></div>
+
         <div class="absolute inset-0 z-0">
-            <!-- Grid de velocidad -->
-            <div class="absolute inset-0 opacity-[0.05]" style="background-image: repeating-linear-gradient(90deg, #865BFF 0px, #865BFF 1px, transparent 1px, transparent 100px), repeating-linear-gradient(0deg, #865BFF 0px, #865BFF 1px, transparent 1px, transparent 100px);"></div>
-            
-            <!-- Texto de Fondo Rayado -->
-            <div class="absolute top-1/2 left-0 -translate-y-1/2 w-full text-center opacity-[0.02] select-none pointer-events-none">
-                <span class="text-[50vw] font-black text-white uppercase tracking-[-0.05em] leading-none italic">POWER</span>
-            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/50 via-[#050505]/90 to-[#050505]"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('/images/imagenes%20nuevas/8d25cf7f49c36716ee118242656ba3e722258a6f.png')] bg-cover bg-center opacity-10 grayscale"></div>
         </div>
 
-        <div class="max-w-[1600px] mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="max-w-5xl mx-auto text-center">
+                <!-- Product Badge -->
+                <div class="inline-flex items-center gap-4 px-6 py-3 bg-purple-600/10 border border-purple-500/30 rounded-full mb-10 backdrop-blur-md animate-fade-in-up">
+                    <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-5 border-r border-white/20 pr-4">
+                    <span class="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">PRO LEVERAGE X12</span>
+                </div>
+
+                <div class="mb-6">
+                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-black">Presentado por <span class="text-white">${ibName}</span></span>
+                </div>
+
+                <h1 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 leading-[1.1] uppercase tracking-tighter">
+                    Opera con capital real. <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">Sin evaluaciones. Sin esperas.</span>
+                </h1>
                 
-                <!-- Columna: Force Info -->
-                <div class="lg:col-span-7 section-reveal">
-                    <div class="flex items-center gap-4 mb-12">
-                        <div class="flex gap-1">
-                            ${[1,2,3,4].map(i => `<div class="w-2 h-8 bg-[#865BFF]/20 rounded-full"></div>`).join('')}
-                        </div>
-                        <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.8em] italic">Level 10 Leverage</span>
+                <p class="text-xl md:text-2xl text-white/60 font-light mb-12 max-w-3xl mx-auto leading-relaxed">
+                    Multiplica tu capital hasta x12 y opera directamente en mercados CFDs con una cuenta real financiada por Bridge Markets.
+                </p>
+
+                ${ibPhrase ? `<p class="text-lg text-purple-400/80 font-medium mb-12 italic tracking-wide">${ibPhrase}</p>` : ''}
+
+                <!-- Stats Visual -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
+                    <div class="p-8 bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-sm">
+                        <div class="text-3xl font-black text-white mb-2">100%</div>
+                        <div class="text-[10px] text-white/30 uppercase tracking-widest font-black leading-tight">División de beneficios</div>
                     </div>
-
-                    <h1 class="text-7xl md:text-[12rem] lg:text-[16rem] font-black leading-[0.7] text-white mb-16 tracking-tightest uppercase italic">
-                        ${title} <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-white/20 italic">${highlight}</span>
-                    </h1>
-
-                    <div class="max-w-2xl">
-                        <p class="text-2xl md:text-3xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight">
-                            ${subtitle}
-                        </p>
-                        
-                        <div class="flex flex-wrap gap-12 items-center">
-                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-[0_0_60px_rgba(134,91,255,0.4)]">
-                                <span class="relative z-10 uppercase tracking-[0.5em] text-xs font-black italic">${ctaText}</span>
-                            </a>
-                            
-                            <div class="flex flex-col border-l border-white/10 pl-10">
-                                <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-2">Max. Multiplier</span>
-                                <span class="text-4xl font-black text-white italic tracking-tighter">1:1000</span>
-                            </div>
-                        </div>
+                    <div class="p-8 bg-purple-600/10 border border-purple-500/20 rounded-3xl backdrop-blur-sm">
+                        <div class="text-3xl font-black text-purple-400 mb-2">x12</div>
+                        <div class="text-[10px] text-white/30 uppercase tracking-widest font-black leading-tight">Apalancamiento</div>
+                    </div>
+                    <div class="p-8 bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-sm">
+                        <div class="text-3xl font-black text-white mb-2 italic">Día 3</div>
+                        <div class="text-[10px] text-white/30 uppercase tracking-widest font-black leading-tight">Retiro de ganancias</div>
                     </div>
                 </div>
 
-                <!-- Columna: Visual Force -->
-                <div class="lg:col-span-5 relative flex justify-center items-center section-reveal">
-                    <div class="relative w-full aspect-square flex items-center justify-center">
-                        
-                        <!-- Main 3D Asset (Caballo Rosa) -->
-                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-[1.8] translate-x-10">
-                            <img src="/images/imagenes%20nuevas/caballo%20rosa.png" alt="Force Horse" class="w-full h-full object-contain filter drop-shadow-[0_0_150px_rgba(134,91,255,0.4)] animate-power-vibe">
-                        </div>
-
-                    </div>
+                <div class="flex justify-center">
+                    <a href="${ctaLink}" class="group relative px-12 py-6 bg-purple-600 text-white font-black rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(147,51,234,0.4)]">
+                        <span class="relative z-10 uppercase tracking-widest text-sm">${ctaText}</span>
+                    </a>
                 </div>
-
             </div>
         </div>
-
-        <style>
-            @keyframes power-vibe {
-                0%, 100% { transform: translateY(0) scale(1.8) rotate(0deg); filter: drop-shadow(0 0 100px rgba(134,91,255,0.3)); }
-                50% { transform: translateY(-20px) scale(1.85) rotate(1deg); filter: drop-shadow(0 0 180px rgba(134,91,255,0.6)); }
-            }
-            .animate-power-vibe { animation: power-vibe 6s ease-in-out infinite; }
-        </style>
     </section>
     `;
 }
 
+// ─── ABOUT / COMPARISON ─────────────────────────────────────
 export function renderLX12Intro(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative overflow-hidden">
-        <div class="max-w-4xl mx-auto text-center section-reveal">
-            <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.6em] mb-10 block">Concepto Pro Leverage</span>
-            <h2 class="text-4xl md:text-6xl font-black text-white mb-12 uppercase tracking-tightest leading-tight">¿Qué es la Cuenta <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#865BFF]">PRO LEVERAGE X12?</span></h2>
-            
-            <div class="p-12 md:p-16 rounded-[4rem] border border-white/5 bg-white/[0.02] backdrop-blur-3xl text-left relative group">
-                <div class="absolute -top-10 -left-10 w-24 h-24 bg-[#865BFF]/20 rounded-full blur-2xl group-hover:bg-[#865BFF]/40 transition-all"></div>
-                <p class="text-xl md:text-2xl text-white/50 leading-relaxed font-medium">
-                    La Cuenta PRO LEVERAGE X12 es un producto de acceso directo a capital real, diseñado para traders con experiencia que buscan multiplicar su capacidad operativa sin aumentar su capital inicial. Al adquirir la cuenta, Bridge Markets te otorga un apalancamiento real de 12x sobre tu depósito. No existe fase de evaluación ni challenge previo. Empiezas a operar desde el primer día en mercados CFDs con el capital apalancado activo. El 100% de los beneficios netos generados son para el trader.
-                </p>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderLX12TableCompare(content: Record<string, any>, brand: BrandConfig): string {
-    const rows = [
-        { c: '¿Requiere evaluación?', lx: '<span class="material-symbols-outlined text-red-500 align-middle mr-2 text-sm">close</span> No. Acceso directo', pf: '<span class="material-symbols-outlined text-emerald-500 align-middle mr-2 text-sm">check_circle</span> Sí. Challenge previo' },
-        { c: 'Tipo de mercado', lx: 'CFDs (Forex, índices, commodities)', pf: 'Forex/CFDs o Sintéticos' },
-        { c: 'Apalancamiento', lx: '12x el depósito real', pf: 'Capital asignado por BM' },
-        { c: 'División de beneficios', lx: '100% para el trader', pf: '70–80% para el trader' },
-        { c: 'Objetivo de ganancia', lx: 'Sin objetivo obligatorio', pf: '8% para superar el challenge' },
-        { c: 'Retiro de profits', lx: 'Desde el día 3 (mín. 2%)', pf: 'Cada 14 días' },
-        { c: 'Liquidación total', lx: 'Desde el día 45', pf: 'No aplica (cuenta permanente)' },
-    ];
-
-    return `
-    <section class="py-32 px-8 bg-[#05010f] relative">
-        <div class="max-w-6xl mx-auto section-reveal">
-            <div class="text-center mb-24">
-                <h2 class="text-4xl font-black text-white uppercase tracking-widest">DIFERENCIA CLAVE VS PROPFIRM</h2>
-                <div class="h-1 w-20 bg-emerald-500 mx-auto mt-6 rounded-full"></div>
+    <section class="py-32 px-8 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32 section-reveal">
+                <div>
+                    <span class="text-purple-500 font-black text-xs uppercase tracking-widest mb-6 block">Acceso Directo a Capital</span>
+                    <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-10 uppercase leading-tight">¿Qué es la Cuenta PRO LEVERAGE X12?</h2>
+                    <div class="space-y-6 text-white/60 text-lg leading-relaxed">
+                        <p>La Cuenta PRO LEVERAGE X12 es un producto de acceso directo a capital real, diseñado para traders con experiencia que buscan multiplicar su capacidad operativa sin aumentar su capital inicial.</p>
+                        <p class="p-8 bg-purple-600/5 border-l-4 border-purple-500 rounded-r-3xl">Al adquirir la cuenta, Bridge Markets te otorga un apalancamiento real de 12x sobre tu depósito. No existe fase de evaluación ni challenge previo. Empiezas a operar desde el primer día en mercados CFDs con el capital apalancado activo.</p>
+                        <p class="font-bold text-white italic">El 100% de los beneficios netos generados son para el trader.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="w-full max-w-md mx-auto drop-shadow-[0_0_50px_rgba(168,85,247,0.3)] transform -rotate-6 animate-pulse-slow">
+                </div>
             </div>
 
-            <div class="rounded-[4rem] border border-white/10 overflow-hidden bg-white/5 shadow-2xl backdrop-blur-sm">
+            <!-- Comparison Table -->
+            <div class="section-reveal">
+                <h3 class="text-2xl font-black text-white mb-12 uppercase text-center">Diferencia clave vs PropFirm</h3>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[700px]">
+                    <table class="w-full text-left border-collapse bg-white/[0.02] border border-white/5 rounded-[2rem] overflow-hidden">
                         <thead>
-                            <tr class="bg-white/5">
-                                <th class="py-8 px-10 text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Característica</th>
-                                <th class="py-8 px-10 text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em]">PRO LEVERAGE X12</th>
-                                <th class="py-8 px-10 text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">PROPFIRM (Obsidian/Elite)</th>
+                            <tr class="border-b border-white/10 bg-white/[0.03]">
+                                <th class="py-8 px-6 text-[10px] font-black text-white/30 uppercase tracking-widest">Característica</th>
+                                <th class="py-8 px-6 text-[10px] font-black text-purple-400 uppercase tracking-widest">PRO LEVERAGE X12</th>
+                                <th class="py-8 px-6 text-[10px] font-black text-white/30 uppercase tracking-widest">PROPFIRM (Elite)</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/5">
-                            ${rows.map(r => `
-                                <tr class="hover:bg-white/10/[0.02] transition-colors">
-                                    <td class="py-6 px-10 text-white font-bold text-sm tracking-tight">${r.c}</td>
-                                    <td class="py-6 px-10 text-white font-black text-sm">${r.lx}</td>
-                                    <td class="py-6 px-10 text-white/40 text-sm font-medium">${r.pf}</td>
+                            ${[
+                                ['¿Requiere evaluación?', '❌ No. Acceso directo', '✅ Sí. Challenge previo'],
+                                ['Tipo de mercado', 'CFDs (Forex, índices, commodities)', 'Forex/CFDs o Sintéticos'],
+                                ['Apalancamiento', '12x el depósito real', 'Capital asignado por BM'],
+                                ['División de beneficios', '100% para el trader', '70–80% para el trader'],
+                                ['Objetivo de ganancia', 'Sin objetivo obligatorio', '8% para superar challenge'],
+                                ['Tope de ganancias', '400% del valor de compra', '10% del valor de la cuenta'],
+                                ['Retiro de profits', 'Desde el día 3 (mín. 2%)', 'Cada 14 días'],
+                                ['Liquidación total', 'Desde el día 45', 'No aplica (cuenta permanente)']
+                            ].map(row => `
+                                <tr class="hover:bg-white/[0.03] transition-colors">
+                                    <td class="py-6 px-6 text-xs font-bold text-white/80 uppercase">${row[0]}</td>
+                                    <td class="py-6 px-6 text-sm text-purple-300 font-bold italic">${row[1]}</td>
+                                    <td class="py-6 px-6 text-sm text-white/30">${row[2]}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -141,286 +121,363 @@ export function renderLX12TableCompare(content: Record<string, any>, brand: Bran
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── ACCOUNT SIZES ──────────────────────────────────────────
 export function renderLX12Pricing(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'lx12_pricing')!.defaultContent, ...content };
-    const plans = [
-        { balance: '$600', price: '$50' },
-        { balance: '$1.200', price: '$100' },
-        { balance: '$2.400', price: '$200' },
-        { balance: '$3.600', price: '$300' },
-        { balance: '$6.000', price: '$500' },
-        { balance: '$12.000', price: '$1,000' },
-        { balance: '$24.000', price: '$2,000' },
-        { balance: '$36.000', price: '$3,000' },
+    const ctaText = content.ctaPriceText || "Comprar ahora";
+    const ctaLink = brand.ctaLink || "#";
+
+    const sizes = [
+        { b: '$600', p: '$50' },
+        { b: '$1.200', p: '$100' },
+        { b: '$2.400', p: '$200' },
+        { b: '$3.600', p: '$300' },
+        { b: '$6.000', p: '$500' },
+        { b: '$12.000', p: '$1,000' },
+        { b: '$24.000', p: '$2,000' },
+        { b: '$36.000', p: '$3,000' }
     ];
 
     return `
-    <section id="pricing" class="py-32 px-8 bg-[#0a0515] relative">
-        <div class="max-w-7xl mx-auto section-reveal">
-            <div class="text-center mb-24">
-                <h2 class="text-5xl font-black text-white mb-6 uppercase tracking-tighter">ELIGE EL TAMAÑO DE TU CUENTA</h2>
-                <p class="text-xl text-white/40 max-w-2xl mx-auto font-medium">Todos los tamaños incluyen el mismo apalancamiento x12 y el 100% de los beneficios para el trader.</p>
+    <section id="precios" class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-6 uppercase">Elige el tamaño de tu cuenta</h2>
+                <p class="text-white/40 text-lg max-w-2xl mx-auto">Elige el balance de cuenta que mejor se adapte a tu estrategia. Todos los tamaños incluyen el mismo apalancamiento x12 y el 100% de los beneficios.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                ${plans.map(p => `
-                    <div class="p-10 rounded-[2.5rem] border border-white/5 bg-white/[0.02] hover:bg-[#865BFF]/5 hover:border-[#865BFF]/50 transition-all group flex flex-col items-center">
-                        <div class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-4">Account Balance</div>
-                        <div class="text-5xl font-black text-white mb-8 tracking-tighter">${p.balance}</div>
-                        <div class="w-full h-px bg-white/5 mb-8"></div>
-                        <div class="text-center mb-10">
-                            <div class="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Precio Compra</div>
-                            <div class="text-3xl font-black text-emerald-400">${p.price} <span class="text-xs text-white/40">USD</span></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 section-reveal">
+                ${sizes.map(s => `
+                    <div class="group relative p-10 bg-white/[0.02] border border-white/10 rounded-[2.5rem] hover:border-purple-500/50 transition-all hover:translate-y-[-8px]">
+                        <div class="absolute top-6 right-8 text-[10px] font-black text-purple-500 uppercase tracking-widest">x12 Real</div>
+                        <div class="mb-8">
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2">Balance de Cuenta</span>
+                            <div class="text-4xl font-black text-white font-montserrat">${s.b} <span class="text-sm font-light text-white/30">USD</span></div>
                         </div>
-                        <a href="#register" class="w-full py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:bg-[#865BFF] hover:border-[#865BFF] transition-all text-center">
-                            ${c.ctaText}
+                        <div class="mb-10 p-4 bg-white/5 rounded-2xl border border-white/5">
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-1">Precio de Compra</span>
+                            <div class="text-2xl font-black text-purple-400">${s.p} <span class="text-xs font-light text-white/30">USD</span></div>
+                        </div>
+                        <a href="${ctaLink}" class="block w-full py-4 bg-white text-black text-center font-black rounded-xl uppercase tracking-widest text-[10px] hover:bg-purple-600 hover:text-white transition-all">
+                            ${ctaText}
                         </a>
                     </div>
                 `).join('')}
             </div>
             
-            <p class="text-center mt-12 text-white/20 text-[10px] font-bold uppercase tracking-widest">
-                *Los precios pueden variar. Consulta condiciones vigentes en tu portal de cliente.
+            <p class="mt-12 text-center text-[10px] text-white/20 uppercase tracking-[0.2em] font-black">
+                Los precios pueden variar. Consulta condiciones vigentes en tu portal de cliente.
             </p>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── EXAMPLE / CALCULATOR ──────────────────────────────────
 export function renderLX12Example(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-32 px-8 bg-[#05010f] relative overflow-hidden">
-        <div class="max-w-6xl mx-auto section-reveal">
-            <div class="text-center mb-24">
-                <h2 class="text-4xl font-black text-white uppercase tracking-widest">EJEMPLO DE APALANCAMIENTO</h2>
-                <div class="h-1 w-24 bg-[#865BFF] mx-auto mt-6 rounded-full"></div>
+    <section class="py-32 px-8 bg-[#080808] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <span class="text-purple-500 font-black text-xs uppercase tracking-widest mb-4 block">Entiende el poder de tu cuenta</span>
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-6 uppercase">¿Cómo funciona? Ejemplo real</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-12 rounded-[3.5rem] bg-white text-black group text-center shadow-2xl transform hover:-translate-y-2 transition-all">
-                    <span class="material-symbols-outlined text-black text-6xl mb-8">payments</span>
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-2 opacity-50">Tu Depósito</h3>
-                    <div class="text-5xl font-black tracking-tighter mb-4">$200 <span class="text-lg">USD</span></div>
-                    <p class="text-xs font-bold uppercase tracking-widest opacity-40">Capital Real Invertido</p>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 section-reveal">
+                <div class="p-10 bg-white/[0.02] border border-white/5 rounded-[3rem] text-center">
+                    <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                        <span class="material-symbols-outlined text-white text-3xl">payments</span>
+                    </div>
+                    <h4 class="text-sm font-black text-white/40 uppercase mb-2">Tu Depósito</h4>
+                    <div class="text-4xl font-black text-white">$200 <span class="text-xs font-normal">USD</span></div>
+                    <p class="mt-4 text-xs text-white/30 uppercase font-bold tracking-widest">Tu capital inicial real</p>
                 </div>
 
-                <div class="p-12 rounded-[3.5rem] bg-[#865BFF] text-white group text-center shadow-[0_0_60px_rgba(134,91,255,0.4)] relative overflow-hidden transform hover:-translate-y-2 transition-all">
-                    <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <span class="material-symbols-outlined text-white text-6xl mb-8">bolt</span>
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-2 opacity-60">Capital Apalancado</h3>
-                    <div class="text-5xl font-black tracking-tighter mb-4">$2.400 <span class="text-lg">USD</span></div>
-                    <p class="text-xs font-bold uppercase tracking-widest opacity-60">Poder de Operación (X12)</p>
+                <div class="p-10 bg-purple-600/10 border border-purple-500/30 rounded-[3.5rem] text-center transform scale-110 z-10 shadow-2xl">
+                    <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                        <span class="material-symbols-outlined text-purple-400 text-3xl">bolt</span>
+                    </div>
+                    <h4 class="text-sm font-black text-purple-300 uppercase mb-2">Capital Apalancado</h4>
+                    <div class="text-5xl font-black text-white">$2.400 <span class="text-xs font-normal">USD</span></div>
+                    <p class="mt-4 text-xs text-purple-400 uppercase font-black tracking-widest">Apalancamiento x12 activo</p>
                 </div>
 
-                <div class="p-12 rounded-[3.5rem] bg-white/5 border border-white/10 text-white group text-center transform hover:-translate-y-2 transition-all">
-                    <span class="material-symbols-outlined text-red-500 text-6xl mb-8">gpp_maybe</span>
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.4em] mb-2 text-white/40">Límite de Pérdida</h3>
-                    <div class="text-5xl font-black tracking-tighter mb-4">$240 <span class="text-lg text-red-500">USD</span></div>
-                    <p class="text-xs font-bold uppercase tracking-widest text-red-500/50">10% del Capital Apalancado</p>
+                <div class="p-10 bg-white/[0.02] border border-white/5 rounded-[3rem] text-center">
+                    <div class="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                        <span class="material-symbols-outlined text-red-500 text-3xl">warning</span>
+                    </div>
+                    <h4 class="text-sm font-black text-white/40 uppercase mb-2">Límite de Pérdida</h4>
+                    <div class="text-4xl font-black text-red-500">$240 <span class="text-xs font-normal text-white/30">USD</span></div>
+                    <p class="mt-4 text-xs text-white/30 uppercase font-bold tracking-widest">10% sobre el apalancado</p>
                 </div>
             </div>
 
-            <div class="mt-16 p-8 bg-black/40 rounded-3xl border border-white/5 text-center">
-                <p class="text-white/40 text-sm font-medium">
-                    <span class="text-emerald-400 font-bold">Nota de Transparencia:</span> La estructura de cuenta contempla un 20% adicional del broker sobre el depósito inicial para garantizar margen operativo.
+            <div class="mt-20 p-8 bg-white/[0.01] border border-white/5 rounded-3xl text-center max-w-3xl mx-auto section-reveal">
+                <p class="text-white/40 text-sm leading-relaxed italic">
+                    <span class="text-white font-bold not-italic">✅ EJEMPLO OFICIAL:</span> Depósito de 200 USD → Balance apalancado de 2.400 USD (12x). Límite de pérdida: 10% del balance apalancado = 240 USD. <br>
+                    <span class="text-[10px] mt-4 block">Nota: la estructura de cuenta contempla un 20% adicional del broker sobre el depósito inicial.</span>
                 </p>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── RULES AND CONDITIONS ──────────────────────────────────
 export function renderLX12Rules(content: Record<string, any>, brand: BrandConfig): string {
-    const rules = [
-        { q: 'Pérdida de la cuenta (Límite 10%)', a: 'Si alcanzas o superas el 10% de pérdida sobre el valor de la cuenta apalancada, la cuenta queda inhabilitada de forma permanente. Esto aplica tanto para pérdida puntual, acumulada o diaria.' },
-        { q: 'Depósitos adicionales restringidos', a: 'Las cuentas apalancadas son productos cerrados. Una vez activadas, NO admiten nuevos depósitos. Para aumentar capital, se debe adquirir una nueva cuenta.' },
-        { q: 'Prohibición de Software Externo', a: 'Está prohibido el uso de bots (HFT o tradicionales), copy trading o estructuras MAM. Es un producto para trading manual exclusivamente.' },
-        { q: 'Límite de Ganancias (400%)', a: 'El beneficio máximo retirable es del 400% del valor de compra inicial. Una vez alcanzado, la cuenta cumple su ciclo operacional.' },
-        { q: 'Restricción de Scalping Extremo', a: 'No se permiten operaciones con duración menor a 5 minutos. Incumplir esta regla conlleva la cancelación de la cuenta y sus beneficios.' },
-    ];
-
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative">
-        <div class="max-w-4xl mx-auto section-reveal">
-            <div class="text-center mb-24">
-                <h2 class="text-4xl font-black text-white uppercase tracking-widest">CONDICIONES Y REGLAS</h2>
-                <div class="h-1 w-20 bg-red-500/50 mx-auto mt-6 rounded-full"></div>
+    <section class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center gap-6 mb-16 section-reveal">
+                <img src="/images/imagenes%20nuevas/rey%20rosa.png" class="h-24 drop-shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+                <div>
+                    <h2 class="text-4xl font-black font-montserrat text-white uppercase tracking-tight">Condiciones y Reglas</h2>
+                    <p class="text-purple-500 font-bold uppercase tracking-widest text-xs mt-2">Protocolo Institucional de Riesgo</p>
+                </div>
             </div>
 
-            <div class="space-y-6">
-                ${rules.map((r, i) => `
-                    <div class="bg-white/5 border border-white/5 p-10 rounded-3xl group hover:border-[#865BFF]/30 transition-all">
-                        <h4 class="text-xl font-black text-white mb-6 uppercase tracking-tighter flex items-center gap-6">
-                            <span class="text-[#865BFF]">0${i + 1}</span> ${r.q}
-                        </h4>
-                        <p class="text-white/40 font-medium leading-relaxed">${r.a}</p>
+            <div class="space-y-6 section-reveal">
+                <!-- Regla 1.1 -->
+                <div class="rule-item p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="w-8 h-8 bg-red-500/20 text-red-500 rounded-full flex items-center justify-center font-black text-xs">1.1</span>
+                        <h3 class="text-xl font-black text-white uppercase">Pérdida de la cuenta (límite 10%)</h3>
                     </div>
-                `).join('')}
+                    <p class="text-red-500/80 font-bold mb-8 p-4 bg-red-500/5 border border-red-500/20 rounded-xl text-sm uppercase tracking-widest">
+                        ⚠️ REGLA CRÍTICA: Si alcanzas o superas el 10% de pérdida sobre el valor de la cuenta apalancada, la cuenta se da por perdida e INHABILITADA.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-[#050505] rounded-xl border border-white/5">
+                            <span class="text-[10px] font-black text-white/30 uppercase block mb-2">Pérdida puntual</span>
+                            <p class="text-xs text-white/60">Si la pérdida llega al 10% del balance apalancado en cualquier momento.</p>
+                        </div>
+                        <div class="p-4 bg-[#050505] rounded-xl border border-white/5">
+                            <span class="text-[10px] font-black text-white/30 uppercase block mb-2">Pérdida acumulada</span>
+                            <p class="text-xs text-white/60">Si en cualquier momento tu capital baja al 90% del balance inicial.</p>
+                        </div>
+                        <div class="p-4 bg-[#050505] rounded-xl border border-white/5">
+                            <span class="text-[10px] font-black text-white/30 uppercase block mb-2">Pérdida diaria</span>
+                            <p class="text-xs text-white/60">Si pierdes un 10% respecto a la equidad de las 00:00 UTC servidor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Otras Reglas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem]">
+                        <h4 class="text-sm font-black text-white mb-4 uppercase flex items-center gap-3">
+                            <span class="material-symbols-outlined text-purple-500">do_not_disturb_on</span>
+                            Sin depósitos adicionales
+                        </h4>
+                        <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest">Las cuentas son productos CERRADOS. No admiten nuevos depósitos tras su activación.</p>
+                    </div>
+                    <div class="p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem]">
+                        <h4 class="text-sm font-black text-white mb-4 uppercase flex items-center gap-3">
+                            <span class="material-symbols-outlined text-purple-500">front_hand</span>
+                            Trading Manual Únicamente
+                        </h4>
+                        <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest">Prohibido el uso de Bots (HFT), Copy Trading o estructuras MAM/PAMM.</p>
+                    </div>
+                    <div class="p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem]">
+                        <h4 class="text-sm font-black text-white mb-4 uppercase flex items-center gap-3">
+                            <span class="material-symbols-outlined text-purple-500">emoji_events</span>
+                            Límite de Ganancia (400%)
+                        </h4>
+                        <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest">El beneficio máximo por cuenta es del 400% del valor de compra inicial.</p>
+                    </div>
+                    <div class="p-8 bg-white/[0.02] border border-white/10 rounded-[2.5rem]">
+                        <h4 class="text-sm font-black text-white mb-4 uppercase flex items-center gap-3">
+                            <span class="material-symbols-outlined text-purple-500">timer</span>
+                            Restricción Scalping (5m)
+                        </h4>
+                        <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest">No se permiten operaciones menores a 5 minutos. Evita la cancelación por scalping extremo.</p>
+                    </div>
+                </div>
             </div>
+            
+            <p class="mt-16 text-center text-[10px] text-white/20 uppercase tracking-[0.4em] font-black section-reveal">
+                "Propósito de estas reglas: Proteger la integridad del producto y evitar prácticas de alto riesgo."
+            </p>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── WITHDRAWALS ────────────────────────────────────────────
 export function renderLX12Withdrawals(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-32 px-8 bg-[#05010f] relative border-y border-white/5">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center section-reveal">
-            <div>
-                <span class="text-emerald-500 text-[10px] font-black uppercase tracking-[0.8em] mb-10 block">Liquidez de Salida</span>
-                <h2 class="text-5xl font-black text-white mb-10 uppercase tracking-tighter leading-tight">Retiros Rápidos y <br>Sencillos.</h2>
-                <p class="text-xl text-white/50 leading-relaxed font-medium mb-12">
-                    Nadie guarda tu dinero más tiempo del necesario. Disfruta de beneficios reales en periodos cortos de tiempo.
-                </p>
-                <div class="space-y-8">
-                    <div class="flex gap-8 group">
-                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-black font-black text-2xl group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-xl">3</div>
-                        <div>
-                            <h4 class="text-xl font-black text-white mb-2 uppercase tracking-tight">Cosecha de Profits (Día 3)</h4>
-                            <p class="text-white/40 text-sm font-medium">Retira tus ganancias acumuladas con un mínimo del 2% del balance inicial.</p>
+    <section class="py-32 px-8 bg-[#080808] border-y border-white/5 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-20 items-center section-reveal">
+                <div class="flex-1">
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase leading-none">Retiros y Condiciones Operativas</h2>
+                    <p class="text-xl text-white/50 mb-12">Producto directo a liquidez. Tu capital está disponible bajo las siguientes ventanas de tiempo oficial:</p>
+                    
+                    <div class="space-y-6">
+                        <div class="p-8 bg-purple-600/10 border border-purple-500/20 rounded-[2rem] flex items-center gap-8">
+                            <div class="text-4xl font-black text-white font-montserrat italic shrink-0">DÍA 3</div>
+                            <div>
+                                <h4 class="text-sm font-black text-white uppercase mb-1">Retiro de PROFITS (Ganancias)</h4>
+                                <p class="text-xs text-white/40 uppercase tracking-widest">Mínimo el 2% del balance inicial de la cuenta.</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex gap-8 group">
-                        <div class="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white font-black text-2xl group-hover:bg-[#865BFF] transition-all shadow-xl">45</div>
-                        <div>
-                            <h4 class="text-xl font-black text-white mb-2 uppercase tracking-tight">Liquidación Total (Día 45)</h4>
-                            <p class="text-white/40 text-sm font-medium">Retira tu capital inicial + el 100% de beneficios generados y cierra el ciclo.</p>
+                        <div class="p-8 bg-white/[0.02] border border-white/10 rounded-[2rem] flex items-center gap-8">
+                            <div class="text-4xl font-black text-white font-montserrat italic shrink-0">DÍA 45</div>
+                            <div>
+                                <h4 class="text-sm font-black text-white uppercase mb-1">Liquidadción Total</h4>
+                                <p class="text-xs text-white/40 uppercase tracking-widest">Retira el 100% de beneficio + capital inicial.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="p-16 rounded-[4rem] bg-[#865BFF] text-white shadow-[0_0_80px_rgba(134,91,255,0.3)] relative overflow-hidden">
-                <div class="absolute right-[-20%] top-[-20%] w-[400px] h-[400px] bg-white/10 rounded-full blur-[100px]"></div>
-                <h3 class="text-3xl font-black mb-10 uppercase tracking-tightest">BLOQUEO DE SEGURIDAD</h3>
-                <p class="text-lg opacity-80 leading-relaxed mb-10 font-medium italic">
-                    "El 30% del capital de compra queda bloqueado por 60 días al activar la cuenta para garantizar exposición real al mercado y estabilidad operativa."
-                </p>
-                <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest opacity-60">
-                    <span class="material-symbols-outlined">verified</span> Standard Compliance
+
+                <div class="flex-1">
+                    <div class="p-12 bg-white/[0.02] border border-white/10 rounded-[3rem] relative">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 opacity-20">
+                            <img src="/images/imagenes%20nuevas/reloj rosa.png" class="w-full h-full object-contain">
+                        </div>
+                        <h4 class="text-2xl font-black text-white mb-8 uppercase">Seguridad del Sistema</h4>
+                        <div class="flex items-start gap-4 p-6 bg-red-500/5 rounded-2xl border border-red-500/10 mb-6">
+                            <span class="material-symbols-outlined text-red-500">lock</span>
+                            <p class="text-xs text-white/60 uppercase tracking-widest leading-relaxed">
+                                <span class="text-white font-black block mb-2">Bloqueo Inicial</span>
+                                30% del capital bloqueado por 60 días para garantizar la exposición al mercado real.
+                            </p>
+                        </div>
+                        <p class="text-[10px] text-white/30 uppercase tracking-[0.2em] font-medium leading-relaxed">
+                            * Debes haber realizado al menos 1 operación en la cuenta para calificar a liquidación total.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── BENEFITS ───────────────────────────────────────────────
 export function renderLX12Benefits(content: Record<string, any>, brand: BrandConfig): string {
-    const bens = [
-        { icon: 'lock_open', t: 'Sin Challenge', d: 'Empieza en real sin evaluaciones previas.' },
-        { icon: 'trending_up', t: '100% Profits', d: 'Todo el beneficio neto es para ti.' },
-        { icon: 'bolt', t: 'x12 Leverage', d: 'Multiplica tu poder de compra instantáneamente.' },
-        { icon: 'schedule', t: 'Retiro día 3', d: 'Liquidez rápida para tus ganancias.' },
-        { icon: 'rocket', t: 'Velocidad', d: 'Activación de cuenta en menos de 24h.' },
-        { icon: 'public', t: 'CFDs Globales', d: 'Opera Forex, Oro e Índices Mayores.' }
+    const benefits = [
+        { t: 'Sin challenge ni evaluación', d: 'Acceso directo al capital apalancado desde el primer día. No necesitas demostrar nada.' },
+        { t: '100% de los beneficios', d: 'Todo lo que generes es tuyo. Bridge Markets no toma parte de tus ganancias.' },
+        { t: 'Apalancamiento x12 real', d: 'Tu capital se multiplica por 12 desde la activación. Opera mucho más con menos.' },
+        { t: 'Retiro desde el día 3', d: 'Si tienes ganancias (mín. 2%), puedes retirarlas desde el tercer día operativo.' },
+        { t: 'Liquidación al día 45', d: 'Retira capital + ganancias completos a partir del día 45 de actividad.' },
+        { t: 'Mercados de Alta Liquidez', d: 'Opera Forex, índices y commodities con condiciones profesionales de mercado real.' }
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative">
-        <div class="max-w-7xl mx-auto section-reveal text-center">
-            <h2 class="text-5xl font-black text-white mb-24 uppercase tracking-widest">WHY BRIDGE MARKETS?</h2>
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
-                ${bens.map(b => `
-                    <div class="p-10 rounded-[2.5rem] bg-white text-black group hover:shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all flex flex-col items-center">
-                        <span class="material-symbols-outlined text-black text-5xl mb-6 group-hover:scale-125 transition-transform">${b.icon}</span>
-                        <h4 class="text-xl font-black uppercase tracking-tighter mb-4">${b.t}</h4>
-                        <p class="text-xs font-bold opacity-40 uppercase tracking-widest leading-relaxed">${b.d}</p>
+    <section class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-20 uppercase text-center">¿Por qué elegir PRO LEVERAGE X12?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 section-reveal">
+                ${benefits.map(b => `
+                    <div class="p-10 bg-white/[0.02] border border-white/5 rounded-[3rem] hover:bg-white/[0.04] transition-all group">
+                        <div class="w-12 h-12 bg-purple-600/10 rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-purple-500">verified</span>
+                        </div>
+                        <h4 class="text-lg font-black text-white mb-4 uppercase">${b.t}</h4>
+                        <p class="text-sm text-white/40 leading-relaxed">${b.d}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── COMMUNITY ──────────────────────────────────────────────
 export function renderLX12Community(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'lx12_community')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
+    const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
+    const message = content.communityMessage || 'Únete a nuestro ecosistema de traders apalancados.';
+    const telegram = brand.telegram || '#';
+    const whatsapp = brand.whatsapp || '#';
 
     return `
-    <section class="py-32 px-8 bg-[#05010f] relative">
-        <div class="max-w-7xl mx-auto section-reveal">
-            <div class="p-16 lg:p-24 rounded-[5rem] bg-white text-black flex flex-col lg:flex-row items-center gap-20 shadow-4xl relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-tr from-slate-50 to-white"></div>
-                
-                <div class="lg:w-1/2 relative space-y-10">
-                    <div class="inline-flex items-center gap-4 px-6 py-2 bg-black text-white rounded-full">
-                        <span class="text-[9px] font-black uppercase tracking-[0.4em]">Official Community</span>
+    <section id="comunidad" class="py-32 px-8 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-gradient-to-br from-purple-600/10 via-transparent to-slate-900 border border-white/10 rounded-[4rem] p-12 md:p-24 relative overflow-hidden section-reveal">
+                <div class="max-w-3xl relative z-10">
+                    <span class="text-purple-500 font-black text-xs uppercase tracking-[0.4em] mb-8 block">Sección Personalizada</span>
+                    <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-10 uppercase">${ibName}</h2>
+                    <div class="text-white/60 text-lg md:text-xl leading-relaxed mb-12 italic">
+                        ${message}
                     </div>
-                    <h2 class="text-6xl font-black uppercase leading-[0.85] tracking-tightest">PRO <br>${ibName}</h2>
-                    <p class="text-2xl text-gray-500 font-light italic leading-relaxed border-l-8 border-[#865BFF] pl-10 shadow-sm">
-                        "${brand.heroPhrase || c.welcomeMessage}"
-                    </p>
                     
-                    <div class="flex flex-wrap gap-4 pt-6">
-                        ${brand.whatsapp ? `<a href="https://wa.me/${brand.whatsapp}" class="p-4 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-lg"><span class="material-symbols-outlined text-4xl">chat</span></a>` : ''}
-                        ${brand.telegram ? `<a href="${brand.telegram}" class="px-10 py-4 bg-[#865BFF] text-white font-black rounded-2xl flex items-center justify-center shadow-lg text-sm uppercase tracking-widest">Join Telegram</a>` : ''}
+                    <div class="flex flex-wrap gap-4">
+                        <a href="${telegram}" class="px-10 py-5 bg-[#24A1DE] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">Telegram</a>
+                        <a href="${whatsapp}" class="px-10 py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">WhatsApp</a>
                     </div>
                 </div>
-
-                <div class="lg:w-1/2 relative">
-                    <div class="aspect-video bg-[#05010f] rounded-[3rem] overflow-hidden shadow-4xl group-hover:scale-105 transition-transform duration-700 relative">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#865BFF]/30 via-transparent to-transparent"></div>
-                        <div class="w-full h-full flex items-center justify-center">
-                            <span class="material-symbols-outlined text-white text-[120px] opacity-10">groups</span>
-                        </div>
-                    </div>
-                    <div class="absolute -bottom-6 -left-6 p-8 bg-[#865BFF] text-white rounded-3xl shadow-2xl">
-                        <div class="text-3xl font-black">X12</div>
-                        <div class="text-[9px] font-black uppercase tracking-widest opacity-60">Verified Support</div>
-                    </div>
+                
+                <div class="absolute -bottom-20 -right-20 w-1/2 h-1/2 opacity-10 pointer-events-none">
+                    <img src="/images/imagenes%20nuevas/caballo rosa.png" class="w-full h-full object-contain transform -rotate-12">
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FAQ ────────────────────────────────────────────────────
 export function renderLX12Faq(content: Record<string, any>, brand: BrandConfig): string {
     const faqs = [
-        { q: '¿Necesito pasar un challenge?', a: 'No. La Cuenta PRO LEVERAGE X12 es de acceso directo. Una vez comprada y activada, empiezas a operar sin ninguna evaluación previa.' },
-        { q: '¿Cuánto capital voy a tener disponible?', a: 'Tu depósito se multiplica x12. Ejemplo: compras una cuenta de $1.200 por tan solo $100 y operas con ese balance apalancado total.' },
+        { q: '¿Necesito pasar un challenge para esta cuenta?', a: 'No. La Cuenta PRO LEVERAGE X12 es de acceso directo. Una vez comprada y activada, empiezas a operar sin ninguna evaluación previa.' },
+        { q: '¿Cuánto capital voy a tener disponible?', a: 'Tu depósito se multiplica x12. Ejemplo: depositas $200 y operas con $2.400 de balance apalancado.' },
         { q: '¿Puedo depositar más dinero después?', a: 'No. Las cuentas apalancadas son productos cerrados. Una vez activadas, no admiten depósitos adicionales.' },
         { q: '¿Cuándo puedo retirar mis ganancias?', a: 'A partir del día 3 puedes retirar profits con un mínimo del 2% del balance inicial.' },
+        { q: '¿Puedo retirar mi capital también?', a: 'Sí, a partir del día 45 puedes liquidar la cuenta completa y retirar el 100% de beneficios + capital.' },
         { q: '¿Cuál es el máximo que puedo ganar?', a: 'El tope es el 400% del valor de compra inicial. Ejemplo: compras por $1.000 → puedes ganar hasta $4.000 de utilidad.' },
+        { q: '¿Puedo usar un robot o EA?', a: 'No. Esta cuenta es solo para trading manual. Bots, copy trading y estructuras MAM/PAMM están prohibidos.' },
+        { q: '¿Qué pasa si pierdo el 10%?', a: 'La cuenta queda inhabilitada. Se aplica el límite de pérdida del 10% sobre el balance apalancado total.' },
+        { q: '¿Qué mercados puedo operar?', a: 'CFDs: Forex, índices y commodities disponibles en la plataforma MetaTrader 5 de Bridge Markets.' }
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative">
-        <div class="max-w-4xl mx-auto section-reveal text-center">
-            <h2 class="text-4xl font-black text-white mb-24 uppercase tracking-widest">FREQUENTLY ASKED</h2>
-            <div class="space-y-6">
-                ${faqs.map(f => `
-                    <div class="bg-white/5 p-12 rounded-[2.5rem] text-left hover:bg-white/10/[0.08] transition-all cursor-pointer group">
-                        <h4 class="text-xl font-black text-white mb-6 uppercase tracking-tighter group-hover:text-[#865BFF] transition-colors">${f.q}</h4>
-                        <p class="text-white/40 leading-relaxed font-medium">${f.a}</p>
+    <section class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-4xl mx-auto section-reveal">
+            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-16 text-center uppercase">Preguntas Frecuentes</h2>
+            <div class="space-y-4">
+                ${faqs.map(faq => `
+                    <div class="p-6 bg-white/[0.02] border border-white/5 rounded-3xl hover:border-purple-500/30 transition-all group">
+                        <h4 class="text-white font-bold mb-3 italic group-hover:text-purple-400 transition-colors">${faq.q}</h4>
+                        <p class="text-white/40 text-sm leading-relaxed">${faq.a}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FINAL CTA ──────────────────────────────────────────────
 export function renderLX12FinalCTA(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'lx12_final_cta')!.defaultContent, ...content };
-    const ctaLink = brand.ctaLink || '#register';
+    const ctaLink = brand.ctaLink || "#";
+
     return `
-    <section class="py-48 px-8 bg-[#865BFF] relative overflow-hidden text-center">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
-        <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-white/10 rounded-full blur-[120px]"></div>
-        
-        <div class="max-w-7xl mx-auto relative z-10 section-reveal">
-            <h2 class="text-7xl md:text-[10rem] font-black text-white uppercase tracking-tightest leading-[0.8] mb-16 drop-shadow-4xl">GO PRO <br>X12 NOW</h2>
-            <p class="text-2xl text-white/60 mb-20 font-light italic max-w-4xl mx-auto leading-relaxed">
-                "Las Cuentas Apalancadas x12 son una herramienta potente de alto rendimiento que exige disciplina en la gestión del riesgo, cumplimiento estricto y control emocional."
+    <section class="py-40 px-8 bg-gradient-to-t from-purple-900/20 to-[#050505] relative overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
+            <p class="text-purple-400 font-bold uppercase tracking-[0.4em] mb-12 text-sm max-w-2xl mx-auto leading-relaxed">
+                'Las Cuentas Apalancadas x12 son una herramienta potente de alto rendimiento que exige disciplina en la gestión del riesgo, cumplimiento estricto y control emocional.'
             </p>
+            <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-12 uppercase leading-none tracking-tighter">¿Listo para operar con capital real?</h2>
             
-            <a href="${ctaLink}" class="px-24 py-10 bg-white text-[#140633] font-black rounded-[3rem] hover:scale-110 shadow-3xl transition-all uppercase text-2xl tracking-tighter inline-block">
-                ${c.ctaText}
+            <a href="${ctaLink}" class="inline-block px-16 py-8 bg-white text-black font-black rounded-2xl hover:bg-purple-600 hover:text-white transition-all text-sm uppercase tracking-widest hover:scale-105 active:scale-95 shadow-2xl">
+                Activar mi cuenta X12 →
             </a>
             
-            <div class="mt-24 p-12 border border-white/20 bg-black/10 rounded-[3rem] backdrop-blur-3xl text-center">
-                <p class="text-[10px] font-black text-white/40 uppercase tracking-[0.6em] leading-loose">
-                    Advertencia de Riesgo: El trading con apalancamiento implica alto riesgo. Puedes perder parte o todo tu capital. Bridge Markets LTD.
-                </p>
-            </div>
+            <p class="mt-20 text-[10px] text-white/20 uppercase tracking-[0.2em] font-black max-w-xl mx-auto leading-relaxed">
+                'El trading con apalancamiento implica alto riesgo. Puedes perder parte o todo tu capital. Opera con responsabilidad.'
+            </p>
         </div>
-    </section>`;
+        
+        <div class="absolute -bottom-20 left-1/2 -translate-x-1/2 w-full h-full opacity-10 pointer-events-none">
+            <img src="/images/imagenes%20nuevas/peones rosa.png" class="w-full h-full object-contain object-bottom">
+        </div>
+    </section>
+    `;
 }

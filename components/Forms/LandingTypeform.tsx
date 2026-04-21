@@ -7,7 +7,7 @@ import {
     Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
     Pencil, Eye, X, Download, ToggleLeft, ToggleRight,
     Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play,
-    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone, Clock, Bell, AlertCircle
+    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone, Monitor, Clock, Bell, AlertCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
@@ -311,31 +311,47 @@ function SectionPicker({
 }
 
 // ─── Live Preview Component ───────────────────────────────
-function PhoneMockup({ html }: { html: string }) {
+function DevicePreview({ html, mode }: { html: string; mode: 'mobile' | 'desktop' }) {
     const { t } = useLanguage();
+    
+    if (mode === 'desktop') {
+        return (
+            <div className="sticky top-10 w-full">
+                <div className="relative w-full aspect-video bg-[#000] rounded-3xl border-[12px] border-slate-800 shadow-2xl overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-8 bg-slate-800 flex items-center px-4 gap-2 z-30">
+                        <div className="w-2 h-2 rounded-full bg-red-500/50" />
+                        <div className="w-2 h-2 rounded-full bg-amber-500/50" />
+                        <div className="w-2 h-2 rounded-full bg-emerald-500/50" />
+                    </div>
+                    <div className="absolute inset-0 pt-8 bg-[#000]">
+                        <ModularPreview html={html} theme="dark" />
+                    </div>
+                </div>
+                <div className="mt-4 text-center">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                        Desktop Institutional Hub
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="sticky top-10 w-full max-w-[320px] mx-auto">
-            <div className="relative w-full aspect-[9/18.5] bg-[#0d0221] rounded-[40px] border-[8px] border-[#1a0545] shadow-2xl overflow-hidden group">
-                {/* Speaker/Camera notch */}
+            <div className="relative w-full aspect-[9/18.5] bg-[#000000] rounded-[40px] border-[8px] border-[#1a0545] shadow-2xl overflow-hidden group">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#1a0545] rounded-b-2xl z-30 flex items-center justify-center">
                     <div className="w-10 h-1 bg-white/10 rounded-full" />
                 </div>
                 
-                <div className="absolute inset-0 z-10 bg-[#0d0221]">
+                <div className="absolute inset-0 z-10 bg-[#000000]">
                     <ModularPreview 
                         html={html} 
-                        style={{ 
-                            width: '100%', 
-                            height: '100%',
-                            border: 'none'
-                        }} 
+                        style={{ width: '100%', height: '100%', border: 'none' }} 
                     />
                 </div>
 
-                {/* Glass overlay/reflection */}
                 <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-tr from-white/5 to-transparent opacity-30" />
-                
-                {/* Bottom Bar */}
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-white/20 rounded-full z-30" />
             </div>
             <div className="mt-4 text-center">
@@ -377,6 +393,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     const [instagram, setInstagram] = useState('');
     const [telegram, setTelegram] = useState('');
     const [tiktok, setTiktok] = useState('');
+    const [youtube, setYoutube] = useState('');
     const [ctaLink, setCtaLink] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
     const [customLogoUrl, setCustomLogoUrl] = useState('');
@@ -428,6 +445,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     const [finalSlug, setFinalSlug] = useState('');
     const [copied, setCopied] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile');
 
     // Load user
     useEffect(() => {
@@ -480,6 +498,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             setInstagram(editData.config?.instagram || '');
             setTelegram(editData.config?.telegram || '');
             setTiktok(editData.config?.tiktok || '');
+            setYoutube(editData.config?.youtube || '');
             setCtaLink(editData.config?.ctaLink || '');
             setVideoUrl(editData.config?.videoUrl || '');
             setCustomLogoUrl(editData.config?.customLogoUrl || '');
@@ -554,6 +573,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             instagram,
             telegram,
             tiktok,
+            youtube,
             ctaLink,
             videoUrl,
             customLogoUrl,
@@ -658,19 +678,20 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             instagram,
             telegram,
             tiktok,
+            youtube,
             ctaLink,
             videoUrl,
             customLogoUrl,
             modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
         };
         return generateModularLandingHTML(data, true); // bodyOnly = true
-    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, ctaLink, videoUrl, customLogoUrl]);
+    }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, youtube, ctaLink, videoUrl, customLogoUrl]);
 
     // Debounce the HTML update to the iframe to prevent lag
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedHtml(livePreviewHtml);
-        }, 800); // Increased debounce to 800ms for stability
+        }, 100); // Minimal debounce, ModularPreview handles the rest
         return () => clearTimeout(handler);
     }, [livePreviewHtml]);
 
@@ -690,6 +711,24 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                     <p className="text-xs text-slate-400 mt-1">{t.landing.subtitle}</p>
                 </div>
                 <div className="flex items-center gap-2">
+                    {/* Device Toggle */}
+                    <div className="flex items-center bg-slate-100 rounded-xl p-1 mr-4">
+                        <button 
+                            onClick={() => setPreviewMode('mobile')}
+                            title="Mobile Preview"
+                            className={`p-2 rounded-lg transition-all ${previewMode === 'mobile' ? 'bg-white text-[#865BFF] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                        >
+                            <Smartphone className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => setPreviewMode('desktop')}
+                            title="Desktop Preview"
+                            className={`p-2 rounded-lg transition-all ${previewMode === 'desktop' ? 'bg-white text-[#865BFF] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                        >
+                            <Monitor className="w-4 h-4" />
+                        </button>
+                    </div>
+
                     {/* Landing Language Badge — always visible */}
                     <div className="flex items-center gap-1.5">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.landing.landingLang}:</span>
@@ -927,6 +966,21 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                                             type="text" value={tiktok}
                                             onChange={(e) => setTiktok(e.target.value)}
                                             placeholder="@tiktok"
+                                            className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
+                                        />
+                                    </div>
+                                    {/* YouTube */}
+                                    <div className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 group focus-within:border-red-200 transition-all">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center">
+                                                <div className="w-3.5 h-3.5 bg-red-600 rounded-[2px]" />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 uppercase">YouTube</span>
+                                        </div>
+                                        <input
+                                            type="text" value={youtube}
+                                            onChange={(e) => setYoutube(e.target.value)}
+                                            placeholder="Canal o Video"
                                             className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none"
                                         />
                                     </div>
@@ -1412,41 +1466,51 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
         </div>
 
         {/* ─── RIGHT COLUMN: STUDIO PREVIEW (40%) ─── */}
-        <div className="hidden lg:block lg:w-[400px] shrink-0 sticky top-10">
-            <div className="bg-slate-50/50 rounded-[3rem] p-8 border border-slate-200/50 backdrop-blur-sm">
+        <div className={`hidden lg:block shrink-0 sticky top-10 transition-all duration-500 ${previewMode === 'desktop' ? 'w-full max-w-[1200px] absolute left-0 right-0 top-32 z-50 px-8' : 'lg:w-[400px]'}`}>
+            <div className="bg-slate-50/50 rounded-[3rem] p-8 border border-slate-200/50 backdrop-blur-sm shadow-2xl">
                 <div className="flex items-center justify-between mb-8 px-4">
                     <div className="flex items-center gap-2">
-                        <Smartphone className="w-5 h-5 text-slate-400" />
+                        {previewMode === 'mobile' ? <Smartphone className="w-5 h-5 text-slate-400" /> : <Monitor className="w-5 h-5 text-slate-400" />}
                         <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{t.landing.studioPreview}</span>
                     </div>
+                    {previewMode === 'desktop' && (
+                        <button 
+                            onClick={() => setPreviewMode('mobile')}
+                            className="text-[10px] font-black text-[#865BFF] bg-[#865BFF]/10 px-4 py-1.5 rounded-full hover:bg-[#865BFF] hover:text-white transition-all"
+                        >
+                            CERRAR VISTA DESKTOP
+                        </button>
+                    )}
                     <div className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <span className="text-[10px] font-bold text-emerald-600 uppercase">Live</span>
                     </div>
                 </div>
                 
-                <PhoneMockup html={debouncedHtml} />
+                <DevicePreview html={debouncedHtml} mode={previewMode} />
                 
-                <div className="mt-8 space-y-4">
-                    <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">{t.landing.designStatus}</p>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-slate-700">{t.landing.totalProgress}</span>
-                            <span className="text-sm font-black text-[#865BFF]">{Math.round((step / 4) * 100)}%</span>
+                {previewMode === 'mobile' && (
+                    <div className="mt-8 space-y-4">
+                        <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                            <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">{t.landing.designStatus}</p>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm font-bold text-slate-700">{t.landing.totalProgress}</span>
+                                <span className="text-sm font-black text-[#865BFF]">{Math.round((step / 4) * 100)}%</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-slate-100 rounded-full mt-3 overflow-hidden">
+                                <motion.div 
+                                    className="h-full bg-[#865BFF]" 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${(step / 4) * 100}%` }}
+                                />
+                            </div>
                         </div>
-                        <div className="w-full h-1.5 bg-slate-100 rounded-full mt-3 overflow-hidden">
-                            <motion.div 
-                                className="h-full bg-[#865BFF]" 
-                                initial={{ width: 0 }}
-                                animate={{ width: `${(step / 4) * 100}%` }}
-                            />
-                        </div>
+                        
+                        <p className="text-[10px] text-center text-slate-400 px-4">
+                            {t.landing.autoSaveNote}
+                        </p>
                     </div>
-                    
-                    <p className="text-[10px] text-center text-slate-400 px-4">
-                        {t.landing.autoSaveNote}
-                    </p>
-                </div>
+                )}
             </div>
         </div>
 

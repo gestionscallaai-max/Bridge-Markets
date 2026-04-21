@@ -1,621 +1,566 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
+// ─── INSTITUTIONAL HERO (REFACTORED: ASYMMETRIC & BOLD) ─────
 export function renderInstHero(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'inst_hero')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
-    const ctaLink = brand.ctaLink || '#registro';
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibPhrase = brand.heroPhrase || "";
+    const ctaMainText = content.ctaMainText || "Abrir mi cuenta";
+    const ctaMainLink = brand.ctaLink || "#";
 
     return `
-    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-32 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Fondo Arquitectónico -->
-        <div class="absolute inset-0 z-0">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full text-[25vw] font-black text-white/[0.02] uppercase tracking-tighter leading-none select-none pointer-events-none flex items-center justify-center overflow-hidden">
-                INSTITUTIONAL
-            </div>
-            <div class="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-[#865BFF]/10 rounded-full blur-[150px]"></div>
-            <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px]"></div>
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#020202]">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-slate-800/20 blur-[120px] rounded-full"></div>
+        
+        <!-- Large Background Text (Decorative) -->
+        <div class="absolute top-1/2 left-0 -translate-y-1/2 text-[20vw] font-black text-white/[0.02] uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter">
+            BRIDGE MARKETS
         </div>
 
-        <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-0">
-                
-                <!-- Columna de Contenido Principal -->
-                <div class="lg:w-7/12 section-reveal z-20">
-                    <div class="inline-flex items-center gap-6 px-6 py-3 bg-white/5 border border-white/10 rounded-full mb-16 backdrop-blur-xl">
-                        <div class="w-2 h-2 rounded-full bg-[#865BFF] animate-ping"></div>
-                        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Official Institutional Partner — ${ibName}</span>
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-8 section-reveal">
+                    <div class="inline-block px-4 py-1.5 bg-indigo-600/10 border border-indigo-500/30 rounded-full mb-8">
+                        <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em]">Ecosistema Institucional Global</span>
                     </div>
-
-                    <h1 class="text-6xl md:text-8xl lg:text-[9rem] font-black leading-[0.85] mb-12 tracking-tightest text-white uppercase mix-blend-difference">
-                        ${c.title.split(' ').slice(0, 2).join(' ')} <br>
-                        <span class="relative inline-block">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#865BFF] to-white">${c.title.split(' ').slice(2).join(' ')}</span>
-                            <div class="absolute -bottom-4 left-0 w-full h-2 bg-[#865BFF]/30 blur-sm rounded-full"></div>
-                        </span>
+                    
+                    <h1 class="text-6xl md:text-[120px] font-black font-montserrat text-white leading-[0.9] uppercase tracking-tighter mb-10">
+                        Tu mundo <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-indigo-600 italic">Financiero</span><br>
+                        Completo.
                     </h1>
-                    <div class="max-w-xl">
-                        <p class="text-2xl md:text-3xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight border-l-2 border-[#865BFF] pl-10">
-                            ${c.phrase}
-                        </p>
-                        
-                        <div class="flex flex-wrap gap-12 items-center">
-                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden transform hover:-translate-y-2 transition-all duration-500 shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-[0_0_80px_rgba(134,91,255,0.4)]">
-                                <div class="absolute inset-0 bg-[#865BFF] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                                <span class="relative z-10 uppercase tracking-[0.5em] text-sm group-hover:text-white">${c.ctaText}</span>
-                            </a>
-                            
-                            ${c.videoUrl ? `
-                            <button onclick="openVideoModal('${c.videoUrl}')" class="group flex items-center gap-6">
-                                <div class="w-20 h-20 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#865BFF] group-hover:scale-110 transition-all duration-500 relative overflow-hidden">
-                                    <div class="absolute inset-0 bg-[#865BFF] opacity-0 group-hover:opacity-10 transition-opacity"></div>
-                                    <span class="material-symbols-outlined text-3xl text-white group-hover:text-[#865BFF]">play_arrow</span>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] mb-1">Corporate Reveal</span>
-                                    <span class="text-[11px] font-black text-white uppercase tracking-widest group-hover:text-[#865BFF] transition-colors">WATCH VIDEO</span>
-                                </div>
-                            </button>
-                            ` : ''}
-                        </div>
-                    </div>
+                    
+                    <p class="text-xl md:text-3xl text-white/40 font-light mb-12 max-w-2xl leading-tight">
+                        Desde Forex y CFDs hasta índices sintéticos exclusivos. Todo lo que necesitas. <span class="text-white">Un solo broker.</span>
+                    </p>
 
-                <!-- Composición Visual Asimétrica -->
-                <div class="lg:w-5/12 relative section-reveal">
-                    <div class="relative w-full aspect-square lg:aspect-auto lg:h-[800px] flex items-center justify-center">
-                        
-                        <!-- Main 3D Asset -->
-                        <div class="relative z-10 w-full h-full flex items-center justify-center transform lg:-translate-x-20">
-                            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Premium 3D" class="w-full h-full object-contain filter drop-shadow-[0_0_50px_rgba(134,91,255,0.3)] animate-float">
-                        </div>
-
-                        <!-- Floating Tech Card -->
-                        <div class="absolute top-1/4 -right-10 lg:right-0 z-20 p-8 bg-[#05010f]/80 backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-700 max-w-[280px]">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-[#865BFF]/20 flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-[#865BFF] text-xl">account_balance</span>
-                                </div>
-                                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest leading-none">Security Protocol</span>
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <a href="${ctaMainLink}" class="group relative px-12 py-6 bg-white text-black font-black rounded-full overflow-hidden transition-all hover:pr-16 active:scale-95 shadow-2xl">
+                            <span class="relative z-10 uppercase tracking-widest text-xs">${ctaMainText}</span>
+                            <span class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all material-symbols-outlined">arrow_forward</span>
+                        </a>
+                        <div class="flex items-center gap-6">
+                            <div class="flex -space-x-3">
+                                <div class="w-10 h-10 rounded-full border-2 border-[#020202] bg-slate-800 flex items-center justify-center"><span class="text-[10px] text-white">UK</span></div>
+                                <div class="w-10 h-10 rounded-full border-2 border-[#020202] bg-slate-700 flex items-center justify-center"><span class="text-[10px] text-white">EU</span></div>
+                                <div class="w-10 h-10 rounded-full border-2 border-[#020202] bg-slate-600 flex items-center justify-center"><span class="material-symbols-outlined text-xs text-white">public</span></div>
                             </div>
-                            <p class="text-sm text-white font-medium leading-relaxed mb-4">Institutional Liquidity aggregated through Tier-1 prime brokers.</p>
-                            <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                                <div class="h-full w-[85%] bg-[#865BFF] rounded-full shadow-[0_0_10px_rgba(134,91,255,0.5)]"></div>
-                            </div>
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest">Presencia Global Regulada</span>
                         </div>
-
-                        <!-- Floating Performance Card -->
-                        <div class="absolute bottom-1/4 -left-10 lg:-left-20 z-0 p-8 bg-white/5 backdrop-blur-md border border-white/10 rounded-[3rem] shadow-2xl transform -rotate-6 hover:rotate-0 transition-all duration-700 min-w-[240px]">
-                            <div class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-4 text-center">Server Latency</div>
-                            <div class="text-4xl font-black text-white text-center mb-2 tracking-tighter">0.02ms</div>
-                            <div class="flex justify-center">
-                                <div class="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black rounded-full uppercase tracking-widest">Optimized</div>
-                            </div>
-                        </div>
-
-                        <!-- Background Elements -->
-                        <div class="absolute inset-0 bg-gradient-to-tr from-[#865BFF]/20 via-transparent to-transparent rounded-full blur-3xl opacity-30"></div>
                     </div>
                 </div>
 
+                <div class="lg:col-span-4 relative section-reveal delay-200">
+                    <div class="relative z-10 p-8 bg-white/[0.02] border border-white/10 rounded-[3rem] backdrop-blur-xl transform rotate-3 hover:rotate-0 transition-all duration-700">
+                        <div class="flex justify-between items-start mb-12">
+                            <img src="/images/logo-bm-blanco.png" class="h-6">
+                            <div class="w-3 h-3 bg-indigo-500 rounded-full animate-ping"></div>
+                        </div>
+                        <div class="space-y-8">
+                            <div>
+                                <div class="text-[10px] text-white/30 uppercase tracking-widest mb-2 font-black italic">Presentado por</div>
+                                <div class="text-2xl font-black text-white uppercase tracking-tighter">${ibName}</div>
+                            </div>
+                            <p class="text-sm text-white/50 italic leading-relaxed font-light">"${ibPhrase || 'Bienvenidos al estándar institucional de Bridge Markets.'}"</p>
+                        </div>
+                    </div>
+                    <!-- Decorative shapes -->
+                    <div class="absolute -top-10 -left-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
+                    <div class="absolute -bottom-10 -right-10 w-24 h-24 border border-white/10 rounded-full"></div>
+                </div>
             </div>
         </div>
-
-        <style>
-            @keyframes float {
-                0%, 100% { transform: translateY(0) rotate(0); }
-                50% { transform: translateY(-30px) rotate(2deg); }
-            }
-            .animate-float {
-                animation: float 8s ease-in-out infinite;
-            }
-        </style>
     </section>
     `;
 }
 
+// ─── WHO WE ARE (REFACTORED: MODERN INFO-GRID) ──────────────
 export function renderInstAbout(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-64 bg-[#05010f] relative overflow-hidden">
-        <!-- Fondo Arquitectónico -->
-        <div class="absolute inset-0 z-0 opacity-30">
-            <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-900/50"></div>
-            <img src="/images/imagenes%20nuevas/caballo%20negro.png" class="absolute top-1/2 left-0 -translate-y-1/2 w-[60%] h-auto object-contain opacity-5 grayscale pointer-events-none" alt="Background">
-        </div>
-
-        <div class="max-w-7xl mx-auto px-8 relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-24 lg:gap-40">
-                <div class="lg:w-6/12 section-reveal">
-                    <div class="flex items-center gap-4 mb-12">
-                        <div class="w-12 h-[1px] bg-[#865BFF]"></div>
-                        <span class="text-[#865BFF] text-[10px] font-black uppercase tracking-[0.8em]">Core Identity</span>
-                    </div>
-                    
-                    <h2 class="text-7xl md:text-[8rem] font-black text-white leading-[0.85] mb-16 uppercase tracking-tightest italic">
-                        REDEFINING <br><span class="text-white/20">THE STANDARD.</span>
-                    </h2>
-                    
-                    <div class="space-y-12 text-2xl text-white/50 font-light leading-relaxed max-w-xl">
-                        <p class="first-letter:text-6xl first-letter:font-black first-letter:text-[#865BFF] first-letter:mr-3 first-letter:float-left">
-                            Bridge Markets es una arquitectura financiera global. Operamos con tecnología de nivel institucional, conectando el talento real con infraestructuras de capital sólidas en los mercados más dinámicos del mundo.
-                        </p>
-                        <div class="p-10 border-l-4 border-[#865BFF] bg-white/[0.02] backdrop-blur-xl">
-                             <p class="text-white font-medium italic text-xl leading-relaxed">"La disciplina es el único algoritmo que garantiza la consistencia en los mercados financieros."</p>
-                        </div>
+    <section class="py-40 px-8 bg-[#020202] relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-20 mb-32 section-reveal">
+                <div class="lg:w-1/3">
+                    <div class="sticky top-32">
+                        <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Trayectoria</span>
+                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-8 tracking-tighter">¿Quiénes somos?</h2>
+                        <div class="w-20 h-1 bg-indigo-600"></div>
                     </div>
                 </div>
+                <div class="lg:w-2/3 space-y-12">
+                    <p class="text-2xl md:text-4xl text-white font-light leading-tight">Bridge Markets es un broker internacional con tecnología de <span class="text-indigo-400 font-bold">nivel institucional</span>, operando desde el Reino Unido y las Islas Marshall.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-white/50 leading-relaxed">
+                        <p>Nuestra misión es conectar traders disciplinados con oportunidades reales de capital, ofreciendo un ecosistema completo que incluye trading personal, gestión de capital y programas de PropTrading de alto nivel.</p>
+                        <p>Creemos que el verdadero talento en los mercados no se mide por la suerte, sino por la disciplina, la consistencia y la gestión profesional del riesgo. Ofrecemos las herramientas para que ese talento florezca.</p>
+                    </div>
+                </div>
+            </div>
 
-                <div class="lg:w-6/12 grid grid-cols-2 gap-10 section-reveal">
-                     ${[
-                         { val: '2021', label: 'Foundation' },
-                         { val: '9+', label: 'Languages' },
-                         { val: '4', label: 'Global Markets' },
-                         { val: '24/7', label: 'Expert Support' }
-                     ].map((stat, i) => `
-                        <div class="p-12 bg-white/[0.02] border border-white/5 rounded-none text-center hover:bg-[#865BFF] hover:text-white transition-all duration-700 group relative overflow-hidden ${i % 2 !== 0 ? 'lg:translate-y-20' : ''}">
-                            <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                            <div class="relative z-10">
-                                <div class="text-6xl font-black mb-4 tracking-tighter">${stat.val}</div>
-                                <div class="text-[9px] font-black uppercase tracking-[0.4em] opacity-40 group-hover:opacity-100">${stat.label}</div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 section-reveal">
+                ${[
+                    { v: '2021', t: 'Fundación', i: 'history_edu' },
+                    { v: '9+', t: 'Idiomas', i: 'translate' },
+                    { v: '4', t: 'Mercados', i: 'public' },
+                    { v: '24/7', t: 'Soporte', i: 'support_agent' }
+                ].map(s => `
+                    <div class="group p-10 bg-white/[0.01] border border-white/5 rounded-[3rem] transition-all hover:bg-white/[0.03]">
+                        <span class="material-symbols-outlined text-indigo-500/50 mb-8 block group-hover:scale-110 transition-transform">${s.i}</span>
+                        <div class="text-5xl font-black text-white mb-2 font-montserrat">${s.v}</div>
+                        <div class="text-[10px] text-white/30 uppercase tracking-[0.2em] font-black">${s.t}</div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <!-- Entities Detail (Sleek Overlay) -->
+            <div class="mt-20 p-12 bg-gradient-to-r from-white/[0.02] to-transparent border-l border-white/10 rounded-r-[3rem] section-reveal">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h4 class="text-xs font-black text-white uppercase tracking-widest mb-8">Estructura Corporativa</h4>
+                        <div class="space-y-8">
+                            <div>
+                                <div class="text-[10px] text-indigo-500 font-black uppercase mb-2">United Kingdom</div>
+                                <p class="text-xs text-white/40 leading-relaxed font-medium uppercase tracking-wider">Bridge Markets Limited — Reg. 15159310 <br> Owen Avenue, Hessle, Yorkshire, UK.</p>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-indigo-500 font-black uppercase mb-2">Marshall Islands</div>
+                                <p class="text-xs text-white/40 leading-relaxed font-medium uppercase tracking-wider">Bridge Markets Ltd. — Reg. 113891 <br> Estructura internacional de holding global.</p>
                             </div>
                         </div>
-                     `).join('')}
-                </div>
-            </div>
-
-            <!-- Legals Card -->
-            <div class="mt-40 grid grid-cols-1 lg:grid-cols-12 gap-10 section-reveal">
-                <div class="lg:col-span-4 p-12 bg-[#865BFF] text-white flex flex-col justify-between">
-                    <h3 class="text-4xl font-black uppercase tracking-tightest leading-none mb-10 italic">LEGAL <br>FRAMEWORK</h3>
-                    <span class="material-symbols-outlined text-6xl opacity-30">gavel</span>
-                </div>
-                <div class="lg:col-span-8 p-12 bg-white/5 border border-white/10 backdrop-blur-3xl grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <h4 class="text-white font-black text-[11px] uppercase tracking-widest mb-4 opacity-40">United Kingdom</h4>
-                        <p class="text-white font-bold mb-2">Bridge Markets Limited</p>
-                        <p class="text-[10px] text-white/30 uppercase tracking-widest leading-relaxed">Registration 15159310. Yorkshire, United Kingdom.</p>
                     </div>
-                    <div>
-                        <h4 class="text-white font-black text-[11px] uppercase tracking-widest mb-4 opacity-40">Marshall Islands</h4>
-                        <p class="text-white font-bold mb-2">Bridge Markets Ltd.</p>
-                        <p class="text-[10px] text-white/30 uppercase tracking-widest leading-relaxed">Registration 113891. Business Trust structure.</p>
+                    <div class="flex justify-center opacity-20 grayscale">
+                        <img src="/images/logo-bm-blanco.png" class="h-16">
                     </div>
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── WHY CHOOSE US (REFACTORED: VISUAL IMPACT) ──────────────
 export function renderInstWhy(content: Record<string, any>, brand: BrandConfig): string {
     const reasons = [
-        { t: 'Ecosistema Financiero Completo', d: 'PropTrading, sintéticos, cuentas apalancadas, MAM y Copy Trading en un solo lugar.' },
-        { t: 'Todos los Sintéticos', d: 'Deriv + Weltrade + índices propios BM. Más de 100 instrumentos 24/7.' },
-        { t: 'Tecnología Institucional', d: 'Servidores MT5 ultra rápidos con spreads competitivos desde 0.0 pips.' },
-        { t: 'PropFirm Propio', d: 'Accede a capital financiado real: OBSIDIAN, BASALT, ELITE y ULTRA.' },
-        { t: 'Cuentas para cada Perfil', d: 'Desde traders independientes hasta gestores institucionales de alto nivel.' },
-        { t: 'Red Global de IBs', d: 'Presencia en México, Nigeria, Filipinas, India y expansión continua.' }
+        { t: 'Ecosistema Completo', d: 'PropTrading, sintéticos, cuentas apalancadas, MAM y Copy Trading en un solo lugar.' },
+        { t: 'Todos los Sintéticos', d: 'Deriv + Weltrade + Índices Propios en una sola cuenta MT5 24/7.' },
+        { t: 'Tecnología MT5', d: 'Servidores ultra-rápidos, spreads desde 0.0 pips y ejecución profesional.' },
+        { t: 'Programa PropFirm', d: 'Accede a capital financiado real. Programas Obsidian, Basalt, Elite y Ultra.' },
+        { t: 'Cuentas a Medida', d: 'Desde traders independientes hasta gestores profesionales y cuentas x12.' },
+        { t: 'Soporte 24/7', d: 'Atención en 9 idiomas incluyendo español, ruso, thai y alemán.' }
     ];
 
     return `
-    <section class="py-64 bg-[#05010f] relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal">
-            <div class="flex flex-col lg:flex-row justify-between items-end mb-32 gap-12">
-                <h2 class="text-7xl md:text-9xl font-black text-white uppercase tracking-tightest leading-[0.8] italic">
-                    WHY <br><span class="text-[#865BFF]">BRIDGE?</span>
-                </h2>
-                <p class="text-xl text-white/30 max-w-sm uppercase tracking-widest font-black border-l-2 border-[#865BFF] pl-8 italic">
-                    The infrastructure of the next generation of institutional traders.
-                </p>
+    <section class="py-40 px-8 bg-[#050505] overflow-hidden">
+        <div class="max-w-7xl mx-auto relative">
+            <div class="flex justify-between items-end mb-24 section-reveal">
+                <div class="max-w-2xl">
+                    <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white uppercase leading-[0.9] tracking-tighter mb-8">El estándar <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-slate-500">Bridge.</span></h2>
+                    <p class="text-white/40 text-lg font-light">¿Por qué el 1% de los traders profesionales eligen nuestra infraestructura?</p>
+                </div>
+                <div class="hidden lg:block text-indigo-900/20 text-9xl font-black select-none">01</div>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
-                ${reasons.map((r, i) => `
-                    <div class="group p-16 bg-white/[0.02] border border-white/5 hover:bg-[#865BFF] transition-all duration-700 relative overflow-hidden h-[450px] flex flex-col justify-end">
-                        <div class="absolute top-12 left-12 text-7xl font-black text-white/5 group-hover:text-white/20 transition-colors italic">0${i+1}</div>
-                        <div class="relative z-10">
-                            <h3 class="text-3xl font-black text-white mb-6 uppercase tracking-tighter leading-none group-hover:scale-110 origin-left transition-transform italic">${r.t}</h3>
-                            <p class="text-white/40 text-lg leading-relaxed font-light group-hover:text-white transition-colors">${r.d}</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5 rounded-[4rem] overflow-hidden section-reveal">
+                ${reasons.map(r => `
+                    <div class="p-12 bg-[#050505] hover:bg-white/[0.02] transition-all group">
+                        <div class="mb-12 flex justify-between items-start">
+                            <span class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Core Feature</span>
+                            <span class="material-symbols-outlined text-white/10 group-hover:text-indigo-500 transition-colors">verified</span>
                         </div>
-                        <div class="absolute bottom-0 right-0 w-32 h-32 bg-white/5 translate-x-16 translate-y-16 rotate-45 group-hover:bg-white/20 transition-all"></div>
+                        <h4 class="text-xl font-black text-white mb-6 uppercase tracking-tight">${r.t}</h4>
+                        <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest font-medium">${r.d}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── PRODUCT ECOSISTEM (REFACTORED: BENTO GRID) ─────────────
 export function renderInstEcosystem(content: Record<string, any>, brand: BrandConfig): string {
-    const products = [
-        { id: 'prop', t: 'PropFirm', d: 'OBSIDIAN · BASALT · ELITE · ULTRA. Capital financiado sin arriesgar tu dinero.', badge: 'PROP', color: '#3b82f6', link: '#propfirm' },
-        { id: 'snt', t: 'Índices Sintéticos', d: 'Mas de 100 instrumentos 24/7. Fortune, Vortex, BullX y más.', badge: 'SYN', color: '#c084fc', link: '#sinteticos' },
-        { id: 'lx12', t: 'Cuentas Leverage X12', d: 'Capital apalancado 12x sin fases de evaluación. 100% de beneficios.', badge: 'X12', color: '#ef4444', link: '#x12' },
-        { id: 'mam', t: 'Cuentas MAM', d: 'Gestión profesional centralizada con total transparencia para inversores.', badge: 'MAM', color: '#fbbf24', link: '#mam' },
-        { id: 'copy', t: 'Copy Trading', d: 'Replica estrategias verificadas con control total de tu capital.', badge: 'CP', color: '#10b981', link: '#copy' },
-        { id: 'fx', t: 'Forex y CFDs', d: 'Mercados reales con ejecución ECN y spreads institucionales.', badge: 'FX', color: '#6366f1', link: '#forex' }
-    ];
-
     return `
-    <section id="ecosistema" class="py-48 bg-white text-[#05010f] rounded-[8rem] relative z-20 shadow-[0_-50px_100px_rgba(0,0,0,0.2)]">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center lg:text-left">
-            <div class="max-w-4xl mb-32">
-                <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em] mb-10 block">Bridge Ecosystem</span>
-                <h2 class="text-6xl md:text-8xl font-black text-[#140633] uppercase tracking-tightest leading-[0.85] mb-12">NUESTRO UNIVERSO <br>DE PRODUCTOS.</h2>
-                <p class="text-3xl text-gray-400 font-light leading-relaxed">
-                    Cada solución está diseñada para un perfil específico, compartiendo siempre el mismo estándar: tecnología institucional y transparencia total.
-                </p>
+    <section id="ecosistema" class="py-40 px-8 bg-[#020202]">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-24 section-reveal">
+                <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Portafolio</span>
+                <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white uppercase tracking-tighter mb-8">Ecosistema de Productos</h2>
+                <p class="text-white/40 text-xl max-w-3xl leading-relaxed">Cada solución está diseñada para un perfil específico, unificada bajo el mismo estándar de excelencia institucional.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-40">
-                ${products.map(p => `
-                    <div class="group relative bg-gradient-to-br from-[#F8FAFC] to-white border border-slate-200 shadow-xl p-16 rounded-[4rem] overflow-hidden hover:shadow-[0_40px_80px_rgba(134,91,255,0.15)] transition-all duration-500 hover:-translate-y-4">
-                        <div class="absolute -right-20 -top-20 w-64 h-64 opacity-10 blur-3xl transition-all duration-700 group-hover:opacity-30 group-hover:scale-150" style="background: radial-gradient(circle, ${p.color} 0%, transparent 70%);"></div>
-                        <div class="flex justify-between items-start mb-12 relative z-10">
-                            <span class="px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-[#140633]" style="background-color: ${p.color}15; color: ${p.color}">${p.badge}</span>
-                            <span class="material-symbols-outlined text-slate-300 text-6xl group-hover:-rotate-12 transition-transform duration-500" style="color: ${p.color}">hub</span>
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 section-reveal">
+                <!-- Large: PropFirm -->
+                <div class="md:col-span-8 p-12 bg-gradient-to-br from-indigo-900/20 to-slate-900 border border-white/10 rounded-[3.5rem] group hover:border-indigo-500/50 transition-all flex flex-col justify-between min-h-[400px]">
+                    <div>
+                        <div class="flex justify-between items-center mb-12">
+                            <span class="px-4 py-2 bg-indigo-500/20 text-indigo-400 rounded-full text-[10px] font-black uppercase tracking-widest">Producto Estrella</span>
+                            <span class="text-xs text-white/20 font-black">BM-PROP</span>
                         </div>
-                        <h3 class="text-3xl font-black text-[#140633] mb-6 uppercase tracking-tighter leading-none relative z-10">${p.t}</h3>
-                        <p class="text-lg text-slate-500 font-medium leading-relaxed mb-12 relative z-10">${p.d}</p>
-                        <a href="${p.link}" class="inline-flex items-center gap-4 text-[#865BFF] font-black uppercase tracking-widest text-sm hover:gap-8 transition-all duration-300 relative z-10">
-                            Ver Detalles <span class="material-symbols-outlined">arrow_forward</span>
-                        </a>
+                        <h3 class="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter">PropFirm</h3>
+                        <p class="text-white/50 text-lg font-light max-w-md">Opera con capital financiado real sin arriesgar tu dinero. Programas Obsidian, Basalt, Elite y Ultra.</p>
+                    </div>
+                    <a href="#" class="inline-flex items-center gap-4 text-xs font-black text-white uppercase tracking-widest hover:gap-6 transition-all">Ver Programas <span class="material-symbols-outlined">arrow_right_alt</span></a>
+                </div>
+
+                <!-- Small: Synthetics -->
+                <div class="md:col-span-4 p-10 bg-white/[0.02] border border-white/5 rounded-[3.5rem] hover:bg-white/[0.04] transition-all flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-white/20 font-black mb-12 block">BM-SYN</span>
+                        <h3 class="text-3xl font-black text-white mb-4 uppercase tracking-tight italic">Índices Sintéticos</h3>
+                        <p class="text-xs text-white/40 uppercase tracking-widest leading-relaxed">Más de 100 instrumentos propios y exclusivos 24/7.</p>
+                    </div>
+                    <a href="#" class="material-symbols-outlined text-indigo-500">open_in_new</a>
+                </div>
+
+                <!-- Medium: Leverage X12 -->
+                <div class="md:col-span-4 p-10 bg-white/[0.02] border border-white/5 rounded-[3.5rem] hover:bg-white/[0.04] transition-all flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs text-white/20 font-black mb-12 block">BM-LX12</span>
+                        <h3 class="text-3xl font-black text-white mb-4 uppercase tracking-tight italic">Leverage X12</h3>
+                        <p class="text-xs text-white/40 uppercase tracking-widest leading-relaxed">Sin evaluación. Multiplica tu capital x12 directamente.</p>
+                    </div>
+                    <a href="#" class="material-symbols-outlined text-indigo-500">bolt</a>
+                </div>
+
+                <!-- Medium: MAM & Copy -->
+                <div class="md:col-span-8 p-12 bg-white/[0.01] border border-white/10 rounded-[3.5rem] hover:border-white/30 transition-all grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-black text-white mb-4 uppercase">MAM Accounts</h3>
+                            <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest">Gestión profesional centralizada para capitales institucionales.</p>
+                        </div>
+                        <a href="#" class="text-[10px] font-black text-white/60 hover:text-white">LPOA PROTECTED →</a>
+                    </div>
+                    <div class="flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-black text-white mb-4 uppercase">Copy Trading</h3>
+                            <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest">Replica estrategias de traders verificados con control total.</p>
+                        </div>
+                        <a href="#" class="text-[10px] font-black text-white/60 hover:text-white">SOCIAL TRADING →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Detail (Refactored Minimalist) -->
+            <div class="mt-32 section-reveal">
+                <div class="text-center mb-16">
+                    <h4 class="text-xs font-black text-white/20 uppercase tracking-[0.6em]">Detalle Técnico Unificado</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse border-y border-white/5">
+                        <tbody>
+                            ${[
+                                ['PropFirm (Forex/CFDs)', 'Traders que buscan capital fondeado', 'Hasta 80% Profit Split'],
+                                ['PropFirm (Sintéticos)', 'Traders de índices algorítmicos', 'Programas Elite y Ultra'],
+                                ['Índices Sintéticos BM', 'Estrategas y Scalpers 24/7', 'Indices Propios + Deriv + Weltrade'],
+                                ['Leverage X12', 'Traders experimentados', '12x Real sin Evaluación'],
+                                ['Cuentas MAM / PAMM', 'Gestores y Grandes Inversores', 'Tecnología Equity & Cash'],
+                                ['Forex Institucional', 'Traders Retail y Pro', 'Spreads desde 0.0 / MT5']
+                            ].map(row => `
+                                <tr class="group border-b border-white/5 hover:bg-white/[0.01] transition-all">
+                                    <td class="py-8 px-4 text-xs font-black text-white uppercase group-hover:text-indigo-400 transition-colors">${row[0]}</td>
+                                    <td class="py-8 px-4 text-[10px] text-white/30 uppercase tracking-widest">${row[1]}</td>
+                                    <td class="py-8 px-4 text-[10px] text-white/50 font-bold uppercase italic">${row[2]}</td>
+                                    <td class="py-8 px-4 text-right">
+                                        <a href="#" class="inline-block p-4 rounded-full border border-white/10 hover:border-indigo-500 transition-all">
+                                            <span class="material-symbols-outlined text-xs text-white">north_east</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── TRADER vs INVESTOR (REFACTORED: SPLIT SCREEN EXPERIENCE) ──
+export function renderInstSelector(content: Record<string, any>, brand: BrandConfig): string {
+    const ctaLink = brand.ctaLink || "#";
+
+    return `
+    <section class="min-h-screen flex flex-col lg:flex-row relative overflow-hidden bg-[#020202]">
+        <!-- Vertical Label -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none hidden lg:block">
+            <div class="text-[120px] font-black text-white/5 uppercase tracking-tighter transform -rotate-90">CHOOSE</div>
+        </div>
+
+        <!-- Left Side: Trader -->
+        <div class="flex-1 p-16 md:p-32 flex flex-col justify-center relative group overflow-hidden hover:flex-[1.5] transition-all duration-700">
+            <div class="absolute inset-0 bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative z-10">
+                <span class="text-indigo-500 font-black text-xs uppercase tracking-widest mb-12 block">Perfil Operativo</span>
+                <h2 class="text-5xl md:text-[100px] font-black text-white mb-8 leading-none tracking-tighter uppercase">Soy <br><span class="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Trader</span></h2>
+                <ul class="space-y-6 mb-16 max-w-sm">
+                    <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">
+                        <span class="w-1 h-1 bg-indigo-500 rounded-full"></span> PropFirm
+                    </li>
+                    <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">
+                        <span class="w-1 h-1 bg-indigo-500 rounded-full"></span> Síntéticos
+                    </li>
+                    <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">
+                        <span class="w-1 h-1 bg-indigo-500 rounded-full"></span> Leverage X12
+                    </li>
+                </ul>
+                <a href="${ctaLink}" class="inline-block px-12 py-6 border-2 border-white text-white font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all">Acceso Directo</a>
+            </div>
+        </div>
+
+        <!-- Right Side: Investor -->
+        <div class="flex-1 p-16 md:p-32 flex flex-col justify-center relative group overflow-hidden hover:flex-[1.5] transition-all duration-700 bg-white/[0.01]">
+            <div class="absolute inset-0 bg-slate-800/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative z-10">
+                <span class="text-slate-500 font-black text-xs uppercase tracking-widest mb-12 block">Perfil de Crecimiento</span>
+                <h2 class="text-5xl md:text-[100px] font-black text-white mb-8 leading-none tracking-tighter uppercase">Soy <br><span class="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Inversor</span></h2>
+                <ul class="space-y-6 mb-16 max-w-sm">
+                    <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">
+                        <span class="w-1 h-1 bg-slate-500 rounded-full"></span> Copy Trading
+                    </li>
+                    <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">
+                        <span class="w-1 h-1 bg-slate-500 rounded-full"></span> MAM Equity
+                    </li>
+                    <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">
+                        <span class="w-1 h-1 bg-slate-500 rounded-full"></span> MAM Cash
+                    </li>
+                </ul>
+                <a href="${ctaLink}" class="inline-block px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-indigo-600 hover:text-white transition-all shadow-xl">Ver Estrategias</a>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── IB PROGRAM (REFACTORED: BOLD & GRAPHIC) ────────────────
+export function renderInstPartners(content: Record<string, any>, brand: BrandConfig): string {
+    const ctaLink = brand.ctaLink || "#";
+
+    return `
+    <section class="py-40 px-8 bg-[#020202]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center section-reveal">
+                <div class="lg:col-span-7">
+                    <h2 class="text-6xl md:text-[100px] font-black font-montserrat text-white leading-[0.85] uppercase tracking-tighter mb-12">Construye <br>tu Propia <br><span class="text-indigo-500">Red.</span></h2>
+                    <p class="text-xl md:text-3xl text-white/40 font-light mb-12 max-w-2xl leading-tight">Conviértete en socio IB y conecta traders con el ecosistema más completo del mercado.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 mb-16">
+                        ${[
+                            ['Comisiones Recurrentes', 'Ingresos por cada lote operado por tus referidos.'],
+                            ['Marketing List', 'Acceso a landings personalizables y banners.'],
+                            ['Soporte VIP', 'Canal directo con el equipo de Bridge Markets.'],
+                            ['Panel IB Pro', 'Monitoreo total de volúmenes y comisiones.']
+                        ].map(item => `
+                            <div>
+                                <div class="text-indigo-400 font-black text-[10px] uppercase tracking-widest mb-2">${item[0]}</div>
+                                <p class="text-xs text-white/30 font-medium uppercase tracking-wider leading-relaxed">${item[1]}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <a href="${ctaLink}" class="inline-block px-12 py-6 bg-indigo-600 text-white font-black rounded-full uppercase tracking-[0.2em] text-[10px] hover:scale-105 transition-all shadow-2xl">
+                        Unirme al Programa →
+                    </a>
+                </div>
+                <div class="lg:col-span-5 relative">
+                    <div class="aspect-square bg-gradient-to-br from-indigo-600/20 to-slate-900 border border-white/10 rounded-[4rem] flex items-center justify-center p-12 overflow-hidden group">
+                        <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-1000 rotate-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── TECH & STEPS (REFACTORED: MINIMALIST FLOW) ─────────────
+export function renderInstTech(content: Record<string, any>, brand: BrandConfig): string {
+    return `
+    <section class="py-40 px-8 bg-[#050505]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 section-reveal mb-40">
+                ${[
+                    { t: 'MT5', s: 'PLATAFORMA INSTITUCIONAL' },
+                    { t: 'CHARTS', s: 'GRÁFICOS 24/7' },
+                    { t: 'ACADEMY', s: 'EDUCACIÓN PRO' },
+                    { t: 'PORTAL', s: 'GESTIÓN TOTAL' }
+                ].map(item => `
+                    <div class="p-12 bg-white/[0.01] border border-white/5 rounded-[3.5rem] text-center hover:border-indigo-500/50 transition-all">
+                        <h4 class="text-4xl font-black text-white mb-2 uppercase italic tracking-tighter">${item.t}</h4>
+                        <p class="text-[10px] text-indigo-500 font-black tracking-[0.4em]">${item.s}</p>
                     </div>
                 `).join('')}
             </div>
 
-            <div class="overflow-x-auto glass-panel rounded-[4rem] border border-slate-100 p-8 shadow-inner">
-                <table class="w-full text-left border-collapse min-w-[900px]">
-                    <thead>
-                        <tr class="border-b border-slate-200">
-                             <th class="py-8 px-8 text-[11px] font-black uppercase tracking-[0.3em] text-gray-400">Producto</th>
-                             <th class="py-8 px-8 text-[11px] font-black uppercase tracking-[0.3em] text-gray-400">Para quién es</th>
-                             <th class="py-8 px-8 text-[11px] font-black uppercase tracking-[0.3em] text-gray-400">Propuesta Clave</th>
-                             <th class="py-8 px-8 text-right"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        ${[
-                            { p: 'PropFirm FX', who: 'Traders experimentados', raw: '80% Profit Split. Fases 1/2.' },
-                            { p: 'Sintéticos Pro', who: 'Traders 24/7 & Scalpers', raw: '100+ Instrumentos exclusivos' },
-                            { p: 'Leverage X12', who: 'High Leverage Lovers', raw: 'Sin evaluación. 12x Capital.' },
-                            { p: 'MAM Accounts', who: 'Gestores & Fondos', raw: 'LPOA Segura. Master Sync.' },
-                            { p: 'Copy Trading', who: 'Inversionistas Pasivos', raw: 'Réplica verificada. Control total.' }
-                        ].map(row => `
-                            <tr class="hover:bg-white/10 transition-colors group">
-                                <td class="py-10 px-8 text-2xl font-black text-[#140633] uppercase tracking-tighter">${row.p}</td>
-                                <td class="py-10 px-8 text-gray-400 font-bold uppercase text-xs tracking-widest">${row.who}</td>
-                                <td class="py-10 px-8 text-gray-500 font-medium text-lg">${row.raw}</td>
-                                <td class="py-10 px-8 text-right">
-                                    <button class="px-8 py-4 bg-[#865BFF] text-white text-[10px] font-black uppercase tracking-widest rounded-3xl opacity-0 group-hover:opacity-100 transition-all shadow-xl">Ver Producto</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderInstSelector(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'inst_selector')!.defaultContent, ...content };
-    const ctaLink = brand.ctaLink || '#registro';
-
-    return `
-    <section class="py-48 bg-white relative">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center">
-             <h2 class="text-6xl md:text-8xl font-black text-[#140633] mb-32 uppercase tracking-tightest leading-none">¿CUÁL ES <br><span class="text-gray-200">TU CAMINO?</span></h2>
-             
-             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                 <!-- TRADER -->
-                 <div class="relative group p-20 rounded-[5rem] bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-200 shadow-2xl text-left overflow-hidden hover:shadow-[0_50px_100px_rgba(134,91,255,0.2)] hover:-translate-y-4 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-br from-[#140633] to-[#2a1560] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
-                    <div class="relative z-10 group-hover:text-white transition-colors duration-700">
-                        <span class="text-[11px] font-black uppercase tracking-[0.8em] text-[#865BFF] mb-12 block group-hover:text-white/60 transition-colors">Perfil Activo</span>
-                        <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none group-hover:text-white text-[#140633] transition-colors">SOY <br>TRADER</h3>
-                        <p class="text-xl text-slate-500 font-medium mb-16 leading-relaxed group-hover:text-white/70 transition-colors">Quiero operar los mercados y generar beneficios con mi propia estrategia y disciplina.</p>
-                        
-                        <ul class="space-y-6 mb-16">
-                            ${['PropFirm: Sin arriesgar tu capital', 'Sintéticos: Disponibles 24/7', 'Leverage X12: Sin evaluación', 'Forex ECN: Spreads institucionales'].map(item => `
-                                <li class="flex items-center gap-4">
-                                     <span class="material-symbols-outlined text-[#865BFF] group-hover:text-white transition-colors">check_circle</span>
-                                     <span class="text-sm font-black uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors opacity-90">${item}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-
-                        <a href="${ctaLink}" class="w-full text-center block py-8 bg-[#865BFF] text-white font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:bg-white hover:text-[#865BFF] transition-all shadow-xl group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
-                             ${c.ctaTrader}
-                        </a>
-                    </div>
-                 </div>
-
-                 <!-- INVERSOR -->
-                 <div class="relative group p-20 rounded-[5rem] bg-gradient-to-bl from-white to-[#F8FAFC] border border-slate-200 shadow-2xl text-left overflow-hidden hover:shadow-[0_50px_100px_rgba(59,130,246,0.2)] hover:-translate-y-4 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-bl from-[#0f172a] to-[#1e3a8a] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
-                    <div class="relative z-10 group-hover:text-white transition-colors duration-700">
-                        <span class="text-[11px] font-black uppercase tracking-[0.8em] text-blue-500 mb-12 block group-hover:text-white/60 transition-colors">Perfil Pasivo</span>
-                        <h3 class="text-6xl font-black mb-12 uppercase tracking-tighter leading-none group-hover:text-white text-[#140633] transition-colors">SOY <br>INVERSOR</h3>
-                        <p class="text-xl text-slate-500 font-medium mb-16 leading-relaxed group-hover:text-white/70 transition-colors">Quiero hacer crecer mi capital delegando la operativa en gestión profesional o réplica.</p>
-                        
-                        <ul class="space-y-6 mb-16">
-                            ${['Copy Trading: Réplica automática', 'MAM Equity: Transparencia total', 'MAM Cash: Inversión institucional', 'Social Trading: Red de beneficios'].map(item => `
-                                <li class="flex items-center gap-4">
-                                     <span class="material-symbols-outlined text-blue-500 group-hover:text-white transition-colors">check_circle</span>
-                                     <span class="text-sm font-black uppercase tracking-widest text-slate-600 group-hover:text-white transition-colors opacity-90">${item}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-
-                        <a href="${ctaLink}" class="w-full text-center block py-8 bg-blue-600 text-white font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:bg-white hover:text-blue-600 transition-all shadow-xl group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
-                             ${c.ctaInvestor}
-                        </a>
-                    </div>
-                 </div>
-             </div>
-        </div>
-    </section>`;
-}
-
-export function renderInstPartners(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'inst_partners')!.defaultContent, ...content };
-    const benefits = [
-        { t: 'Comisiones por referidos', d: 'Genera ingresos por cada cliente que active productos.' },
-        { t: 'Landings personalizables', d: 'Acceso a este sistema para crear tu propia red de marca.' },
-        { t: 'Soporte dedicado', d: 'Acceso directo al equipo corporativo para resolución de dudas.' },
-        { t: 'Materiales Premium', d: 'Presentaciones, documentos y recursos de marketing listos.' },
-        { t: 'Panel de seguimiento', d: 'Monitorea volúmenes y comisiones desde tu portal de IB.' }
-    ];
-
-    return `
-    <section class="py-48 bg-[#05010f] relative overflow-hidden text-white border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal text-center lg:text-left">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
-                <div>
-                     <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em] mb-12 block">Introducing Broker Program</span>
-                     <h2 class="text-6xl md:text-8xl font-black text-white leading-[0.85] mb-16 uppercase tracking-tightest">CONVIÉRTETE <br>EN SOCIO <span class="text-white/20">IB.</span></h2>
-                     <p class="text-3xl text-white/40 font-light leading-relaxed mb-16">Nuestra red de IBs opera activamente en México, Nigeria, Filipinas e India, construyendo negocios recurrentes con base tecnológica.</p>
-                     
-                     <div class="flex flex-col gap-10">
-                        ${benefits.map(b => `
-                            <div class="flex gap-8 group">
-                                <div class="w-14 h-14 rounded-[1.5rem] bg-white/5 border border-white/10 flex items-center justify-center text-[#865BFF] group-hover:bg-[#865BFF] group-hover:text-white transition-all shadow-xl">
-                                    <span class="material-symbols-outlined">partnership</span>
-                                </div>
-                                <div>
-                                    <h4 class="text-2xl font-black text-white uppercase tracking-tighter mb-2">${b.t}</h4>
-                                    <p class="text-white/40 text-sm font-medium leading-relaxed">${b.d}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                     </div>
-                </div>
-
-                <div class="relative">
-                    <div class="p-16 rounded-[4rem] bg-white/5 border border-white/10 backdrop-blur-3xl relative overflow-hidden text-center group">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-[#865BFF]/20 to-transparent"></div>
-                        <span class="material-symbols-outlined text-[200px] text-[#865BFF]/10 mb-12 block group-hover:scale-110 transition-transform duration-[5s]">public</span>
-                        <h3 class="text-4xl font-black mb-6 uppercase tracking-tight">Expansión Global</h3>
-                        <p class="text-white/40 text-sm uppercase tracking-widest mb-16 leading-relaxed">Únete a la elite de socios <br>comerciales de Bridge Markets.</p>
-                        <a href="https://bridgemarkets.global/ib-form" class="inline-block px-16 py-8 bg-white text-black font-black rounded-[2rem] text-xl uppercase tracking-tighter hover:shadow-3xl transition-all">
-                            ${c.ctaText}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderInstTech(content: Record<string, any>, brand: BrandConfig): string {
-    const stacks = [
-        { icon: 'terminal', title: 'MetaTrader 5', desc: 'Escritorio, iOS y Android. Servidor BridgeMarkets-MT5.', badge: 'MT5' },
-        { icon: 'monitoring', title: 'Charts Propios', desc: 'Acceso a charts.bridgemarkets.global de forma gratuita.', badge: 'CHART' },
-        { icon: 'school', title: 'Academia', desc: 'Webinars, glosario y material educativo para todos los niveles.', badge: 'EDU' },
-        { icon: 'dashboard', title: 'Portal Cliente', desc: 'Gestiona fondos, depósitos y retiros desde un solo lugar.', badge: 'UI' }
-    ];
-
-    return `
-    <section class="py-48 bg-white text-[#140633] border-y border-slate-50 relative">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center">
-             <h2 class="text-6xl md:text-8xl font-black text-[#140633] mb-32 uppercase tracking-tightest leading-none">PLATAFORMA <br><span class="text-gray-200">TECNOLÓGICA</span></h2>
-             
-             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                 ${stacks.map(s => `
-                    <div class="relative p-16 bg-gradient-to-br from-white to-[#F8FAFC] border border-slate-200 shadow-xl rounded-[4rem] group hover:shadow-[0_30px_80px_rgba(134,91,255,0.2)] transition-all duration-500 hover:-translate-y-4 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-[#140633] to-[#3a1d77] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
-                        <div class="relative z-10 group-hover:text-white transition-colors duration-500">
-                            <div class="w-20 h-20 bg-white shadow-lg rounded-[1.5rem] flex items-center justify-center text-[#865BFF] mb-12 group-hover:bg-white/10 group-hover:text-white group-hover:backdrop-blur-xl border border-transparent group-hover:border-white/20 transition-all duration-500 transform group-hover:rotate-6">
-                                <span class="material-symbols-outlined text-4xl drop-shadow-md">${s.icon}</span>
-                            </div>
-                            <h4 class="text-3xl font-black mb-6 uppercase tracking-tighter leading-none">${s.title}</h4>
-                            <p class="text-slate-500 font-medium text-lg leading-relaxed group-hover:text-white/80 transition-colors uppercase tracking-widest text-sm">${s.desc}</p>
-                        </div>
-                    </div>
-                 `).join('')}
-             </div>
-        </div>
-    </section>`;
-}
-
-export function renderInstWorkflow(content: Record<string, any>, brand: BrandConfig): string {
-    const steps = [
-        { t: 'Crea tu cuenta', d: 'Regístrate en menos de 2 minutos.' },
-        { t: 'Completa KYC', d: 'Verifica tu identidad según estándares IL.' },
-        { t: 'Elige Producto', d: 'Propfirm, Sintéticos, MAM, Copy o Forex.' },
-        { t: 'Fondea / Compra', d: 'Deposita fondos o adquiere tu reto Prop.' },
-        { t: 'Descarga MT5', d: 'Instala la plataforma en tu dispositivo.' },
-        { t: 'Opera o Invierte', d: 'Tu cuenta está lista para actuar.' },
-        { t: 'Gestiona', d: 'Monitorea, escala y retira beneficios.' }
-    ];
-
-    return `
-    <section class="py-48 bg-white overflow-hidden text-[#140633]">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center">
-            <h2 class="text-6xl md:text-8xl font-black text-[#140633] mb-32 uppercase tracking-tightest leading-none">CÓMO <br><span class="text-gray-200">EMPEZAR</span></h2>
-            
-            <div class="relative">
-                <div class="hidden lg:block absolute top-[50%] left-0 w-full h-px bg-slate-200 z-0"></div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6 relative z-10">
-                    ${steps.map((s, i) => `
-                        <div class="group h-full">
-                            <div class="relative flex flex-col items-center p-8 bg-gradient-to-b from-white to-slate-50 border border-slate-200 shadow-md shadow-slate-200/50 rounded-[3rem] hover:shadow-[0_20px_50px_rgba(134,91,255,0.15)] hover:border-[#865BFF]/30 transition-all duration-500 transform hover:-translate-y-4 overflow-hidden h-full z-10 hover:z-20">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#865BFF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <span class="relative z-10 text-5xl font-black text-slate-200 group-hover:text-[#865BFF] transition-colors leading-none tracking-tightest mb-8 drop-shadow-sm group-hover:drop-shadow-[0_0_15px_rgba(134,91,255,0.5)]">0${i+1}</span>
-                                <h4 class="relative z-10 text-sm font-black uppercase tracking-widest text-center leading-tight mb-4 text-[#140633] group-hover:text-[#865BFF] transition-colors">${s.t}</h4>
-                                <p class="relative z-10 text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">${s.d}</p>
-                            </div>
+            <!-- Steps Onboarding -->
+            <div class="section-reveal text-center">
+                <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-20">Cómo empezar en <span class="italic text-indigo-500">Bridge</span></h2>
+                <div class="flex flex-wrap justify-center gap-4">
+                    ${[
+                        'Crea tu cuenta', 'Completa KYC', 'Elige producto', 'Deposita', 'Descarga MT5', 'Opera o Invierte', 'Crece'
+                    ].map((step, idx) => `
+                        <div class="flex items-center gap-4 px-8 py-4 bg-white/[0.02] border border-white/5 rounded-full hover:bg-indigo-600 transition-all group">
+                            <span class="text-xs font-black text-white/20 group-hover:text-white/40 font-montserrat">${idx + 1}</span>
+                            <span class="text-[10px] font-black text-white uppercase tracking-widest whitespace-nowrap">${step}</span>
                         </div>
                     `).join('')}
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── COMMUNITY ──────────────────────────────────────────────
 export function renderInstCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'inst_community')!.defaultContent, ...content };
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
-    const message = brand.heroPhrase || c.welcomeMessage || 'Únete a nuestra comunidad oficial vinculada a Bridge Markets.';
-    const logoUrl = brand.logoUrl || '/images/logo-bm-blanco.png';
+    const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
+    const message = content.communityMessage || 'Únete a nuestro ecosistema global y conecta con la tecnología institucional.';
+    const telegram = brand.telegram || '#';
+    const whatsapp = brand.whatsapp || '#';
 
     return `
-    <section class="py-48 bg-[#05010f] text-white relative">
-        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal">
-             <div class="bg-white/5 border border-white/10 rounded-[6rem] p-16 lg:p-32 flex flex-col lg:flex-row items-center gap-24 relative overflow-hidden group">
-                <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-[#865BFF] to-transparent"></div>
-                
-                <div class="lg:w-1/3 flex flex-col items-center">
-                    <div class="w-64 h-64 bg-black border-4 border-white/5 rounded-full overflow-hidden shadow-4xl group-hover:border-[#865BFF] transition-all duration-1000 rotate-3 hover:rotate-0">
-                        <img src="${logoUrl}" alt="IB" class="w-full h-full object-contain p-8">
+    <section id="comunidad" class="py-40 px-8 bg-[#020202]">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative p-12 md:p-24 bg-gradient-to-br from-indigo-950/20 via-[#050505] to-[#020202] border border-white/10 rounded-[5rem] overflow-hidden section-reveal">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-8">
+                        <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Partner Community</span>
+                        <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white uppercase tracking-tighter leading-none mb-10">${ibName}</h2>
+                        <p class="text-xl md:text-2xl text-white/50 font-light mb-12 leading-relaxed italic max-w-2xl">"${message}"</p>
+                        
+                        <div class="flex flex-wrap gap-6">
+                            <a href="${telegram}" class="px-12 py-5 bg-[#24A1DE] text-white rounded-full font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all">Telegram</a>
+                            <a href="${whatsapp}" class="px-12 py-5 bg-[#25D366] text-white rounded-full font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all">WhatsApp</a>
+                        </div>
                     </div>
-                    <div class="mt-12 text-center">
-                        <h3 class="text-4xl font-black uppercase tracking-tighter mb-4">${ibName}</h3>
-                        <div class="px-6 py-2 bg-[#865BFF]/10 border border-[#865BFF]/20 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-[#865BFF]">Partner Verificado</div>
-                    </div>
-                </div>
-
-                <div class="lg:w-2/3">
-                    <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[1em] mb-12 block">Mensaje de Bienvenida</span>
-                    <p class="text-4xl text-white font-light leading-[1.4] mb-16 italic border-l-8 border-[#865BFF] pl-16">
-                        "${message}"
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-6">
-                        ${brand.telegram ? `<a href="${brand.telegram}" class="px-12 py-6 bg-blue-600 text-white font-black rounded-3xl hover:shadow-3xl transition-all shadow-xl text-lg flex items-center gap-4 uppercase tracking-widest text-sm">Telegram</a>` : ''}
-                        ${brand.whatsapp ? `<a href="https://wa.me/${brand.whatsapp}" class="px-12 py-6 bg-emerald-600 text-white font-black rounded-3xl hover:shadow-3xl transition-all shadow-xl text-lg flex items-center gap-4 uppercase tracking-widest text-sm">WhatsApp</a>` : ''}
+                    <div class="lg:col-span-4 opacity-10">
+                        <img src="/images/imagenes%20nuevas/hourglass.png" class="w-full h-auto transform -rotate-12">
                     </div>
                 </div>
-             </div>
+            </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FAQ (REFACTORED: CLEAN MINIMALIST) ─────────────────────
 export function renderInstFAQ(content: Record<string, any>, brand: BrandConfig): string {
     const faqs = [
-        { q: '¿Qué es Bridge Markets?', a: 'Broker internacional con sede en UK e Islas Marshall, ofreciendo un ecosistema de inversión Institucional completo.' },
-        { q: '¿Es seguro operar aquí?', a: 'Sí, contamos con entidades registradas, fondos segregados y ejecución institucional bajo cumplimiento internacional.' },
-        { q: '¿Qué productos ofrecen?', a: 'Propfirm, Índices Sintéticos, Leverage X12, MAM, Copy Trading y Forex/CFDs.' },
-        { q: '¿Cuál es la plataforma?', a: 'MetaTrader 5 (MT5) oficial de Bridge Markets, servidor: BridgeMarkets-MT5.' },
-        { q: '¿Tienen soporte?', a: 'Sí, ofrecemos soporte especializado 24/5 en múltiples idiomas (Español incluido).' },
-        { q: '¿Puedo ser IB?', a: 'Sí. Contamos con un programa de socios robusto con comisiones líderes y soporte dedicado.' }
+        { q: '¿Qué es Bridge Markets?', a: 'Broker financiero internacional (Reino Unido / Marshall) que ofrece Forex, Sintéticos, PropFirm, MAM y Copy Trading en un mismo ecosistema.' },
+        { q: '¿Es seguro?', a: 'Entidades registradas, fondos segregados y estándares institucionales. Consulta la documentación legal en el sitio oficial.' },
+        { q: '¿Qué productos hay?', a: 'PropFirm, Índices Sintéticos (100+), Leverage X12, MAM, Copy Trading y Forex retail.' },
+        { q: '¿Plataforma?', a: 'MetaTrader 5 (MT5) para Windows, iOS y Android. Servidor: BridgeMarkets-MT5.' },
+        { q: '¿Depósito mínimo?', a: 'Varía según el producto. Consulta detalles específicos en el portal de cliente tras tu registro.' },
+        { q: '¿Sintéticos Propios?', a: 'Sí: Fortune, Vortex, BullX, BearX y FomoX. Integrados con Deriv y Weltrade en una sola MT5.' }
     ];
 
     return `
-    <section class="py-48 bg-white text-[#140633]">
-        <div class="max-w-5xl mx-auto px-8 section-reveal text-center">
-             <h2 class="text-6xl font-black text-[#140633] mb-32 uppercase tracking-tightest leading-none">CONSULTAS <br><span class="text-gray-300">FRECUENTES</span></h2>
-             
-             <div class="space-y-8 text-left">
-                 ${faqs.map(f => `
-                    <div class="glass-panel border border-slate-100 p-12 rounded-[4rem] group hover:bg-white/10 hover:border-[#140633] transition-all shadow-sm hover:shadow-4xl">
-                        <h4 class="text-3xl font-black text-[#140633] mb-8 uppercase tracking-tighter flex items-center gap-8 group-hover:text-[#865BFF]">
-                             <span class="w-1.5 h-12 bg-[#865BFF] rounded-full"></span> ${f.q}
-                        </h4>
-                        <p class="text-xl text-gray-400 font-medium leading-relaxed pl-10">${f.a}</p>
+    <section class="py-40 px-8 bg-[#050505]">
+        <div class="max-w-4xl mx-auto section-reveal">
+            <h2 class="text-4xl font-black text-white text-center uppercase tracking-tighter mb-24 italic underline decoration-indigo-600 underline-offset-8">Central de Consultas</h2>
+            <div class="space-y-4">
+                ${faqs.map(faq => `
+                    <div class="p-10 bg-white/[0.01] border-b border-white/10 hover:bg-white/[0.03] transition-all group">
+                        <h4 class="text-white font-black uppercase tracking-widest text-xs mb-4 group-hover:text-indigo-400 transition-colors">${faq.q}</h4>
+                        <p class="text-white/30 text-xs leading-relaxed uppercase font-medium tracking-wider">${faq.a}</p>
                     </div>
-                 `).join('')}
-             </div>
+                `).join('')}
+            </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── FINAL CTA ──────────────────────────────────────────────
 export function renderInstFinalCTA(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'inst_final_cta')!.defaultContent, ...content };
-    const ctaLink = brand.ctaLink || '#registro';
+    const ctaMainLink = brand.ctaLink || "#";
 
     return `
-    <section class="py-64 bg-[#05010f] relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#140633] via-[#05010f] to-[#865BFF]/40"></div>
-        <div class="max-w-7xl mx-auto px-8 relative z-10 text-center section-reveal">
-            <h2 class="text-7xl md:text-[12rem] font-black text-white mb-20 uppercase tracking-tightest leading-[0.8] drop-shadow-3xl">UN BROKER. <br><span class="text-[#865BFF] outline-text"> TODO.</span></h2>
-            <p class="text-3xl text-white/40 mb-32 font-light uppercase tracking-[0.4em] max-w-5xl mx-auto leading-relaxed">No importa si eres trader, inversor o gestor. <br>En Bridge Markets tienes el ecosistema completo.</p>
+    <section class="py-60 px-8 bg-[#020202] relative overflow-hidden text-center">
+        <!-- Floating Circles -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-10 section-reveal">
+            <h2 class="text-6xl md:text-[140px] font-black text-white uppercase leading-[0.85] tracking-tighter mb-12">
+                Un solo Broker. <br>
+                <span class="text-indigo-500 italic">Todo</span><br>
+                lo que necesitas.
+            </h2>
             
-            <div class="flex flex-wrap justify-center gap-10">
-                <a href="${ctaLink}" class="px-20 py-10 bg-white text-black font-black rounded-full hover:scale-110 transition-transform uppercase text-2xl tracking-tighter shadow-3xl">${c.ctaMain}</a>
-                <a href="#ecosistema" class="px-20 py-10 bg-white/5 border border-white/10 text-white font-black rounded-full hover:bg-white/20 transition-all uppercase text-2xl tracking-tighter backdrop-blur-md">${c.ctaSecondary}</a>
-                <a href="https://bridgemarkets.global/ib-form" class="px-20 py-10 bg-[#865BFF] text-white font-black rounded-full hover:shadow-[0_45px_90px_rgba(134,91,255,0.4)] transition-all uppercase text-2xl tracking-tighter">${c.ctaIB}</a>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-20">
+                <a href="${ctaMainLink}" class="px-16 py-8 bg-white text-black font-black rounded-full uppercase tracking-widest text-xs hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.2)]">
+                    Abrir Cuenta Real →
+                </a>
+                <a href="#ecosistema" class="px-12 py-6 text-white font-black uppercase tracking-widest text-xs border-b-2 border-indigo-600 hover:text-indigo-400 transition-all">
+                    Explorar Productos
+                </a>
             </div>
-
-            <div class="mt-40 text-center">
-                 <p class="text-[10px] text-white/20 uppercase font-black tracking-[0.8em]">Risk Disclaimer: Trading involves significant risk. BridgeMarkets LTD 2026.</p>
-            </div>
+            
+            <p class="text-[9px] text-white/20 uppercase tracking-[0.4em] font-black max-w-2xl mx-auto leading-loose italic">
+                "Los productos financieros con apalancamiento conllevan riesgo. Resultados pasados no garantizan rendimientos futuros. Operar con responsabilidad es la clave del éxito."
+            </p>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── INSTITUTIONAL FOOTER ──────────────────────────────────
 export function renderInstFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.fullName || brand.ibName || 'Partner Oficial';
-    const year = new Date().getFullYear();
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const currentYear = new Date().getFullYear();
 
     return `
-    <footer class="py-48 bg-white border-t border-slate-50 relative z-10 text-[#140633]">
-        <div class="max-w-7xl mx-auto px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40 section-reveal">
-                <div class="col-span-1 lg:col-span-1">
-                    <img src="/images/logo-bm-blanco.png" alt="BM" class="h-10 mb-12">
-                    <p class="text-gray-400 text-xs font-black uppercase tracking-[0.2em] leading-loose mb-12">Infraestructura institucional V3. Bridge Markets LTD está regulado internacionalmente para garantizar fondos segregados.</p>
-                    <div class="p-8 glass-panel border border-slate-100 rounded-[2rem] flex items-center gap-6">
-                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#865BFF] font-black">${ibName.charAt(0)}</div>
-                        <div class="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none">Presentado por <br><span class="text-[#140633] text-sm">${ibName}</span></div>
-                    </div>
+    <footer class="py-24 px-8 bg-[#010101] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 mb-24">
+                <div class="col-span-2">
+                    <img src="/images/logo-bm-blanco.png" class="h-6 mb-8">
+                    <p class="text-[10px] text-white/30 uppercase tracking-[0.2em] leading-relaxed mb-8 max-w-xs">Tecnología de ejecución institucional para traders e inversores globales.</p>
                 </div>
-
                 <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.6em] mb-12 text-gray-400">Trading MT5</h4>
-                    <ul class="space-y-6 text-xs font-black uppercase tracking-widest">
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">Escritorio</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">iOS & Android</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">Cuenta ECN</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">Social Trading</a></li>
+                    <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-6">Trading</h5>
+                    <ul class="space-y-4 text-[9px] text-white/40 uppercase font-bold tracking-widest">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">MetaTrader 5</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Cuentas ECN</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">MAM / PAMM</a></li>
                     </ul>
                 </div>
-
                 <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.6em] mb-12 text-gray-400">Legal</h4>
-                    <ul class="space-y-6 text-xs font-black uppercase tracking-widest">
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">Términos</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">Acuerdo IB</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">KYC Policy</a></li>
-                        <li><a href="#" class="hover:text-[#865BFF] transition-colors">Risk Disclaimer</a></li>
+                    <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-6">Soporte</h5>
+                    <ul class="space-y-4 text-[9px] text-white/40 uppercase font-bold tracking-widest">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Glosario</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Academia</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Contacto</a></li>
                     </ul>
                 </div>
-
                 <div>
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.6em] mb-12 text-gray-400">Contacto</h4>
-                    <ul class="space-y-6 text-xs font-black uppercase tracking-widest text-gray-400">
-                        <li>corporate@bridgemarkets.global</li>
-                        <li>+1 (786) 979-3392</li>
-                        <li>@bridgemarketsbroker</li>
+                    <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-6">Legal</h5>
+                    <ul class="space-y-4 text-[9px] text-white/40 uppercase font-bold tracking-widest">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Términos</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">KYC</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-[10px] font-black text-white uppercase tracking-widest mb-6">Red</h5>
+                    <ul class="space-y-4 text-[9px] text-white/40 uppercase font-bold tracking-widest">
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Ser IB</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition-colors">Programa Socios</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="pt-24 border-t border-slate-100 text-center">
-                <p class="text-[10px] font-black text-gray-300 uppercase tracking-[0.4em] mb-16 max-w-5xl mx-auto leading-loose">
-                    Advertencia de Riesgo: Los productos financieros implican riesgo. El contenido en este sitio no es un consejo de inversión. Bridge Markets Limited (UK) Reg 15159310. Bridge Markets Ltd (Marshall Islands) Reg 113891.
-                </p>
-                <div class="text-[10px] font-black text-[#140633] uppercase tracking-[1em]">© ${year} BRIDGE MARKETS GLOBAL.</div>
+            <div class="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-end gap-12">
+                <div class="text-[9px] text-white/10 uppercase tracking-widest font-black italic">© ${currentYear} BridgeMarkets LTD. UK & Marshall Islands.</div>
+                <div class="text-right">
+                    <div class="text-[10px] text-white/40 font-black uppercase tracking-widest mb-2 italic">Presentado por <span class="text-white">${ibName}</span></div>
+                    <div class="text-[8px] text-white/10 uppercase tracking-widest leading-relaxed">ADVERTENCIA: Operar productos financieros conlleva un alto riesgo. <br> Resultados pasados no garantizan rendimientos futuros.</div>
+                </div>
             </div>
         </div>
-    </footer>`;
+    </footer>
+    `;
 }

@@ -1,514 +1,779 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
-export function renderMCHero(content: Record<string, any>, brand: BrandConfig): string {
-    const title = content.title || "ALPHA";
-    const highlight = content.highlight || "WEALTH";
-    const subtitle = content.subtitle || brand.heroPhrase || "Gestión de capital de alto nivel con transparencia total y tecnología MAM/PAMM.";
-    const ctaText = content.ctaText || "Join Alpha";
-    const ctaLink = brand.ctaLink || "#register";
+// ─── MAM & COPY HERO (SHARED) ───────────────────────────────
+export function renderMamCopyHero(content: Record<string, any>, brand: BrandConfig): string {
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibPhrase = brand.heroPhrase || "";
+    const ctaMamText = content.ctaMamText || "Quiero una cuenta MAM";
+    const ctaCopyText = content.ctaCopyText || "Quiero hacer Copy Trading";
+    const ctaMamLink = content.ctaMamLink || brand.ctaLink || "#";
+    const ctaCopyLink = content.ctaCopyLink || brand.ctaLink || "#";
 
     return `
-    <section class="relative min-h-screen flex items-center pt-32 pb-48 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Fondo Alpha Wealth -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#050505]">
+        <!-- Background logic -->
         <div class="absolute inset-0 z-0">
-            <!-- Patrón de malla elegante -->
-            <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(rgba(134,91,255,0.2) 1px, transparent 1px); background-size: 40px 40px;"></div>
-            
-            <!-- Tipografía de Fondo Sutil -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center opacity-[0.02] select-none pointer-events-none">
-                <span class="text-[40vw] font-black text-white uppercase tracking-tightest leading-none italic">ESTATE</span>
-            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('/images/imagenes%20nuevas/8d25cf7f49c36716ee118242656ba3e722258a6f.png')] bg-cover bg-center opacity-20 grayscale"></div>
         </div>
 
-        <div class="max-w-[1600px] mx-auto w-full relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+        <div class="container mx-auto px-8 relative z-10">
+            <div class="max-w-5xl mx-auto text-center">
+                <!-- IB Badge -->
+                <div class="inline-flex items-center gap-4 px-6 py-3 bg-white/5 border border-white/10 rounded-full mb-10 backdrop-blur-md animate-fade-in-up">
+                    <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-5 object-contain border-r border-white/20 pr-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                        <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Partner Oficial: <span class="text-white">${ibName}</span></span>
+                    </div>
+                </div>
+
+                <h1 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-8 leading-[1.1] uppercase">
+                    Gestiona o invierte capital de forma <span class="text-gradient-mamcopy">profesional, automatizada y transparente.</span>
+                </h1>
                 
-                <!-- Columna: Wealth Info -->
-                <div class="lg:col-span-6 section-reveal">
-                    <div class="flex items-center gap-6 mb-16">
-                        <div class="w-16 h-[2px] bg-gradient-to-r from-[#865BFF] to-transparent"></div>
-                        <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em]">Private Management</span>
+                <p class="text-xl md:text-2xl text-white/60 font-light mb-6 max-w-3xl mx-auto leading-relaxed">
+                    Accede a las Cuentas MAM y al Copy Trading de Bridge Markets. Dos soluciones. Un mismo ecosistema profesional.
+                </p>
+
+                ${ibPhrase ? `<p class="text-lg text-blue-400/80 font-medium mb-12 tracking-wide">${ibPhrase}</p>` : ''}
+
+                <!-- Product Badges -->
+                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                    <div class="px-6 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full flex items-center gap-2">
+                        <span class="material-symbols-outlined text-blue-400 text-sm">work</span>
+                        <span class="text-[10px] font-black text-white uppercase tracking-widest">💼 Cuentas MAM</span>
                     </div>
-
-                    <h1 class="text-7xl md:text-[11rem] lg:text-[14rem] font-black leading-[0.8] text-white mb-16 tracking-tightest uppercase italic">
-                        ${title} <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#865BFF] via-white to-white/20 italic">${highlight}</span>
-                    </h1>
-
-                    <div class="max-w-xl">
-                        <p class="text-2xl text-white/40 leading-relaxed mb-20 font-light italic tracking-tight">
-                            ${subtitle}
-                        </p>
-                        
-                        <div class="flex flex-wrap gap-12 items-center">
-                            <a href="${ctaLink}" class="group relative px-20 py-10 bg-white text-black font-black overflow-hidden hover:bg-[#865BFF] hover:text-white transition-all duration-700 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
-                                <span class="relative z-10 uppercase tracking-[0.5em] text-xs font-black italic">${ctaText}</span>
-                            </a>
-                            
-                            <div class="flex flex-col">
-                                <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em] mb-2 italic">Minimum Entry</span>
-                                <span class="text-2xl font-black text-white italic tracking-tighter">$10,000.00</span>
-                            </div>
-                        </div>
+                    <div class="px-6 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-400 text-sm">assignment</span>
+                        <span class="text-[10px] font-black text-white uppercase tracking-widest">📋 Copy Trading</span>
                     </div>
                 </div>
 
-                <!-- Columna: Visual Alpha -->
-                <div class="lg:col-span-6 relative flex justify-center items-center section-reveal">
-                    <div class="relative w-full aspect-square flex items-center justify-center">
-                        
-                        <!-- Main 3D Asset (Caballo Negro) -->
-                        <div class="relative z-10 w-full h-full transform scale-125 lg:scale-150">
-                            <img src="/images/imagenes%20nuevas/caballo%20negro.png" alt="Alpha Wealth Horse" class="w-full h-full object-contain filter drop-shadow-[0_0_120px_rgba(134,91,255,0.2)] animate-float-slow">
-                        </div>
-
-                        <!-- Elegant HUD Detail -->
-                        <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-20 rotate-90 opacity-20 hidden lg:block">
-                            <span class="text-[100px] font-black text-white uppercase tracking-[1em] leading-none whitespace-nowrap">PRESTIGE</span>
-                        </div>
-                    </div>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    <a href="${ctaMamLink}" class="group relative px-10 py-5 bg-blue-600 text-white font-black rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(37,99,235,0.3)]">
+                        <span class="relative z-10 uppercase tracking-widest text-xs">${ctaMamText}</span>
+                    </a>
+                    <a href="${ctaCopyLink}" class="group relative px-10 py-5 bg-emerald-600 text-white font-black rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(16,185,129,0.3)]">
+                        <span class="relative z-10 uppercase tracking-widest text-xs">${ctaCopyText}</span>
+                    </a>
                 </div>
-
             </div>
         </div>
-
-        <style>
-            @keyframes float-slow {
-                0%, 100% { transform: translateY(0) scale(1.3); }
-                50% { transform: translateY(-40px) scale(1.35); }
-            }
-            .animate-float-slow { animation: float-slow 12s ease-in-out infinite; }
-        </style>
+        
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-20">
+            <span class="material-symbols-outlined text-white text-4xl">expand_more</span>
+        </div>
     </section>
     `;
 }
 
-export function renderMCIntro(content: Record<string, any>, brand: BrandConfig): string {
+// ─── TABS NAVIGATION (STICKY) ──────────────────────────────
+export function renderMamCopyNav(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section id="learn" class="py-48 bg-white relative">
-        <div class="max-w-7xl mx-auto px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center section-reveal">
-                <div class="max-w-2xl">
-                    <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[0.8em] mb-10 block">Filosofía de Inversión</span>
-                    <h2 class="text-6xl font-black text-[#140633] leading-[0.85] mb-12 uppercase tracking-tightest">La infraestructura que redefine el éxito.</h2>
-                    <p class="text-2xl text-gray-500 font-light leading-relaxed">
-                        No se trata solo de copiar operaciones, se trata de acceder a una red institucional diseñada para la consistencia a largo plazo.
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 gap-10">
-                    <div class="p-12 glass-panel rounded-[3rem] border border-slate-100 hover:shadow-3xl hover:bg-white/10 transition-all transform hover:-translate-x-4 group">
-                        <div class="flex items-center gap-8 mb-8">
-                            <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-4xl">account_balance</span></div>
-                            <h4 class="text-3xl font-black text-[#140633] uppercase tracking-tighter">MAM Ecosystem</h4>
-                        </div>
-                        <p class="text-gray-400 font-medium text-lg leading-relaxed">Gestión centralizada de múltiples cuentas bajo una sola terminal maestra con ejecución LPOA.</p>
-                    </div>
-                    <div class="p-12 glass-panel rounded-[3rem] border border-slate-100 hover:shadow-3xl hover:bg-white/10 transition-all transform hover:-translate-x-2 group">
-                        <div class="flex items-center gap-8 mb-8">
-                            <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-4xl">auto_awesome</span></div>
-                            <h4 class="text-3xl font-black text-[#140633] uppercase tracking-tighter">Social Copy</h4>
-                        </div>
-                        <p class="text-gray-400 font-medium text-lg leading-relaxed">Replicación automatizada de milisegundos para inversores que buscan control individual absoluto.</p>
-                    </div>
-                </div>
-            </div>
+    <div id="product-nav-trigger"></div>
+    <div id="product-nav" class="sticky top-0 z-[90] w-full bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 py-4 transition-all duration-500 opacity-0 -translate-y-full">
+        <div class="max-w-7xl mx-auto px-8 flex justify-center gap-4 md:gap-8">
+            <button onclick="document.getElementById('mam').scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 transition-all group">
+                <span class="material-symbols-outlined text-blue-500 text-sm">work</span>
+                <span class="text-[10px] font-black text-white uppercase tracking-widest">Cuentas MAM</span>
+            </button>
+            <button onclick="document.getElementById('copy').scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all group">
+                <span class="material-symbols-outlined text-emerald-500 text-sm">assignment</span>
+                <span class="text-[10px] font-black text-white uppercase tracking-widest">Copy Trading</span>
+            </button>
+            <button onclick="document.getElementById('comparativa').scrollIntoView({behavior:'smooth'})" class="hidden md:flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">
+                <span class="material-symbols-outlined text-white/40 text-sm">compare_arrows</span>
+                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">Comparar</span>
+            </button>
         </div>
-    </section>`;
-}
+    </div>
 
-export function renderMCMamBlock(content: Record<string, any>, brand: BrandConfig): string {
-    return `
-    <section id="mam" class="py-48 glass-panel relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,#3B82F608,transparent_50%)]"></div>
-        <div class="max-w-7xl mx-auto px-8 relative z-10">
-            <div class="mb-40 section-reveal text-center lg:text-left">
-                <span class="text-blue-600 text-[11px] font-black uppercase tracking-[0.6em] mb-10 block">Institutional Asset Management</span>
-                <h2 class="text-7xl md:text-[9rem] font-black text-[#140633] uppercase tracking-tightest leading-[0.8] mb-16">CUENTAS <br><span class="text-blue-600 drop-shadow-2xl">MAM</span></h2>
-                <div class="max-w-4xl h-2 w-48 bg-blue-600 mb-16 rounded-full mx-auto lg:mx-0"></div>
-                <p class="text-3xl text-gray-500 font-light max-w-3xl leading-relaxed mx-auto lg:mx-0 pr-10">La robustez del sistema Maestro Multi-Cuentas de Bridge Markets para gestores de alto rendimiento.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-40 section-reveal">
-                ${[
-                    { icon: 'hub', title: 'Centralizada', desc: 'Control total de subcuentas desde una terminal operativa.' },
-                    { icon: 'bolt', title: 'Ultra Fast', desc: 'Ejecución simultánea en todos los clientes sin latencia.' },
-                    { icon: 'balance', title: 'Equitativa', desc: 'Distribución de lotaje proporcional basada en el capital.' },
-                    { icon: 'security', title: 'Auditada', desc: 'Transparencia total para que el cliente audite su equity.' }
-                ].map((item, i) => `
-                    <div class="bg-white p-14 rounded-[3.5rem] border border-slate-100 shadow-[0_20px_50px_rgba(20,6,51,0.05)] hover:shadow-[0_50px_100px_rgba(20,6,51,0.12)] transition-all transform hover:-translate-y-6 group">
-                        <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-12 group-hover:bg-blue-600 group-hover:text-white transition-all duration-700 shadow-inner">
-                            <span class="material-symbols-outlined text-5xl">${item.icon}</span>
-                        </div>
-                        <h4 class="text-3xl font-black text-[#140633] mb-6 uppercase tracking-tighter">${item.title}</h4>
-                        <p class="text-gray-400 font-bold text-xs uppercase tracking-[0.2em] leading-loose">${item.desc}</p>
-                    </div>
-                `).join('')}
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-40 section-reveal">
-                <div class="p-20 rounded-[5rem] bg-[#140633] text-white shadow-3xl relative overflow-hidden group">
-                     <div class="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-[120px] group-hover:bg-blue-600/20 transition-all"></div>
-                     <h4 class="text-4xl font-black mb-12 uppercase tracking-tighter relative z-10">MODELO EQUITY</h4>
-                     <p class="text-2xl text-white/50 mb-16 font-light leading-relaxed relative z-10">Visibilidad absoluta. Cada cliente ve de forma individual la flotación y operaciones activas del gestor.</p>
-                     <div class="grid grid-cols-2 gap-8 relative z-10">
-                        <div class="p-8 border border-white/5 bg-white/5 rounded-3xl">
-                            <div class="text-blue-400 text-3xl font-black mb-2">100%</div>
-                            <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Transparencia</div>
-                        </div>
-                        <div class="p-8 border border-white/5 bg-white/5 rounded-3xl">
-                            <div class="text-blue-400 text-3xl font-black mb-2">LIVE</div>
-                            <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Auditoría</div>
-                        </div>
-                     </div>
-                </div>
-                <div class="p-20 rounded-[5rem] bg-white border border-slate-100 shadow-3xl relative overflow-hidden group">
-                    <div class="absolute bottom-0 left-0 w-80 h-80 bg-gray-50 rounded-full blur-[100px]"></div>
-                    <h4 class="text-4xl font-black text-[#140633] mb-12 uppercase tracking-tighter relative z-10">MODELO CASH</h4>
-                    <p class="text-2xl text-gray-500 mb-16 font-light leading-relaxed relative z-10">Gestión por fondeo centralizado. El capital se consolida bajo un enfoque puramente institucional.</p>
-                     <div class="flex gap-4 relative z-10">
-                         <span class="px-6 py-3 bg-slate-100 rounded-full text-[10px] font-black uppercase tracking-widest text-[#140633]">Pool de Liquidez</span>
-                         <span class="px-6 py-3 bg-slate-100 rounded-full text-[10px] font-black uppercase tracking-widest text-[#140633]">Master Capital</span>
-                     </div>
-                </div>
-            </div>
-
-            <div class="p-24 bg-white rounded-[5rem] border border-slate-100 shadow-3xl relative overflow-hidden section-reveal">
-                <div class="absolute -right-40 -top-40 text-[400px] font-black text-[#140633]/5 select-none pointer-events-none tracking-tightest leading-none">V3</div>
-                <div class="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
-                    <span class="material-symbols-outlined text-blue-600 text-8xl mb-12 drop-shadow-lg">verified_user</span>
-                    <h3 class="text-5xl font-black text-[#140633] mb-10 uppercase tracking-tighter">Protocolo Legal LPOA</h3>
-                    <p class="text-3xl text-gray-500 leading-relaxed mb-16 font-light max-w-2xl">
-                        "Limited Power of Attorney: La seguridad de que tu capital **siempre** es tuyo."
-                    </p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full text-left">
-                        <div class="p-10 glass-panel rounded-[3rem] border border-slate-100 flex gap-8 items-center">
-                            <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 shrink-0"><span class="material-symbols-outlined text-4xl">lock</span></div>
-                            <p class="text-sm font-black text-[#140633] uppercase tracking-[0.2em] leading-relaxed">El gestor tiene restringido el acceso a retiros de fondos de clientes.</p>
-                        </div>
-                        <div class="p-10 glass-panel rounded-[3rem] border border-slate-100 flex gap-8 items-center">
-                            <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-emerald-600 shrink-0"><span class="material-symbols-outlined text-4xl">key</span></div>
-                            <p class="text-sm font-black text-[#140633] uppercase tracking-[0.2em] leading-relaxed">Solo el titular de la cuenta puede autorizar depósitos y retiros.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderMCCopyBlock(content: Record<string, any>, brand: BrandConfig): string {
-    return `
-    <section id="copy" class="py-48 bg-white relative overflow-hidden">
-        <div class="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[#F8FAFC] to-white"></div>
-        <div class="max-w-7xl mx-auto px-8 relative z-10">
-            <div class="mb-40 section-reveal text-center lg:text-left">
-                <span class="text-emerald-600 text-[11px] font-black uppercase tracking-[0.6em] mb-10 block">Real-Time Sync Infrastructure</span>
-                <h2 class="text-7xl md:text-[9rem] font-black text-[#140633] uppercase tracking-tightest leading-[0.8] mb-16">COPY <br><span class="text-emerald-600 drop-shadow-2xl">TRADING</span></h2>
-                <div class="max-w-4xl h-2 w-48 bg-emerald-600 mb-16 rounded-full mx-auto lg:mx-0"></div>
-                <p class="text-3xl text-gray-500 font-light max-w-3xl leading-relaxed mx-auto lg:mx-0 pr-10">Libertad total. Replica cada movimiento de los mejores traders con un retraso inferior a 10ms.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-40 section-reveal">
-                ${[
-                    { icon: 'speed', title: '0 Latencia', desc: 'Sincronización instantánea entre cuentas individuales.' },
-                    { icon: 'tune', title: 'Risk Control', desc: 'Define lotajes, stop-loss y límites de pérdida propios.' },
-                    { icon: 'payments', title: 'Inmediato', desc: 'Retira tus beneficios sin esperar aprobaciones de terceros.' },
-                    { icon: 'groups', title: 'Diverso', desc: 'Copia a múltiples estrategias para diversificar tu riesgo.' }
-                ].map((item, i) => `
-                    <div class="glass-panel p-14 rounded-[3.5rem] border border-slate-100 shadow-inner hover:shadow-3xl hover:bg-white/10 transition-all transform hover:-translate-y-6 group">
-                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-emerald-600 mb-12 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-700 shadow-md">
-                            <span class="material-symbols-outlined text-5xl">${item.icon}</span>
-                        </div>
-                        <h4 class="text-3xl font-black text-[#140633] mb-6 uppercase tracking-tighter">${item.title}</h4>
-                        <p class="text-gray-400 font-bold text-xs uppercase tracking-[0.2em] leading-loose">${item.desc}</p>
-                    </div>
-                `).join('')}
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 section-reveal">
-                <div class="glass-panel rounded-[5rem] p-20 border border-slate-100 shadow-2xl relative overflow-hidden group">
-                    <span class="text-[120px] font-black text-gray-100 absolute -top-10 -right-10 leading-none tracking-tightest group-hover:text-emerald-500/5 transition-colors">SYNC</span>
-                    <h4 class="text-emerald-600 text-[11px] font-black uppercase tracking-[0.8em] mb-16 relative z-10">Ventaja Competitiva</h4>
-                    <div class="space-y-16 relative z-10">
-                        <div>
-                            <h5 class="text-3xl font-black text-[#140633] mb-6 uppercase tracking-tighter border-l-8 border-emerald-600 pl-10">Monetización</h5>
-                            <p class="text-xl text-gray-400 leading-relaxed font-medium pl-10">Los proveedores de señales cobran comisiones de éxito directamente del beneficio generado.</p>
-                        </div>
-                        <div>
-                            <h5 class="text-3xl font-black text-[#140633] mb-6 uppercase tracking-tighter border-l-8 border-emerald-600 pl-10">Escalabilidad</h5>
-                            <p class="text-xl text-gray-400 leading-relaxed font-medium pl-10">Sin límites de seguidores. Tu estrategia puede impactar a miles de inversores a la vez.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-[#140633] rounded-[5rem] p-20 border border-white/5 shadow-3xl relative overflow-hidden group">
-                    <h4 class="text-blue-400 text-[11px] font-black uppercase tracking-[0.8em] mb-16">Inversión Pasiva</h4>
-                    <div class="space-y-16">
-                        <div>
-                            <h5 class="text-3xl font-black text-white mb-6 uppercase tracking-tighter border-l-8 border-blue-400 pl-10">Stop Manual</h5>
-                            <p class="text-xl text-white/40 leading-relaxed font-medium pl-10">Puedes detener la replicación en un clic, sin contratos de permanencia ni esperas.</p>
-                        </div>
-                        <div>
-                            <h5 class="text-3xl font-black text-white mb-6 uppercase tracking-tighter border-l-8 border-blue-400 pl-10">Control de Lote</h5>
-                            <p class="text-xl text-white/40 leading-relaxed font-medium pl-10">Copia de forma proporcional o usa lotajes fijos para una gestión de riesgo personalizada.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderMCComparison(content: Record<string, any>, brand: BrandConfig): string {
-    return `
-    <section class="py-48 bg-[#F4F5F7] relative">
-        <div class="max-w-7xl mx-auto px-8 section-reveal text-center">
-            <h2 class="text-6xl md:text-[8rem] font-black text-[#140633] mb-32 uppercase tracking-tightest leading-none">ANALISIS <br><span class="text-gray-300">DUAL</span></h2>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trigger = document.getElementById('product-nav-trigger');
+            const nav = document.getElementById('product-nav');
             
-            <div class="bg-white rounded-[5rem] shadow-4xl border border-slate-100 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[800px]">
-                        <thead>
-                            <tr class="bg-[#140633]">
-                                <th class="py-14 px-12 text-white/40 text-[11px] uppercase font-black tracking-[0.5em]">Parámetro de Gestión</th>
-                                <th class="py-14 px-12 text-blue-400 text-[11px] uppercase font-black tracking-[0.5em]">MAM Accounts</th>
-                                <th class="py-14 px-12 text-emerald-400 text-[11px] uppercase font-black tracking-[0.5em]">Copy Trading</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-50">
-                            ${[
-                                { c: 'Naturaleza de Gestión', m: 'Gestión Institucional Centralizada', ct: 'Sincronización Individual' },
-                                { c: 'Control de Riesgo', m: 'Definido globalmente por el gestor', ct: 'Definido por cada inversionista' },
-                                { c: 'Poder Legal (LPOA)', m: 'Requerido para el gestor', ct: 'No requerido (Sync Directo)' },
-                                { c: 'Flexibilidad de Fondos', m: 'Fondos segregados por subcuenta', ct: 'Total disponibilidad inmediata' },
-                                { c: 'Ejecución Operativa', m: 'Proporcional por Capital', ct: 'Replicada en milisegundos' },
-                                { c: 'Perfil Sugerido', m: 'Inversionistas Institucionales / High-Net', ct: 'Retail Traders / Traders Pasivos' }
-                            ].map(row => `
-                                <tr class="hover:glass-panel transition-colors">
-                                    <td class="py-12 px-12 text-[#140633] font-black text-sm uppercase tracking-widest border-r border-slate-50">${row.c}</td>
-                                    <td class="py-12 px-12 text-gray-500 text-lg font-medium border-r border-slate-50">${row.m}</td>
-                                    <td class="py-12 px-12 text-gray-500 text-lg font-medium">${row.ct}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <p class="mt-16 text-[10px] font-black text-gray-400 uppercase tracking-[0.6em]">Bridge Markets Comparative Engine V3</p>
-        </div>
-    </section>`;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        nav.classList.remove('opacity-0', '-translate-y-full');
+                    } else {
+                        nav.classList.add('opacity-0', '-translate-y-full');
+                    }
+                });
+            }, { threshold: 0 });
+
+            if (trigger) observer.observe(trigger);
+        });
+    </script>
+    `;
 }
 
-export function renderMCBenefits(content: Record<string, any>, brand: BrandConfig): string {
+// ─── INTRO SECTION (UNIFIED) ────────────────────────────────
+export function renderMamCopyIntro(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-40 bg-[#140633] relative overflow-hidden">
-        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal text-center">
-            <h2 class="text-4xl font-black text-white/30 mb-24 uppercase tracking-[0.8em] leading-none">Security Stack</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-20 gap-y-24">
-                ${[
-                    'A-Book Execution', 'Capital Segregation', 'Multi-Asset Liquidity', 'Master Gateway MT5',
-                    'Bi-Weekly Payouts', 'High-Water Mark Fees', 'V3 Core Bridge', 'SSL Encryption'
-                ].map((b, i) => `
-                    <div class="flex flex-col items-center gap-8 group">
-                        <div class="w-20 h-20 rounded-[1.5rem] border-2 border-white/5 flex items-center justify-center text-[#865BFF] bg-white/5 group-hover:bg-[#865BFF] group-hover:text-white group-hover:border-[#865BFF] transition-all transform group-hover:-rotate-12 shadow-2xl">
-                            <span class="material-symbols-outlined text-4xl">verified</span>
+    <section class="py-32 px-8 bg-[#050505] text-center">
+        <div class="max-w-4xl mx-auto section-reveal">
+            <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">Dos soluciones, un ecosistema</span>
+            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-10 uppercase">Conectando capital con talento</h2>
+            
+            <div class="space-y-8 text-white/50 text-lg leading-relaxed">
+                <p>En el entorno actual de los mercados financieros, han surgido herramientas que permiten optimizar la gestión de inversiones tanto para traders profesionales como para inversionistas.</p>
+                <p>Bridge Markets ofrece dos soluciones de alto nivel para conectar capital con talento:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
+                <div class="p-8 bg-blue-500/5 border border-blue-500/10 rounded-[2.5rem] hover:border-blue-500/30 transition-all">
+                    <h3 class="text-xl font-black text-white mb-4">💼 Cuentas MAM</h3>
+                    <p class="text-sm text-white/40 leading-relaxed">Multi-Account Manager: gestión centralizada y profesional de múltiples cuentas.</p>
+                </div>
+                <div class="p-8 bg-emerald-500/5 border border-emerald-500/10 rounded-[2.5rem] hover:border-emerald-500/30 transition-all">
+                    <h3 class="text-xl font-black text-white mb-4">📋 Copy Trading</h3>
+                    <p class="text-sm text-white/40 leading-relaxed">Replicación automática de estrategias verificadas en tiempo real.</p>
+                </div>
+            </div>
+            
+            <p class="mt-16 text-white/60 text-lg">Ambos modelos facilitan el acceso a los mercados financieros de forma estructurada, transparente y escalable.</p>
+        </div>
+    </section>
+    `;
+}
+
+// ─── MAM BLOCK ──────────────────────────────────────────────
+export function renderMamBlock(content: Record<string, any>, brand: BrandConfig): string {
+    return `
+    <section id="mam" class="py-32 px-8 bg-[#080808] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+            <img src="/images/imagenes%20nuevas/rey%20rosa.png" class="w-full h-full object-contain object-right transform rotate-12">
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex items-center gap-4 mb-12 section-reveal">
+                <div class="w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl text-blue-500">work</span>
+                </div>
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">Cuentas MAM</h2>
+                    <p class="text-blue-500 font-bold uppercase tracking-widest text-xs">Multi-Account Manager — Gestión profesional centralizada</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start section-reveal">
+                <div>
+                    <h3 class="text-2xl font-black text-white mb-6 uppercase">¿Qué es una Cuenta MAM?</h3>
+                    <p class="text-white/60 text-lg leading-relaxed mb-8">Una cuenta MAM (Multi-Account Manager) es una solución tecnológica que permite a un gestor profesional administrar múltiples cuentas de trading desde una única plataforma.</p>
+                    <p class="text-white/60 text-lg leading-relaxed border-l-2 border-blue-500 pl-6">Todas las operaciones realizadas en la cuenta principal del gestor se replican automáticamente en las cuentas de los inversionistas, de forma proporcional al capital de cada uno.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    ${[
+                        { i: 'account_balance', t: 'Gestión centralizada', d: 'Administra múltiples cuentas desde un solo lugar.' },
+                        { i: 'bolt', t: 'Ejecución simultánea', d: 'Operaciones replicadas al instante en toda la red.' },
+                        { i: 'analytics', t: 'Distribución proporcional', d: 'Resultados asignados según el capital de cada cuenta.' },
+                        { i: 'search', t: 'Transparencia total', d: 'Control detallado y auditoría de cada operación.' }
+                    ].map(f => `
+                        <div class="p-6 bg-white/[0.02] border border-white/10 rounded-3xl hover:bg-white/[0.04] transition-all group">
+                            <span class="material-symbols-outlined text-blue-500 mb-4 group-hover:scale-110 transition-transform">${f.i}</span>
+                            <h4 class="text-sm font-black text-white mb-2 uppercase">${f.t}</h4>
+                            <p class="text-[10px] text-white/40 leading-relaxed uppercase tracking-widest">${f.d}</p>
                         </div>
-                        <span class="text-white/60 font-black text-[11px] uppercase tracking-[0.4em] group-hover:text-white transition-colors">${b}</span>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- Types -->
+            <div class="mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 section-reveal">
+                <div class="p-10 bg-gradient-to-br from-blue-600/20 to-transparent border border-blue-500/20 rounded-[3rem]">
+                    <h4 class="text-2xl font-black text-white mb-6 uppercase">MAM EQUITY</h4>
+                    <p class="text-white/50 mb-8 text-sm">El inversionista puede visualizar en tiempo real todas las operaciones del gestor.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-xs font-bold text-white/80 uppercase"><span class="text-blue-500">✓</span> Alta transparencia</li>
+                        <li class="flex items-center gap-3 text-xs font-bold text-white/80 uppercase"><span class="text-blue-500">✓</span> Monitoreo constante del rendimiento</li>
+                        <li class="flex items-center gap-3 text-xs font-bold text-white/80 uppercase"><span class="text-blue-500">✓</span> Control visual del capital</li>
+                    </ul>
+                </div>
+                <div class="p-10 bg-gradient-to-br from-slate-600/20 to-transparent border border-white/10 rounded-[3rem]">
+                    <h4 class="text-2xl font-black text-white mb-6 uppercase">MAM CASH</h4>
+                    <p class="text-white/50 mb-8 text-sm">El inversionista delega completamente la gestión operativa al trader profesional.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-xs font-bold text-white/80 uppercase"><span class="text-blue-500">✓</span> Gestión totalmente automatizada</li>
+                        <li class="flex items-center gap-3 text-xs font-bold text-white/80 uppercase"><span class="text-blue-500">✓</span> Enfoque pasivo del inversionista</li>
+                        <li class="flex items-center gap-3 text-xs font-bold text-white/80 uppercase"><span class="text-blue-500">✓</span> Ejecución profesional de estrategias</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- LPOA -->
+            <div class="mt-32 bg-white/[0.01] border border-white/5 rounded-[3rem] p-12 section-reveal">
+                <div class="flex flex-col md:flex-row gap-12 items-center">
+                    <div class="flex-1">
+                        <h3 class="text-3xl font-black text-white mb-6">¿Qué es el LPOA?</h3>
+                        <p class="text-white/60 text-lg leading-relaxed">El LPOA (Limited Power of Attorney) es un documento legal que autoriza al gestor a ejecutar operaciones en nombre del cliente bajo condiciones previamente establecidas.</p>
+                    </div>
+                    <div class="flex-1 grid grid-cols-1 gap-4">
+                        <div class="flex items-start gap-4 p-6 bg-[#050505] rounded-2xl border border-white/5">
+                            <span class="material-symbols-outlined text-blue-500">verified</span>
+                            <p class="text-sm text-white/60"><span class="text-white font-bold block mb-1">Propiedad Total</span> El cliente mantiene la propiedad total de sus fondos en todo momento.</p>
+                        </div>
+                        <div class="flex items-start gap-4 p-6 bg-[#050505] rounded-2xl border border-white/5">
+                            <span class="material-symbols-outlined text-red-500">lock</span>
+                            <p class="text-sm text-white/60"><span class="text-white font-bold block mb-1">Sin Retiros</span> El gestor NO puede retirar dinero bajo ninguna circunstancia.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How it works Stepper -->
+            <div class="mt-32 section-reveal">
+                <h3 class="text-2xl font-black text-white mb-12 uppercase text-center">¿Cómo funciona una Cuenta MAM?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                    ${[
+                        { n: '1', t: 'El gestor abre la MAM', d: 'El gestor abre una cuenta MAM con Bridge Markets.' },
+                        { n: '2', t: 'Se crean subcuentas', d: 'Se crean subcuentas individuales para cada inversionista.' },
+                        { n: '3', t: 'Depósito de fondos', d: 'Los inversionistas depositan fondos en sus respectivas cuentas.' },
+                        { n: '4', t: 'Firma del LPOA', d: 'Se firma el acuerdo de gestión autorizada (LPOA).' },
+                        { n: '5', t: 'Operación centralizada', d: 'El gestor ejecuta operaciones desde la cuenta principal.' },
+                        { n: '6', t: 'Distribución automática', d: 'Las operaciones se distribuyen proporcionalmente a cada subcuenta.' }
+                    ].map(step => `
+                        <div class="relative p-8 bg-white/[0.02] border border-white/5 rounded-3xl">
+                            <div class="text-5xl font-black text-blue-500/20 absolute top-4 right-8">${step.n}</div>
+                            <h4 class="text-lg font-black text-white mb-4">${step.t}</h4>
+                            <p class="text-sm text-white/40 leading-relaxed">${step.d}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <!-- Advantages for Trader and Investor -->
+            <div class="mt-32 grid grid-cols-1 md:grid-cols-2 gap-16 section-reveal">
+                <div>
+                    <h3 class="text-xl font-black text-blue-500 mb-8 uppercase tracking-widest">Ventajas para el Trader Gestor</h3>
+                    <div class="space-y-4">
+                        ${[
+                            { t: 'Escalabilidad', d: 'Gestiona grandes volúmenes de capital sin operar múltiples cuentas manualmente.' },
+                            { t: 'Ingresos adicionales', d: 'Recibe comisiones por rendimiento o gestión como proveedor de estrategias.' },
+                            { t: 'Eficiencia operativa', d: 'Ejecución simultánea en múltiples cuentas, reducción de errores y optimización.' },
+                            { t: 'Infraestructura profesional', d: 'Servidores rápidos, plataformas MT4/MT5 y soporte técnico continuo.' },
+                            { t: 'Crecimiento profesional', d: 'Construye historial verificable, atrae inversionistas y desarrolla tu marca personal.' }
+                        ].map(v => `
+                            <div class="p-6 bg-white/[0.01] border border-white/5 rounded-2xl flex gap-4">
+                                <span class="material-symbols-outlined text-blue-500 text-sm pt-1">check_circle</span>
+                                <div>
+                                    <h4 class="text-sm font-black text-white uppercase mb-1">${v.t}</h4>
+                                    <p class="text-xs text-white/40">${v.d}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-blue-400 mb-8 uppercase tracking-widest">Ventajas para el Inversionista</h3>
+                    <div class="space-y-4">
+                        ${[
+                            { t: 'Acceso a gestión profesional', d: 'Tu capital es operado por un trader certificado bajo condiciones controladas.' },
+                            { t: 'Transparencia total', d: 'Monitorea en tiempo real las operaciones según el tipo de cuenta MAM elegida.' },
+                            { t: 'Control sobre el capital', d: 'Mantienes la propiedad de tus fondos en todo momento. El gestor solo opera, no retira.' },
+                            { t: 'Flexibilidad en niveles de riesgo', d: 'Elige el perfil de riesgo y el tipo de cuenta que mejor se adapte a tus objetivos.' },
+                            { t: 'Operaciones proporcionales', d: 'Las ganancias y pérdidas se distribuyen según tu participación de capital.' }
+                        ].map(v => `
+                            <div class="p-6 bg-white/[0.01] border border-white/5 rounded-2xl flex gap-4">
+                                <span class="material-symbols-outlined text-blue-400 text-sm pt-1">check_circle</span>
+                                <div>
+                                    <h4 class="text-sm font-black text-white uppercase mb-1">${v.t}</h4>
+                                    <p class="text-xs text-white/40">${v.d}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── COPY TRADING BLOCK ─────────────────────────────────────
+export function renderCopyBlock(content: Record<string, any>, brand: BrandConfig): string {
+    return `
+    <section id="copy" class="py-32 px-8 bg-[#050505] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+            <img src="/images/imagenes%20nuevas/caballo%20rosa.png" class="w-full h-full object-contain object-right transform -rotate-12">
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex items-center gap-4 mb-12 section-reveal">
+                <div class="w-16 h-16 bg-emerald-600/10 rounded-2xl flex items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl text-emerald-500">assignment</span>
+                </div>
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">Copy Trading</h2>
+                    <p class="text-emerald-500 font-bold uppercase tracking-widest text-xs">Replica automáticamente estrategias de traders profesionales verificados</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start section-reveal">
+                <div>
+                    <h3 class="text-2xl font-black text-white mb-6 uppercase">¿Qué es el Copy Trading?</h3>
+                    <p class="text-white/60 text-lg leading-relaxed mb-8">El Copy Trading es un modelo de inversión que permite a los usuarios replicar automáticamente las operaciones de traders profesionales en tiempo real.</p>
+                    <p class="text-white/60 text-lg leading-relaxed border-l-2 border-emerald-500 pl-6">A diferencia de las cuentas MAM, el Copy Trading ofrece mayor flexibilidad al inversionista, quien puede elegir, seguir o dejar de copiar estrategias en cualquier momento.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    ${[
+                        { i: 'sync', t: 'Replicación automática', d: 'Copia operaciones al instante y sin intervención manual.' },
+                        { i: 'verified', t: 'Estrategias verificadas', d: 'Accede a traders con historial real y auditado.' },
+                        { i: 'tune', t: 'Control directo', d: 'Ajusta el capital asignado y detén la copia cuando desees.' },
+                        { i: 'public', t: 'Diversificación total', d: 'Distribuye tu capital entre múltiples traders expertos.' }
+                    ].map(f => `
+                        <div class="p-6 bg-white/[0.02] border border-white/10 rounded-3xl hover:bg-white/[0.04] transition-all group">
+                            <span class="material-symbols-outlined text-emerald-500 mb-4 group-hover:scale-110 transition-transform">${f.i}</span>
+                            <h4 class="text-sm font-black text-white mb-2 uppercase">${f.t}</h4>
+                            <p class="text-[10px] text-white/40 leading-relaxed uppercase tracking-widest">${f.d}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-32 section-reveal">
+                <!-- Trader Side -->
+                <div>
+                    <h3 class="text-xl font-black text-emerald-500 mb-8 uppercase tracking-widest">Ventajas para el Trader Proveedor</h3>
+                    <div class="space-y-4">
+                        ${[
+                            { t: 'Monetiza tu estrategia', d: 'Conviértete en proveedor de señales y recibe comisiones por rendimiento.' },
+                            { t: 'Atrae inversionistas', d: 'Tu historial verificable en la plataforma atrae capital de forma orgánica.' },
+                            { t: 'Marca Personal', d: 'Desarrolla reputación profesional dentro del ecosistema Bridge Markets.' },
+                            { t: 'Escalabilidad sin esfuerzo extra', d: 'Tus operaciones se replican automáticamente. Sin gestión manual adicional.' }
+                        ].map(v => `
+                            <div class="p-6 bg-white/[0.01] border border-white/5 rounded-2xl flex gap-4">
+                                <span class="material-symbols-outlined text-emerald-500 text-sm pt-1">check_circle</span>
+                                <div>
+                                    <h4 class="text-sm font-black text-white uppercase mb-1">${v.t}</h4>
+                                    <p class="text-xs text-white/40">${v.d}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Investor Side -->
+                <div>
+                    <h3 class="text-xl font-black text-blue-400 mb-8 uppercase tracking-widest">Ventajas para el Inversionista</h3>
+                    <div class="space-y-4">
+                        ${[
+                            { t: 'Simplicidad total', d: 'No necesitas experiencia en trading. Eliges un trader y tu cuenta replica sus operaciones.' },
+                            { t: 'Alta flexibilidad', d: 'Puedes cambiar de trader, pausar o detener la copia en cualquier momento.' },
+                            { t: 'Diversificación', d: 'Copia varios traders simultáneamente para distribuir el riesgo.' },
+                            { t: 'Estrategias verificadas', d: 'Los traders visibles tienen historial real y verificable en la plataforma.' },
+                            { t: 'Control sobre tu capital', d: 'Tú decides cuánto asignar a cada trader y puedes retirar cuando lo necesites.' }
+                        ].map(v => `
+                            <div class="p-6 bg-white/[0.01] border border-white/5 rounded-2xl flex gap-4">
+                                <span class="material-symbols-outlined text-blue-400 text-sm pt-1">check_circle</span>
+                                <div>
+                                    <h4 class="text-sm font-black text-white uppercase mb-1">${v.t}</h4>
+                                    <p class="text-xs text-white/40">${v.d}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── COMPARISON MAM vs COPY ────────────────────────────────
+export function renderMamCopyComparison(content: Record<string, any>, brand: BrandConfig): string {
+    const rows = [
+        ['Gestión', 'Centralizada por el gestor', 'Elegida por el inversionista'],
+        ['Control del cliente', 'Medio — delegado al gestor', 'Alto — control total del usuario'],
+        ['Ejecución', 'Proporcional automática', 'Copia directa de operaciones'],
+        ['Flexibilidad', 'Moderada', 'Alta — cambia de trader cuando quieras'],
+        ['Perfil ideal del inversionista', 'Busca gestión profesional pasiva', 'Quiere participar activamente en la selección'],
+        ['Requiere firma de LPOA', 'Sí', 'No'],
+        ['Diversificación', 'Por subcuenta del gestor', 'Entre múltiples traders simultáneamente'],
+        ['Transparencia', 'Alta (especialmente MAM Equity)', 'Alta — historial verificable']
+    ];
+
+    return `
+    <section id="comparativa" class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-4 uppercase tracking-tight">Comparativa MAM vs Copy Trading</h2>
+                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">Elige el modelo que mejor se adapte a tu perfil operativo</p>
+            </div>
+
+            <div class="overflow-x-auto section-reveal">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="py-6 px-4 text-[10px] font-black text-white/30 uppercase tracking-widest">Característica</th>
+                            <th class="py-6 px-4 text-[10px] font-black text-blue-500 uppercase tracking-widest">Cuenta MAM</th>
+                            <th class="py-6 px-4 text-[10px] font-black text-emerald-500 uppercase tracking-widest">Copy Trading</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        ${rows.map(row => `
+                            <tr class="hover:bg-white/[0.02] transition-colors group">
+                                <td class="py-6 px-4 text-xs font-bold text-white uppercase tracking-wider">${row[0]}</td>
+                                <td class="py-6 px-4 text-sm text-white/50 group-hover:text-blue-400 transition-colors">${row[1]}</td>
+                                <td class="py-6 px-4 text-sm text-white/50 group-hover:text-emerald-400 transition-colors">${row[2]}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── GENERAL BENEFITS ──────────────────────────────────────
+export function renderMamCopyBenefits(content: Record<string, any>, brand: BrandConfig): string {
+    const benefits = [
+        'Capital segregado', 'Operaciones proporcionales', 
+        'Subcuentas ilimitadas', 'Inversión en USD', 
+        'Posibilidad de incrementar capital', 'Operaciones desde 0.01 lotes', 
+        'Soporte 24/7', 'Plataforma MT4 / MT5'
+    ];
+
+    return `
+    <section class="py-32 px-8 bg-[#080808] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 section-reveal">
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-4 uppercase">Beneficios Generales del Sistema</h2>
+                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">Infraestructura institucional para tu éxito</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 section-reveal">
+                ${benefits.map(b => `
+                    <div class="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center gap-3 group hover:bg-white/[0.04] transition-all">
+                        <span class="material-symbols-outlined text-[#3b82f6] text-sm">check_circle</span>
+                        <span class="text-[10px] font-black text-white/70 uppercase tracking-widest">${b}</span>
                     </div>
                 `).join('')}
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
-export function renderMCDualSteps(content: Record<string, any>, brand: BrandConfig): string {
+// ─── HOW TO START ──────────────────────────────────────────
+export function renderMamCopySteps(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-48 bg-white">
-        <div class="max-w-7xl mx-auto px-8 section-reveal">
-            <div class="text-center mb-40">
-                <h2 class="text-6xl md:text-8xl font-black text-[#140633] uppercase tracking-tighter">RUTA DE <br><span class="text-gray-200">ACCESO</span></h2>
+    <section class="py-32 px-8 bg-[#080808] border-y border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24 section-reveal">
+                <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">¿Cómo empezar?</h2>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-32">
-                <div class="text-left">
-                    <div class="flex items-center gap-6 mb-16">
-                        <div class="h-px w-16 bg-blue-600"></div>
-                        <h3 class="text-[11px] font-black text-blue-600 uppercase tracking-[1em]">Para el Gestor</h3>
-                    </div>
-                    <div class="space-y-14">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 section-reveal">
+                <!-- Traders -->
+                <div class="p-10 bg-white/[0.02] border border-white/5 rounded-[3rem]">
+                    <h3 class="text-2xl font-black text-white mb-10 uppercase border-b border-white/10 pb-6">Para Traders Gestores / Proveedores</h3>
+                    <div class="space-y-8">
                         ${[
-                            { n: '01', t: 'Identidad Digital', d: 'Completa tu registro y verificación KYC bajo el estándar de Bridge Markets.' },
-                            { n: '02', t: 'Configuración Maestra', d: 'Habilita tu terminal MAM y conecta tu estrategia Maestra en MT5.' },
-                            { n: '03', t: 'Parámetros LPOA', d: 'Firma el acuerdo legal que habilita la gestión proporcional de las subcuentas.' },
-                            { n: '04', t: 'Gestión Activa', d: 'Opera y gestiona tus clientes desde un único panel institucional centralizado.' }
-                        ].map(step => `
-                            <div class="flex gap-12 items-start group">
-                                <span class="text-7xl font-black text-blue-50 group-hover:text-blue-600 transition-colors leading-none tracking-tightest">${step.n}</span>
-                                <div class="pt-2"><h4 class="text-2xl font-black text-[#140633] mb-4 uppercase tracking-tighter">${step.t}</h4><p class="text-gray-400 font-bold text-xs uppercase tracking-[0.2em] leading-loose">${step.d}</p></div>
+                            { n: '1', t: 'Crea tu cuenta', d: 'Regístrate en el portal de Bridge Markets a través del link de tu IB.' },
+                            { n: '2', t: 'Completa tu KYC', d: 'Verifica tu identidad para activar el acceso completo.' },
+                            { n: '3', t: 'Solicita tu cuenta MAM o activa Copy Trading', d: 'Contacta a tu IB o al soporte de BM para configurar tu cuenta gestora.' },
+                            { n: '4', t: 'Define tus condiciones', d: 'Establece las comisiones, el perfil de riesgo y los parámetros de gestión.' },
+                            { n: '5', t: 'Opera y atrae inversionistas', d: 'Ejecuta tu estrategia. Tu historial verificable atrae capital automáticamente.' }
+                        ].map(s => `
+                            <div class="flex gap-6">
+                                <div class="w-10 h-10 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-black shrink-0">${s.n}</div>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1 uppercase text-sm">${s.t}</h4>
+                                    <p class="text-xs text-white/40">${s.d}</p>
+                                </div>
                             </div>
                         `).join('')}
                     </div>
                 </div>
-                <div class="text-left">
-                    <div class="flex items-center gap-6 mb-16">
-                        <div class="h-px w-16 bg-emerald-600"></div>
-                        <h3 class="text-[11px] font-black text-emerald-600 uppercase tracking-[1em]">Para el Inversor</h3>
-                    </div>
-                    <div class="space-y-14">
+
+                <!-- Investors -->
+                <div class="p-10 bg-white/[0.02] border border-white/5 rounded-[3rem]">
+                    <h3 class="text-2xl font-black text-white mb-10 uppercase border-b border-white/10 pb-6">Para Inversionistas</h3>
+                    <div class="space-y-8">
                         ${[
-                            { n: '01', t: 'Fondeo Directo', d: 'Accede a tu cuenta de inversor y deposita el capital a gestionar en tu billetera segura.' },
-                            { n: '02', t: 'Selección de Modelo', d: 'Elige si prefieres delegar en el sistema MAM o replicar vía Copy Trading.' },
-                            { n: '03', t: 'Vínculo de Cuenta', d: 'Conéctate a la estrategia o al gestor elegido en tan solo tres clics desde el portal.' },
-                            { n: '04', t: 'Performance', d: 'Monitorea el crecimiento de tu capital en tiempo real y gestiona tus retiros bimensuales.' }
-                        ].map(step => `
-                            <div class="flex gap-12 items-start group">
-                                <span class="text-7xl font-black text-emerald-50 group-hover:text-emerald-600 transition-colors leading-none tracking-tightest">${step.n}</span>
-                                <div class="pt-2"><h4 class="text-2xl font-black text-[#140633] mb-4 uppercase tracking-tighter">${step.t}</h4><p class="text-gray-400 font-bold text-xs uppercase tracking-[0.2em] leading-loose">${step.d}</p></div>
+                            { n: '1', t: 'Crea tu cuenta', d: 'Regístrate en el portal de Bridge Markets a través del link de tu IB.' },
+                            { n: '2', t: 'Completa tu KYC', d: 'Verifica tu identidad y deposita fondos.' },
+                            { n: '3', t: 'Elige tu modelo', d: 'Decide si prefieres una cuenta MAM (gestión delegada) o Copy Trading.' },
+                            { n: '4', t: 'Asigna tu capital', d: 'Conecta tu cuenta al gestor MAM firmando el LPOA o elige un trader.' },
+                            { n: '5', t: 'Monitorea y retira', d: 'Sigue tu rendimiento en tiempo real y solicita retiros según condiciones.' }
+                        ].map(s => `
+                            <div class="flex gap-6">
+                                <div class="w-10 h-10 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-black shrink-0">${s.n}</div>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1 uppercase text-sm">${s.t}</h4>
+                                    <p class="text-xs text-white/40">${s.d}</p>
+                                </div>
                             </div>
                         `).join('')}
                     </div>
                 </div>
             </div>
         </div>
-    </section>`;
+    </section>
+    `;
 }
 
+// ─── MAM & COPY FAQ ─────────────────────────────────────────
+export function renderMamCopyFAQ(content: Record<string, any>, brand: BrandConfig): string {
+    const mamFaqs = [
+        { q: '¿Qué es una cuenta MAM?', a: 'Es una solución tecnológica que permite a un gestor profesional administrar múltiples cuentas desde una sola plataforma, replicando operaciones de forma proporcional.' },
+        { q: '¿Cuál es la diferencia entre MAM Equity y MAM Cash?', a: 'MAM Equity permite al inversionista ver las operaciones en tiempo real. MAM Cash delega completamente la gestión al trader profesional.' },
+        { q: '¿Qué es el LPOA?', a: 'Es un documento legal que autoriza al gestor a operar en nombre del cliente. El cliente mantiene siempre la propiedad de sus fondos; el gestor solo opera, no retira.' },
+        { q: '¿Puede el gestor retirar mi dinero?', a: 'No. El LPOA solo autoriza al gestor a ejecutar operaciones. Los fondos siempre pertenecen al cliente.' },
+        { q: '¿Desde cuánto puedo empezar a invertir en MAM?', a: 'Las operaciones se pueden ejecutar desde 0.01 lotes. Consulta con tu IB el capital mínimo recomendado para el gestor de tu elección.' },
+        { q: '¿Cuántas subcuentas puede gestionar un MAM?', a: 'La plataforma permite subcuentas ilimitadas, permitiendo al gestor escalar su cartera de inversionistas sin límite operativo.' }
+    ];
+    const copyFaqs = [
+        { q: '¿Qué es el Copy Trading?', a: 'Es un modelo donde tu cuenta replica automáticamente y en tiempo real las operaciones de un trader profesional que tú elige.' },
+        { q: '¿Necesito saber de trading para hacer Copy Trading?', a: 'No. Simplemente eliges un trader con historial verificado, asignas capital y tu cuenta copia sus operaciones automáticamente.' },
+        { q: '¿Puedo dejar de copiar a un trader en cualquier momento?', a: 'Sí. Tienes control total. Puedes pausar, cambiar o detener la copia cuando lo desees.' },
+        { q: '¿Puedo copiar a varios traders a la vez?', a: 'Sí. Puedes diversificar copiando múltiples traders simultáneamente para distribuir el riesgo.' },
+        { q: '¿Cómo ganan los traders proveedores?', a: 'Los traders proveedores reciben comisiones por rendimiento o gestión según las condiciones establecidas en la plataforma.' },
+        { q: '¿Los traders tienen historial verificable?', a: 'Sí. Los traders visibles en la plataforma de Copy Trading tienen historial real y verificable públicamente.' }
+    ];
+
+    return `
+    <section class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-20 text-center uppercase">Preguntas Frecuentes</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 section-reveal">
+                <div>
+                    <h3 class="text-lg font-black text-blue-400 mb-8 uppercase tracking-widest">FAQ — Cuentas MAM</h3>
+                    <div class="space-y-4">
+                        ${mamFaqs.map(faq => `
+                            <div class="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                                <h4 class="text-white font-bold mb-3 italic">${faq.q}</h4>
+                                <p class="text-white/40 text-sm leading-relaxed">${faq.a}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-emerald-400 mb-8 uppercase tracking-widest">FAQ — Copy Trading</h3>
+                    <div class="space-y-4">
+                        ${copyFaqs.map(faq => `
+                            <div class="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                                <h4 class="text-white font-bold mb-3 italic">${faq.q}</h4>
+                                <p class="text-white/40 text-sm leading-relaxed">${faq.a}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── FINAL CTA ──────────────────────────────────────────────
+export function renderMamCopyFinalCTA(content: Record<string, any>, brand: BrandConfig): string {
+    const ctaMamText = content.ctaMamText || "Quiero una cuenta MAM";
+    const ctaCopyText = content.ctaCopyText || "Quiero hacer Copy Trading";
+    const ctaMamLink = content.ctaMamLink || brand.ctaLink || "#";
+    const ctaCopyLink = content.ctaCopyLink || brand.ctaLink || "#";
+
+    return `
+    <section class="py-40 px-8 bg-[#050505] relative overflow-hidden border-t border-white/5">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="absolute -bottom-20 -right-20 w-1/3 object-contain transform -rotate-12">
+        </div>
+        <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
+            <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 tracking-tighter uppercase leading-none">Conecta talento con <span class="text-blue-500">capital.</span></h2>
+            <p class="text-xl md:text-2xl text-white/50 font-light mb-12">Elige tu modelo: gestión centralizada con MAM o libertad total con Copy Trading.</p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="${ctaMamLink}" class="w-full sm:w-auto px-12 py-6 bg-blue-600 text-white font-black rounded-2xl hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest">${ctaMamText}</a>
+                <a href="${ctaCopyLink}" class="w-full sm:w-auto px-12 py-6 bg-emerald-600 text-white font-black rounded-2xl hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest">${ctaCopyText}</a>
+            </div>
+            
+            <p class="mt-16 text-[10px] text-white/20 uppercase tracking-[0.4em] font-black max-w-2xl mx-auto">
+                "Los resultados pasados no garantizan rendimientos futuros. Toda inversión conlleva riesgo. Opera o invierte con responsabilidad."
+            </p>
+        </div>
+    </section>
+    `;
+}
+
+// ─── MC COMMUNITY SECTION ──────────────────────────────────
 export function renderMCCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'mc_community')!.defaultContent, ...content };
-    const communityName = brand.communityName || c.communityName;
-    const bannerUrl = c.bannerUrl || 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&q=80&w=2000';
+    const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
+    const message = content.communityMessage || 'Únete a nuestro ecosistema y conecta con traders profesionales.';
+    const telegram = brand.telegram || '#';
+    const whatsapp = brand.whatsapp || '#';
+
+    return `
+    <section id="comunidad" class="py-32 px-8 bg-[#050505] relative overflow-hidden border-t border-white/5">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="bg-gradient-to-br from-blue-600/10 via-transparent to-emerald-600/10 border border-white/10 rounded-[3rem] p-10 md:p-20 backdrop-blur-3xl">
+                <div class="max-w-3xl">
+                    <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">Comunidad Exclusiva</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase">${ibName}</h2>
+                    <p class="text-white/60 text-lg md:text-xl leading-relaxed mb-12">${message}</p>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="${telegram}" class="px-8 py-4 bg-[#24A1DE] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">Telegram</a>
+                        <a href="${whatsapp}" class="px-8 py-4 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    `;
+}
+
+// ─── MC FOOTER ──────────────────────────────────────────────
+export function renderMCFooter(content: Record<string, any>, brand: BrandConfig): string {
+    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const currentYear = new Date().getFullYear();
+
+    return `
+    <footer class="py-20 px-8 bg-[#020202] border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+                <div class="max-w-xs">
+                    <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-8 mb-8">
+                    <p class="text-white/30 text-xs leading-relaxed">
+                        Tecnología institucional al alcance de todos los inversores. Expertos en gestión MAM y Copy Trading global.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+                    <div class="flex flex-col gap-4">
+                        <span class="text-[10px] font-black text-white/20 uppercase tracking-widest">Productos</span>
+                        <a href="#mam" class="text-xs text-white/50 hover:text-blue-500 transition-colors">Cuentas MAM</a>
+                        <a href="#copy" class="text-xs text-white/50 hover:text-emerald-500 transition-colors">Copy Trading</a>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <span class="text-[10px] font-black text-white/20 uppercase tracking-widest">Legal</span>
+                        <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Advertencia de Riesgo</a>
+                        <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Términos y Condiciones</a>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <span class="text-[10px] font-black text-white/20 uppercase tracking-widest">Soporte</span>
+                        <a href="mailto:corporate@bridgemarkets.global" class="text-xs text-white/50 hover:text-white transition-colors">Soporte BM</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[10px] text-white/20 uppercase tracking-[0.2em] font-medium">© ${currentYear} BridgeMarkets LTD. Todos los derechos reservados.</p>
+                <div class="text-[10px] text-white/40 uppercase tracking-widest font-black">Presentado por ${ibName}</div>
+            </div>
+        </div>
+    </footer>
+    `;
+}
+
+// ─── MC REGISTRATION FORM ──────────────────────────────────
+export function renderMCRegistration(content: Record<string, any>, brand: BrandConfig): string {
+    const slug = brand.slug || 'default';
+    const partnerId = brand.partnerId || '';
     
     return `
-    <section id="community" class="py-48 bg-white relative">
-        <div class="max-w-7xl mx-auto px-8 relative z-10 section-reveal">
-            <div class="bg-white rounded-[6rem] p-16 lg:p-32 border border-slate-100 shadow-4xl relative overflow-hidden flex flex-col lg:flex-row items-center gap-32 group">
-                <div class="absolute inset-0 glass-panel opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <div class="lg:w-1/2 relative">
-                    <div class="rounded-[4rem] overflow-hidden shadow-4xl rotate-3 hover:rotate-0 transition-transform duration-1000 aspect-square border-8 border-white">
-                        <img src="${bannerUrl}" alt="Banner" class="w-full h-full object-cover">
-                    </div>
-                    <div class="absolute -bottom-10 -right-10 p-14 bg-[#140633] text-white rounded-[3rem] shadow-4xl z-20">
-                        <span class="material-symbols-outlined text-7xl text-[#865BFF]">handshake</span>
-                    </div>
-                </div>
-                <div class="lg:w-1/2 relative z-10">
-                    <span class="text-[#865BFF] text-[11px] font-black uppercase tracking-[1em] mb-12 block">Invitación Exclusiva</span>
-                    <h2 class="text-6xl font-black text-[#140633] mb-12 uppercase tracking-tightest leading-[0.85]">${communityName}</h2>
-                    <p class="text-3xl text-gray-500 font-light italic leading-relaxed mb-16 border-l-[12px] border-[#865BFF] pl-12 shadow-sm italic">"${c.welcomeMessage}"</p>
-                    
-                    <div class="flex flex-wrap gap-6 mb-20">
-                        ${brand.telegram ? `<a href="${brand.telegram}" class="px-12 py-6 bg-white border border-slate-100 text-[#140633] font-black rounded-3xl hover:bg-blue-600 hover:text-white transition-all shadow-xl text-lg">Telegram Community</a>` : ''}
-                        ${brand.whatsapp ? `<a href="https://wa.me/${brand.whatsapp}" class="px-12 py-6 bg-white border border-slate-100 text-[#140633] font-black rounded-3xl hover:bg-emerald-600 hover:text-white transition-all shadow-xl text-lg">Direct WhatsApp</a>` : ''}
-                    </div>
-
-                    <a href="#register" class="inline-block px-16 py-8 bg-[#140633] text-white font-black rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(20,6,51,0.5)] hover:bg-[#865BFF] hover:-translate-y-2 transition-all uppercase tracking-[0.2em] text-xl">Acceder Ahora</a>
-                </div>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderMCFaq(content: Record<string, any>, brand: BrandConfig): string {
-    return `
-    <section class="py-48 bg-white border-t border-slate-50">
-        <div class="max-w-5xl mx-auto px-8 section-reveal text-center">
-            <h2 class="text-6xl font-black text-[#140633] mb-32 uppercase tracking-tightest leading-none">CONSULTAS <br><span class="text-gray-300">FRECUENTES</span></h2>
-            
-            <div class="space-y-8">
-                ${[
-                    { q: '¿Qué es exactamente el sistema MAM?', a: 'Es una tecnología de gestión donde un gestor opera una cuenta maestra y el sistema reparte automáticamente los resultados a todas las subcuentas vinculadas proporcionalmente al capital de cada una.' },
-                    { q: '¿Tengo que dejar mi computadora encendida para CopyTrading?', a: 'No. La replicación ocurre en la nube, dentro de los servidores de Bridge Markets. Una vez conectada tu cuenta, puedes apagar tu dispositivo y el sistema seguirá replicando 24/5.' },
-                    { q: '¿Qué riesgo asumo al copiar a un tercero?', a: 'Asumes el riesgo operativo de la estrategia elegida. Sin embargo, en CopyTrading tú mantienes el control de detener la copia en cualquier momento y de definir tu propio nivel de gestión de riesgo.' }
-                ].map((item, i) => `
-                    <div class="glass-panel border border-slate-100 p-14 rounded-[4rem] text-left hover:border-[#865BFF]/30 hover:bg-white/10 transition-all group shadow-sm hover:shadow-3xl">
-                        <h4 class="text-3xl font-black text-[#140633] mb-8 uppercase tracking-tighter flex items-center gap-8">
-                            <span class="w-4 h-4 rounded-full bg-[#865BFF]"></span> ${item.q}
-                        </h4>
-                        <p class="text-xl text-gray-400 font-medium leading-relaxed pl-12">${item.a}</p>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderMCFinalCTA(content: Record<string, any>, brand: BrandConfig): string {
-    return `
-    <section class="py-48 bg-[#140633] relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-        <div class="absolute inset-0 bg-gradient-to-br from-[#140633] via-[#140633] to-[#865BFF]/30"></div>
-        <div class="max-w-7xl mx-auto px-8 relative z-10 text-center section-reveal">
-            <h2 class="text-7xl md:text-[10rem] font-black text-white mb-20 uppercase tracking-tightest leading-[0.8] drop-shadow-3xl">DOMINA EL <br><span class="text-[#865BFF]">CAPITAL</span></h2>
-            <p class="text-3xl text-white/40 mb-24 font-light uppercase tracking-[0.4em] max-w-5xl mx-auto">MAM para el enfoque institucional · Copy Trading para la libertad total.</p>
-            
-            <div class="flex flex-wrap justify-center gap-12 mb-32">
-                <a href="#register" class="px-20 py-10 bg-white text-[#140633] font-black rounded-[3rem] hover:shadow-[0_50px_100px_rgba(255,255,255,0.3)] transition-all transform hover:scale-110 uppercase text-2xl tracking-tighter shadow-2xl">Empezar MAM</a>
-                <a href="#register" class="px-20 py-10 bg-emerald-500 text-white font-black rounded-[3rem] hover:shadow-[0_50px_100px_rgba(16,185,129,0.4)] transition-all transform hover:scale-110 uppercase text-2xl tracking-tighter shadow-2xl">Hacer CopyTrading</a>
-            </div>
-
-            <div class="max-w-4xl mx-auto p-16 border border-white/5 rounded-[5rem] bg-white/5 backdrop-blur-3xl relative overflow-hidden group">
-                <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                <p class="text-[11px] text-white/30 uppercase tracking-[0.6em] font-black leading-[2.2] text-center">
-                    Advertencia de Riesgo: El trading de margen conlleva un alto nivel de riesgo para su capital y solo debe operar con dinero que pueda permitirse perder. Bridge Markets LTD.
-                </p>
-            </div>
-        </div>
-    </section>`;
-}
-
-export function renderMCFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.fullName || 'IB Oficial';
-    const isLight = true;
-    return `
-    <footer class="py-48 bg-white border-t border-slate-50 relative z-10">
-        <div class="max-w-7xl mx-auto px-8">
-            <div class="flex flex-col lg:flex-row justify-between gap-40 mb-32 section-reveal">
-                <div class="max-w-md">
-                    <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="w-12 h-12 object-contain filter ${isLight ? 'brightness-0' : 'brightness-100'}">
-                    <p class="text-gray-400 text-lg font-bold uppercase tracking-widest leading-loose mb-16">Infraestructura institucional V3. Bridge Markets LTD está regulado internacionalmente para garantizar la máxima seguridad de fondos segregados.</p>
-                    <div class="p-12 glass-panel rounded-[4rem] border border-slate-100 flex gap-10 items-center">
-                        <div class="w-20 h-20 bg-white rounded-[1.5rem] shadow-sm flex items-center justify-center text-[#865BFF] text-3xl font-black">
-                            ${ibName.charAt(0)}
-                        </div>
-                        <div>
-                             <span class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.6em] mb-3">Official Partner Network</span>
-                             <span class="text-3xl font-black text-[#140633] uppercase leading-none tracking-tighter">${ibName}</span>
+    <section id="registro" class="py-32 px-8 bg-[#050505]">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/[0.02] border border-white/10 rounded-[3rem] overflow-hidden shadow-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <!-- Info Side -->
+                    <div class="p-12 md:p-16 bg-gradient-to-br from-blue-600/20 to-emerald-600/20 flex flex-col justify-center">
+                        <h2 class="text-3xl font-black font-montserrat text-white mb-6 uppercase">Únete al ecosistema</h2>
+                        <p class="text-white/60 text-sm leading-relaxed mb-8">
+                            Completa el formulario y un especialista de Bridge Markets te guiará en el proceso de apertura y configuración de tu cuenta.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-xs text-white/40 uppercase tracking-widest font-black">
+                                <span class="material-symbols-outlined text-blue-500 text-sm">verified</span>
+                                Tecnología Segura
+                            </div>
+                            <div class="flex items-center gap-3 text-xs text-white/40 uppercase tracking-widest font-black">
+                                <span class="material-symbols-outlined text-emerald-500 text-sm">verified</span>
+                                Soporte Institucional
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
-                    <div>
-                        <h4 class="text-[#140633] font-black text-xs uppercase tracking-[0.8em] mb-12">Divisiones</h4>
-                        <ul class="space-y-8 text-sm text-gray-400 font-black uppercase tracking-[0.2em]">
-                            <li><a href="#" class="hover:text-[#865BFF] transition-colors">Maestra MAM V3</a></li>
-                            <li><a href="#" class="hover:text-[#865BFF] transition-colors">Social Copy Engine</a></li>
-                            <li><a href="#" class="hover:text-[#865BFF] transition-colors">Liquidez A-Book</a></li>
-                        </ul>
+
+                    <!-- Form Side -->
+                    <div class="p-12 md:p-16 bg-white/[0.02]">
+                        <form id="mcLeadForm" class="space-y-6">
+                            <input type="hidden" name="landingSlug" value="${slug}">
+                            <input type="hidden" name="partnerId" value="${partnerId}">
+                            
+                            <div>
+                                <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">Nombre Completo</label>
+                                <input type="text" required name="name" placeholder="Ej: Juan Pérez" 
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white text-sm focus:outline-none focus:border-blue-500 transition-all">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">Correo Electrónico</label>
+                                <input type="email" required name="email" placeholder="juan@ejemplo.com" 
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white text-sm focus:outline-none focus:border-blue-500 transition-all">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">WhatsApp / Teléfono</label>
+                                <input type="tel" required name="whatsapp" placeholder="+1 234 567 890" 
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white text-sm focus:outline-none focus:border-blue-500 transition-all">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">Producto de Interés</label>
+                                <select name="product" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white text-sm focus:outline-none focus:border-blue-500 transition-all appearance-none">
+                                    <option value="MAM" class="bg-slate-900">Cuentas MAM</option>
+                                    <option value="Copy Trading" class="bg-slate-900">Copy Trading</option>
+                                    <option value="Ambos" class="bg-slate-900">Ambos Productos</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" id="mcSubmitBtn" class="w-full py-5 bg-white text-black font-black rounded-xl uppercase tracking-widest text-xs hover:bg-blue-500 hover:text-white transition-all active:scale-95 shadow-xl">
+                                Enviar Solicitud →
+                            </button>
+                            
+                            <div id="mcFormMessage" class="mt-4 text-center"></div>
+                        </form>
                     </div>
-                    <div>
-                        <h4 class="text-[#140633] font-black text-xs uppercase tracking-[0.8em] mb-12">Recursos</h4>
-                        <ul class="space-y-8 text-sm text-gray-400 font-black uppercase tracking-[0.2em]">
-                            <li><a href="#" class="hover:text-[#865BFF] transition-colors">Centro de Ayuda</a></li>
-                            <li><a href="#" class="hover:text-[#865BFF] transition-colors">Portal Legal</a></li>
-                            <li><a href="#" class="hover:text-[#865BFF] transition-colors">Documentación LPOA</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-[#140633] font-black text-xs uppercase tracking-[0.8em] mb-12">Contacto</h4>
-                        <ul class="space-y-8 text-sm text-gray-500 font-black uppercase tracking-[0.2em]">
-                            <li>Soporte 24/5</li>
-                            <li>Bridge Markets Global</li>
-                            <li>St. Vincent & Grenadines</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="pt-24 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-12">
-                <span class="text-xs font-black text-gray-300 uppercase tracking-[0.8em]">© 2026 BridgeMarkets. All Rights Reserved. V3 Premium Release.</span>
-                <div class="flex gap-16 opacity-20 grayscale">
-                     <img src="/images/logo-bm-blanco.png" alt="BM" class="h-8">
                 </div>
             </div>
         </div>
-    </footer>`;
+    </section>
+
+    <script>
+        document.getElementById("mcLeadForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById("mcSubmitBtn");
+            const msg = document.getElementById("mcFormMessage");
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            btn.disabled = true;
+            btn.textContent = "Procesando...";
+            
+            try {
+                const res = await fetch("/api/leads", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                
+                if (res.ok) {
+                    msg.innerHTML = '<p class="text-emerald-500 font-bold text-xs uppercase tracking-widest">¡Solicitud recibida! Te contactaremos pronto.</p>';
+                    this.reset();
+                    btn.textContent = "Enviado";
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                msg.innerHTML = '<p class="text-red-500 font-bold text-xs uppercase tracking-widest">Error al enviar. Intenta de nuevo.</p>';
+                btn.disabled = false;
+                btn.textContent = "Enviar Solicitud →";
+            }
+        });
+    </script>
+    `;
 }

@@ -71,27 +71,47 @@ export function generateLandingHTML(data: LandingData): string {
             var btn=document.getElementById("submitBtn");
             var msg=document.getElementById("formMessage");
             var fields=document.querySelectorAll(".lead-input");
+            
+            // Advanced Validation
+            var name = fields[0].value.trim();
+            var email = fields[1].value.trim();
+            var phone = fields[2].value.trim();
+            var emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+            
+            if (name.length < 3) {
+                msg.innerHTML = "<div class='text-red-500 text-[10px] font-bold mt-2 uppercase tracking-widest'>Error: Nombre demasiado corto</div>";
+                return;
+            }
+            if (!emailRegex.test(email)) {
+                msg.innerHTML = "<div class='text-red-500 text-[10px] font-bold mt-2 uppercase tracking-widest'>Error: Email inválido</div>";
+                return;
+            }
+            if (phone.length < 7) {
+                msg.innerHTML = "<div class='text-red-500 text-[10px] font-bold mt-2 uppercase tracking-widest'>Error: Teléfono inválido</div>";
+                return;
+            }
+
             btn.disabled=true; btn.textContent="Enviando...";
             try{
                 var res=await fetch("/api/leads",{
                     method:"POST",
                     headers:{"Content-Type":"application/json"},
                     body:JSON.stringify({
-                        name:fields[0].value,
-                        email:fields[1].value,
-                        whatsapp:fields[2].value,
+                        name: name,
+                        email: email,
+                        whatsapp: phone,
                         landingSlug:"${data.slug}",
                         partnerId:"${data.partnerId}"
                     })
                 });
                 var resData=await res.json();
                 if(resData.success){
-                    msg.innerHTML="<div class='bg-green-100 text-green-700 p-4 rounded-xl font-bold mt-4'>¡Gracias! Te contactaremos pronto.</div>";
+                    msg.innerHTML="<div class='bg-green-500/10 text-green-500 p-4 rounded-xl font-bold mt-4 text-center text-xs uppercase tracking-widest border border-green-500/20'>¡Gracias! Te contactaremos pronto.</div>";
                     document.getElementById("leadForm").reset();
                     btn.textContent="Enviado";
                 }else{ throw new Error(); }
             }catch(err){
-                msg.innerHTML="<div class='bg-red-100 text-red-700 p-4 rounded-xl font-bold mt-4'>Error al enviar. Intenta de nuevo.</div>";
+                msg.innerHTML="<div class='bg-red-500/10 text-red-500 p-4 rounded-xl font-bold mt-4 text-center text-xs uppercase tracking-widest border border-red-500/20'>Error al enviar. Intenta de nuevo.</div>";
                 btn.disabled=false; btn.textContent="${t.submit}";
             }
         });`;
@@ -386,16 +406,25 @@ export function getSharedHead(title: string, desc: string) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bridge Markets | ${title}</title>
     <meta name="description" content="${desc}">
+    <link rel="icon" type="image/png" href="/images/logo morado.png">
+    <style>
+        :root { --brand: #865BFF; --bg: #000000; }
+        body { background-color: #000 !important; color: white; margin: 0; font-family: sans-serif; opacity: 0; transition: opacity 0.5s ease-in; }
+        body.loaded { opacity: 1; }
+        .section-reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .section-reveal.visible { opacity: 1; transform: translateY(0); }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Red+Hat+Display:wght@400;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Inter:wght@300;400;600;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { 
-                        sans: ['Poppins', 'sans-serif'],
-                        headline: ['Red Hat Display', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        headline: ['Outfit', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
                         montserrat: ['Montserrat', 'sans-serif']
                     },
                     colors: {
@@ -410,7 +439,7 @@ export function getSharedHead(title: string, desc: string) {
 export function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
     const isDark = theme === 'dark';
     const bgGradient = isDark 
-        ? "linear-gradient(135deg, #0A051A 0%, #170B3B 50%, #0A051A 100%)"
+        ? "#000000"
         : "linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #F8FAFC 100%)";
     const textColor = isDark ? "#FFFFFF" : "#0F172A";
 
@@ -420,7 +449,7 @@ export function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
             background: ${bgGradient};
             background-attachment: fixed;
             color: ${textColor}; 
-            font-family: 'Poppins', sans-serif; 
+            font-family: 'Inter', sans-serif; 
             overflow-x: hidden; 
             margin: 0;
         }
@@ -653,13 +682,16 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         </div>
     </nav>`;
 
+    const hasCustomForm = sectionIds.some(id => id.includes('registration') || id.includes('contact'));
+    
     const fullContent = `
         ${navHtml}
         <main class="">
             ${sectionsHtml}
+            ${!hasCustomForm ? `
             <div class="section-wrapper">
                 ${formHtml}
-            </div>
+            </div>` : ''}
         </main>
         <div class="section-wrapper">
             ${footerHtml}
