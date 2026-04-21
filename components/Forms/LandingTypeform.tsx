@@ -1123,7 +1123,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                                             </p>
                                             
                                             <div className="flex flex-wrap gap-2">
-                                                {template.sections.slice(0, 5).map(sId => {
+                                                {template.sections.slice(0, 5).map((sId: string) => {
                                                     const sec = SECTION_CATALOG.find(s => s.id === sId);
                                                     return sec ? (
                                                         <div key={sId} className="flex items-center gap-1.5 bg-slate-50 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-100 group-hover:border-[#865BFF]/10 transition-colors">

@@ -1,4 +1,5 @@
 import { LandingTemplate } from './landing/types';
+export type { LandingTemplate };
 
 export const LANDING_TEMPLATES: LandingTemplate[] = [
     {

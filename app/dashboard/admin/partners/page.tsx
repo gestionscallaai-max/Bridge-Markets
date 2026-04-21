@@ -22,14 +22,26 @@ export default function PartnersManagementPage() {
     async function fetchPartners() {
         setLoading(true);
         try {
-            // Fetch partners with some basic counts
+            // Fetch partners with counts for landings and leads
             const { data, error } = await supabase
                 .from('partners')
-                .select('*')
+                .select(`
+                    *,
+                    landings:landings(count),
+                    leads:leads(count)
+                `)
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setPartners(data || []);
+            
+            // Format data to have simple count numbers
+            const formattedPartners = (data || []).map(p => ({
+                ...p,
+                landingsCount: p.landings?.[0]?.count || 0,
+                leadsCount: p.leads?.[0]?.count || 0
+            }));
+
+            setPartners(formattedPartners);
         } catch (err) {
             console.error('Error fetching partners:', err);
         }
@@ -38,6 +50,12 @@ export default function PartnersManagementPage() {
 
     async function toggleRole(partnerId: string, currentRole: string) {
         const newRole = currentRole === 'admin' ? 'partner' : 'admin';
+        const confirmMsg = newRole === 'admin' 
+            ? '¿Estás seguro de otorgar permisos de ADMINISTRADOR a este partner? Tendrá control total sobre el sistema.'
+            : '¿Estás seguro de quitar los permisos de administrador a este usuario?';
+
+        if (!window.confirm(confirmMsg)) return;
+
         try {
             const { error } = await supabase
                 .from('partners')
@@ -96,6 +114,8 @@ export default function PartnersManagementPage() {
                             <tr className="bg-slate-50/50 border-b border-slate-100">
                                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Partner</th>
                                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">ID & Registro</th>
+                                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Landings</th>
+                                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center">Leads Totales</th>
                                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Nivel / Rango</th>
                                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Rol Sistema</th>
                                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Acciones</th>
@@ -127,6 +147,14 @@ export default function PartnersManagementPage() {
                                                 <Calendar className="w-3 h-3" />
                                                 {formatDateUpperCase(partner.created_at)}
                                             </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-5 text-center">
+                                        <span className="text-sm font-black text-slate-700">{partner.landingsCount}</span>
+                                    </td>
+                                    <td className="px-6 py-5 text-center">
+                                        <div className="inline-flex items-center justify-center min-w-[32px] h-6 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-black border border-emerald-100">
+                                            {partner.leadsCount}
                                         </div>
                                     </td>
                                     <td className="px-6 py-5">

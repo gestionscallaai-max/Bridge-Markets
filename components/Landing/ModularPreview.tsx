@@ -114,10 +114,10 @@ export default function ModularPreview({ html, theme = 'dark', className, style 
             
             {/* Minimalist Tech Loader Overlay */}
             {!isReady && (
-                <div class="absolute inset-0 bg-[#000] flex items-center justify-center z-50">
-                    <div class="flex flex-col items-center gap-4">
-                        <div class="w-12 h-12 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
-                        <div class="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] animate-pulse">Initializing Interface</div>
+                <div className="absolute inset-0 bg-[#000] flex items-center justify-center z-50">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="w-12 h-12 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+                        <div className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] animate-pulse">Initializing Interface</div>
                     </div>
                 </div>
             )}

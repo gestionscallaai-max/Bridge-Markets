@@ -1,5 +1,11 @@
 import { LandingProduct } from './types';
 
+export const SECTION_CATEGORIES: Record<string, { label: string, icon: string }> = {
+    'Official': { label: 'Oficiales', icon: 'verified' },
+    'Custom': { label: 'Personalizados', icon: 'edit' },
+    'Promotion': { label: 'Promocionales', icon: 'campaign' }
+};
+
 export const SECTION_CATALOG: LandingProduct[] = [
     {
         id: 'bridge_v3_premium',

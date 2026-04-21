@@ -3,7 +3,7 @@
 // Extracted from 14 bocetos for mix-and-match landing pages
 // ─────────────────────────────────────────────────────────────
 
-export type SectionCategory = 'hero' | 'content' | 'social_proof' | 'cta' | 'layout';
+export type SectionCategory = string;
 
 export interface SectionMeta {
     id: string;
@@ -21,6 +21,7 @@ export interface BrandConfig {
     email: string;
     partnerId: string;
     language: string;
+    slug: string;
     primaryColor?: string;
     // Campo editable: Nombre de la comunidad o academia del IB
     communityName?: string;
@@ -38,4 +39,28 @@ export interface BrandConfig {
     // Nombre del IB (fallback para communityName)
     ibName?: string;
     videoUrl?: string;
+}
+
+export interface LandingTemplate {
+    id: string;
+    name: string;
+    category: string;
+    description: string;
+    sourceFile: string;
+    sections: string[];
+    gradient: string;
+    accentColor: string;
+    badge?: string;
+    badgeColor?: string;
+    theme: 'light' | 'dark';
+}
+
+export interface LandingProduct {
+    id: string;
+    name: string;
+    icon: string;
+    category: string;
+    description: string;
+    sourceTemplate: number;
+    defaultContent: Record<string, any>;
 }

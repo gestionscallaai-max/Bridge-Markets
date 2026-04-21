@@ -375,12 +375,12 @@ export function renderInstPartners(content: Record<string, any>, brand: BrandCon
     `;
 }
 
-// ─── TECH & STEPS (REFACTORED: MINIMALIST FLOW) ─────────────
+// ─── TECHNOLOGY CARDS (REFACTORED: MINIMALIST GRID) ─────────
 export function renderInstTech(content: Record<string, any>, brand: BrandConfig): string {
     return `
     <section class="py-40 px-8 bg-[#050505]">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 section-reveal mb-40">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 section-reveal">
                 ${[
                     { t: 'MT5', s: 'PLATAFORMA INSTITUCIONAL' },
                     { t: 'CHARTS', s: 'GRÁFICOS 24/7' },
@@ -393,8 +393,16 @@ export function renderInstTech(content: Record<string, any>, brand: BrandConfig)
                     </div>
                 `).join('')}
             </div>
+        </div>
+    </section>
+    `;
+}
 
-            <!-- Steps Onboarding -->
+// ─── ONBOARDING STEPS (REFACTORED: MINIMALIST FLOW) ─────────
+export function renderInstWorkflow(content: Record<string, any>, brand: BrandConfig): string {
+    return `
+    <section class="py-40 px-8 bg-[#050505]">
+        <div class="max-w-7xl mx-auto">
             <div class="section-reveal text-center">
                 <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-20">Cómo empezar en <span class="italic text-indigo-500">Bridge</span></h2>
                 <div class="flex flex-wrap justify-center gap-4">

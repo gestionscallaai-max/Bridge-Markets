@@ -200,6 +200,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
             children: [
                 { href: '/dashboard/admin/partners', label: t.nav.partnerManagement },
                 { href: '/dashboard/admin/landings', label: 'Aprobación Landings' },
+                { href: '/dashboard/admin/leads', label: 'Master Leads' },
                 { href: '/dashboard/admin/settings', label: t.nav.globalSettings },
             ]
         },
@@ -220,6 +221,9 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
         if (pathname?.startsWith('/dashboard/marketing/generator')) return { main: 'Marketing', accent: 'AI Generator' };
         if (pathname?.startsWith('/dashboard/links')) return { main: t.nav.referralLinks, accent: '' };
         if (pathname?.startsWith('/dashboard/admin/partners')) return { main: t.nav.admin, accent: t.nav.partnerManagement };
+        if (pathname?.startsWith('/dashboard/admin/landings')) return { main: t.nav.admin, accent: 'Aprobación Landings' };
+        if (pathname?.startsWith('/dashboard/admin/leads')) return { main: t.nav.admin, accent: 'Master Leads' };
+        if (pathname?.startsWith('/dashboard/admin/settings')) return { main: t.nav.admin, accent: t.nav.globalSettings };
         return { main: isAdmin ? t.overview.adminPanel : 'Dashboard', accent: '' };
     };
 

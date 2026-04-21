@@ -540,6 +540,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         email: data.email,
         partnerId: data.partnerId,
         language: data.language,
+        slug: data.slug,
         communityName: data.communityName,
         heroPhrase: data.heroPhrase,
         instagram: data.instagram,
