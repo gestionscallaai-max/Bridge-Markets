@@ -7,7 +7,7 @@ import {
     Loader2, Rocket, Layout, Sparkles, Copy, ExternalLink,
     Pencil, Eye, X, Download, ToggleLeft, ToggleRight,
     Plus, GripVertical, Trash2, ArrowLeft, ArrowRight, Save, Play,
-    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone, Clock, Bell
+    History as HistoryIcon, Info, MessageCircle, Send, Share2, Smartphone, Clock, Bell, AlertCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
