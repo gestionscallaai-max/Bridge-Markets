@@ -203,7 +203,7 @@ export default function OverviewPage() {
     const partnerStatCards = [
         { title: t.overview.myLeads, value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF' },
         { title: t.overview.trafficClicks, value: stats.clicks.toString(), icon: MousePointerClick, iconColor: 'text-blue-500', iconBg: 'bg-blue-50', accent: '#3b82f6' },
-        { title: t.overview.conversionRate || 'Tasa de Conversión', value: stats.conversionRate.toFixed(1) + '%', icon: Target, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981' },
+        { title: 'TASA CONVERSIÓN REGISTRADO', value: stats.conversionRate.toFixed(1) + '%', icon: Target, iconColor: 'text-emerald-500', iconBg: 'bg-emerald-50', accent: '#10b981' },
         { title: t.overview.myLandings, value: stats.landings.toString(), icon: Globe2, iconColor: 'text-amber-500', iconBg: 'bg-amber-50', accent: '#f59e0b' },
     ];
 
@@ -304,7 +304,7 @@ export default function OverviewPage() {
                             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
                                 <Clock className="w-4 h-4" />
                                 <span className="text-xs font-bold uppercase tracking-wider">
-                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                                    {mounted && new Date().toLocaleDateString(dateLocales[lang] || 'es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase().replace('.', '')}
                                 </span>
                             </div>
                             <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>

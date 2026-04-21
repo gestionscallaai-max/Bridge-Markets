@@ -121,7 +121,6 @@ export default function ReportsStatsPage() {
                         .eq('partner_id', user.id)
                 ]);
 
-                const days = [t.reports.dayMon, t.reports.dayTue, t.reports.dayWed, t.reports.dayThu, t.reports.dayFri, t.reports.daySat, t.reports.daySun];
                 const dayMap: any[] = [];
                 const now = new Date();
                 
@@ -162,9 +161,9 @@ export default function ReportsStatsPage() {
 
     // Admin metrics (4 cards including network total)
     const adminMetrics = [
-        { label: 'Clicks Totales — Red', value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
-        { label: 'Leads Capturados — Red', value: stats.leads, icon: Users, color: '#f59e0b', trend: '+5%', isUp: true },
-        { label: 'TASA REGISTROS', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
+        { label: 'Clicks Totales - Red', value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
+        { label: 'Leads Capturados - Red', value: stats.leads, icon: Users, color: '#f59e0b', trend: '+5%', isUp: true },
+        { label: 'TASA CONVERSIÓN REGISTRADO', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
         { label: 'Partners Activos', value: stats.totalPartners, icon: Network, color: '#3B82F6', trend: 'Red', isUp: true },
     ];
 
@@ -172,7 +171,7 @@ export default function ReportsStatsPage() {
     const partnerMetrics = [
         { label: t.reports.totalClicks, value: stats.clicks, icon: MousePointerClick, color: '#865BFF', trend: '+12%', isUp: true },
         { label: t.reports.leadsCapt, value: stats.leads, icon: Users, color: '#FF5B86', trend: '+5%', isUp: true },
-        { label: 'TASA REGISTROS', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
+        { label: 'TASA CONVERSIÓN REGISTRADO', value: stats.conversionRate, icon: Activity, color: '#10B981', trend: '-2%', isUp: false },
         { label: 'Landings', value: stats.landings, icon: Globe, color: '#3B82F6', trend: 'N/A', isUp: true },
     ];
 
@@ -186,7 +185,7 @@ export default function ReportsStatsPage() {
 
     return (
         <div className="space-y-8 pb-20 max-w-7xl mx-auto">
-            {/* ── Header Banner */}
+            {/* -- Header Banner */}
             <div className={`relative rounded-[2.5rem] p-8 text-white shadow-2xl border z-20 ${
                 isAdmin ? 'bg-gradient-to-br from-[#1a0f00] to-[#2d1900] border-amber-500/20' : 'bg-[#0d0221] border-white/5'
             }`}>
@@ -207,8 +206,8 @@ export default function ReportsStatsPage() {
                                 isAdmin ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' : 'text-[#865BFF] bg-[#865BFF]/10 border-[#865BFF]/20'
                             }`}>
                                 {isAdmin
-                                    ? <><Shield className="w-3 h-3" /><span>Vista Administrador — Red Global</span></>
-                                    : <><Eye className="w-3 h-3" /><span>Partner View — Tus Métricas</span></>}
+                                    ? <><Shield className="w-3 h-3" /><span>Vista Administrador - Red Global</span></>
+                                    : <><Eye className="w-3 h-3" /><span>Partner View - Tus Métricas</span></>}
                             </div>
                             <h1 className="text-2xl font-medium tracking-tight mt-1">
                                 {isAdmin ? 'Análisis de Red' : t.reports.statsTitle}
@@ -222,7 +221,7 @@ export default function ReportsStatsPage() {
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-[#865BFF]/10 border-[#865BFF]/20 text-[#865BFF]'}`}>
                             <Clock className="w-4 h-4" />
                             <span className="text-xs font-bold uppercase tracking-wider">
-                                {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                                {mounted && new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase().replace('.', '')}
                             </span>
                         </div>
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${isAdmin ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-white/10 border-white/10 text-white'}`}>
@@ -235,7 +234,7 @@ export default function ReportsStatsPage() {
                 </div>
             </div>
 
-            {/* ── Stat Cards */}
+            {/* -- Stat Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {metrics.map((m, i) => (
                     <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
@@ -258,7 +257,7 @@ export default function ReportsStatsPage() {
                 ))}
             </div>
 
-            {/* ── Charts row */}
+            {/* -- Charts row */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main chart */}
                 <div className={`lg:col-span-2 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden flex flex-col min-h-[450px] ${
@@ -269,7 +268,7 @@ export default function ReportsStatsPage() {
                         <div>
                             <h3 className="text-xl font-bold flex items-center gap-2">
                                 <TrendingUp className={`w-5 h-5 ${isAdmin ? 'text-amber-400' : 'text-[#865BFF]'}`} />
-                                {isAdmin ? 'Tendencia Semanal — Red Completa' : t.reports.weeklyTrend}
+                                {isAdmin ? 'Tendencia Semanal - Red Completa' : t.reports.weeklyTrend}
                             </h3>
                             <p className="text-white/40 text-xs mt-1">
                                 {isAdmin ? 'Clicks y leads consolidados de toda la red' : t.reports.weeklyTrendDesc}
@@ -304,7 +303,7 @@ export default function ReportsStatsPage() {
                     </div>
                 </div>
 
-                {/* Side panel — different by role */}
+                {/* Side panel - different by role */}
                 <div className="space-y-8">
                     {isAdmin ? (
                         /* Admin: Top Partners Ranking */
