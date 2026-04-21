@@ -8,18 +8,25 @@ export const SECTION_CATEGORIES: Record<string, { label: string, icon: string }>
 
 export const SECTION_CATALOG: LandingProduct[] = [
     // ─── PROPFIRM (Blueprint 2) ──────────────────────────
-    { id: 'prop_hero', name: 'PropFirm Hero', icon: 'rocket_launch', category: 'Official', description: 'Encabezado principal con CTA para PropFirm.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_about', name: 'PropFirm Educación', icon: 'school', category: 'Official', description: 'Sección educativa sobre el programa PropFirm.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_matrix_forex', name: 'Programas Forex', icon: 'grid_view', category: 'Official', description: 'Tabla de programas de fondeo Forex.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_matrix_synthetic', name: 'Programas Sintéticos', icon: 'rebase', category: 'Official', description: 'Tabla de programas de fondeo Sintéticos.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_workflow', name: 'PropFirm Pasos', icon: 'reorder', category: 'Official', description: 'Flujo de pasos para fondearse.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_rules', name: 'PropFirm Reglas', icon: 'gavel', category: 'Official', description: 'Reglas operativas de la PropFirm.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_benefits', name: 'PropFirm Beneficios', icon: 'military_tech', category: 'Official', description: 'Beneficios de operar con Bridge Markets.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_community', name: 'PropFirm Comunidad', icon: 'groups', category: 'Official', description: 'Sección de comunidad y soporte.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_faq', name: 'PropFirm FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas frecuentes de fondeo.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_final_cta', name: 'PropFirm Final CTA', icon: 'ads_click', category: 'Official', description: 'Llamado a la acción final.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_registration', name: 'PropFirm Registro', icon: 'app_registration', category: 'Official', description: 'Formulario de registro integrado.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_footer', name: 'PropFirm Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página temático PropFirm.', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_hero', name: 'PropFirm: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero oficial de cuentas fondeadas', sourceTemplate: 2, defaultContent: { ctaText: 'Empieza tu Challenge' } },
+    { id: 'prop_about', name: 'PropFirm: Definición', icon: 'school', category: 'Official', description: '¿Qué es PropTrading? Explicación fija', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_matrix_forex', name: 'Programas Forex', icon: 'grid_view', category: 'Official', description: 'Tabla de programas de fondeo Forex.', sourceTemplate: 2, defaultContent: { ctaObsidianText: 'Comprar OBSIDIAN', ctaBasaltText: 'Comprar BASALT' } },
+    { id: 'prop_matrix_synthetic', name: 'Programas Sintéticos', icon: 'rebase', category: 'Official', description: 'Tabla de programas de fondeo Sintéticos.', sourceTemplate: 2, defaultContent: { ctaEliteText: 'Comprar ELITE', ctaUltraText: 'Comprar ULTRA' } },
+    { id: 'prop_workflow', name: 'PropFirm: Proceso', icon: 'reorder', category: 'Official', description: '4 pasos del flujo de PropTrading', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_rules', name: 'PropFirm: Reglas Clave', icon: 'gavel', category: 'Official', description: '8 reglas operativas oficiales', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_benefits', name: 'PropFirm: Beneficios', icon: 'military_tech', category: 'Official', description: 'Certificación del trader y ventajas', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_community', name: 'PropFirm: Comunidad', icon: 'groups', category: 'Official', description: 'Sección 100% editable por el IB', sourceTemplate: 2, defaultContent: { 
+        welcomeMsg: 'Únete a un entorno diseñado para el crecimiento mutuo. Aquí no solo operamos, sino que construimos el futuro del trading institucional juntos.', 
+        photoUrl: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80',
+        socialWhatsApp: '',
+        socialTelegram: '',
+        socialInstagram: '',
+        socialYouTube: ''
+    } },
+    { id: 'prop_faq', name: 'PropFirm: FAQ', icon: 'quiz', category: 'Official', description: 'Dudas resueltas sobre fondeo.', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_final_cta', name: 'PropFirm: CTA Final', icon: 'ads_click', category: 'Official', description: 'Botones de compra de cierre', sourceTemplate: 2, defaultContent: { ctaObsidianText: 'Quiero OBSIDIAN', ctaBasaltText: 'Quiero BASALT', ctaEliteText: 'Quiero ELITE', ctaUltraText: 'Quiero ULTRA' } },
+    { id: 'prop_registration', name: 'PropFirm: Registro', icon: 'app_registration', category: 'Official', description: 'Captura de leads institucional', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_footer', name: 'PropFirm: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página con branding Bridge Markets', sourceTemplate: 2, defaultContent: {} },
 
     // ─── MAM & COPY (Blueprint 3) ────────────────────────
     { id: 'mc_hero', name: 'MAM & Copy Hero', icon: 'hub', category: 'Official', description: 'Encabezado para servicios de gestión de capital.', sourceTemplate: 3, defaultContent: {} },
