@@ -40,8 +40,8 @@ export interface LandingConfig {
 // ─── Modular Template Config ─────────────────────────────────
 export interface ModularConfig {
     templateId: string;
-    selectedSections: string[];
-    sectionOverrides: Record<string, Record<string, any>>;
+    sections: string[];
+    overrides: Record<string, Record<string, any>>;
 }
 
 export interface LandingData {
