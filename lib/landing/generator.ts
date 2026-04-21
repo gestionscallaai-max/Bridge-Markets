@@ -380,22 +380,26 @@ export function openLandingPreview(html: string) {
 import { getTemplateById } from '../landing-templates';
 
 
-function getSharedHead(title: string, desc: string, language: string) {
+export function getSharedHead(title: string, desc: string) {
     return `
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bridge Markets | ${title}</title>
     <meta name="description" content="${desc}">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Red+Hat+Display:wght@400;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Poppins', 'sans-serif'],
+                        headline: ['Red Hat Display', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif']
+                    },
                     colors: {
-                        brand: { dark: '#0A051A', purple: '#6D28D9', stepBg: '#2D1B5E', accent: '#8B5CF6' }
+                        brand: { dark: '#0A051A', purple: '#865BFF', stepBg: '#2D1B5E', accent: '#8B5CF6' }
                     }
                 }
             }
@@ -403,7 +407,7 @@ function getSharedHead(title: string, desc: string, language: string) {
     </script>`;
 }
 
-function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
+export function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
     const isDark = theme === 'dark';
     const bgGradient = isDark 
         ? "linear-gradient(135deg, #0A051A 0%, #170B3B 50%, #0A051A 100%)"
@@ -418,66 +422,81 @@ function getSharedStyles(theme: 'light' | 'dark' = 'dark') {
             color: ${textColor}; 
             font-family: 'Poppins', sans-serif; 
             overflow-x: hidden; 
+            margin: 0;
         }
-        /* Overlapping Sections System to avoid hard cuts */
-        .section-wrapper { 
-            position: relative;
-            z-index: 10;
+        
+        /* Modern Reveal System */
+        .section-reveal { transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(60px); }
+        .section-reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Glassmorphism V3 */
+        .glass-panel { 
+            background: ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.7)'} !important; 
+            backdrop-filter: blur(30px) !important; 
+            -webkit-backdrop-filter: blur(30px) !important;
+            border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)'} !important;
+            box-shadow: ${isDark ? '0 40px 100px rgba(0, 0, 0, 0.4)' : '0 40px 100px rgba(0, 0, 0, 0.05)'} !important; 
         }
 
-        /* Glassmorphism System */
-        .glass-panel { 
-            background: ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.6)'} !important; 
-            backdrop-filter: blur(24px) !important; 
-            -webkit-backdrop-filter: blur(24px) !important;
-            border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)'} !important;
-            box-shadow: ${isDark ? '0 30px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)' : '0 30px 60px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,1)'} !important; 
+        /* Bridge V3 Utilities */
+        .text-gradient-v3 {
+            background: linear-gradient(135deg, #865BFF 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .glass { 
-            background: ${isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(255, 255, 255, 0.4)'} !important; 
-            backdrop-filter: blur(12px) !important; 
-            -webkit-backdrop-filter: blur(12px) !important;
-            border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.3)'} !important;
-            box-shadow: ${isDark ? '0 10px 30px rgba(0, 0, 0, 0.2)' : '0 10px 30px rgba(0, 0, 0, 0.05)'} !important;
-        }
+
+        /* Section Overlap System (V3 Refined) */
+        .section-wrapper { position: relative; z-index: 10; width: 100%; }
+        .section-wrapper + .section-wrapper { margin-top: -5rem; }
         
-        .reveal { transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .js-enabled .reveal:not(.active) { opacity: 0; transform: translateY(40px); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .btn-purple { 
-            background: linear-gradient(135deg, #6D28D9 0%, #8B5CF6 100%) !important; 
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important; 
-            box-shadow: 0 15px 30px rgba(109, 40, 217, 0.2), inset 0 1px 0 rgba(255,255,255,0.2) !important;
-            color: white !important;
+        .section-wrapper > section { 
+            position: relative; 
+            border-top-left-radius: 5rem; 
+            border-top-right-radius: 5rem; 
+            box-shadow: 0 -40px 100px rgba(0,0,0,0.1); 
+            padding-top: 8rem !important; 
         }
-        .btn-purple:hover { 
-            transform: translateY(-4px) scale(1.02) !important; 
-            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important; 
+
+        /* Specific overrides for sections that shouldn't have radius or overlap */
+        .section-wrapper:first-child > section, 
+        .section-wrapper:first-child > header { 
+            border-radius: 0 !important; 
+            margin-top: 0 !important; 
+            padding-top: inherit !important;
+            box-shadow: none !important;
         }
-        
-        
-        /* Force spacing to look complete and organized */
-        .section-wrapper {
-            padding: 0 !important;
-            position: relative;
-            z-index: 10;
-        }
-        /* Superposición visual de capas ("efecto top") */
-        .section-wrapper + .section-wrapper {
-            margin-top: -4rem !important;
-        }
-        /* Bordes redondeados superiores para todas las secciones superpuestas */
-        .section-wrapper > section:not(#register), .section-wrapper > footer {
-            border-top-left-radius: 4rem !important;
-            border-top-right-radius: 4rem !important;
-            box-shadow: 0 -30px 60px rgba(0,0,0,0.2) !important;
-            padding-top: 6rem !important;
-        }
+
+        /* Scrollbar Premium */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #865BFF33; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #865BFF66; }
     </style>`;
 }
 
-export function generateModularLandingHTML(data: LandingData): string {
+export function getSharedScripts() {
+    return `
+    <script>
+        // Smooth reveal logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section-reveal').forEach(el => observer.observe(el));
+
+        // Form handling
+        window.openRegistration = () => {
+            const modal = document.getElementById('register');
+            if(modal) modal.classList.remove('hidden');
+        };
+    </script>`;
+}
+
+export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean = false): string {
     const modConf = data.modularConfig;
     if (!modConf) return generateLandingHTML(data); // fallback to legacy
 
@@ -512,9 +531,11 @@ export function generateModularLandingHTML(data: LandingData): string {
             if (!renderer) return `<!-- Section "${sId}" not found -->`;
             const overrides = modConf.sectionOverrides[sId] || {};
             const sectionHtml = renderer(overrides, brandConfig);
-            return `<div class="section-wrapper">\n${sectionHtml}\n</div>`;
+            return `<div class="section-wrapper section-reveal">\n${sectionHtml}\n</div>`;
         })
         .join('\n');
+
+    if (bodyOnly) return sectionsHtml;
 
     const isES = data.language === 'ES';
     const dict = {

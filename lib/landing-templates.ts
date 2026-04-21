@@ -20,27 +20,16 @@ export interface LandingTemplate {
 export const LANDING_TEMPLATES: LandingTemplate[] = [
     {
         id: 'synthetic_edu',
-        name: 'Índices Sintéticos (Educativa)',
+        name: 'Índices Sintéticos Pro V3 (Final)',
         category: 'Official',
-        description: 'Enfocada en explicar y educar sobre el mercado de sintéticos. Ideal para captar nuevos traders.',
+        description: 'La landing oficial y definitiva de Bridge Markets para Índices Sintéticos. Diseño premium y corporativo con elementos 3D.',
         sourceFile: 'Blueprint 1',
         sections: ['snt_hero', 'snt_about', 'snt_advantages', 'snt_families', 'snt_workflow', 'snt_specs', 'snt_platforms', 'snt_community', 'snt_faq', 'snt_cta', 'snt_footer'],
         gradient: 'linear-gradient(135deg, #0A051A 0%, #1a0545 50%, #7c3aed 100%)',
         accentColor: '#8b5cf6',
-        badge: 'Official',
-        badgeColor: '#10b981',
-    },
-    {
-        id: 'propfirm_pro',
-        name: 'PropFirm (Cuentas fondeadas)',
-        category: 'Official',
-        description: 'Landing de alta conversión para los retos de PropFirm (Obsidian, Basalt, Elite, Ultra).',
-        sourceFile: 'Blueprint 2',
-        sections: ['prop_hero', 'prop_about', 'prop_matrix', 'prop_workflow', 'prop_rules', 'prop_benefits', 'prop_community', 'prop_faq', 'prop_cta', 'prop_footer'],
-        gradient: 'linear-gradient(135deg, #020617 0%, #0f172a 50%, #3b82f6 100%)',
-        accentColor: '#3b82f6',
-        badge: 'Official',
-        badgeColor: '#10b981',
+        badge: 'Premium',
+        badgeColor: '#8b5cf6',
+        theme: 'dark'
     },
     {
         id: 'unified_copy_mam',
@@ -165,6 +154,30 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         badge: 'New',
         badgeColor: '#865BFF',
         theme: 'dark',
+    },
+    {
+        id: 'bridge_v3_premium',
+        name: 'Bridge V3 Premium (Oficial)',
+        category: 'Official',
+        description: 'La experiencia definitiva de Bridge Markets. Diseño oficial V3 con estética de vanguardia, 3D y máxima conversión.',
+        sourceFile: 'Blueprint V3',
+        sections: [
+            'v3_header',
+            'v3_hero',
+            'v3_features',
+            'inst_about',
+            'inst_ecosystem',
+            'inst_tech',
+            'inst_workflow',
+            'v3_community',
+            'inst_faq',
+            'v3_footer'
+        ],
+        gradient: 'linear-gradient(135deg, #F8FAFC 0%, #E5D8FF 50%, #AA9AFF 100%)',
+        accentColor: '#865BFF',
+        badge: 'Official V3',
+        badgeColor: '#865BFF',
+        theme: 'light',
     },
 ];
 

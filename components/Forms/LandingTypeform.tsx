@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
+import ModularPreview from '@/components/Landing/ModularPreview';
 import {
     generateLandingHTML, generateModularLandingHTML, openLandingPreview,
     type LandingData, type ModularConfig
@@ -284,12 +285,16 @@ function PhoneMockup({ html }: { html: string }) {
                 
                 {/* Iframe Content */}
                 <div className="absolute inset-0 z-10 bg-white">
-                    <iframe 
-                        srcDoc={html} 
-                        className="w-[300%] h-[300%] origin-top-left scale-[0.333]" 
-                        style={{ border: 'none' }}
-                        title="Live Mobile Preview"
-                        sandbox="allow-same-origin allow-scripts"
+                    <ModularPreview 
+                        html={html} 
+                        theme={theme} 
+                        style={{ 
+                            width: '400%', 
+                            height: '400%', 
+                            transformOrigin: 'top left',
+                            transform: 'scale(0.25) translateZ(0)',
+                            willChange: 'transform'
+                        }} 
                     />
                 </div>
 
@@ -342,6 +347,8 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     const [videoUrl, setVideoUrl] = useState('');
     const [customLogoUrl, setCustomLogoUrl] = useState('');
     
+    // Debounced HTML for Preview Performance
+    const [debouncedHtml, setDebouncedHtml] = useState('');
     // Sync portal language to landing generator language representation
     const getLandingLangFromPortal = (pLang: string) => {
         if (pLang === 'en') return 'GB';
@@ -598,6 +605,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     ];
 
     // Live Preview HTML
+    // Live Preview HTML calculation
     const livePreviewHtml = React.useMemo(() => {
         if (!selectedTemplate || selectedSections.length === 0) return '';
         const data: LandingData = {
@@ -614,8 +622,16 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             customLogoUrl,
             modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
         };
-        return generateModularLandingHTML(data);
+        return generateModularLandingHTML(data, true); // bodyOnly = true
     }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, ctaLink, videoUrl, customLogoUrl]);
+
+    // Debounce the HTML update to the iframe to prevent lag
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedHtml(livePreviewHtml);
+        }, 800); // Increased debounce to 800ms for stability
+        return () => clearTimeout(handler);
+    }, [livePreviewHtml]);
 
     return (
         <div className="max-w-[1600px] mx-auto pb-12">
@@ -1358,7 +1374,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                     </div>
                 </div>
                 
-                <PhoneMockup html={livePreviewHtml} />
+                <PhoneMockup html={debouncedHtml} />
                 
                 <div className="mt-8 space-y-4">
                     <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">

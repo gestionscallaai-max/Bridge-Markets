@@ -43,21 +43,34 @@ export function renderSntFooter(content: Record<string, any>, brand: BrandConfig
                 </p>
             </div>
             <div>
-                <h4 class="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-8">Navegación</h4>
+                <h4 class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em] mb-8">Navegación Oficial</h4>
                 <div class="flex flex-col gap-4 text-xs font-bold text-white/50 uppercase tracking-widest">
-                    <a href="#" class="hover:text-white transition-colors">Broker Oficial</a>
-                    <a href="#" class="hover:text-white transition-colors">Términos y Condiciones</a>
-                    <a href="#" class="hover:text-white transition-colors">Aviso de Privacidad</a>
+                    <a href="#" class="hover:text-white transition-colors">Servicios</a>
+                    <a href="#" class="hover:text-white transition-colors">Social Trading</a>
+                    <a href="#" class="hover:text-white transition-colors">PropFirm</a>
+                    <a href="https://charts.bridgemarkets.global" target="_blank" class="hover:text-white transition-colors">Gráficos Sintéticos</a>
                 </div>
             </div>
             <div>
-                <h4 class="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-8">IB Partner</h4>
+                <h4 class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em] mb-8">Información Legal</h4>
+                <div class="flex flex-col gap-4 text-xs font-bold text-white/50 uppercase tracking-widest">
+                    <a href="#" class="hover:text-white transition-colors">Términos y Condiciones</a>
+                    <a href="#" class="hover:text-white transition-colors">Política KYC/AML</a>
+                    <a href="#" class="hover:text-white transition-colors">Declaración de Riesgos</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em] mb-8">IB Partner</h4>
                 <div class="flex flex-col gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-black text-primary">${brand.fullName.charAt(0)}</div>
+                        <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-black text-[#865BFF]">${brand.fullName.charAt(0)}</div>
                         <span class="text-sm font-black text-white">${brand.fullName}</span>
                     </div>
                     <span class="text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Verified Bridge Markets Partner</span>
+                    <div class="pt-4 border-t border-white/5 mt-4">
+                        <p class="text-[9px] text-white/40 mb-1">Contacto Corporativo BM:</p>
+                        <p class="text-[9px] font-bold text-white/60">corporate@bridgemarkets.global</p>
+                    </div>
                 </div>
             </div>
         </div>

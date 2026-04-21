@@ -429,86 +429,80 @@ export function renderSntHero(content: Record<string, any>, brand: BrandConfig):
     const ctaLink = brand.ctaLink || "#register";
     
     return `
-    <section class="relative min-h-[95vh] flex items-center pt-20 pb-32 px-8 overflow-hidden bg-[#05010f]">
-        <!-- Ultra-Premium Dark Background -->
-        <div class="absolute inset-0 z-0">
-            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(134,91,255,0.15),transparent_70%)]"></div>
-            <div class="absolute top-[10%] right-[5%] w-[600px] h-[600px] bg-[#865BFF]/20 rounded-full blur-[150px] animate-pulse"></div>
-            <div class="absolute bottom-[0%] left-[0%] w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[120px]"></div>
-        </div>
+    <section class="relative min-h-[90vh] flex items-center pt-24 pb-20 px-8 bg-[#0a0a0a] overflow-hidden border-b border-white/5">
+        <div class="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-[#1f1635] to-transparent opacity-30"></div>
 
         <div class="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div class="section-reveal">
-                <div class="flex items-center gap-5 mb-10 p-2 bg-white/5 border border-white/10 rounded-full w-fit pr-6 backdrop-blur-md">
-                    <img src="https://bridgemarkets.global/wp-content/uploads/2023/06/Logo-Bridge-Markets-Horizontal-Blanco.png" alt="Bridge Markets" class="h-5 md:h-6 ml-4 opacity-90 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
-                    <div class="h-4 w-[1px] bg-white/30"></div>
-                    <span class="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[#865BFF]">Por ${ibName}</span>
+                <div class="flex items-center gap-5 mb-10">
+                    <img src="https://bridgemarkets.global/wp-content/uploads/2023/06/Logo-Bridge-Markets-Horizontal-Blanco.png" alt="Bridge Markets" class="h-6 opacity-90">
+                    <div class="h-5 w-[1px] bg-white/20"></div>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">Por ${ibName}</span>
                 </div>
 
-                <h1 class="text-5xl md:text-7xl lg:text-[5.5rem] font-black font-headline leading-[0.95] mb-8 tracking-tighter text-white">
-                    Opera en un <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#865BFF] to-blue-400">nuevo Universo</span><br>de Oportunidades.
+                <h1 class="text-5xl md:text-7xl lg:text-[5rem] font-black font-headline leading-tight mb-8 tracking-tighter text-white uppercase">
+                    Opera en un <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#a78bfa]">nuevo Universo</span><br>de Oportunidades.
                 </h1>
                 
-                <p class="text-lg md:text-xl text-white/50 leading-relaxed max-w-xl mb-6 font-medium">
+                <p class="text-lg md:text-xl text-white/60 leading-relaxed max-w-xl mb-6 font-light">
                     Bienvenido a los Índices Sintéticos de Bridge Markets, mercados virtuales 24/7 con comportamientos realistas.
                 </p>
-                ${ibPhrase ? `<p class="text-md text-white/70 italic border-l-2 border-[#865BFF] pl-4 mb-12 max-w-lg">${ibPhrase}</p>` : '<div class="mb-12"></div>'}
+                ${ibPhrase ? `<p class="text-sm text-white/40 italic border-l border-white/20 pl-4 mb-12 max-w-lg">${ibPhrase}</p>` : '<div class="mb-12"></div>'}
 
-                <div class="flex flex-col sm:flex-row gap-6 mb-12">
-                    <a href="${ctaLink}" class="group relative px-10 py-5 bg-[#865BFF] text-white font-black rounded-2xl overflow-hidden transition-all shadow-[0_0_40px_rgba(134,91,255,0.4)] hover:shadow-[0_0_60px_rgba(134,91,255,0.6)] hover:scale-105 text-center flex items-center justify-center gap-3">
-                        <span class="relative z-10 uppercase tracking-widest text-sm lg:text-base">${ctaText}</span>
-                        <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                    <a href="${ctaLink}" class="px-10 py-5 bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-[#a78bfa] hover:text-white transition-colors flex items-center justify-center gap-3 w-fit">
+                        ${ctaText}
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
                     </a>
                 </div>
 
-                <div class="flex items-center gap-8 py-6 border-t border-white/5">
+                <div class="flex items-center gap-8 py-6 border-t border-white/10">
                     <div class="flex flex-col">
-                        <p class="text-[11px] font-black text-[#865BFF] uppercase tracking-widest mb-1">Sin noticias, sin pausas, sin límites.</p>
-                        <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Solo pura acción de mercado, siempre disponible.</p>
+                        <p class="text-[11px] font-bold text-[#a78bfa] uppercase tracking-[0.2em] mb-1">Sin noticias, sin pausas, sin límites.</p>
+                        <p class="text-[10px] font-medium text-white/40 uppercase tracking-widest">Solo pura acción de mercado, siempre disponible.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="relative section-reveal lg:block hidden" style="animation-delay: 0.2s;">
-                <div class="relative w-full aspect-square max-w-lg mx-auto">
-                    <div class="absolute inset-0 bg-gradient-to-br from-[#865BFF]/30 to-blue-500/10 rounded-full blur-[80px] opacity-70 animate-pulse"></div>
-                    <div class="relative z-10 w-full h-full p-1 rounded-full bg-gradient-to-br from-white/10 to-white/0 overflow-hidden shadow-2xl backdrop-blur-sm border border-white/10">
-                        <div class="w-full h-full rounded-full bg-[#05010f]/80 flex items-center justify-center relative overflow-hidden">
-                            <div class="w-3/4 h-3/4 rounded-full border border-[#865BFF]/30 border-dashed animate-[spin_60s_linear_infinite]"></div>
-                            <div class="absolute w-1/2 h-1/2 rounded-full border border-blue-400/20 border-dotted animate-[spin_40s_linear_infinite_reverse]"></div>
-                            <span class="material-symbols-outlined absolute text-[120px] text-white/20 filter drop-shadow-[0_0_30px_rgba(134,91,255,0.8)]">change_history</span>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute bottom-10 -left-10 glass-panel p-4 bg-black/80 rounded-2xl border border-white/10 backdrop-blur-xl animate-bounce">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-ping"></div>
-                            <div>
-                                <p class="text-[9px] font-black uppercase text-white/50 tracking-widest">RNG Engine</p>
-                                <p class="text-xs font-bold text-white">En Línea</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="relative section-reveal lg:flex justify-end hidden">
+                <div class="relative w-full max-w-lg aspect-square flex items-center justify-center">
+                    <div class="absolute inset-0 bg-[#a78bfa]/10 rounded-full blur-[100px]"></div>
+                    <img src="/images/imagenes nuevas/rey rosa.png" alt="Rey Bridge Markets" class="w-full h-auto object-contain relative z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_6s_ease-in-out_infinite]" style="animation: float 6s ease-in-out infinite; transform: translateY(0px);">
                 </div>
             </div>
+            <style>
+                @keyframes float {
+                    0% { transform: translateY(0px); }
+                    50% { transform: translateY(-20px); }
+                    100% { transform: translateY(0px); }
+                }
+            </style>
         </div>
     </section>`;
 }
 
 export function renderSntAbout(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_right,rgba(134,91,255,0.05),transparent_50%)]"></div>
-        <div class="max-w-4xl mx-auto relative z-10 section-reveal text-center">
-            <span class="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-10 shadow-lg">Concepto Core</span>
-            <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-12 tracking-tighter uppercase">¿Qué son los Índices Sintéticos?</h2>
+    <section class="py-32 px-8 bg-[#050505] relative overflow-hidden border-b border-white/5">
+        <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center section-reveal">
+            <div class="order-2 lg:order-1 relative flex justify-center">
+                <div class="absolute inset-0 bg-[#a78bfa]/5 rounded-full blur-[100px]"></div>
+                <img src="/images/imagenes nuevas/caballo rosa.png" alt="Estrategia y Control" class="w-full max-w-sm h-auto object-contain relative z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] animate-[float_5s_ease-in-out_infinite]" style="animation: float 5s ease-in-out infinite; transform: translateY(0px);">
+            </div>
             
-            <div class="glass-panel p-10 md:p-14 asym-card border border-white/5 bg-gradient-to-b from-white/5 to-transparent relative group">
-                <div class="absolute -top-6 -left-6 text-[#865BFF]/20 text-9xl font-serif">"</div>
-                <p class="relative text-lg md:text-xl text-white/60 leading-relaxed font-medium z-10 text-left">
-                    Los Índices Sintéticos de Bridge Markets son instrumentos financieros creados a partir de algoritmos de generación aleatoria controlada (RNG – Random Number Generator) que simulan los movimientos del mercado con base en volatilidad, tendencias y patrones de comportamiento real. Estos índices no dependen de activos físicos (como acciones o divisas) ni de noticias externas. En cambio, reproducen las condiciones dinámicas de los mercados financieros reales: subidas, caídas, impulsos, consolidaciones y rupturas. Gracias a esto, puedes operar bajo reglas claras y constantes, con condiciones estables, accesibles 24/7 y sin la incertidumbre que provocan los eventos globales.
-                </p>
+            <div class="order-1 lg:order-2">
+                <span class="inline-block px-4 py-2 bg-white/5 text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-8 border border-white/10">Concepto Core</span>
+                <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-8 tracking-tighter uppercase">¿Qué son los Índices Sintéticos?</h2>
+                
+                <div class="border-l-2 border-[#a78bfa]/30 pl-8 relative">
+                    <p class="text-lg text-white/60 leading-relaxed font-light mb-6">
+                        Los Índices Sintéticos de Bridge Markets son instrumentos financieros creados a partir de algoritmos de generación aleatoria controlada (RNG – Random Number Generator) que simulan los movimientos del mercado con base en volatilidad, tendencias y patrones de comportamiento real.
+                    </p>
+                    <p class="text-lg text-white/60 leading-relaxed font-light">
+                        Estos índices no dependen de activos físicos (como acciones o divisas) ni de noticias externas. En cambio, reproducen las condiciones dinámicas de los mercados financieros reales: subidas, caídas, impulsos, consolidaciones y rupturas. Gracias a esto, puedes operar bajo reglas claras y constantes, con condiciones estables, accesibles 24/7 y sin la incertidumbre que provocan los eventos globales.
+                    </p>
+                </div>
             </div>
         </div>
     </section>`;
@@ -521,26 +515,25 @@ export function renderSntAdvantages(content: Record<string, any>, brand: BrandCo
         { icon: 'tune', title: 'Volatilidad controlada', desc: 'Cada familia tiene niveles definidos de volatilidad para que elijas el perfil que más se adapte a tu estrategia.' },
         { icon: 'block', title: 'Sin influencia de noticias', desc: 'Olvídate de los eventos macroeconómicos. Aquí las condiciones son puramente técnicas.' },
         { icon: 'memory', title: 'Ideal para trading algorítmico', desc: 'Diseñados para bots, estrategias cuantitativas y pruebas de backtesting en entornos consistentes.' },
-        { icon: 'query_stats', title: 'Riesgo medible y oportunidades', desc: 'Gracias a su naturaleza matemática, puedes diseñar sistemas más predecibles y controlar tu gestión de riesgo.' },
+        { icon: 'query_stats', title: 'Riesgo medible y oportunidades constantes', desc: 'Gracias a la naturaleza matemática de sus series, puedes diseñar sistemas más predecibles y controlar mejor la gestión del riesgo.' },
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#05010f] relative border-t border-white/5">
+    <section class="py-32 px-8 bg-[#0a0a0a] relative border-b border-white/5">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-24 section-reveal">
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-6 uppercase tracking-tighter">Ventajas de <span class="text-[#865BFF]">Operar Sintéticos</span></h2>
-                <div class="h-1 w-20 bg-[#865BFF] mx-auto rounded-full"></div>
+            <div class="text-center mb-20 section-reveal">
+                <span class="inline-block px-4 py-2 bg-white/5 text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 border border-white/10">El Diferencial</span>
+                <h2 class="text-4xl md:text-5xl font-black font-headline text-white tracking-tighter uppercase">¿Por qué operar<br>Índices Sintéticos?</h2>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 section-reveal" style="animation-delay: 0.2s;">
                 ${advantages.map((adv, i) => `
-                    <div class="glass-panel p-10 rounded-2xl border border-white/5 bg-[#0a0515]/80 group hover:bg-white/5 transition-all duration-500 section-reveal relative overflow-hidden" style="animation-delay: ${i * 0.1}s">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-[#865BFF]/5 rounded-full blur-2xl group-hover:bg-[#865BFF]/20 transition-colors"></div>
-                        <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white mb-8 group-hover:rotate-12 transition-transform shadow-lg relative z-10">
-                            <span class="material-symbols-outlined text-3xl font-light">${adv.icon}</span>
+                    <div class="p-8 bg-[#050505] border border-white/5 hover:border-[#a78bfa]/40 transition-all group">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-[#a78bfa] transition-colors">
+                            <span class="material-symbols-outlined text-[#a78bfa] group-hover:text-white">${adv.icon}</span>
                         </div>
-                        <h3 class="text-xl font-black text-white mb-4 uppercase tracking-widest relative z-10">${adv.title}</h3>
-                        <p class="text-sm text-white/40 leading-relaxed font-medium relative z-10">${adv.desc}</p>
+                        <h3 class="text-lg font-black text-white mb-3 uppercase tracking-wide">${adv.title}</h3>
+                        <p class="text-sm text-white/50 font-light leading-relaxed">${adv.desc}</p>
                     </div>
                 `).join('')}
             </div>
@@ -550,142 +543,78 @@ export function renderSntAdvantages(content: Record<string, any>, brand: BrandCo
 
 export function renderSntFamilies(content: Record<string, any>, brand: BrandConfig): string {
     const families = [
-        { 
-            name: 'FORTUNE', tagline: 'El ritmo constante del mercado en movimiento.',
-            desc: 'Los índices Fortune y FortuneX simulan movimientos de precio en "pasos" controlados dentro del gráfico.',
-            sub: 'Fortune 100, 250, 500, 1000 — FortuneX 200, 300, 500',
-            features: ['Movimiento escalonado (step-by-step)', 'Comportamiento ordenado y rangos claros', 'Versiones X con multiplicador de pasos']
-        },
-        { 
-            name: 'VORTEX', tagline: 'Donde la Intensidad del mercado cobra vida.',
-            desc: 'Los índices Vortex ofrecen escenarios de volatilidad constante, ideales para medir tu capacidad de reacción y control.',
-            sub: 'Vortex 20, 40, 60, 80, 100',
-            features: ['Volatilidad estable y predecible', 'Sin interrupciones ni influencias externas', 'Oscilaciones proporcionales realistas']
-        },
-        { 
-            name: 'BULLX & BEARX', tagline: 'Los motores del impulso y la caída.',
-            desc: 'La familia Trending simula entornos donde predominan las direcciones fuertes con movimientos explosivos periódicos.',
-            sub: 'BullX 400, 777, 900, 1000 — BearX 400, 777, 900, 1000',
-            features: ['Direccionalidad clara (Spikes)', 'Eventos extremos programados', 'Momentum, rompimiento o reversión']
-        },
-        { 
-            name: 'FOMOX', tagline: 'Donde la tendencia aparece sin aviso...',
-            desc: 'Los índices FomoX representan escenarios de tendencia aleatoria y espontánea; imitan los momentos de hype o euforia.',
-            sub: 'FomoX 111, 333, 888, 999',
-            features: ['Direccionalidad impredecible', 'Aceleración espontánea de corto plazo', 'Para amantes del Breakout y Reversals']
-        }
+        { id: 'fortune', name: 'Fortune (Jump)', desc: 'Saltar a nuevas oportunidades. Gaps explosivos cada hora.', icon: 'rocket_launch', color: 'from-amber-400 to-orange-600' },
+        { id: 'vortex', name: 'Vortex (Crash/Boom)', desc: 'Captura impulsos agresivos. Rupturas repentinas en tendencias.', icon: 'bolt', color: 'from-red-400 to-rose-600' },
+        { id: 'bullx', name: 'BullX/BearX (Step)', desc: 'Movimientos escalonados. Tendencias consistentes y marcadas.', icon: 'trending_up', color: 'from-emerald-400 to-teal-600' },
+        { id: 'fomox', name: 'FomoX (VIX)', desc: 'La verdadera prueba de fuego. Oscilaciones de alta velocidad.', icon: 'speed', color: 'from-[#a78bfa] to-[#865BFF]' }
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative">
-        <div class="max-w-7xl mx-auto section-reveal">
-            <div class="text-center mb-24">
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-6 uppercase tracking-tighter">Nuestras 4 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#865BFF]">Familias</span></h2>
-                <p class="text-lg md:text-xl text-white/50 max-w-3xl mx-auto font-medium">Bridge Markets agrupa sus índices en cuatro familias principales, cada una con un comportamiento característico y un propósito de trading distinto.</p>
+    <section class="py-32 px-8 bg-[#0a0a0a] relative border-b border-white/5 overflow-hidden">
+        <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+            <img src="/images/imagenes nuevas/alfiler rosa.png" alt="Alfil" class="w-[500px] h-auto drop-shadow-2xl grayscale blur-sm">
+        </div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row items-end justify-between mb-20 section-reveal gap-8">
+                <div>
+                    <span class="inline-block px-4 py-2 bg-white/5 text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 border border-white/10">Diversificación</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-headline text-white tracking-tighter uppercase">4 Familias,<br>Infinitas Estrategias.</h2>
+                </div>
+                <p class="text-white/50 max-w-sm font-light text-right">
+                    Diseñadas para adaptarse a cualquier perfil de riesgo y estilo de trading.
+                </p>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
-                ${families.map((f, i) => `
-                    <div class="glass-panel p-10 rounded-[2rem] border border-white/10 bg-[#05010f]/60 hover:border-[#865BFF]/50 transition-all group overflow-hidden relative">
-                        <div class="absolute top-0 right-0 px-6 py-2 bg-white/5 rounded-bl-3xl border-b border-l border-white/5 text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">0${i+1}</div>
-                        
-                        <h3 class="text-3xl font-black text-white mb-2 uppercase tracking-tighter group-hover:text-[#865BFF] transition-colors">${f.name}</h3>
-                        <p class="text-[11px] font-black text-[#865BFF] uppercase tracking-widest mb-6">${f.tagline}</p>
-                        <p class="text-white/60 text-sm leading-relaxed font-medium mb-8 pr-12">${f.desc}</p>
-                        
-                        <div class="p-6 bg-white/5 border border-white/5 rounded-2xl mb-8">
-                            <p class="text-[9px] font-black text-white/30 uppercase tracking-widest mb-2">Subfamilias Disponibles</p>
-                            <p class="text-sm font-bold text-white">${f.sub}</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 section-reveal" style="animation-delay: 0.1s;">
+                ${families.map(fam => `
+                    <div class="p-8 bg-[#050505] border border-white/5 hover:border-white/20 transition-all group flex items-start gap-6 relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 opacity-5 text-white text-8xl material-symbols-outlined transform group-hover:scale-110 transition-transform">${fam.icon}</div>
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br ${fam.color} flex items-center justify-center shrink-0 shadow-lg relative z-10">
+                            <span class="material-symbols-outlined text-white text-3xl">${fam.icon}</span>
                         </div>
-
-                        <ul class="space-y-4">
-                            ${f.features.map(feat => `
-                                <li class="flex items-start gap-4">
-                                    <span class="material-symbols-outlined text-[#865BFF] text-base">check_circle</span>
-                                    <span class="text-xs font-bold text-white/70 tracking-wide">${feat}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-black text-white mb-2 uppercase tracking-wide">${fam.name}</h3>
+                            <p class="text-white/50 font-light leading-relaxed text-sm">${fam.desc}</p>
+                        </div>
                     </div>
                 `).join('')}
             </div>
-
-            <!-- Comparativa Visual -->
-            <div class="glass-panel p-0 rounded-[2rem] border border-white/10 overflow-hidden relative shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]">
-                <div class="bg-[#05010f] p-8 text-center border-b border-white/10">
-                    <h3 class="text-2xl font-black text-white uppercase tracking-widest">Resumen de Comportamientos</h3>
-                </div>
-                <div class="overflow-x-auto bg-[#0a0515]/90">
-                    <table class="w-full text-left min-w-[700px]">
-                        <thead>
-                            <tr class="bg-white/5">
-                                <th class="py-6 px-8 text-[10px] font-black uppercase tracking-[0.2em] text-[#865BFF]">Familia</th>
-                                <th class="py-6 px-8 text-[10px] font-black uppercase tracking-[0.2em] text-[#865BFF]">Subfamilias</th>
-                                <th class="py-6 px-8 text-[10px] font-black uppercase tracking-[0.2em] text-[#865BFF]">Comportamiento Principal</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5">
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="py-8 px-8 font-black text-white uppercase tracking-widest text-sm">FORTUNE</td>
-                                <td class="py-8 px-8 text-white/60 text-xs font-bold leading-relaxed">Fortune 100/250/500/1000<br>FortuneX 200/300/500</td>
-                                <td class="py-8 px-8 text-white/60 text-sm font-medium">Movimiento escalonado (step-by-step). Rangos y rupturas claras.</td>
-                            </tr>
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="py-8 px-8 font-black text-white uppercase tracking-widest text-sm">VORTEX</td>
-                                <td class="py-8 px-8 text-white/60 text-xs font-bold leading-relaxed">Vortex 20 / 40 / 60 / 80 / 100</td>
-                                <td class="py-8 px-8 text-white/60 text-sm font-medium">Volatilidad constante y predecible. A mayor número, mayor amplitud.</td>
-                            </tr>
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="py-8 px-8 font-black text-white uppercase tracking-widest text-sm text-nowrap">BULLX & BEARX</td>
-                                <td class="py-8 px-8 text-white/60 text-xs font-bold leading-relaxed">BullX 400/777/900/1000<br>BearX 400/777/900/1000</td>
-                                <td class="py-8 px-8 text-white/60 text-sm font-medium">Tendencias con spikes direccionales. Momentum e impulso.</td>
-                            </tr>
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="py-8 px-8 font-black text-white uppercase tracking-widest text-sm">FOMOX</td>
-                                <td class="py-8 px-8 text-white/60 text-xs font-bold leading-relaxed">FomoX 111 / 333 / 888 / 999</td>
-                                <td class="py-8 px-8 text-white/60 text-sm font-medium">Tendencia aleatoria y espontánea. Ideal para breakout y reversals.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <p class="text-center mt-8 text-[10px] font-bold text-white/20 uppercase tracking-widest">*Consulta el gráfico comparativo visual SVG en el portal oficial de BM.</p>
         </div>
     </section>`;
 }
 
 export function renderSntWorkflow(content: Record<string, any>, brand: BrandConfig): string {
     const steps = [
-        { title: 'Elige tu familia', desc: 'Decide si buscas estabilidad (Fortune), tendencia (BullX) o caos controlado (FomoX).' },
-        { title: 'Define tu estrategia', desc: 'Usa tus propios indicadores o prueba tus bots en entornos 100% repetibles.' },
-        { title: 'Gestiona el riesgo', desc: 'Cada índice tiene su propia personalidad de volatilidad. Ajusta tu lote ideal.' },
-        { title: 'Analiza patrones', desc: 'Los índices Bridge Markets ofrecen consistencia. Ideal para backtesting.' },
-        { title: 'Ejecuta con precisión', desc: 'Aquí cada tick es una oportunidad de mejora. Sin noticias, sin excusas.' },
+        { num: '01', title: 'Registro y Verificación', desc: 'Abre tu cuenta y completa la verificación KYC en la zona segura de clientes.' },
+        { num: '02', title: 'Fondos a tu Wallet', desc: 'Realiza tu depósito utilizando criptomonedas, tarjetas u otros métodos locales.' },
+        { num: '03', title: 'Apertura de Cuenta MT5', desc: 'Desde el portal de cliente, crea tu cuenta comercial específica para Índices Sintéticos.' },
+        { num: '04', title: 'Transferencia Interna', desc: 'Mueve fondos desde tu wallet principal hacia tu nueva cuenta comercial de MT5.' },
+        { num: '05', title: 'Conexión y Trading', desc: 'Descarga MT5, inicia sesión con tus credenciales y comienza a operar las 24 horas.' }
     ];
 
     return `
-    <section class="py-32 px-8 bg-[#05010f] border-t border-white/5 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[#865BFF]/5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div class="max-w-7xl mx-auto section-reveal relative z-10">
-            <div class="text-center mb-24">
-                <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-6 uppercase tracking-tighter">¿Cómo <span class="text-[#865BFF]">Operar</span>?</h2>
-                <div class="h-1 w-24 bg-[#865BFF] mx-auto rounded-full"></div>
+    <section class="py-32 px-8 bg-[#050505] relative border-b border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24 section-reveal">
+                <span class="inline-block px-4 py-2 bg-white/5 text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 border border-white/10">El Proceso</span>
+                <h2 class="text-4xl md:text-5xl font-black font-headline text-white tracking-tighter uppercase">5 Pasos para Operar</h2>
             </div>
-
-            <div class="flex flex-col lg:flex-row gap-6 relative">
-                <div class="hidden lg:block absolute top-[40%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#865BFF]/50 to-transparent z-0"></div>
-                ${steps.map((s, i) => `
-                    <div class="flex-1 flex flex-col group relative z-10 hover:-translate-y-4 transition-transform duration-500">
-                        <div class="asym-card p-8 bg-[#0a0515]/90 border border-white/10 hover:border-[#865BFF]/50 transition-all duration-500 h-full backdrop-blur-xl group-hover:shadow-[0_20px_50px_-10px_rgba(134,91,255,0.3)]">
-                            <div class="w-16 h-16 bg-[#05010f] border border-white/5 rounded-full flex items-center justify-center text-[#865BFF] mb-8 group-hover:bg-[#865BFF] group-hover:text-white font-black text-2xl transition-all shadow-[0_0_20px_rgba(134,91,255,0.2)] mx-auto lg:mx-0">
-                                0${i + 1}
+            
+            <div class="relative section-reveal" style="animation-delay: 0.2s;">
+                <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white/10 -translate-y-1/2 hidden md:block"></div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                    ${steps.map((step, i) => `
+                        <div class="relative group">
+                            <div class="w-16 h-16 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center mb-6 relative z-10 mx-auto md:mx-0 group-hover:bg-[#a78bfa] transition-colors">
+                                <span class="text-xl font-black text-white group-hover:text-black">${step.num}</span>
                             </div>
-                            <h3 class="text-lg font-black text-white mb-4 uppercase tracking-tight text-center lg:text-left">${s.title}</h3>
-                            <p class="text-xs text-white/50 leading-relaxed font-medium text-center lg:text-left">${s.desc}</p>
+                            <div class="text-center md:text-left">
+                                <h3 class="text-lg font-black text-white mb-3 uppercase tracking-wide">${step.title}</h3>
+                                <p class="text-sm text-white/50 font-light leading-relaxed">${step.desc}</p>
+                            </div>
                         </div>
-                    </div>
-                `).join('')}
+                    `).join('')}
+                </div>
             </div>
         </div>
     </section>`;
@@ -693,49 +622,39 @@ export function renderSntWorkflow(content: Record<string, any>, brand: BrandConf
 
 export function renderSntSpecs(content: Record<string, any>, brand: BrandConfig): string {
     return `
-    <section class="py-32 px-8 bg-[#0a0515] relative overflow-hidden">
-        <div class="absolute -top-32 -right-32 w-96 h-96 bg-[#865BFF]/10 rounded-full blur-[100px]"></div>
-        <div class="max-w-6xl mx-auto section-reveal relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-                <div>
-                     <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-6 uppercase tracking-tighter">Especificaciones <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Técnicas</span></h2>
-                     <p class="text-lg text-white/50 leading-relaxed font-medium max-w-xl">Parámetros precisos que reflejan distintos comportamientos del mercado y profundidad operativa.</p>
-                </div>
-                <div class="px-6 py-2 bg-white/5 border border-white/10 rounded-full inline-block">
-                    <span class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Institutional Grade</span>
-                </div>
-            </div>
-
-            <div class="glass-panel asym-card border border-white/10 p-0 overflow-hidden shadow-2xl backdrop-blur-xl">
-                <div class="overflow-x-auto">
-                    <table class="w-full min-w-[800px] text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gradient-to-r from-white/5 to-transparent border-b border-white/10">
-                                <th class="py-8 px-10 text-[11px] font-black text-[#865BFF] uppercase tracking-[0.2em] w-1/3">Familia de Índice</th>
-                                <th class="py-8 px-10 text-[11px] font-black text-[#865BFF] uppercase tracking-[0.2em]">Spread Global</th>
-                                <th class="py-8 px-10 text-[11px] font-black text-[#865BFF] uppercase tracking-[0.2em]">Lotaje Mín/Máx</th>
-                                <th class="py-8 px-10 text-[11px] font-black text-[#865BFF] uppercase tracking-[0.2em]">Ejecución</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5 bg-[#05010f]/80">
-                            ${['FORTUNE / FORTUNEX', 'VORTEX', 'BULLX & BEARX', 'FOMOX'].map((fam, i) => `
-                                <tr class="hover:bg-[#865BFF]/5 transition-colors group">
-                                    <td class="py-8 px-10 font-black text-white uppercase tracking-widest text-sm flex items-center gap-4">
-                                        <span class="w-2 h-2 rounded-full bg-white/10 group-hover:bg-[#865BFF] transition-colors"></span>
-                                        ${fam}
-                                    </td>
-                                    <td class="py-8 px-10 text-white/50 font-mono text-xs font-bold tracking-widest">Desde 0.0 Pips</td>
-                                    <td class="py-8 px-10 text-white/50 font-mono text-xs font-bold tracking-widest">Variable</td>
-                                    <td class="py-8 px-10 text-emerald-400 font-mono text-xs font-bold tracking-widest">Market Execution</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+    <section class="py-32 px-8 bg-[#0a0a0a] relative overflow-hidden border-b border-white/5">
+        <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center section-reveal">
+            <div>
+                <span class="inline-block px-4 py-2 bg-white/5 text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-4 border border-white/10">Datos Técnicos</span>
+                <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-8 tracking-tighter uppercase">Especificaciones del Producto</h2>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-[#050505] border border-white/5">
+                        <span class="text-white/60 font-light uppercase text-sm tracking-wide">Plataforma</span>
+                        <span class="text-white font-bold tracking-widest text-right">MetaTrader 5 (MT5)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-[#050505] border border-white/5">
+                        <span class="text-white/60 font-light uppercase text-sm tracking-wide">Ejecución</span>
+                        <span class="text-white font-bold tracking-widest text-right">Market Execution</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-[#050505] border border-white/5">
+                        <span class="text-white/60 font-light uppercase text-sm tracking-wide">Spreads</span>
+                        <span class="text-[#a78bfa] font-bold tracking-widest text-right">[Dato de BM]</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-[#050505] border border-white/5">
+                        <span class="text-white/60 font-light uppercase text-sm tracking-wide">Lotaje Mín/Máx</span>
+                        <span class="text-[#a78bfa] font-bold tracking-widest text-right">[Dato de BM]</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-[#050505] border border-white/5">
+                        <span class="text-white/60 font-light uppercase text-sm tracking-wide">Margin Call / Stop Out</span>
+                        <span class="text-[#a78bfa] font-bold tracking-widest text-right">[Dato de BM]</span>
+                    </div>
                 </div>
             </div>
-            <div class="mt-8 flex justify-between items-center text-[10px] font-bold text-white/20 uppercase tracking-widest italic">
-                <p>*Los datos técnicos exactos deben validarse en la pasarela de cliente MT5.</p>
-                <p>Bridge Markets Server</p>
+            
+            <div class="relative flex justify-center">
+                <div class="absolute inset-0 bg-[#a78bfa]/5 rounded-full blur-[100px]"></div>
+                <img src="/images/imagenes nuevas/reloj rosa.png" alt="Reloj 24/7" class="w-full max-w-sm h-auto object-contain relative z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] animate-[float_6s_ease-in-out_infinite]" style="animation: float 6s ease-in-out infinite; transform: translateY(0px);">
             </div>
         </div>
     </section>`;
@@ -743,11 +662,12 @@ export function renderSntSpecs(content: Record<string, any>, brand: BrandConfig)
 
 export function renderSntPlatforms(content: Record<string, any>, brand: BrandConfig): string {
     const steps = [
-        { icon: 'person_add', text: 'Regístrate en Bridge Markets' },
-        { icon: 'account_balance_wallet', text: 'Crea tu cuenta de Índices Sintéticos' },
-        { icon: 'download', text: 'Descarga MT5 (PC, Mac, iOS, Android)' },
-        { icon: 'login', text: 'Conecta con tus credenciales seguras' },
-        { icon: 'rocket_launch', text: 'Comienza a operar inmediatamente' }
+        { icon: 'person_add', text: 'Crea tu cuenta en el portal de Bridge Markets' },
+        { icon: 'policy', text: 'Completa tu proceso KYC (verificación de identidad)' },
+        { icon: 'account_balance_wallet', text: 'Deposita fondos en tu cuenta de trading' },
+        { icon: 'download', text: 'Descarga MetaTrader 5 (MT5) en escritorio, iOS o Android' },
+        { icon: 'login', text: 'Conéctate al servidor BridgeMarkets-MT5' },
+        { icon: 'rocket_launch', text: 'Elige tu familia favorita y empieza a operar 24/7' }
     ];
 
     return `
@@ -825,12 +745,14 @@ export function renderSntCommunity(content: Record<string, any>, brand: BrandCon
 
 export function renderSntFAQ(content: Record<string, any>, brand: BrandConfig): string {
     const faqs = [
-        { q: '¿Qué es un Índice Sintético?', a: 'Es un mercado simulado por algoritmos RNG que replican el comportamiento de los mercados reales sin depender de activos físicos ni noticias externas.' },
-        { q: '¿Puedo operar 24/7?', a: 'Sí, los índices sintéticos están disponibles todos los días del año, incluyendo fines de semana y festivos oficiales.' },
-        { q: '¿Necesito una cuenta especial?', a: 'Deberás crear una cuenta exclusiva de "Índices Sintéticos" dentro de tu área de cliente de Bridge Markets (Diferente a Forex o Cryptos).' },
-        { q: '¿Qué plataforma se utiliza?', a: 'MetaTrader 5 (MT5) es la terminal institucional oficial para operar nuestras familias de índices.' },
-        { q: '¿Cómo se garantiza la transparencia?', a: 'El generador de números (RNG) es auditado por entidades de cumplimiento estrictas para asegurar resultados estadísticamente sólidos.' },
-        { q: '¿Existen comisiones ocultas?', a: 'No, los costos operativos están reflejados directamente en el spread de cada mercado sintético en vivo.' }
+        { q: '¿Qué son los índices sintéticos?', a: 'Son instrumentos generados por algoritmos RNG que simulan movimientos de mercado. No dependen de activos físicos ni de noticias externas.' },
+        { q: '¿Están disponibles 24/7?', a: 'Sí. Los índices sintéticos de Bridge Markets operan los 365 días del año, sin cierres ni pausas de mercado.' },
+        { q: '¿Cuántas familias hay?', a: '4 familias: Fortune (step-by-step), Vortex (volatilidad constante), BullX/BearX (trending con spikes) y FomoX (tendencia aleatoria).' },
+        { q: '¿Puedo usar robots o EAs?', a: 'Sí. Los índices sintéticos son ideales para trading algorítmico por su consistencia y reproducibilidad en backtesting.' },
+        { q: '¿En qué plataforma se operan?', a: 'MetaTrader 5 (MT5). Disponible para escritorio (Windows), iOS y Android con servidor BridgeMarkets-MT5.' },
+        { q: '¿Qué diferencia hay entre BullX y BearX?', a: 'BullX tiene tendencia bajista con spikes alcistas. BearX tiene tendencia alcista con spikes bajistas.' },
+        { q: '¿Qué índice es mejor para empezar?', a: 'Fortune o Vortex son ideales para traders que buscan estructura y predecibilidad. FomoX y BullX/BearX son para traders con más experiencia.' },
+        { q: '¿Los resultados son manipulables?', a: 'No. Cada movimiento es generado por un RNG auditado que garantiza imparcialidad y consistencia estadística.' }
     ];
 
     return `
@@ -856,38 +778,29 @@ export function renderSntFAQ(content: Record<string, any>, brand: BrandConfig): 
 }
 
 export function renderSntCTA(content: Record<string, any>, brand: BrandConfig): string {
-    const ctaText = content.ctaText || "Empezar a Operar";
+    const ctaText = content.ctaText || "Comenzar a operar ahora";
     const ctaLink = brand.ctaLink || "#register";
     
     return `
-    <section class="py-40 bg-[#05010f] relative overflow-hidden section-reveal">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute bottom-0 left-0 w-full h-1/2 bg-[linear-gradient(0deg,#865BFF,bg-white)] opacity-10"></div>
-            <div class="absolute top-[20%] left-[50%] -translate-x-[50%] w-full max-w-4xl h-full bg-[#865BFF]/10 rounded-t-full blur-[120px] pointer-events-none"></div>
-        </div>
-        
-        <div class="max-w-4xl mx-auto px-8 relative z-10 text-center text-white">
-            <div class="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-10 backdrop-blur-md">
-                 <span class="text-[9px] font-black uppercase text-[#865BFF] tracking-[0.3em] flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Bridge Markets Live Server</span>
+    <section class="py-32 px-8 bg-[#050505] relative overflow-hidden">
+        <div class="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#a78bfa]/5 rounded-full blur-[150px]"></div>
+
+        <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
+            <div class="mb-12 flex justify-center">
+                <img src="/images/imagenes nuevas/peones rosa.png" alt="Peones" class="w-56 h-auto object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)] animate-[float_4s_ease-in-out_infinite]" style="animation: float 4s ease-in-out infinite; transform: translateY(0px);">
             </div>
-            
-            <h2 class="text-5xl md:text-7xl lg:text-[6rem] font-black font-headline mb-8 uppercase tracking-tighter leading-[0.9]">DOMINA EL <br><span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-[#865BFF]">MERCADO</span></h2>
-            <p class="text-lg md:text-xl text-white/50 mb-16 max-w-2xl mx-auto font-medium">El próximo movimiento del mercado podría ser tuyo. Únete a miles de traders en la red global oficial de Bridge Markets hoy mismo.</p>
-            
-            <div class="flex flex-col items-center gap-16">
-                <a href="${ctaLink}" class="group relative px-12 py-6 bg-white text-black font-black text-xl uppercase tracking-widest rounded-full hover:scale-110 transition-all overflow-hidden flex items-center justify-center gap-4 shadow-[#865BFF]/60 shadow-[0_0_80px_rgba(134,91,255,0.4)]">
-                    <span class="relative z-10">${ctaText}</span>
-                    <span class="material-symbols-outlined relative z-10 group-hover:translate-x-2 transition-transform">trending_up</span>
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#865BFF]/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                </a>
-                
-                <div class="max-w-2xl p-8 bg-[#0a0515]/60 asym-card border border-white/5 backdrop-blur-md text-left">
-                    <p class="text-[10px] text-white/30 uppercase tracking-[0.3em] font-black mb-4 pb-4 border-b border-white/5">Risk Disclosure — Bridge Markets LTD</p>
-                    <p class="text-[9px] text-white/20 leading-relaxed uppercase tracking-widest font-bold">
-                        El trading de Índices Sintéticos implica un alto riesgo de pérdida de capital. Estos mercados simulados operan 24/7 y la volatilidad puede ser extrema en familias específicas como FOMOX/BULLX. Asegúrese de comprender los riesgos algorítmicos antes de invertir capital real. Los CFD e Instrumentos RNG son productos apalancados.
-                    </p>
-                </div>
-            </div>
+            <h2 class="text-5xl md:text-7xl font-black font-headline text-white mb-8 tracking-tighter uppercase">
+                Toma tu posición<br>en el tablero.
+            </h2>
+            <p class="text-xl text-white/60 font-light mb-12 max-w-2xl mx-auto">
+                No importa si el mercado real está cerrado o estancado. Aquí, siempre es momento de operar.
+            </p>
+            <a href="${ctaLink}" class="inline-flex px-12 py-6 bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-[#a78bfa] hover:text-white transition-all items-center justify-center gap-4 hover:scale-105 shadow-2xl">
+                ${ctaText}
+                <span class="material-symbols-outlined text-xl">login</span>
+            </a>
+            <p class="mt-8 text-white/30 text-xs font-light uppercase tracking-widest">Abre tu cuenta en minutos y domina el juego.</p>
         </div>
     </section>`;
 }

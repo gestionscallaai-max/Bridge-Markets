@@ -8,6 +8,7 @@ import { renderLX12Hero, renderLX12Intro, renderLX12TableCompare, renderLX12Pric
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
 import { renderSNUHero, renderSNUMetrics, renderSNUUniversesIntro, renderSNUU1BM, renderSNUU2Deriv, renderSNUU3Welt, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUCTA, renderSNUFooter } from './syntheticUniverse';
 import { renderPSHero, renderPSBanner, renderPSFeatures, renderPSMatrix, renderPSCalculator, renderPSRules, renderPSContact, renderPSFooter } from './propfirmSinteticos';
+import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
 
 
 export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, brand: BrandConfig) => string> = {
@@ -107,4 +108,9 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     ps_rules: renderPSRules,
     ps_contact: renderPSContact,
     ps_footer: renderPSFooter,
+    v3_hero: renderV3Hero,
+    v3_features: renderV3Features,
+    v3_header: renderV3Header,
+    v3_community: renderV3Community,
+    v3_footer: renderV3Footer,
 };

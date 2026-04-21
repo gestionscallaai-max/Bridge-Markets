@@ -298,6 +298,57 @@ export const SECTION_CATALOG: SectionMeta[] = [
         },
     },
 
+    // ─── V3 PREMIUM (OFFICIAL STYLE) ───────
+    {
+        id: 'v3_header',
+        name: 'V3 Header Blur',
+        icon: 'menu',
+        category: 'layout',
+        description: 'Barra de navegación flotante con blur y diseño premium V3',
+        sourceTemplate: 10,
+        defaultContent: {},
+    },
+    {
+        id: 'v3_hero',
+        name: 'V3 Hero Bridge',
+        icon: 'rocket_launch',
+        category: 'hero',
+        description: 'Hero inspirado en el sitio oficial de Bridge con diseño geométrico y 3D',
+        sourceTemplate: 10,
+        defaultContent: {
+            title: 'Conquista los <br><strong class="font-bold">mercados financieros globales</strong>',
+            subtitle: 'Bridge Markets es tu plataforma de trading profesional: segura, innovadora y diseñada para llevar tu experiencia al siguiente nivel.',
+            ctaText: 'Únete ahora',
+        },
+    },
+    {
+        id: 'v3_features',
+        name: 'V3 Tech Features',
+        icon: 'bolt',
+        category: 'content',
+        description: 'Grid de características tecnológicas con diseño de tarjetas redondeadas V3',
+        sourceTemplate: 10,
+        defaultContent: {},
+    },
+    {
+        id: 'v3_community',
+        name: 'V3 Community Card',
+        icon: 'groups',
+        category: 'cta',
+        description: 'Banner de comunidad Premium con degradado V3',
+        sourceTemplate: 10,
+        defaultContent: {},
+    },
+    {
+        id: 'v3_footer',
+        name: 'V3 Premium Footer',
+        icon: 'bottom_panel_open',
+        category: 'layout',
+        description: 'Footer corporativo minimalista V3',
+        sourceTemplate: 10,
+        defaultContent: {},
+    },
+
     // ─── SECCIONES OFICIALES (BOCETOS DEFINITIVOS) ───────
     {
         id: 'hero_official',
