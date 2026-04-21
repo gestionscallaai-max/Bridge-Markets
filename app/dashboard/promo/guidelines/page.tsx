@@ -95,42 +95,6 @@ export default function PromoGuidelinesPage() {
                 </motion.div>
             </div>
 
-            {/* Legal Notice */}
-            <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="bg-[#0d0221] rounded-[2.5rem] p-10 text-white relative overflow-hidden group border border-white/5"
-            >
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-amber-500 opacity-5 blur-[80px] -mr-32 -mb-32"></div>
-                <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                    <div className="w-20 h-20 rounded-[2rem] bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 shadow-xl shadow-amber-500/5">
-                        <AlertTriangle className="w-10 h-10" />
-                    </div>
-                    <div className="flex-1 text-center md:text-left">
-                        <h4 className="text-xl font-black mb-3 flex items-center justify-center md:justify-start gap-2">
-                            <Info className="w-5 h-5 text-[#865BFF]" /> Aviso Legal Crítico
-                        </h4>
-                        <p className="text-white/40 text-sm leading-relaxed font-medium">
-                            El trading en los mercados financieros implica un riesgo significativo de pérdida de capital. Como Partner, es tu responsabilidad legal asegurar que tus clientes comprendan y acepten estos riesgos. El incumplimiento de estas directrices resultará en la revocación inmediata de tu estatus de afiliado y la pérdida de comisiones acumuladas.
-                        </p>
-                    </div>
-                    <div className="shrink-0">
-                        <button className="flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white text-xs font-black uppercase tracking-widest border border-white/10 transition-all">
-                            Descargar PDF <FileText className="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* Footer hint */}
-            <div className="text-center">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center justify-center gap-4">
-                    <div className="h-px w-10 bg-slate-100"></div>
-                    Actualizado para Q2 2026
-                    <div className="h-px w-10 bg-slate-100"></div>
-                </p>
-            </div>
         </div>
     );
 }
