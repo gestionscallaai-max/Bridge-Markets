@@ -287,7 +287,6 @@ function PhoneMockup({ html }: { html: string }) {
                 <div className="absolute inset-0 z-10 bg-white">
                     <ModularPreview 
                         html={html} 
-                        theme={theme} 
                         style={{ 
                             width: '400%', 
                             height: '400%', 
