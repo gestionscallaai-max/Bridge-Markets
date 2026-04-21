@@ -342,7 +342,7 @@ export function renderPropRules(content: Record<string, any>, brand: BrandConfig
 export function renderPropCommunity(content: Record<string, any>, brand: BrandConfig): string {
     const communityName = brand.communityName || brand.ibName || "Nuestra Comunidad";
     const welcomeMsg = content.welcomeMsg || "Únete a un entorno diseñado para el crecimiento mutuo. Aquí no solo operamos, sino que construimos el futuro del trading institucional juntos.";
-    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80";
+    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
     const whatsapp = content.socialWhatsApp || brand.whatsapp || "";
     const telegram = content.socialTelegram || brand.telegram || "";

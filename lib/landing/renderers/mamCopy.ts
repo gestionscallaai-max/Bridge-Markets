@@ -613,7 +613,7 @@ export function renderMamCopyFinalCTA(content: Record<string, any>, brand: Brand
 export function renderMCCommunity(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
     const message = content.communityMessage || 'Únete a nuestro ecosistema y conecta con traders profesionales.';
-    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80";
+    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
     const telegram = content.socialTelegram || brand.telegram || "#";
     const whatsapp = content.socialWhatsApp || brand.whatsapp || "#";

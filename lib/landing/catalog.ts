@@ -17,7 +17,7 @@ export const SECTION_CATALOG: LandingProduct[] = [
     { id: 'prop_benefits', name: 'PropFirm: Beneficios', icon: 'military_tech', category: 'Official', description: 'Certificación del trader y ventajas', sourceTemplate: 2, defaultContent: {} },
     { id: 'prop_community', name: 'PropFirm: Comunidad', icon: 'groups', category: 'Official', description: 'Sección 100% editable por el IB', sourceTemplate: 2, defaultContent: { 
         welcomeMsg: 'Únete a un entorno diseñado para el crecimiento mutuo. Aquí no solo operamos, sino que construimos el futuro del trading institucional juntos.', 
-        photoUrl: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80',
+        photoUrl: 'https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80',
         socialWhatsApp: '',
         socialTelegram: '',
         socialInstagram: '',
@@ -73,18 +73,41 @@ export const SECTION_CATALOG: LandingProduct[] = [
     { id: 'lx12_footer', name: 'LX12: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página temático LX12', sourceTemplate: 4, defaultContent: {} },
 
     // ─── INSTITUTIONAL (Blueprint 5) ─────────────────────
-    { id: 'inst_hero', name: 'Inst Hero Bold', icon: 'account_balance', category: 'Official', description: 'Hero institucional asimétrico y potente.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_about', name: 'Inst Quiénes Somos', icon: 'history_edu', category: 'Official', description: 'Trayectoria e historia corporativa.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_why', name: 'Inst Por Qué BM', icon: 'verified', category: 'Official', description: 'Ventajas competitivas institucionales.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_ecosystem', name: 'Inst Ecosistema', icon: 'dashboard', category: 'Official', description: 'Bento grid de productos Bridge.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_selector', name: 'Inst Perfil Selector', icon: 'split_screen', category: 'Official', description: 'Selector de perfil Trader vs Inversor.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_partners', name: 'Inst Socios IB', icon: 'handshake', category: 'Official', description: 'Información del programa de afiliados.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_tech', name: 'Inst Tecnología', icon: 'memory', category: 'Official', description: 'Tarjetas de tecnología MT5 y charts.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_workflow', name: 'Inst Pasos Onboarding', icon: 'format_list_numbered', category: 'Official', description: 'Flujo de pasos institucional.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_community', name: 'Inst Comunidad', icon: 'groups', category: 'Official', description: 'Comunidad institucional global.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_faq', name: 'Inst FAQ', icon: 'contact_support', category: 'Official', description: 'Dudas corporativas generales.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_final_cta', name: 'Inst Final CTA', icon: 'ads_click', category: 'Official', description: 'Llamado a la acción institucional.', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_footer', name: 'Inst Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo.', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_hero', name: 'Inst: Hero', icon: 'account_balance', category: 'Official', description: 'Hero institucional asimétrico y potente', sourceTemplate: 5, defaultContent: { ibPhrase: '', ctaMainText: 'Abrir mi cuenta', ctaSecondaryText: 'Ver todos los productos' } },
+    { id: 'inst_about', name: 'Inst: Quiénes Somos', icon: 'history_edu', category: 'Official', description: 'Trayectoria e historia corporativa fija', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_why', name: 'Inst: Por Qué BM', icon: 'verified', category: 'Official', description: 'Ventajas competitivas institucionales fijas', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_ecosystem', name: 'Inst: Ecosistema', icon: 'dashboard', category: 'Official', description: 'Bento grid de productos y tabla técnica', sourceTemplate: 5, defaultContent: {
+        ctaPropText: 'Ver PropFirm',
+        ctaSynText: 'Ver Sintéticos',
+        ctaX12Text: 'Ver Cuentas Leverage',
+        ctaMamText: 'Ver Cuentas MAM',
+        ctaCopyText: 'Ver Copy Trading',
+        ctaForexText: 'Ver Cuentas Forex'
+    } },
+    { id: 'inst_selector', name: 'Inst: Perfil', icon: 'split_screen', category: 'Official', description: 'Selector Trader vs Inversor', sourceTemplate: 5, defaultContent: {
+        ctaTraderText: 'Acceso Directo',
+        ctaInvestorText: 'Ver Estrategias'
+    } },
+    { id: 'inst_partners', name: 'Inst: Socios IB', icon: 'handshake', category: 'Official', description: 'Información del programa de socios', sourceTemplate: 5, defaultContent: { ctaText: 'Unirme al Programa' } },
+    { id: 'inst_tech', name: 'Inst: Tecnología', icon: 'memory', category: 'Official', description: 'Cards de tecnología MT5 y charts', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_workflow', name: 'Inst: Onboarding', icon: 'format_list_numbered', category: 'Official', description: 'Flujo de 7 pasos para empezar', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_community', name: 'Inst: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable del IB para Institucional', sourceTemplate: 5, defaultContent: { 
+        communityMessage: 'Únete a nuestro ecosistema global y conecta con la tecnología institucional.', 
+        photoUrl: '',
+        socialWhatsApp: '',
+        socialTelegram: '',
+        socialInstagram: '',
+        socialYouTube: '',
+        supportLabel: 'Soporte del IB',
+        ctaText: 'Habla con un asesor'
+    } },
+    { id: 'inst_faq', name: 'Inst: FAQ', icon: 'contact_support', category: 'Official', description: 'Consultas corporativas oficiales', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_final_cta', name: 'Inst: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre institucional multi-perfil', sourceTemplate: 5, defaultContent: {
+        ctaRegisterText: 'Abrir Cuenta Real',
+        ctaProductsText: 'Explorar Productos',
+        ctaIBText: 'Quiero ser IB'
+    } },
+    { id: 'inst_footer', name: 'Inst: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo Bridge Markets', sourceTemplate: 5, defaultContent: {} },
 
     // ─── SYNTHETIC UNIVERSE (Blueprint 6) ─────────────────
     { id: 'snu_hero', name: 'SNU Hero Espacial', icon: 'public', category: 'Official', description: 'Hero del universo de sintéticos.', sourceTemplate: 6, defaultContent: {} },

@@ -394,7 +394,7 @@ export function renderLX12Benefits(content: Record<string, any>, brand: BrandCon
 export function renderLX12Community(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
     const message = content.communityMessage || 'Únete a nuestro ecosistema de traders apalancados. Aquí operamos con capital real desde el primer día.';
-    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80";
+    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
     const telegram = content.socialTelegram || brand.telegram || "#";
     const whatsapp = content.socialWhatsApp || brand.whatsapp || "#";
