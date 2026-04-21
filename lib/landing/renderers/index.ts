@@ -7,6 +7,7 @@ import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, 
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
 import { renderSNUHero, renderSNUValue, renderSNUUniverses, renderSNUUnvBM, renderSNUUnvDeriv, renderSNUUnvWeltrade, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUFinalCTA, renderSNUFooter } from './syntheticUniverse';
 import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
+import { renderSPHero, renderSPAbout, renderSPAdvantages, renderSPFamilies, renderSPWorkflow, renderSPTechSpecs, renderSPActivation, renderSPCommunity, renderSPFAQ, renderSPFinalCTA, renderSPFooter } from './syntheticProduct';
 import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
 import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator } from './features';
 import { renderTestimonials, renderSntFooter } from './forms';
@@ -88,6 +89,19 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     v3_header: renderV3Header,
     v3_community: renderV3Community,
     v3_footer: renderV3Footer,
+
+    // SYNTHETIC PRODUCT (Blueprint 8)
+    sp_hero: renderSPHero,
+    sp_about: renderSPAbout,
+    sp_advantages: renderSPAdvantages,
+    sp_families: renderSPFamilies,
+    sp_workflow: renderSPWorkflow,
+    sp_tech_specs: renderSPTechSpecs,
+    sp_activation: renderSPActivation,
+    sp_community: renderSPCommunity,
+    sp_faq: renderSPFAQ,
+    sp_final_cta: renderSPFinalCTA,
+    sp_footer: renderSPFooter,
 
     // SHARED / MODULAR SECTIONS
     hero_dark: renderHeroDark,

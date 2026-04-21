@@ -456,7 +456,7 @@ export function renderSntHero(content: Record<string, any>, brand: BrandConfig):
             <!-- Visual Asset -->
             <div class="relative hidden lg:flex justify-center">
                 <div class="absolute inset-0 bg-[#8b5cf6]/20 rounded-full blur-[100px] animate-pulse"></div>
-                <img src="/images/imagenes nuevas/rey rosa.png" alt="Chess King" class="relative z-10 w-[80%] drop-shadow-[0_40px_80px_rgba(0,0,0,0.8)] animate-[heroFloat_6s_ease-in-out_infinite]">
+                <img src="/images/imagenes_nuevas/rey_rosa.png" alt="Chess King" class="relative z-10 w-[80%] drop-shadow-[0_40px_80px_rgba(0,0,0,0.8)] animate-[heroFloat_6s_ease-in-out_infinite]">
             </div>
         </div>
     </section>`;
@@ -471,7 +471,7 @@ export function renderSntAbout(content: Record<string, any>, brand: BrandConfig)
             <div class="order-2 lg:order-1 relative flex justify-center">
                 <div class="relative">
                     <div class="absolute inset-0 bg-gradient-to-br from-[#8b5cf6]/20 to-transparent rounded-full blur-[80px]"></div>
-                    <img src="/images/imagenes nuevas/caballo rosa.png" alt="Estrategia y Control" class="w-full max-w-sm h-auto object-contain relative z-10 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] animate-[heroFloat_5s_ease-in-out_infinite]">
+                    <img src="/images/imagenes_nuevas/caballo_rosa.png" alt="Estrategia y Control" class="w-full max-w-sm h-auto object-contain relative z-10 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] animate-[heroFloat_5s_ease-in-out_infinite]">
                     
                     <!-- Decorative Element -->
                     <div class="absolute -right-8 -top-8 w-24 h-24 border border-white/10 rounded-full flex items-center justify-center animate-spin-slow">
@@ -773,7 +773,7 @@ export function renderSntSpecs(content: Record<string, any>, brand: BrandConfig)
             <div class="relative flex justify-center lg:justify-end">
                 <div class="relative">
                     <div class="absolute inset-0 bg-gradient-to-tr from-[#8b5cf6]/30 to-transparent rounded-full blur-[100px]"></div>
-                    <img src="/images/imagenes%20nuevas/reloj%20rosa.png" alt="Reloj 24/7" class="w-full max-w-md h-auto object-contain relative z-10 drop-shadow-[0_40px_80px_rgba(0,0,0,0.8)] animate-[heroFloat_6s_ease-in-out_infinite]">
+                    <img src="/images/imagenes_nuevas/reloj_rosa.png" alt="Reloj 24/7" class="w-full max-w-md h-auto object-contain relative z-10 drop-shadow-[0_40px_80px_rgba(0,0,0,0.8)] animate-[heroFloat_6s_ease-in-out_infinite]">
                     
                     <div class="absolute -left-10 bottom-10 glass-panel p-6 rounded-3xl border-white/10 animate-[bounce_5s_ease-in-out_infinite]">
                         <div class="flex items-center gap-4">
@@ -1050,7 +1050,7 @@ export function renderSntCTA(content: Record<string, any>, brand: BrandConfig): 
             <div class="mb-20 flex justify-center">
                 <div class="relative">
                     <div class="absolute inset-0 bg-[#8b5cf6]/30 rounded-full blur-[100px] animate-pulse"></div>
-                    <img src="/images/imagenes%20nuevas/peones%20rosa.png" alt="Peones" class="w-80 h-auto object-contain relative z-10 drop-shadow-[0_0_80px_rgba(139,92,246,0.4)] animate-[heroFloat_5s_ease-in-out_infinite]">
+                    <img src="/images/imagenes_nuevas/peones_rosa.png" alt="Peones" class="w-80 h-auto object-contain relative z-10 drop-shadow-[0_0_80px_rgba(139,92,246,0.4)] animate-[heroFloat_5s_ease-in-out_infinite]">
                 </div>
             </div>
             

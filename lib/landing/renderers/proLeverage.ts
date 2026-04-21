@@ -83,7 +83,7 @@ export function renderLX12Intro(content: Record<string, any>, brand: BrandConfig
                     </div>
                 </div>
                 <div class="relative">
-                    <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="w-full max-w-md mx-auto drop-shadow-[0_0_50px_rgba(168,85,247,0.3)] transform -rotate-6 animate-pulse-slow">
+                    <img src="/images/imagenes_nuevas/reyna_rosa.png" class="w-full max-w-md mx-auto drop-shadow-[0_0_50px_rgba(168,85,247,0.3)] transform -rotate-6 animate-pulse-slow">
                 </div>
             </div>
 
@@ -232,7 +232,7 @@ export function renderLX12Rules(content: Record<string, any>, brand: BrandConfig
     <section class="py-32 px-8 bg-[#050505]">
         <div class="max-w-4xl mx-auto">
             <div class="flex items-center gap-6 mb-16 section-reveal">
-                <img src="/images/imagenes%20nuevas/rey%20rosa.png" class="h-24 drop-shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+                <img src="/images/imagenes_nuevas/rey_rosa.png" class="h-24 drop-shadow-[0_0_30px_rgba(168,85,247,0.2)]">
                 <div>
                     <h2 class="text-4xl font-black font-montserrat text-white uppercase tracking-tight">Condiciones y Reglas</h2>
                     <p class="text-purple-500 font-bold uppercase tracking-widest text-xs mt-2">Protocolo Institucional de Riesgo</p>
@@ -337,7 +337,7 @@ export function renderLX12Withdrawals(content: Record<string, any>, brand: Brand
                 <div class="flex-1">
                     <div class="p-12 bg-white/[0.02] border border-white/10 rounded-[3rem] relative">
                         <div class="absolute -top-10 -right-10 w-32 h-32 opacity-20">
-                            <img src="/images/imagenes%20nuevas/reloj rosa.png" class="w-full h-full object-contain">
+                            <img src="/images/imagenes_nuevas/reloj_rosa.png" class="w-full h-full object-contain">
                         </div>
                         <h4 class="text-2xl font-black text-white mb-8 uppercase">Seguridad del Sistema</h4>
                         <div class="flex items-start gap-4 p-6 bg-red-500/5 rounded-2xl border border-red-500/10 mb-6">
@@ -441,7 +441,7 @@ export function renderLX12Community(content: Record<string, any>, brand: BrandCo
                 </div>
                 
                 <div class="absolute -bottom-20 -right-20 w-1/2 h-1/2 opacity-5 pointer-events-none">
-                    <img src="/images/imagenes%20nuevas/caballo rosa.png" class="w-full h-full object-contain transform -rotate-12">
+                    <img src="/images/imagenes_nuevas/caballo_rosa.png" class="w-full h-full object-contain transform -rotate-12">
                 </div>
             </div>
         </div>
@@ -502,7 +502,7 @@ export function renderLX12FinalCTA(content: Record<string, any>, brand: BrandCon
         </div>
         
         <div class="absolute -bottom-20 left-1/2 -translate-x-1/2 w-full h-full opacity-10 pointer-events-none">
-            <img src="/images/imagenes%20nuevas/peones rosa.png" class="w-full h-full object-contain object-bottom">
+            <img src="/images/imagenes_nuevas/peones_rosa.png" class="w-full h-full object-contain object-bottom">
         </div>
     </section>
     `;

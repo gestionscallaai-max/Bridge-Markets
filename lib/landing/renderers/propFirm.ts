@@ -48,7 +48,7 @@ export function renderPropHero(content: Record<string, any>, brand: BrandConfig)
                     <!-- 3D Horse Asset -->
                     <div class="relative hidden lg:block">
                         <div class="absolute inset-0 bg-[#D4AF37]/20 rounded-full blur-[80px] animate-pulse"></div>
-                        <img src="/images/imagenes%20nuevas/caballo%20negro.png" alt="Horse" class="w-48 h-auto object-contain relative z-10 animate-[heroFloat_6s_ease-in-out_infinite] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                        <img src="/images/imagenes_nuevas/caballo_negro.png" alt="Horse" class="w-48 h-auto object-contain relative z-10 animate-[heroFloat_6s_ease-in-out_infinite] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@ export function renderPropEducation(content: Record<string, any>, brand: BrandCo
                 <div class="relative section-reveal flex justify-center">
                     <div class="relative group">
                         <div class="absolute inset-0 bg-[#D4AF37]/10 rounded-full blur-[100px] animate-pulse"></div>
-                        <img src="/images/imagenes%20nuevas/hourglass.png" alt="Hourglass" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_8s_ease-in-out_infinite] drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] grayscale hover:grayscale-0 transition-all duration-700">
+                        <img src="/images/imagenes_nuevas/hourglass.png" alt="Hourglass" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_8s_ease-in-out_infinite] drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] grayscale hover:grayscale-0 transition-all duration-700">
                         
                         <div class="absolute -bottom-10 -right-10 w-full h-full rounded-[4rem] flex flex-col items-center justify-center p-12 text-center pointer-events-none">
                             <div class="text-7xl font-black text-white mb-4 italic">0% <span class="text-xl block text-white/40 uppercase font-black tracking-widest mt-2 italic">Riesgo Propio</span></div>
@@ -416,7 +416,7 @@ export function renderPropFAQ(content: Record<string, any>, brand: BrandConfig):
                 <div class="relative section-reveal flex justify-center order-first lg:order-last">
                     <div class="relative">
                         <div class="absolute inset-0 bg-white/5 rounded-full blur-[100px] animate-pulse"></div>
-                        <img src="/images/imagenes%20nuevas/peones%20negro.png" alt="Pawns" class="w-96 h-auto object-contain relative z-10 animate-[heroFloat_7s_ease-in-out_infinite] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+                        <img src="/images/imagenes_nuevas/peones%20negro.png" alt="Pawns" class="w-96 h-auto object-contain relative z-10 animate-[heroFloat_7s_ease-in-out_infinite] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
                     </div>
                 </div>
             </div>
@@ -451,7 +451,7 @@ export function renderPropBenefits(content: Record<string, any>, brand: BrandCon
                 <div class="relative section-reveal flex justify-center">
                     <div class="relative group">
                         <div class="absolute inset-0 bg-[#D4AF37]/20 rounded-full blur-[100px] animate-pulse"></div>
-                        <img src="/images/imagenes%20nuevas/reyna%20negra.png" alt="Queen" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_5s_ease-in-out_infinite] drop-shadow-[0_40px_80px_rgba(0,0,0,0.9)]">
+                        <img src="/images/imagenes_nuevas/reyna%20negra.png" alt="Queen" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_5s_ease-in-out_infinite] drop-shadow-[0_40px_80px_rgba(0,0,0,0.9)]">
                     </div>
                 </div>
             </div>

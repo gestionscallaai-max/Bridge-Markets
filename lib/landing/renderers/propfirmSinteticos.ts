@@ -78,7 +78,7 @@ export function renderPSHero(content: Record<string, any>, brand: BrandConfig): 
                         
                         <!-- Main 3D Asset (Caballo Rosa) -->
                         <div class="relative z-10 w-full h-full transform scale-125 lg:scale-150">
-                            <img src="/images/imagenes%20nuevas/caballo%20rosa.png" alt="Synthetic Nexus" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.3)] animate-float-rotate">
+                            <img src="/images/imagenes_nuevas/caballo%20rosa.png" alt="Synthetic Nexus" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.3)] animate-float-rotate">
                         </div>
 
                         <!-- Technical HUD Overlays -->
@@ -187,7 +187,7 @@ export function renderPSMatrix(content: Record<string, any>, brand: BrandConfig)
     return `
     <section class="py-64 px-6 bg-[#05010f] relative overflow-hidden">
         <!-- Background Asset Subtle -->
-        <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="absolute bottom-0 right-0 w-[40%] opacity-[0.02] grayscale pointer-events-none" alt="BG">
+        <img src="/images/imagenes_nuevas/reyna_rosa.png" class="absolute bottom-0 right-0 w-[40%] opacity-[0.02] grayscale pointer-events-none" alt="BG">
         
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="text-center mb-40 section-reveal">

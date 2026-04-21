@@ -51,7 +51,7 @@ export function renderSNUHero(content: Record<string, any>, brand: BrandConfig):
                 </div>
 
                 <div class="lg:col-span-4 relative hidden lg:block section-reveal delay-300">
-                    <img src="/images/imagenes%20nuevas/reyna%20rosa.png" 
+                    <img src="/images/imagenes_nuevas/reyna_rosa.png" 
                          class="w-full h-auto animate-float drop-shadow-[0_0_80px_rgba(99,102,241,0.3)]">
                 </div>
             </div>
@@ -156,7 +156,7 @@ export function renderSNUUnvBM(content: Record<string, any>, brand: BrandConfig)
                     </p>
                 </div>
                 <div class="lg:col-span-5 hidden lg:block">
-                    <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="h-60 opacity-20 transform -rotate-12 animate-float">
+                    <img src="/images/imagenes_nuevas/reyna_rosa.png" class="h-60 opacity-20 transform -rotate-12 animate-float">
                 </div>
             </div>
 

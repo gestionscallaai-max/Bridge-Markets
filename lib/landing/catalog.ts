@@ -143,4 +143,22 @@ export const SECTION_CATALOG: LandingProduct[] = [
     { id: 'v3_features', name: 'V3 Características', icon: 'featured_play_list', category: 'Official', description: 'Grid de características premium.', sourceTemplate: 7, defaultContent: {} },
     { id: 'v3_community', name: 'V3 Comunidad', icon: 'hub', category: 'Official', description: 'Acceso exclusivo comunidad V3.', sourceTemplate: 7, defaultContent: {} },
     { id: 'v3_footer', name: 'V3 Footer Corporativo', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página premium.', sourceTemplate: 7, defaultContent: {} },
+    
+    // ─── SYNTHETIC PRODUCT (Blueprint 8) ──────────────────
+    { id: 'sp_hero', name: 'SP: Hero Oficial', icon: 'rocket_launch', category: 'Official', description: 'Hero institucional de sintéticos', sourceTemplate: 8, defaultContent: { ibPhrase: '', ctaText: 'Abrir mi cuenta' } },
+    { id: 'sp_about', name: 'SP: Definición', icon: 'info', category: 'Official', description: '¿Qué son los índices sintéticos?', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_advantages', name: 'SP: Ventajas', icon: 'check_circle', category: 'Official', description: '6 tarjetas de ventajas oficiales', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_families', name: 'SP: Familias', icon: 'category', category: 'Official', description: 'Las 4 familias de índices BM', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_workflow', name: 'SP: Cómo Operar', icon: 'stepper', category: 'Official', description: '5 pasos de metodología', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_tech_specs', name: 'SP: Especificaciones', icon: 'analytics', category: 'Official', description: 'Tabla técnica de spreads y lotajes', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_activation', name: 'SP: Plataformas', icon: 'download', category: 'Official', description: '6 pasos para empezar y MT5', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_community', name: 'SP: Comunidad IB', icon: 'groups', category: 'Official', description: 'Sección editable del IB', sourceTemplate: 8, defaultContent: {
+        communityName: '',
+        communityMessage: 'Únete a nuestra comunidad de traders sintéticos.',
+        photoUrl: '',
+        ctaText: 'Habla con un asesor'
+    } },
+    { id: 'sp_faq', name: 'SP: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas oficiales del producto', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_final_cta', name: 'SP: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional', sourceTemplate: 8, defaultContent: { ctaText: 'Abrir cuenta ahora' } },
+    { id: 'sp_footer', name: 'SP: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo', sourceTemplate: 8, defaultContent: {} },
 ];

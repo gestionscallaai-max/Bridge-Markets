@@ -153,7 +153,7 @@ export function renderMamBlock(content: Record<string, any>, brand: BrandConfig)
     return `
     <section id="mam" class="py-32 px-8 bg-[#080808] relative overflow-hidden">
         <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
-            <img src="/images/imagenes%20nuevas/rey%20rosa.png" class="w-full h-full object-contain object-right transform rotate-12">
+            <img src="/images/imagenes_nuevas/rey_rosa.png" class="w-full h-full object-contain object-right transform rotate-12">
         </div>
 
         <div class="max-w-7xl mx-auto relative z-10">
@@ -306,7 +306,7 @@ export function renderCopyBlock(content: Record<string, any>, brand: BrandConfig
     return `
     <section id="copy" class="py-32 px-8 bg-[#050505] relative overflow-hidden">
         <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
-            <img src="/images/imagenes%20nuevas/caballo%20rosa.png" class="w-full h-full object-contain object-right transform -rotate-12">
+            <img src="/images/imagenes_nuevas/caballo%20rosa.png" class="w-full h-full object-contain object-right transform -rotate-12">
         </div>
 
         <div class="max-w-7xl mx-auto relative z-10">
@@ -590,7 +590,7 @@ export function renderMamCopyFinalCTA(content: Record<string, any>, brand: Brand
     return `
     <section class="py-40 px-8 bg-[#050505] relative overflow-hidden border-t border-white/5">
         <div class="absolute inset-0 opacity-10 pointer-events-none">
-            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="absolute -bottom-20 -right-20 w-1/3 object-contain transform -rotate-12">
+            <img src="/images/imagenes_nuevas/reyna_rosa.png" class="absolute -bottom-20 -right-20 w-1/3 object-contain transform -rotate-12">
         </div>
         <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
             <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 tracking-tighter uppercase leading-none">Conecta talento con <span class="text-blue-500">capital.</span></h2>

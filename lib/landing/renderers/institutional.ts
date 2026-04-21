@@ -221,7 +221,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
                     </div>
                     <!-- Chess Asset -->
                     <div class="absolute -bottom-10 -right-10 w-1/2 h-full opacity-10 grayscale pointer-events-none group-hover:opacity-20 group-hover:grayscale-0 transition-all duration-1000">
-                        <img src="/images/imagenes%20nuevas/rey%20rosa.png" class="w-full h-full object-contain object-bottom transform rotate-12">
+                        <img src="/images/imagenes_nuevas/rey_rosa.png" class="w-full h-full object-contain object-bottom transform rotate-12">
                     </div>
                 </div>
 
@@ -402,7 +402,7 @@ export function renderInstPartners(content: Record<string, any>, brand: BrandCon
                 </div>
                 <div class="lg:col-span-5 relative">
                     <div class="aspect-square bg-gradient-to-br from-indigo-600/20 to-slate-900 border border-white/10 rounded-[4rem] flex items-center justify-center p-12 overflow-hidden group">
-                        <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-1000 rotate-6">
+                        <img src="/images/imagenes_nuevas/reyna_rosa.png" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-1000 rotate-6">
                     </div>
                 </div>
             </div>
@@ -505,7 +505,7 @@ export function renderInstCommunity(content: Record<string, any>, brand: BrandCo
                             <img src="${photoUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" alt="Community">
                         </div>
                         <div class="absolute -bottom-10 -right-10 w-40 h-40 opacity-10 pointer-events-none transform rotate-12">
-                            <img src="/images/imagenes%20nuevas/reyna%20rosa.png" class="w-full h-full object-contain">
+                            <img src="/images/imagenes_nuevas/reyna_rosa.png" class="w-full h-full object-contain">
                         </div>
                     </div>
                 </div>

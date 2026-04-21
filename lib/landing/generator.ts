@@ -738,13 +738,14 @@ export function generateModularLandingHTML(config: ModularConfig, brand: BrandCo
             }, 300);
         }
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     ` : '';
 
     return `<!DOCTYPE html>
 <html lang="${targetLang}">
 <head>
     <meta charset="utf-8"/>
+    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Bridge Markets | ${template?.name || 'Trading Platform'}</title>
     ${getSharedHead(template?.name || 'Trading Platform', 'Access institutional markets')}

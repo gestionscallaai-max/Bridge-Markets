@@ -154,6 +154,31 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         badge: 'Premium',
         badgeColor: '#865BFF',
         theme: 'dark',
+    },
+    {
+        id: 'synthetic_product_official',
+        name: 'Índices Sintéticos — Bridge Markets | Para uso de IBs',
+        category: 'Official',
+        description: 'La landing oficial definitiva de Bridge Markets para Índices Sintéticos (Fortune, Vortex, BullX/BearX, FomoX).',
+        sourceFile: 'Blueprint 8',
+        sections: [
+            'sp_hero',
+            'sp_about',
+            'sp_advantages',
+            'sp_families',
+            'sp_workflow',
+            'sp_tech_specs',
+            'sp_activation',
+            'sp_community',
+            'sp_faq',
+            'sp_final_cta',
+            'sp_footer'
+        ],
+        gradient: 'linear-gradient(135deg, #000000 0%, #050515 50%, #4f46e5 100%)',
+        accentColor: '#6366f1',
+        badge: 'Official',
+        badgeColor: '#6366f1',
+        theme: 'dark',
     }
 ];
 
