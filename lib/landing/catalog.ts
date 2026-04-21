@@ -84,7 +84,7 @@ export const SECTION_CATALOG: LandingProduct[] = [
         ctaCopyText: 'Ver Copy Trading',
         ctaForexText: 'Ver Cuentas Forex'
     } },
-    { id: 'inst_selector', name: 'Inst: Perfil', icon: 'split_screen', category: 'Official', description: 'Selector Trader vs Inversor', sourceTemplate: 5, defaultContent: {
+    { id: 'inst_selector', name: 'Inst: Perfil', icon: 'groups', category: 'Official', description: 'Selector Trader vs Inversor', sourceTemplate: 5, defaultContent: {
         ctaTraderText: 'Acceso Directo',
         ctaInvestorText: 'Ver Estrategias'
     } },
@@ -110,18 +110,32 @@ export const SECTION_CATALOG: LandingProduct[] = [
     { id: 'inst_footer', name: 'Inst: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo Bridge Markets', sourceTemplate: 5, defaultContent: {} },
 
     // ─── SYNTHETIC UNIVERSE (Blueprint 6) ─────────────────
-    { id: 'snu_hero', name: 'SNU Hero Espacial', icon: 'public', category: 'Official', description: 'Hero del universo de sintéticos.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_metrics', name: 'SNU Métricas Real-Time', icon: 'speed', category: 'Official', description: 'Métricas de rendimiento en vivo.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_universes_intro', name: 'SNU Intro Universos', icon: 'layers', category: 'Official', description: 'Presentación de los 3 universos.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_u1_bm', name: 'SNU Universo BM', icon: 'diamond', category: 'Official', description: 'Sintéticos propios de Bridge Markets.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_u2_deriv', name: 'SNU Universo Deriv', icon: 'monitoring', category: 'Official', description: 'Integración con Deriv.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_u3_welt', name: 'SNU Universo Weltrade', icon: 'query_stats', category: 'Official', description: 'Integración con Weltrade.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_why', name: 'SNU Por Qué Sintéticos', icon: 'new_releases', category: 'Official', description: 'Ventajas de los mercados sintéticos.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_workflow', name: 'SNU Pasos', icon: 'route', category: 'Official', description: 'Flujo para empezar a operar.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_community', name: 'SNU Comunidad', icon: 'forum', category: 'Official', description: 'Comunidad de traders sintéticos.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_faq', name: 'SNU FAQ', icon: 'help', category: 'Official', description: 'Dudas sobre sintéticos.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_cta', name: 'SNU Final CTA', icon: 'rocket_launch', category: 'Official', description: 'CTA universo sintético.', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_footer', name: 'SNU Footer', icon: 'south_panel', category: 'Official', description: 'Pie de página universo sintético.', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_hero', name: 'SNU: Hero Universo', icon: 'public', category: 'Official', description: 'Hero con estética de universo y espacio', sourceTemplate: 6, defaultContent: { ibPhrase: '', ctaText: 'Abrir mi cuenta' } },
+    { id: 'snu_value', name: 'SNU: Propuesta Valor', icon: 'analytics', category: 'Official', description: 'Números de impacto: 100+, 3, 24/7, 1', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_universes', name: 'SNU: 3 Universos', icon: 'category', category: 'Official', description: 'Introducción a los 3 universos de índices', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_unv_bm', name: 'SNU: Universo 1 (Propios)', icon: 'stars', category: 'Official', description: 'Índices propios BM (Fortune, Vortex...)', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_unv_deriv', name: 'SNU: Universo 2 (Deriv)', icon: 'waves', category: 'Official', description: 'Equivalencias de mercados Deriv en BM', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_unv_weltrade', name: 'SNU: Universo 3 (Weltrade)', icon: 'trending_up', category: 'Official', description: 'Equivalencias de mercados Weltrade en BM', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_why', name: 'SNU: Por Qué BM', icon: 'fact_check', category: 'Official', description: 'Argumentos competitivos sintéticos', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_workflow', name: 'SNU: Cómo Empezar', icon: 'rocket_launch', category: 'Official', description: '7 pasos para operar todos los sintéticos', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_community', name: 'SNU: Comunidad IB', icon: 'groups', category: 'Official', description: 'Sección editable del IB para Sintéticos', sourceTemplate: 6, defaultContent: {
+        communityName: '',
+        communityMessage: 'Únete a nuestra comunidad de traders sintéticos y opera con tecnología institucional.',
+        photoUrl: '',
+        socialWhatsApp: '',
+        socialTelegram: '',
+        socialInstagram: '',
+        socialYouTube: '',
+        socialTikTok: '',
+        supportLabel: 'Soporte del IB',
+        ctaText: 'Habla con un asesor'
+    } },
+    { id: 'snu_faq', name: 'SNU: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas oficiales sobre ecosistema sintético', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_final_cta', name: 'SNU: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre con argumento de cuenta única', sourceTemplate: 6, defaultContent: { 
+        ctaMainText: 'Abrir mi cuenta ahora',
+        ctaSecondaryText: 'Ver gráficos en vivo'
+    } },
+    { id: 'snu_footer', name: 'SNU: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Footer sintético con disclaimer legal', sourceTemplate: 6, defaultContent: { ibSupportLabel: '' } },
 
     // ─── V3 PREMIUM (Blueprint V3) ────────────────────────
     { id: 'v3_header', name: 'V3 Header Minimal', icon: 'horizontal_rule', category: 'Official', description: 'Navegación superior minimalista V3.', sourceTemplate: 7, defaultContent: {} },

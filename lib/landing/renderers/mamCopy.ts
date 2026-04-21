@@ -2,7 +2,7 @@ import { BrandConfig } from '../types';
 
 // ─── MAM & COPY HERO (SHARED) ───────────────────────────────
 export function renderMamCopyHero(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaMamText = content.ctaMamText || "Quiero una cuenta MAM";
     const ctaCopyText = content.ctaCopyText || "Quiero hacer Copy Trading";
@@ -611,7 +611,7 @@ export function renderMamCopyFinalCTA(content: Record<string, any>, brand: Brand
 
 // ─── MC COMMUNITY SECTION ──────────────────────────────────
 export function renderMCCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
+    const ibName = brand.communityName || brand.fullName || 'Nuestra Comunidad';
     const message = content.communityMessage || 'Únete a nuestro ecosistema y conecta con traders profesionales.';
     const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
@@ -658,7 +658,7 @@ export function renderMCCommunity(content: Record<string, any>, brand: BrandConf
 
 // ─── MC FOOTER ──────────────────────────────────────────────
 export function renderMCFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const currentYear = new Date().getFullYear();
 
     return `

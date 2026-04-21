@@ -2,7 +2,7 @@ import { BrandConfig } from '../types';
 
 // ─── INSTITUTIONAL HERO (REFACTORED: ASYMMETRIC & BOLD) ─────
 export function renderInstHero(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaMainText = content.ctaMainText || "Abrir mi cuenta";
     const ctaSecondaryText = content.ctaSecondaryText || "Ver todos los productos";
@@ -13,11 +13,6 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
         <!-- Decorative Background Elements -->
         <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
         <div class="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-slate-800/20 blur-[120px] rounded-full"></div>
-        
-        <!-- Large Background Text (Decorative) -->
-        <div class="absolute top-1/2 left-0 -translate-y-1/2 text-[20vw] font-black text-white/[0.02] uppercase select-none pointer-events-none whitespace-nowrap tracking-tighter">
-            BRIDGE MARKETS
-        </div>
 
         <div class="container mx-auto px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -320,11 +315,6 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
 
     return `
     <section class="min-h-screen flex flex-col lg:flex-row relative overflow-hidden bg-[#020202]">
-        <!-- Vertical Label -->
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none hidden lg:block">
-            <div class="text-[120px] font-black text-white/5 uppercase tracking-tighter transform -rotate-90 italic">CHOOSE</div>
-        </div>
-
         <!-- Left Side: Trader -->
         <div class="flex-1 p-16 md:p-32 flex flex-col justify-center relative group overflow-hidden hover:flex-[1.5] transition-all duration-700">
             <div class="absolute inset-0 bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -469,7 +459,7 @@ export function renderInstWorkflow(content: Record<string, any>, brand: BrandCon
 
 // ─── COMMUNITY ──────────────────────────────────────────────
 export function renderInstCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
+    const ibName = content.communityName || brand.communityName || brand.fullName || 'Nuestra Comunidad';
     const message = content.communityMessage || 'Únete a nuestro ecosistema global y conecta con la tecnología institucional.';
     const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
@@ -601,7 +591,7 @@ export function renderInstFinalCTA(content: Record<string, any>, brand: BrandCon
 
 // ─── INSTITUTIONAL FOOTER ──────────────────────────────────
 export function renderInstFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const currentYear = new Date().getFullYear();
     const supportLink = content.socialWhatsApp ? `https://wa.me/${content.socialWhatsApp}` : (brand.whatsapp ? `https://wa.me/${brand.whatsapp}` : brand.ctaLink || "#");
 

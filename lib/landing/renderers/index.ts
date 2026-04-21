@@ -1,9 +1,11 @@
 import { BrandConfig } from '../types';
+// Force recompile: Unified Synthetic Universe v2.0
+
 import { renderPropHero, renderPropEducation, renderPropProgramsForex, renderPropProgramsSynthetic, renderPropSteps, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropFinalCTA, renderPropFooter, renderPropRegistration } from './propFirm';
 import { renderMamCopyHero, renderMamCopyNav, renderMamCopyIntro, renderMamBlock, renderCopyBlock, renderMamCopyComparison, renderMamCopyBenefits, renderMamCopySteps, renderMamCopyFAQ, renderMamCopyFinalCTA, renderMCCommunity, renderMCFooter, renderMCRegistration } from './mamCopy';
 import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA, renderLX12Footer } from './proLeverage';
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
-import { renderSNUHero, renderSNUMetrics, renderSNUUniversesIntro, renderSNUU1BM, renderSNUU2Deriv, renderSNUU3Welt, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUCTA, renderSNUFooter } from './syntheticUniverse';
+import { renderSNUHero, renderSNUValue, renderSNUUniverses, renderSNUUnvBM, renderSNUUnvDeriv, renderSNUUnvWeltrade, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUFinalCTA, renderSNUFooter } from './syntheticUniverse';
 import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
 import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
 import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator } from './features';
@@ -68,16 +70,16 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
 
     // SYNTHETIC UNIVERSE
     snu_hero: renderSNUHero,
-    snu_metrics: renderSNUMetrics,
-    snu_universes_intro: renderSNUUniversesIntro,
-    snu_u1_bm: renderSNUU1BM,
-    snu_u2_deriv: renderSNUU2Deriv,
-    snu_u3_welt: renderSNUU3Welt,
+    snu_value: renderSNUValue,
+    snu_universes: renderSNUUniverses,
+    snu_unv_bm: renderSNUUnvBM,
+    snu_unv_deriv: renderSNUUnvDeriv,
+    snu_unv_weltrade: renderSNUUnvWeltrade,
     snu_why: renderSNUWhy,
     snu_workflow: renderSNUWorkflow,
     snu_community: renderSNUCommunity,
     snu_faq: renderSNUFAQ,
-    snu_cta: renderSNUCTA,
+    snu_final_cta: renderSNUFinalCTA,
     snu_footer: renderSNUFooter,
 
     // V3 PREMIUM

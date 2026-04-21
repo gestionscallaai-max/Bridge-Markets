@@ -2,7 +2,7 @@ import { BrandConfig } from '../types';
 
 // ─── PRO LEVERAGE HERO ──────────────────────────────────────
 export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaText = content.ctaText || "Quiero mi cuenta apalancada";
     const ctaLink = brand.ctaLink || "#";
@@ -392,7 +392,7 @@ export function renderLX12Benefits(content: Record<string, any>, brand: BrandCon
 
 // ─── COMMUNITY ──────────────────────────────────────────────
 export function renderLX12Community(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
+    const ibName = brand.communityName || brand.fullName || 'Nuestra Comunidad';
     const message = content.communityMessage || 'Únete a nuestro ecosistema de traders apalancados. Aquí operamos con capital real desde el primer día.';
     const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
@@ -510,7 +510,7 @@ export function renderLX12FinalCTA(content: Record<string, any>, brand: BrandCon
 
 // ─── FOOTER (EDITABLE) ──────────────────────────────────────
 export function renderLX12Footer(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || "Partner Oficial";
+    const ibName = brand.communityName || brand.fullName || "Partner Oficial";
     const supportLink = content.socialWhatsApp ? `https://wa.me/${content.socialWhatsApp}` : (brand.whatsapp ? `https://wa.me/${brand.whatsapp}` : brand.ctaLink || "#");
 
     return `

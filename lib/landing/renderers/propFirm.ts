@@ -2,7 +2,7 @@ import { BrandConfig } from '../types';
 
 // ─── PROP HERO ──────────────────────────────────────────────
 export function renderPropHero(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
+    const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ctaText = content.ctaText || "Empieza tu Challenge";
     const ctaLink = brand.ctaLink || "#register";
     const heroPhrase = brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
@@ -340,7 +340,7 @@ export function renderPropRules(content: Record<string, any>, brand: BrandConfig
 
 // ─── IB COMMUNITY (EDITABLE) ────────────────────────────────
 export function renderPropCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const communityName = brand.communityName || brand.ibName || "Nuestra Comunidad";
+    const communityName = brand.communityName || brand.fullName || "Nuestra Comunidad";
     const welcomeMsg = content.welcomeMsg || "Únete a un entorno diseñado para el crecimiento mutuo. Aquí no solo operamos, sino que construimos el futuro del trading institucional juntos.";
     const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     
@@ -497,7 +497,7 @@ export function renderPropFinalCTA(content: Record<string, any>, brand: BrandCon
 
 // ─── FOOTER (EDITABLE) ──────────────────────────────────────
 export function renderPropFooter(content: Record<string, any>, brand: BrandConfig): string {
-    const ibName = brand.communityName || brand.ibName || "Partner Oficial";
+    const ibName = brand.communityName || brand.fullName || "Partner Oficial";
     const supportLink = brand.ctaLink || "#";
 
     return `
