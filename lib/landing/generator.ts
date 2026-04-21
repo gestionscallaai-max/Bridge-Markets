@@ -408,9 +408,8 @@ export function getSharedHead(title: string, desc: string) {
     <meta name="description" content="${desc}">
     <link rel="icon" type="image/png" href="/images/logo morado.png">
     <style>
-        :root { --brand: #865BFF; --bg: #000000; }
-        body { background-color: #000 !important; color: white; margin: 0; font-family: sans-serif; opacity: 0; transition: opacity 0.5s ease-in; }
-        body.loaded { opacity: 1; }
+        :root { --brand: #865BFF; }
+        body { margin: 0; font-family: sans-serif; }
         .section-reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .section-reveal.visible { opacity: 1; transform: translateY(0); }
     </style>
@@ -517,6 +516,13 @@ export function getSharedScripts() {
 
         document.querySelectorAll('.section-reveal').forEach(el => observer.observe(el));
 
+        // Signal ready and show body
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+        // Fallback if load already fired
+        if (document.readyState === 'complete') document.body.classList.add('loaded');
+
         // Form handling
         window.openRegistration = () => {
             const modal = document.getElementById('register');
@@ -525,33 +531,13 @@ export function getSharedScripts() {
     </script>`;
 }
 
-export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean = false): string {
-    const modConf = data.modularConfig;
-    if (!modConf) return generateLandingHTML(data); // fallback to legacy
-
-    const template = getTemplateById(modConf.templateId);
-    const sectionIds = modConf.selectedSections.length > 0
-        ? modConf.selectedSections
+export function generateModularLandingHTML(config: ModularConfig, brand: BrandConfig, bodyOnly: boolean = false): string {
+    const template = getTemplateById(config.templateId);
+    const sectionIds = (config.sections && config.sections.length > 0)
+        ? config.sections
         : (template?.sections || ['hero_dark', 'stats_row']);
 
-    const brandConfig: BrandConfig = {
-        fullName: data.fullName,
-        whatsapp: data.whatsapp,
-        email: data.email,
-        partnerId: data.partnerId,
-        language: data.language,
-        slug: data.slug,
-        communityName: data.communityName,
-        heroPhrase: data.heroPhrase,
-        instagram: data.instagram,
-        telegram: data.telegram,
-        tiktok: data.tiktok,
-        youtube: data.youtube,
-        ctaLink: data.ctaLink,
-        videoUrl: data.videoUrl,
-        logoUrl: data.customLogoUrl || '/images/logo-bm-blanco.png',
-    };
-
+    const brandConfig = brand;
     const theme = template?.theme || 'dark';
     const isLight = theme === 'light';
 
@@ -560,13 +546,13 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         .map((sId: string, idx: number) => {
             const renderer = SECTION_RENDERERS[sId];
             if (!renderer) return `<!-- Section "${sId}" not found -->`;
-            const overrides = modConf.sectionOverrides[sId] || {};
+            const overrides = config.overrides?.[sId] || {};
             const sectionHtml = renderer(overrides, brandConfig);
             return `<div class="section-wrapper section-reveal">\n${sectionHtml}\n</div>`;
         })
         .join('\n');
 
-    const isES = data.language === 'ES';
+    const isES = brand.language === 'ES';
     const dict = {
         nav: {
             plat: isES ? 'Plataforma' : 'Platform',
@@ -594,7 +580,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
             col3_2: isES ? 'Contacto' : 'Contact',
             col4: isES ? 'Legal' : 'Legal',
             col4_1: isES ? 'Privacidad' : 'Privacy',
-            warn: isES ? `Advertencia de Riesgo: Operar en mercados financieros implica un alto riesgo. El apalancamiento puede jugar en contra o a su favor. <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${data.partnerId}` : `High-Risk Warning: Trading in financial markets involves significant risk. Leverage can work against you as well as for you. <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${data.partnerId}`
+            warn: isES ? `Advertencia de Riesgo: Operar en mercados financieros implica un alto riesgo. El apalancamiento puede jugar en contra o a su favor. <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${brand.partnerId}` : `High-Risk Warning: Trading in financial markets involves significant risk. Leverage can work against you as well as for you. <br>© ${new Date().getFullYear()} Bridge Markets Global Limited. Partner: ${brand.partnerId}`
         }
     };
 
@@ -607,7 +593,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
                 <p class="${isLight ? 'text-slate-500' : 'text-white/60'} text-sm font-medium">${dict.form.sub}</p>
             </div>
             <form id="landing-form" class="space-y-6" onsubmit="return false;">
-                <input type="hidden" name="partner_id" value="${data.partnerId}" />
+                <input type="hidden" name="partner_id" value="${brand.partnerId}" />
                 <div>
                     <label class="text-[10px] font-black ${isLight ? 'text-slate-400' : 'text-white/40'} uppercase tracking-widest block mb-2">${dict.form.name}</label>
                     <input name="name" type="text" class="w-full ${isLight ? 'bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-300' : 'bg-white/5 border-white/10 text-white placeholder:text-white/20'} border rounded-2xl p-5 focus:outline-none focus:border-[#865BFF] transition-colors focus:bg-white/10" placeholder="John Doe" required />
@@ -706,7 +692,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         'FR': '🇫🇷', 'AR': '🇸🇦', 'BN': '🇧🇩', 'BR': '🇧🇷',
         'RU': '🇷🇺', 'JP': '🇯🇵', 'ID': '🇮🇩', 'VI': '🇻🇳'
     };
-    const currentLangCode = data.language?.toUpperCase() || 'ES';
+    const currentLangCode = brand.language?.toUpperCase() || 'ES';
     const currentFlag = flags[currentLangCode] || '🌐';
 
     const googleTranslateCode: Record<string, string> = {
@@ -845,7 +831,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
                         email: formData.get('email'),
                         phone: formData.get('phone'),
                         partnerId: formData.get('partner_id'),
-                        landingSlug: "${data.slug}"
+                        landingSlug: "${brand.slug}"
                     };
 
                     try {

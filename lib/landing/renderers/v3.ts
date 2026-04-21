@@ -1,5 +1,4 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
 /**
  * Renders the V3 Premium Hero section based on the Bridge Markets official style.
@@ -43,9 +42,16 @@ export function renderV3Hero(content: Record<string, any>, brand: BrandConfig): 
                         <div class="absolute top-6 left-0 lg:left-6 w-[40%] lg:w-1/5 h-[85%] lg:h-[90%] rounded-tl-[25px] rounded-tr-[25px] rounded-bl-[25px] rounded-br-[67px] bg-gradient-to-b from-[#E5D8FF] to-[#AA9AFF] opacity-80"></div>
                         <div class="absolute top-6 left-[45%] lg:left-[24%] w-[40%] lg:w-1/5 h-[85%] lg:h-[90%] rounded-tl-[25px] rounded-tr-[25px] rounded-bl-[25px] rounded-br-[67px] bg-gradient-to-b from-[#E5D8FF] to-[#AA9AFF] opacity-80"></div>
                         
-                        <!-- Floating 3D Image placeholder or SVG -->
+                        <!-- Floating 3D CSS Effect -->
                         <div class="absolute left-[10%] lg:left-[5%] top-1/2 -translate-y-1/2 w-[80%] lg:w-[45%] aspect-square flex items-center justify-center">
-                             <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Bridge Premium" class="w-full h-full object-contain filter drop-shadow-[0_30px_60px_rgba(0,0,0,0.1)] animate-v3-float">
+                             <div class="w-64 h-64 bg-gradient-to-br from-[#865BFF] to-[#AA9AFF] rounded-[2rem] rotate-[15deg] shadow-[0_50px_100px_rgba(134,91,255,0.4)] animate-v3-float flex items-center justify-center border border-white/20 relative">
+                                <div class="absolute inset-4 border-2 border-white/10 rounded-[1.5rem] flex items-center justify-center">
+                                    <span class="text-7xl font-black text-white/20 tracking-tighter -rotate-[15deg]">BM</span>
+                                </div>
+                                <div class="absolute -top-4 -right-4 w-20 h-20 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 rotate-[10deg] flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-4xl text-white">diamond</span>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -165,7 +171,10 @@ export function renderV3Community(content: Record<string, any>, brand: BrandConf
                 <div class="lg:w-1/2 relative z-10 flex justify-center">
                     <div class="relative group">
                         <div class="absolute inset-0 bg-white/20 rounded-full blur-[100px] group-hover:bg-white/30 transition-all duration-1000"></div>
-                        <img src="/images/imagenes%20nuevas/caballo%20rosa.png" alt="Community" class="w-full max-w-md object-contain drop-shadow-2xl animate-v3-float relative z-10">
+                        <div class="w-72 h-72 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-2xl rounded-[3rem] border border-white/30 rotate-12 shadow-2xl animate-v3-float relative z-10 flex items-center justify-center overflow-hidden">
+                             <span class="material-symbols-outlined text-8xl text-white opacity-40">groups</span>
+                             <div class="absolute inset-0 bg-gradient-to-t from-[#865BFF]/40 to-transparent"></div>
+                        </div>
                     </div>
                 </div>
             </div>

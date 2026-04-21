@@ -1,8 +1,7 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
 export function renderBentoGrid(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'bento_grid')!.defaultContent, ...content };
+    const c = content;
     const cards = (c.cards || []).map((card: any, i: number) => {
         if (card.size === 'large') {
             return `<div class="md:col-span-8 bg-[#211635] text-white asym-card p-12 relative overflow-hidden group min-h-[280px] flex flex-col justify-between">
@@ -40,7 +39,7 @@ export function renderBentoGrid(content: Record<string, any>, brand: BrandConfig
 }
 
 export function renderFeatureSplit(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'feature_split')!.defaultContent, ...content };
+    const c = content;
     const features = (c.features || []).map((f: any) => `
         <div class="flex gap-6 group">
             <div class="w-12 h-12 flex-shrink-0 bg-primary/20 asym-card flex items-center justify-center border border-primary/30 group-hover:bg-primary transition-all">
@@ -71,7 +70,7 @@ export function renderFeatureSplit(content: Record<string, any>, brand: BrandCon
 }
 
 export function renderStatsRow(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'stats_row')!.defaultContent, ...content };
+    const c = content;
     const stats = (c.stats || []).map((s: any) => `
         <div class="group text-center">
             <div class="text-[10px] text-primary font-bold uppercase tracking-[0.4em] mb-4">${s.label}</div>
@@ -86,7 +85,7 @@ export function renderStatsRow(content: Record<string, any>, brand: BrandConfig)
 }
 
 export function renderRiskGrid(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'risk_grid')!.defaultContent, ...content };
+    const c = content;
     const items = (c.items || []).map((item: any) => `
         <div class="text-center group">
             <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-all border border-white/10 group-hover:border-primary/50">
@@ -110,7 +109,7 @@ export function renderRiskGrid(content: Record<string, any>, brand: BrandConfig)
 }
 
 export function renderLeaderboard(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'leaderboard')!.defaultContent, ...content };
+    const c = content;
     const traders = (c.traders || []).map((t: any) => {
         const isTrending = t.trending;
         return `
@@ -150,7 +149,7 @@ export function renderLeaderboard(content: Record<string, any>, brand: BrandConf
 }
 
 export function renderTrustBadges(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'trust_badges')!.defaultContent, ...content };
+    const c = content;
     const badges = (c.badges || []).map((b: any) => `
         <div class="flex flex-col items-center gap-4 opacity-40 hover:opacity-100 transition-all cursor-pointer transform hover:scale-110">
             <span class="material-symbols-outlined text-6xl text-primary">${b.icon}</span>
@@ -169,7 +168,7 @@ export function renderTrustBadges(content: Record<string, any>, brand: BrandConf
 }
 
 export function renderMultiAsset(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'multi_asset')!.defaultContent, ...content };
+    const c = content;
     const assets = (c.assets || []).map((a: any) => `
         <div class="asym-card-sm p-8 bg-gray-50 border border-gray-200 flex flex-col items-center justify-center hover:bg-primary hover:text-white transition-all duration-500 cursor-pointer shadow-sm hover:shadow-[0_25px_50px_-12px_rgba(102,53,222,0.25)] group">
             <span class="material-symbols-outlined text-4xl mb-3">${a.icon}</span>
@@ -200,7 +199,7 @@ export function renderMultiAsset(content: Record<string, any>, brand: BrandConfi
 }
 
 export function renderWorkflowSteps(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'workflow_steps')!.defaultContent, ...content };
+    const c = content;
     const tracks = (c.tracks || []).map((track: any, ti: number) => {
         const isSecond = ti === 1;
         const steps = (track.steps || []).map((s: any) => `
@@ -228,7 +227,7 @@ export function renderWorkflowSteps(content: Record<string, any>, brand: BrandCo
 }
 
 export function renderSecurityFees(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'security_fees')!.defaultContent, ...content };
+    const c = content;
     const secItems = (c.securityItems || []).map((item: any) => `
         <div class="bg-white/5 p-8 asym-card border border-white/5">
             <p class="font-bold text-accent mb-4 flex items-center gap-3"><span class="material-symbols-outlined">${item.icon}</span> ${item.title}</p>
@@ -259,7 +258,7 @@ export function renderSecurityFees(content: Record<string, any>, brand: BrandCon
 }
 
 export function renderCtaCommunity(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'cta_community')!.defaultContent, ...content };
+    const c = content;
     const stats = (c.communityStats || []).map((s: any) => `
         <div><div class="text-5xl font-headline font-black tracking-tighter">${s.value}</div><div class="text-[10px] font-bold uppercase tracking-[0.3em] opacity-60">${s.label}</div></div>
     `).join('\n');
@@ -275,7 +274,7 @@ export function renderCtaCommunity(content: Record<string, any>, brand: BrandCon
 }
 
 export function renderCalculator(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'calculator')!.defaultContent, ...content };
+    const c = content;
     return `
     <section class="py-24 bg-dark-bg">
         <div class="max-w-4xl mx-auto px-8 text-center text-white">

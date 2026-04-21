@@ -5,6 +5,9 @@ import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, 
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
 import { renderSNUHero, renderSNUMetrics, renderSNUUniversesIntro, renderSNUU1BM, renderSNUU2Deriv, renderSNUU3Welt, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUCTA, renderSNUFooter } from './syntheticUniverse';
 import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
+import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
+import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator } from './features';
+import { renderTestimonials, renderSntFooter } from './forms';
 
 export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, brand: BrandConfig) => string> = {
     // PROPFIRM
@@ -82,4 +85,23 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     v3_header: renderV3Header,
     v3_community: renderV3Community,
     v3_footer: renderV3Footer,
+
+    // SHARED / MODULAR SECTIONS
+    hero_dark: renderHeroDark,
+    hero_light: renderHeroLight,
+    hero_gradient: renderHeroGradient,
+    hero_official: renderHeroOfficial,
+    bento_grid: renderBentoGrid,
+    feature_split: renderFeatureSplit,
+    stats_row: renderStatsRow,
+    risk_grid: renderRiskGrid,
+    leaderboard: renderLeaderboard,
+    trust_badges: renderTrustBadges,
+    multi_asset: renderMultiAsset,
+    workflow_steps: renderWorkflowSteps,
+    security_fees: renderSecurityFees,
+    cta_community: renderCtaCommunity,
+    calculator: renderCalculator,
+    testimonials: renderTestimonials,
+    snt_footer: renderSntFooter,
 };

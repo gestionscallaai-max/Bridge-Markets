@@ -1,8 +1,7 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
 export function renderHeroDark(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_dark')!.defaultContent, ...content };
+    const c = content;
     return `
     <section class="relative py-24 px-8 overflow-hidden" style="background: transparent;">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -34,7 +33,7 @@ export function renderHeroDark(content: Record<string, any>, brand: BrandConfig)
 }
 
 export function renderHeroLight(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_light')!.defaultContent, ...content };
+    const c = content;
     return `
     <section class="relative pt-40 pb-20 overflow-hidden min-h-[80vh] flex items-center bg-[#fef7ff]">
         <div class="absolute inset-0 z-0">
@@ -83,7 +82,7 @@ export function renderHeroLight(content: Record<string, any>, brand: BrandConfig
 }
 
 export function renderHeroGradient(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_gradient')!.defaultContent, ...content };
+    const c = content;
     return `
     <section class="relative py-32 px-8 overflow-hidden" style="background: transparent;">
         <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, bg-white 0); background-size: 32px 32px;"></div>
@@ -107,7 +106,7 @@ export function renderHeroGradient(content: Record<string, any>, brand: BrandCon
 }
 
 export function renderHeroOfficial(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'hero_official')!.defaultContent, ...content };
+    const c = content;
     // Prioridad: brand.heroPhrase > content.editableSubtitle
     const subtitle = brand.heroPhrase || c.editableSubtitle;
     const partnerInfo = brand.communityName ? `Comunidad: ${brand.communityName}` : `${brand.fullName} Portfolio`;
@@ -146,7 +145,11 @@ export function renderHeroOfficial(content: Record<string, any>, brand: BrandCon
                 <div class="relative glass-panel asym-card p-4 border-white/5 shadow-2xl overflow-hidden bg-[#05010f]">
                     <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-30 group-hover:opacity-50 transition-opacity"></div>
                     <div class="relative z-10 w-full aspect-square flex items-center justify-center">
-                        <img src="/images/imagenes%20nuevas/reyna%20rosa.png" alt="Premium 3D" class="w-full h-full object-contain p-8 transform group-hover:scale-110 transition-transform duration-1000">
+                        <div class="w-64 h-64 bg-gradient-to-tr from-[#865BFF] to-blue-600 rounded-[3rem] rotate-12 shadow-[0_50px_100px_rgba(134,91,255,0.4)] flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-transform duration-700">
+                             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+                             <span class="material-symbols-outlined text-8xl text-white">shield</span>
+                             <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full border border-white/20"></div>
+                        </div>
                     </div>
                 </div>
             </div>

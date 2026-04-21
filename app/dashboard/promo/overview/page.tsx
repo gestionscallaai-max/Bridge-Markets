@@ -117,20 +117,19 @@ export default function PromoMaterialsPage() {
     const handlePreview = (template: LandingTemplate) => {
         const mappedLang = selectedLang === 'EN' ? 'GB' : selectedLang === 'PT' ? 'BR' : selectedLang;
         
-        const data: LandingData = {
+        const modularConfig: ModularConfig = {
+            templateId: template.id,
+            sections: template.sections,
+            overrides: {},
+        };
+
+        const brandConfig = {
             fullName: formData.fullName,
-            country: 'Global',
-            language: mappedLang,
             whatsapp: formData.whatsapp,
             email: formData.email,
-            landingType: template.id,
             partnerId: friendlyPartnerId || partnerId,
+            language: mappedLang,
             slug: `preview-${template.id}`,
-            modularConfig: {
-                templateId: template.id,
-                selectedSections: template.sections,
-                sectionOverrides: {},
-            },
             communityName: formData.communityName,
             heroPhrase: formData.heroPhrase,
             instagram: formData.instagram,
@@ -138,7 +137,8 @@ export default function PromoMaterialsPage() {
             tiktok: formData.tiktok,
             ctaLink: formData.ctaLink,
         };
-        const html = generateModularLandingHTML(data, true); // bodyOnly = true
+
+        const html = generateModularLandingHTML(modularConfig, brandConfig);
         setPreviewHtml(html);
         setShowPreviewModal(true);
     };

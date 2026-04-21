@@ -1,8 +1,7 @@
 import { BrandConfig } from '../types';
-import { SECTION_CATALOG } from '../catalog';
 
 export function renderTestimonials(content: Record<string, any>, brand: BrandConfig): string {
-    const c = { ...SECTION_CATALOG.find(s => s.id === 'testimonials')!.defaultContent, ...content };
+    const c = content;
     const items = (c.items || []).map((item: any) => `
         <div class="min-w-[380px] bg-white border border-gray-200 asym-card p-12 shadow-sm snap-center flex flex-col justify-between hover:border-primary/40 transition-all group">
             <div>

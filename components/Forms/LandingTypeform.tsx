@@ -579,8 +579,8 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             customLogoUrl,
             modularConfig: {
                 templateId: selectedTemplate,
-                selectedSections,
-                sectionOverrides,
+                sections: selectedSections,
+                overrides: sectionOverrides,
             },
         };
 
@@ -592,7 +592,13 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             setProcessStep('deploying');
 
             setFinalSlug(data.slug);
-            const html = generateModularLandingHTML(data);
+            const brandConfig: BrandConfig = {
+                fullName, whatsapp, email, partnerId, language,
+                slug: data.slug, communityName, heroPhrase, instagram,
+                telegram, tiktok, youtube, ctaLink, videoUrl,
+                logoUrl: customLogoUrl || '/images/logo-bm-blanco.png'
+            };
+            const html = generateModularLandingHTML(data.modularConfig, brandConfig);
             setGeneratedHTML(html);
 
             // Save to Supabase
@@ -669,22 +675,18 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     // Live Preview HTML calculation
     const livePreviewHtml = React.useMemo(() => {
         if (!selectedTemplate || selectedSections.length === 0) return '';
-        const data: LandingData = {
-            fullName, country, language, whatsapp, email,
-            landingType: selectedTemplate, partnerId,
-            slug: 'live-preview',
-            communityName,
-            heroPhrase,
-            instagram,
-            telegram,
-            tiktok,
-            youtube,
-            ctaLink,
-            videoUrl,
-            customLogoUrl,
-            modularConfig: { templateId: selectedTemplate, selectedSections, sectionOverrides },
+        const modularConfig: ModularConfig = {
+            templateId: selectedTemplate,
+            sections: selectedSections,
+            overrides: sectionOverrides,
         };
-        return generateModularLandingHTML(data, true); // bodyOnly = true
+        const brandConfig: BrandConfig = {
+            fullName, whatsapp, email, partnerId, language,
+            slug: 'live-preview', communityName, heroPhrase, instagram,
+            telegram, tiktok, youtube, ctaLink, videoUrl,
+            logoUrl: customLogoUrl || '/images/logo-bm-blanco.png'
+        };
+        return generateModularLandingHTML(modularConfig, brandConfig, true); // bodyOnly = true
     }, [selectedTemplate, selectedSections, sectionOverrides, fullName, country, language, whatsapp, email, partnerId, communityName, heroPhrase, instagram, telegram, tiktok, youtube, ctaLink, videoUrl, customLogoUrl]);
 
     // Debounce the HTML update to the iframe to prevent lag
@@ -855,20 +857,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                                 </div>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {/* Logo URL - MOVED TO TOP AND HIGHLIGHTED */}
-                                    <div className="md:col-span-2 space-y-1.5 p-4 bg-white rounded-xl border border-[#865BFF]/20 shadow-sm">
-                                        <label className="text-[10px] font-black text-[#865BFF] uppercase tracking-widest ml-1 flex items-center gap-2">
-                                            <Layout className="w-3 h-3" />
-                                            URL de tu Logo Personalizado (PNG/SVG blanco recomendado)
-                                        </label>
-                                        <input
-                                            type="text" value={customLogoUrl}
-                                            onChange={(e) => setCustomLogoUrl(e.target.value)}
-                                            placeholder="https://tu-dominio.com/logo.png"
-                                            className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] focus:bg-white transition-all"
-                                        />
-                                        <p className="text-[9px] text-slate-400 mt-1 ml-1">Deja vacío para usar el logo oficial de Bridge Markets.</p>
-                                    </div>
+                                    {/* Logo URL removed by user request - using default only */}
 
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t.landing.communityName}</label>
@@ -888,15 +877,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                                             className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
                                         />
                                     </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Video URL (YouTube/Vimeo)</label>
-                                        <input
-                                            type="text" value={videoUrl}
-                                            onChange={(e) => setVideoUrl(e.target.value)}
-                                            placeholder="https://www.youtube.com/watch?v=..."
-                                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
-                                        />
-                                    </div>
+                                    {/* Video URL removed by user request */}
                                 </div>
                             </div>
 
