@@ -306,7 +306,7 @@ export function renderCopyBlock(content: Record<string, any>, brand: BrandConfig
     return `
     <section id="copy" class="py-32 px-8 bg-[#050505] relative overflow-hidden">
         <div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
-            <img src="/images/imagenes_nuevas/caballo%20rosa.png" class="w-full h-full object-contain object-right transform -rotate-12">
+            <img src="/images/imagenes_nuevas/caballo_rosa.png" class="w-full h-full object-contain object-right transform -rotate-12">
         </div>
 
         <div class="max-w-7xl mx-auto relative z-10">

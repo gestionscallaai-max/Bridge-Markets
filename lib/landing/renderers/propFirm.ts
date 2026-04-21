@@ -416,7 +416,7 @@ export function renderPropFAQ(content: Record<string, any>, brand: BrandConfig):
                 <div class="relative section-reveal flex justify-center order-first lg:order-last">
                     <div class="relative">
                         <div class="absolute inset-0 bg-white/5 rounded-full blur-[100px] animate-pulse"></div>
-                        <img src="/images/imagenes_nuevas/peones%20negro.png" alt="Pawns" class="w-96 h-auto object-contain relative z-10 animate-[heroFloat_7s_ease-in-out_infinite] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+                        <img src="/images/imagenes_nuevas/peones_negro.png" alt="Pawns" class="w-96 h-auto object-contain relative z-10 animate-[heroFloat_7s_ease-in-out_infinite] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
                     </div>
                 </div>
             </div>
@@ -451,7 +451,7 @@ export function renderPropBenefits(content: Record<string, any>, brand: BrandCon
                 <div class="relative section-reveal flex justify-center">
                     <div class="relative group">
                         <div class="absolute inset-0 bg-[#D4AF37]/20 rounded-full blur-[100px] animate-pulse"></div>
-                        <img src="/images/imagenes_nuevas/reyna%20negra.png" alt="Queen" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_5s_ease-in-out_infinite] drop-shadow-[0_40px_80px_rgba(0,0,0,0.9)]">
+                        <img src="/images/imagenes_nuevas/reyna_negra.png" alt="Queen" class="w-80 h-auto object-contain relative z-10 animate-[heroFloat_5s_ease-in-out_infinite] drop-shadow-[0_40px_80px_rgba(0,0,0,0.9)]">
                     </div>
                 </div>
             </div>

@@ -78,7 +78,7 @@ export function renderPSHero(content: Record<string, any>, brand: BrandConfig): 
                         
                         <!-- Main 3D Asset (Caballo Rosa) -->
                         <div class="relative z-10 w-full h-full transform scale-125 lg:scale-150">
-                            <img src="/images/imagenes_nuevas/caballo%20rosa.png" alt="Synthetic Nexus" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.3)] animate-float-rotate">
+                            <img src="/images/imagenes_nuevas/caballo_rosa.png" alt="Synthetic Nexus" class="w-full h-full object-contain filter drop-shadow-[0_0_100px_rgba(134,91,255,0.3)] animate-float-rotate">
                         </div>
 
                         <!-- Technical HUD Overlays -->
