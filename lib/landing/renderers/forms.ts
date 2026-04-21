@@ -33,52 +33,84 @@ export function renderTestimonials(content: Record<string, any>, brand: BrandCon
 
 export function renderSntFooter(content: Record<string, any>, brand: BrandConfig): string {
     const year = new Date().getFullYear();
+    const ibName = content.ibFooterName || brand.fullName || "Partner Oficial";
+    const ibContact = content.ibContactInfo || "";
+    
     return `
-    <footer class="py-20 bg-black text-white px-8 border-t border-white/5">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
-            <div class="md:col-span-2">
-                <img src="https://bridgemarkets.global/wp-content/uploads/2023/06/Logo-Bridge-Markets-Horizontal-Blanco.png" alt="Bridge Markets" class="h-8 mb-8">
-                <p class="text-xs text-white/30 max-w-sm leading-relaxed uppercase tracking-wider">
-                    Bridge Markets es un broker internacional dedicado a brindar soluciones tecnológicas y acceso a mercados globales con los más altos estándares de ejecución y soporte técnico.
-                </p>
-            </div>
-            <div>
-                <h4 class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em] mb-8">Navegación Oficial</h4>
-                <div class="flex flex-col gap-4 text-xs font-bold text-white/50 uppercase tracking-widest">
-                    <a href="#" class="hover:text-white transition-colors">Servicios</a>
-                    <a href="#" class="hover:text-white transition-colors">Social Trading</a>
-                    <a href="#" class="hover:text-white transition-colors">PropFirm</a>
-                    <a href="https://charts.bridgemarkets.global" target="_blank" class="hover:text-white transition-colors">Gráficos Sintéticos</a>
-                </div>
-            </div>
-            <div>
-                <h4 class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em] mb-8">Información Legal</h4>
-                <div class="flex flex-col gap-4 text-xs font-bold text-white/50 uppercase tracking-widest">
-                    <a href="#" class="hover:text-white transition-colors">Términos y Condiciones</a>
-                    <a href="#" class="hover:text-white transition-colors">Política KYC/AML</a>
-                    <a href="#" class="hover:text-white transition-colors">Declaración de Riesgos</a>
-                </div>
-            </div>
-            <div>
-                <h4 class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.3em] mb-8">IB Partner</h4>
-                <div class="flex flex-col gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-black text-[#865BFF]">${brand.fullName.charAt(0)}</div>
-                        <span class="text-sm font-black text-white">${brand.fullName}</span>
-                    </div>
-                    <span class="text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Verified Bridge Markets Partner</span>
-                    <div class="pt-4 border-t border-white/5 mt-4">
-                        <p class="text-[9px] text-white/40 mb-1">Contacto Corporativo BM:</p>
-                        <p class="text-[9px] font-bold text-white/60">corporate@bridgemarkets.global</p>
+    <footer class="py-24 bg-[#020205] text-white px-8 border-t border-white/5 relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute bottom-0 right-0 w-[40%] h-[40%] bg-[#8b5cf6]/5 rounded-full blur-[120px]"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+                <div class="md:col-span-4">
+                    <img src="${content.logoUrl || brand.logoUrl || '/images/logo-bm-blanco.png'}" alt="Logo" class="h-10 mb-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                    <p class="text-sm text-white/40 leading-relaxed uppercase tracking-wider font-light mb-12">
+                        Bridge Markets es un broker internacional dedicado a brindar soluciones tecnológicas y acceso a mercados globales con los más altos estándares de ejecución y soporte técnico.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <p class="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-2">Contacto Corporativo BM:</p>
+                        <p class="text-[11px] font-bold text-white/60">corporate@bridgemarkets.global</p>
+                        <p class="text-[11px] font-bold text-white/60">+1 (786) 979-3392</p>
+                        <p class="text-[11px] font-bold text-white/60">@bridgemarketsbroker</p>
                     </div>
                 </div>
+
+                <div class="md:col-span-2">
+                    <h4 class="text-[10px] font-black text-[#8b5cf6] uppercase tracking-[0.4em] mb-10">Servicios</h4>
+                    <ul class="space-y-5 text-[11px] font-bold text-white/40 uppercase tracking-widest">
+                        <li><a href="#" class="hover:text-white transition-colors">Social Trading</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">PropFirm</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Documentos</a></li>
+                        <li><a href="https://charts.bridgemarkets.global" target="_blank" class="hover:text-white transition-colors">Gráficos</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-2">
+                    <h4 class="text-[10px] font-black text-[#8b5cf6] uppercase tracking-[0.4em] mb-10">Legal</h4>
+                    <ul class="space-y-5 text-[11px] font-bold text-white/40 uppercase tracking-widest">
+                        <li><a href="#" class="hover:text-white transition-colors">Términos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">KYC / AML</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Declaración Riesgos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Privacidad</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-4">
+                    <div class="glass-panel p-8 rounded-[2rem] border-white/10 bg-white/[0.02] relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-[#8b5cf6]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <h4 class="text-[10px] font-black text-[#8b5cf6] uppercase tracking-[0.4em] mb-8 relative z-10">Presentado por</h4>
+                        <div class="flex items-center gap-5 mb-8 relative z-10">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center text-xl font-black shadow-xl border border-white/10">
+                                ${ibName.charAt(0)}
+                            </div>
+                            <div>
+                                <p class="text-sm font-black text-white uppercase tracking-tight">${ibName}</p>
+                                <p class="text-[9px] font-bold text-white/30 uppercase tracking-widest mt-1">Partner Verificado</p>
+                            </div>
+                        </div>
+                        ${ibContact ? `
+                            <div class="pt-6 border-t border-white/5 relative z-10">
+                                <p class="text-[9px] text-white/30 uppercase font-black tracking-widest mb-2">Soporte del Partner:</p>
+                                <p class="text-xs font-bold text-white/70">${ibContact}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="max-w-7xl mx-auto pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-            <p class="text-[9px] font-black text-white/20 uppercase tracking-[0.5em]">© ${year} BRIDGE MARKETS ALL RIGHTS RESERVED.</p>
-            <div class="flex gap-4 items-center">
-                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                <span class="text-[9px] font-black text-white/40 uppercase tracking-[0.2em]">System Operational</span>
+
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                <p class="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">© 2026 BridgeMarkets LTD. Todos los derechos reservados.</p>
+                <div class="flex gap-6 items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-[9px] font-black text-white/40 uppercase tracking-[0.2em]">Institutional Tier-1</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] animate-pulse"></span>
+                        <span class="text-[9px] font-black text-white/40 uppercase tracking-[0.2em]">MT5 SSL Secured</span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>`;

@@ -191,12 +191,12 @@ export async function POST(request: Request) {
                 .eq('id', realPartnerId)
                 .single();
 
-            await notifyAdminNewLanding({
+            notifyAdminNewLanding({
                 partnerName: partner?.name || 'Un socio',
                 landingSlug: slug,
                 landingType: data.landingType || 'Custom',
                 adminEmails
-            });
+            }).catch(e => console.error('Admin notification failed', e));
         }
 
         return NextResponse.json({ success: true, url: `/l/${slug}` });

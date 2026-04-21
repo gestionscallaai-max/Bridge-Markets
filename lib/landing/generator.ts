@@ -518,7 +518,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         tiktok: data.tiktok,
         ctaLink: data.ctaLink,
         videoUrl: data.videoUrl,
-        logoUrl: data.customLogoUrl,
+        logoUrl: data.customLogoUrl || '/images/logo-bm-blanco.png',
     };
 
     const theme = template?.theme || 'dark';
@@ -695,6 +695,7 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
     ${getSharedHead(template?.name || 'Trading Platform', 'Access institutional markets')}
     ${translateScripts}
     <style>
+        html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; background: transparent; }
         ${getSharedStyles(theme)}
     </style>
@@ -710,9 +711,9 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
                 <div class="text-2xl font-black tracking-tighter text-white font-headline" style="${brandConfig.logoUrl ? 'display: none;' : ''}">Bridge <span class="text-[#865BFF]">Markets</span></div>
             </div>
             <div class="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
-                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.plat}</a>
-                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.sec}</a>
-                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#">${dict.nav.price}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#platforms">${dict.nav.plat}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#specs">${dict.nav.sec}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#families">${dict.nav.price}</a>
             </div>
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest text-[#865BFF] cursor-default">
@@ -772,29 +773,24 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
             // ─── Floating/Parallax Removed ───
             // Images from 'imagenes nuevas' were requested removed for inconsistency
 
+            let ticking = false;
             window.addEventListener('scroll', () => {
-                // Navbar scroll effect
-                const nav = document.getElementById('main-nav');
-                if (nav) {
-                    if (window.scrollY > 50) {
-                        nav.classList.add('py-2');
-                        nav.classList.remove('py-6');
-                    } else {
-                        nav.classList.add('py-6');
-                        nav.classList.remove('py-2');
-                    }
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const nav = document.getElementById('main-nav');
+                        if (nav) {
+                            if (window.scrollY > 50) {
+                                nav.classList.add('py-2');
+                                nav.classList.remove('py-6');
+                            } else {
+                                nav.classList.add('py-6');
+                                nav.classList.remove('py-2');
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
                 }
-
-                // Keep only parallax for text/cards
-                document.querySelectorAll('.section-reveal').forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < window.innerHeight && rect.bottom > 0) {
-                        const speed = 0.03;
-                        const offset = (window.innerHeight / 2 - rect.top) * speed;
-                        const title = el.querySelector('h1, h2');
-                        if (title) title.style.transform = 'translateY(' + offset + 'px)';
-                    }
-                });
             });
             
             // ─── Form Submission ───

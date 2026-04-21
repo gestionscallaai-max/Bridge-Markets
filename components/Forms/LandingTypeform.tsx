@@ -69,9 +69,9 @@ function SectionCard({
     const [expanded, setExpanded] = useState(false);
     const content = { ...section.defaultContent, ...overrides };
 
-    // Get editable string fields from content
+    // Get editable string and array fields from content
     const editableFields = Object.entries(content).filter(
-        ([, v]) => typeof v === 'string'
+        ([, v]) => typeof v === 'string' || Array.isArray(v)
     );
 
     return (
@@ -118,28 +118,66 @@ function SectionCard({
 
             {isEnabled && expanded && (
                 <div className="px-4 pb-4 border-t border-slate-100 pt-3 space-y-3">
-                    {editableFields.map(([key, val]) => (
-                        <div key={key}>
-                            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">
-                                {key.replace(/([A-Z])/g, ' $1').trim()}
-                            </label>
-                            {(val as string).length > 80 ? (
-                                <textarea
-                                    value={(overrides[key] ?? val) as string}
-                                    onChange={(e) => onUpdateOverride(key, e.target.value)}
-                                    rows={3}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10 resize-none"
-                                />
-                            ) : (
-                                <input
-                                    type="text"
-                                    value={(overrides[key] ?? val) as string}
-                                    onChange={(e) => onUpdateOverride(key, e.target.value)}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10"
-                                />
-                            )}
-                        </div>
-                    ))}
+                    {editableFields.map(([key, val]) => {
+                        if (Array.isArray(val)) {
+                            return (
+                                <div key={key} className="space-y-4 py-2">
+                                    <label className="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.2em] mb-2 block">
+                                        {key.replace(/([A-Z])/g, ' $1').trim()} (Tabla/Lista)
+                                    </label>
+                                    <div className="space-y-3 pl-3 border-l-2 border-[#865BFF]/20">
+                                        {(overrides[key] || val).map((item: any, idx: number) => (
+                                            <div key={idx} className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100 space-y-3">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Fila #{idx + 1}: {item.family || item.title || ''}</span>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    {Object.entries(item).map(([subKey, subVal]) => (
+                                                        <div key={subKey} className={subKey === 'family' || subKey === 'title' ? 'col-span-2' : ''}>
+                                                            <label className="text-[8px] font-bold text-slate-400 uppercase mb-1 block">{subKey.replace(/([A-Z])/g, ' $1').trim()}</label>
+                                                            <input
+                                                                type="text"
+                                                                value={subVal as string}
+                                                                onChange={(e) => {
+                                                                    const newArr = [...(overrides[key] || val)];
+                                                                    newArr[idx] = { ...newArr[idx], [subKey]: e.target.value };
+                                                                    onUpdateOverride(key, newArr);
+                                                                }}
+                                                                className="w-full bg-white border border-slate-200 rounded-xl py-2 px-3 text-[11px] text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10 transition-all font-medium"
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <div key={key}>
+                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">
+                                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                                </label>
+                                {(val as string).length > 80 ? (
+                                    <textarea
+                                        value={(overrides[key] ?? val) as string}
+                                        onChange={(e) => onUpdateOverride(key, e.target.value)}
+                                        rows={3}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10 resize-none"
+                                    />
+                                ) : (
+                                    <input
+                                        type="text"
+                                        value={(overrides[key] ?? val) as string}
+                                        onChange={(e) => onUpdateOverride(key, e.target.value)}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10"
+                                    />
+                                )}
+                            </div>
+                        );
+                    })}
                     <p className="text-[10px] text-slate-400 italic pt-1">
                         {t.landing.arraysDefaultNote}
                     </p>
@@ -283,16 +321,13 @@ function PhoneMockup({ html }: { html: string }) {
                     <div className="w-10 h-1 bg-white/10 rounded-full" />
                 </div>
                 
-                {/* Iframe Content */}
-                <div className="absolute inset-0 z-10 bg-white">
+                <div className="absolute inset-0 z-10 bg-[#0d0221]">
                     <ModularPreview 
                         html={html} 
                         style={{ 
-                            width: '400%', 
-                            height: '400%', 
-                            transformOrigin: 'top left',
-                            transform: 'scale(0.25) translateZ(0)',
-                            willChange: 'transform'
+                            width: '100%', 
+                            height: '100%',
+                            border: 'none'
                         }} 
                     />
                 </div>
@@ -556,9 +591,16 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
             });
 
             if (!res.ok) {
-                const errorData = await res.json();
-                console.error('Failed to save landing:', errorData.details || errorData.error);
-                setErrorMsg(errorData.details || errorData.error || "Error desconocido al guardar");
+                let errorDetails = "Error desconocido al guardar";
+                try {
+                    const errorData = await res.json();
+                    errorDetails = errorData.details || errorData.error || errorDetails;
+                } catch (e) {
+                    // Fallback for HTML/Text error responses (like Cloudflare 502)
+                    errorDetails = `Error del servidor (${res.status}): ${res.statusText || 'Conexión interrumpida'}. Intenta de nuevo.`;
+                }
+                console.error('Failed to save landing:', errorDetails);
+                setErrorMsg(errorDetails);
             } else {
                 setProcessStep('finalizing');
                 await new Promise(r => setTimeout(r, 1000));
@@ -763,13 +805,32 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                                 </div>
                             </div>
 
-                            {/* Grupo 2: Personalización Visual */}
+                            {/* Grupo 2: Personalización Visual & Branding */}
                             <div className="p-6 rounded-2xl bg-[#865BFF]/5 border border-[#865BFF]/10 space-y-6">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Sparkles className="w-4 h-4 text-[#865BFF]" />
-                                    <span className="text-xs font-black text-[#865BFF] uppercase tracking-wider">{t.landing.brandSettings}</span>
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <Sparkles className="w-4 h-4 text-[#865BFF]" />
+                                        <span className="text-xs font-black text-[#865BFF] uppercase tracking-wider">{t.landing.brandSettings}</span>
+                                    </div>
+                                    <span className="text-[9px] font-bold text-[#865BFF]/60 uppercase tracking-tighter bg-[#865BFF]/10 px-2 py-0.5 rounded-md">Opcional</span>
                                 </div>
+                                
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Logo URL - MOVED TO TOP AND HIGHLIGHTED */}
+                                    <div className="md:col-span-2 space-y-1.5 p-4 bg-white rounded-xl border border-[#865BFF]/20 shadow-sm">
+                                        <label className="text-[10px] font-black text-[#865BFF] uppercase tracking-widest ml-1 flex items-center gap-2">
+                                            <Layout className="w-3 h-3" />
+                                            URL de tu Logo Personalizado (PNG/SVG blanco recomendado)
+                                        </label>
+                                        <input
+                                            type="text" value={customLogoUrl}
+                                            onChange={(e) => setCustomLogoUrl(e.target.value)}
+                                            placeholder="https://tu-dominio.com/logo.png"
+                                            className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] focus:bg-white transition-all"
+                                        />
+                                        <p className="text-[9px] text-slate-400 mt-1 ml-1">Deja vacío para usar el logo oficial de Bridge Markets.</p>
+                                    </div>
+
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t.landing.communityName}</label>
                                         <input
@@ -794,15 +855,6 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                                             type="text" value={videoUrl}
                                             onChange={(e) => setVideoUrl(e.target.value)}
                                             placeholder="https://www.youtube.com/watch?v=..."
-                                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
-                                        />
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Custom Logo URL</label>
-                                        <input
-                                            type="text" value={customLogoUrl}
-                                            onChange={(e) => setCustomLogoUrl(e.target.value)}
-                                            placeholder="https://..."
                                             className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 px-4 text-sm text-slate-700 outline-none focus:border-[#865BFF] transition-all"
                                         />
                                     </div>

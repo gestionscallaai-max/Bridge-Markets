@@ -389,7 +389,7 @@ export function renderPSFooter(content: Record<string, any>, brand: BrandConfig)
         
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-24 mb-40 relative z-10">
             <div class="md:col-span-7">
-                <img src="/logo.png" alt="Bridge Markets" class="h-12 mb-16 brightness-[10]">
+                <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-12 mb-16 brightness-[10]">
                 <p class="text-[12px] text-white/30 max-w-xl leading-relaxed uppercase tracking-[0.25em] font-bold">
                     ${disclaimer}
                 </p>

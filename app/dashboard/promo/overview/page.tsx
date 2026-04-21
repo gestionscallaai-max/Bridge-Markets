@@ -163,7 +163,7 @@ export default function PromoMaterialsPage() {
                 
                 {/* Watermark Logo */}
                 <div className="absolute right-10 bottom-0 w-64 h-64 opacity-[0.05] grayscale brightness-0 invert pointer-events-none">
-                    <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                    <img src="/images/logo-para-fondos.png" alt="" className="w-full h-full object-contain" />
                 </div>
 
                 <div className="relative z-10 px-8 pt-8 pb-6">

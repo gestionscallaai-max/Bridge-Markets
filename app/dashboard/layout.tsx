@@ -253,12 +253,12 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                     
                     {/* Sidebar Watermark */}
                     <div className="absolute bottom-40 -left-10 w-64 h-64 opacity-[0.03] grayscale brightness-0 invert pointer-events-none rotate-12">
-                        <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                        <img src="/images/logo-para-fondos.png" alt="" className="w-full h-full object-contain" />
                     </div>
 
                     {/* Logo */}
                     <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-8 px-6">
-                        <img src="/images/logo BM blanco.png" alt="Bridge Markets" className="w-full max-w-[220px] h-auto object-contain transition-transform duration-500 hover:scale-105" />
+                        <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" className="w-full max-w-[220px] h-auto object-contain transition-transform duration-500 hover:scale-105" />
                         <button 
                             onClick={() => setIsMobileMenuOpen(false)} 
                             className="lg:hidden absolute top-8 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all"
@@ -393,7 +393,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                             <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 shrink-0">
                                 <Menu className="w-5 h-5" />
                             </button>
-                            <img src="/images/LOGO BM NEGRO.png" alt="Logo" className="lg:hidden h-8 object-contain shrink-0" />
+                            <img src="/images/logo-bm-negro.png" alt="Logo" className="lg:hidden h-8 object-contain shrink-0" />
                             <div>
                                 <h1 className="text-sm lg:text-lg font-medium tracking-tight text-slate-800 leading-tight">
                                     {title.main}{' '}

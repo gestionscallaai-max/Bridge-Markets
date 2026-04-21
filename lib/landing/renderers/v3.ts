@@ -186,7 +186,7 @@ export function renderV3Footer(content: Record<string, any>, brand: BrandConfig)
         <div class="max-w-7xl mx-auto px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-20 mb-24">
                 <div class="col-span-1 md:col-span-1">
-                    <img src="/logo.png" alt="BM" class="h-10 mb-10">
+                    <img src="/images/logo-bm-blanco.png" alt="BM" class="h-10 mb-10">
                     <p class="text-[#2F1E5D]/50 text-sm font-medium leading-relaxed mb-10">
                         La infraestructura de trading institucional más avanzada del mundo, ahora disponible para ti.
                     </p>

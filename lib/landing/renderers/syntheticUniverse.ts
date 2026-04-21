@@ -61,7 +61,7 @@ export function renderSNUHero(content: Record<string, any>, brand: BrandConfig):
                         <div class="absolute bottom-0 -right-4 lg:-right-10 z-20 p-10 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-2xl min-w-[320px]">
                             <div class="flex items-center gap-6 mb-8">
                                 <div class="w-14 h-14 rounded-2xl bg-black border border-white/10 flex items-center justify-center overflow-hidden">
-                                    <img src="${brand.logoUrl || '/logo.png'}" alt="IB" class="w-full h-full object-contain p-2" onerror="this.src='/logo.png'">
+                                    <img src="${brand.logoUrl || '/images/logo-bm-blanco.png'}" alt="IB" class="w-full h-full object-contain p-2" onerror="this.src='/images/logo-bm-blanco.png'">
                                 </div>
                                 <div>
                                     <p class="text-[9px] font-black uppercase tracking-[0.4em] text-[#865BFF] mb-1">Project Leader</p>
@@ -340,7 +340,7 @@ export function renderSNUCommunity(content: Record<string, any>, brand: BrandCon
     const c = { ...SECTION_CATALOG.find(s => s.id === 'snu_community')!.defaultContent, ...content };
     const ibName = brand.communityName || brand.fullName || 'IB Oficial';
     const message = brand.heroPhrase || c.welcomeMessage || 'Únete a nuestra comunidad de traders sintéticos.';
-    const logoUrl = brand.logoUrl || '/logo.png';
+    const logoUrl = brand.logoUrl || '/images/logo-bm-blanco.png';
 
     return `
     <section class="py-48 bg-[#0a0614] text-white section-reveal">
@@ -429,7 +429,7 @@ export function renderSNUFooter(content: Record<string, any>, brand: BrandConfig
         <div class="max-w-7xl mx-auto px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-40 mb-40 section-reveal">
                 <div class="col-span-1 lg:col-span-1 text-center lg:text-left">
-                    <img src="/logo.png" alt="BM" class="h-10 mb-16 mx-auto lg:mx-0">
+                    <img src="/images/logo-bm-blanco.png" alt="BM" class="h-10 mb-16 mx-auto lg:mx-0">
                     <div class="p-10 border border-white/10 rounded-[3rem] bg-white/5">
                         <span class="block text-[9px] font-black text-white/30 uppercase tracking-[0.6em] mb-4">Presented By</span>
                         <span class="text-2xl font-black text-white uppercase tracking-tighter">${ibName}</span>

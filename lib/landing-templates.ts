@@ -20,7 +20,7 @@ export interface LandingTemplate {
 export const LANDING_TEMPLATES: LandingTemplate[] = [
     {
         id: 'synthetic_edu',
-        name: 'Índices Sintéticos Pro V3 (Final)',
+        name: '✨ Índices Sintéticos PRO V3 (FINAL) ✨',
         category: 'Official',
         description: 'La landing oficial y definitiva de Bridge Markets para Índices Sintéticos. Diseño premium y corporativo con elementos 3D.',
         sourceFile: 'Blueprint 1',

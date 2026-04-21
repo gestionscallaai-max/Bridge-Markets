@@ -464,7 +464,7 @@ export function renderMCFooter(content: Record<string, any>, brand: BrandConfig)
         <div class="max-w-7xl mx-auto px-8">
             <div class="flex flex-col lg:flex-row justify-between gap-40 mb-32 section-reveal">
                 <div class="max-w-md">
-                    <img src="/logo.png" alt="Bridge Markets" class="w-12 h-12 object-contain filter ${isLight ? 'brightness-0' : 'brightness-100'}">
+                    <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="w-12 h-12 object-contain filter ${isLight ? 'brightness-0' : 'brightness-100'}">
                     <p class="text-gray-400 text-lg font-bold uppercase tracking-widest leading-loose mb-16">Infraestructura institucional V3. Bridge Markets LTD está regulado internacionalmente para garantizar la máxima seguridad de fondos segregados.</p>
                     <div class="p-12 glass-panel rounded-[4rem] border border-slate-100 flex gap-10 items-center">
                         <div class="w-20 h-20 bg-white rounded-[1.5rem] shadow-sm flex items-center justify-center text-[#865BFF] text-3xl font-black">
@@ -506,7 +506,7 @@ export function renderMCFooter(content: Record<string, any>, brand: BrandConfig)
             <div class="pt-24 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-12">
                 <span class="text-xs font-black text-gray-300 uppercase tracking-[0.8em]">© 2026 BridgeMarkets. All Rights Reserved. V3 Premium Release.</span>
                 <div class="flex gap-16 opacity-20 grayscale">
-                     <img src="/logo.png" alt="BM" class="h-8">
+                     <img src="/images/logo-bm-blanco.png" alt="BM" class="h-8">
                 </div>
             </div>
         </div>

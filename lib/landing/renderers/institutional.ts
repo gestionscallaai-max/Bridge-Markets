@@ -476,7 +476,7 @@ export function renderInstCommunity(content: Record<string, any>, brand: BrandCo
     const c = { ...SECTION_CATALOG.find(s => s.id === 'inst_community')!.defaultContent, ...content };
     const ibName = brand.communityName || brand.fullName || 'IB Oficial';
     const message = brand.heroPhrase || c.welcomeMessage || 'Únete a nuestra comunidad oficial vinculada a Bridge Markets.';
-    const logoUrl = brand.logoUrl || '/logo.png';
+    const logoUrl = brand.logoUrl || '/images/logo-bm-blanco.png';
 
     return `
     <section class="py-48 bg-[#05010f] text-white relative">
@@ -572,7 +572,7 @@ export function renderInstFooter(content: Record<string, any>, brand: BrandConfi
         <div class="max-w-7xl mx-auto px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40 section-reveal">
                 <div class="col-span-1 lg:col-span-1">
-                    <img src="/logo.png" alt="BM" class="h-10 mb-12">
+                    <img src="/images/logo-bm-blanco.png" alt="BM" class="h-10 mb-12">
                     <p class="text-gray-400 text-xs font-black uppercase tracking-[0.2em] leading-loose mb-12">Infraestructura institucional V3. Bridge Markets LTD está regulado internacionalmente para garantizar fondos segregados.</p>
                     <div class="p-8 glass-panel border border-slate-100 rounded-[2rem] flex items-center gap-6">
                         <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#865BFF] font-black">${ibName.charAt(0)}</div>

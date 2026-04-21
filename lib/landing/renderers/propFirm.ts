@@ -447,7 +447,7 @@ export function renderPropFooter(content: Record<string, any>, brand: BrandConfi
     <footer class="py-24 bg-[#050505] text-white px-8 border-t border-white/5 relative z-10">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-20 mb-20">
             <div class="md:col-span-2">
-                <img src="/logo.png" alt="Bridge Markets" class="h-8 mb-10 opacity-60 grayscale">
+                <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-8 mb-10 opacity-60 grayscale">
                 <p class="text-[10px] text-white/20 max-w-sm leading-relaxed uppercase tracking-[0.2em] font-bold">
                     Infraestructura de Grado Mercantil. Bridge Markets Certification Program es un proveedor de evaluación y fondeo simulado.
                 </p>
