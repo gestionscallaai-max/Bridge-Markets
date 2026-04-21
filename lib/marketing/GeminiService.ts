@@ -14,7 +14,7 @@ export async function generateLocalizedAd(
     aspectRatio: string = '16:9'
 ): Promise<string | null> {
     try {
-        const genAI = new GoogleGenAI(apiKey);
+        const genAI = new GoogleGenAI({ apiKey });
         // Usamos el modelo más reciente capaz de generar/editar imágenes con texto
         const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
