@@ -536,8 +536,6 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         })
         .join('\n');
 
-    if (bodyOnly) return sectionsHtml;
-
     const isES = data.language === 'ES';
     const dict = {
         nav: {
@@ -598,7 +596,6 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         </div>
     </section>`;
 
-    // Footer
     const footerHtml = `
     <footer class="border-t border-white/5 pt-24 pb-12 bg-[#05010f] text-white relative z-20">
         <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
@@ -632,6 +629,41 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
             ${dict.foot.warn}
         </div>
     </footer>`;
+
+    const navHtml = `
+    <nav class="fixed top-0 w-full z-[100] px-6 py-6 transition-all duration-300" id="main-nav">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-full px-8 h-16 backdrop-blur-3xl">
+            <div class="flex items-center">
+                ${brandConfig.logoUrl ? 
+                    `<img src="${brandConfig.logoUrl}" alt="Logo" class="h-8 md:h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''
+                }
+                <div class="text-2xl font-black tracking-tighter text-white font-headline" style="${brandConfig.logoUrl ? 'display: none;' : ''}">Bridge <span class="text-[#865BFF]">Markets</span></div>
+            </div>
+            <div class="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#platforms">${dict.nav.plat}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#specs">${dict.nav.sec}</a>
+                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#families">${dict.nav.price}</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#register" class="bg-white/10 border border-white/20 hover:bg-white hover:text-black px-6 py-3 rounded-full text-white text-xs font-black uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1">${dict.nav.btn}</a>
+            </div>
+        </div>
+    </nav>`;
+
+    const fullContent = `
+        ${navHtml}
+        <main class="">
+            ${sectionsHtml}
+            <div class="section-wrapper">
+                ${formHtml}
+            </div>
+        </main>
+        <div class="section-wrapper">
+            ${footerHtml}
+        </div>
+    `;
+
+    if (bodyOnly) return fullContent;
 
     const flags: Record<string, string> = {
         'ES': '🇪🇸', 'GB': '🇬🇧', 'ZH': '🇨🇳', 'HI': '🇮🇳',
@@ -701,41 +733,8 @@ export function generateModularLandingHTML(data: LandingData, bodyOnly: boolean 
         ${getSharedStyles(theme)}
     </style>
 </head>
-<body class="${isLight ? 'bg-[#F8FAFC] text-slate-800' : 'bg-[#05010f] text-white'}">
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[100] px-6 py-6 transition-all duration-300" id="main-nav">
-        <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.3)] rounded-full px-8 h-16 backdrop-blur-3xl">
-            <div class="flex items-center">
-                ${brandConfig.logoUrl ? 
-                    `<img src="${brandConfig.logoUrl}" alt="Logo" class="h-8 md:h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''
-                }
-                <div class="text-2xl font-black tracking-tighter text-white font-headline" style="${brandConfig.logoUrl ? 'display: none;' : ''}">Bridge <span class="text-[#865BFF]">Markets</span></div>
-            </div>
-            <div class="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-widest">
-                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#platforms">${dict.nav.plat}</a>
-                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#specs">${dict.nav.sec}</a>
-                <a class="text-white/60 hover:text-white transition-all hover:scale-105" href="#families">${dict.nav.price}</a>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest text-[#865BFF] cursor-default">
-                    <span class="text-base leading-none">${currentFlag}</span>
-                    <span>${currentLangCode}</span>
-                </div>
-                <a href="#register" class="bg-white/10 border border-white/20 hover:bg-white hover:text-black px-6 py-3 rounded-full text-white text-xs font-black uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1">${dict.nav.btn}</a>
-            </div>
-        </div>
-    </nav>
-
-    <main class="">
-        ${sectionsHtml}
-        <div class="section-wrapper">
-            ${formHtml}
-        </div>
-    </main>
-
-    <div class="section-wrapper">
-        ${footerHtml}
-    </div>
+    <body class="${isLight ? 'bg-[#F8FAFC] text-slate-800' : 'bg-[#05010f] text-white'}">
+        ${fullContent}
 
     <script>
         function openVideoModal(url) {
