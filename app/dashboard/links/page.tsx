@@ -54,7 +54,7 @@ export default function ReferralLinksPage() {
         if (!mainLink) return;
         navigator.clipboard.writeText(mainLink);
         setCopied(true);
-        setTimeout(() => setCopied(null), 2000);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     if (loading) return (
@@ -153,7 +153,7 @@ export default function ReferralLinksPage() {
                                                     }`}
                                                 >
                                                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                                                    {copied ? t.links.copied : t.links.copy}
+                                                    {copied ? t.links.copied : t.common.copy}
                                                 </button>
                                                 <a 
                                                     href={mainLink} target="_blank" rel="noreferrer"
