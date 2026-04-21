@@ -3,7 +3,7 @@ import { BrandConfig } from '../types';
 // ─── PRO LEVERAGE HERO ──────────────────────────────────────
 export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.ibName || 'Partner Oficial';
-    const ibPhrase = brand.heroPhrase || "";
+    const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaText = content.ctaText || "Quiero mi cuenta apalancada";
     const ctaLink = brand.ctaLink || "#";
 
@@ -15,7 +15,7 @@ export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig)
 
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/50 via-[#050505]/90 to-[#050505]"></div>
-            <div class="absolute top-0 left-0 w-full h-full bg-[url('/images/imagenes%20nuevas/8d25cf7f49c36716ee118242656ba3e722258a6f.png')] bg-cover bg-center opacity-10 grayscale"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 grayscale"></div>
         </div>
 
         <div class="container mx-auto px-8 relative z-10">
@@ -38,17 +38,17 @@ export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig)
                     Multiplica tu capital hasta x12 y opera directamente en mercados CFDs con una cuenta real financiada por Bridge Markets.
                 </p>
 
-                ${ibPhrase ? `<p class="text-lg text-purple-400/80 font-medium mb-12 italic tracking-wide">${ibPhrase}</p>` : ''}
+                ${ibPhrase ? `<p class="text-lg text-purple-400/80 font-medium mb-12 italic tracking-wide italic leading-relaxed">${ibPhrase}</p>` : ''}
 
                 <!-- Stats Visual -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
                     <div class="p-8 bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-sm">
-                        <div class="text-3xl font-black text-white mb-2">100%</div>
+                        <div class="text-3xl font-black text-white mb-2 italic">100%</div>
                         <div class="text-[10px] text-white/30 uppercase tracking-widest font-black leading-tight">División de beneficios</div>
                     </div>
-                    <div class="p-8 bg-purple-600/10 border border-purple-500/20 rounded-3xl backdrop-blur-sm">
-                        <div class="text-3xl font-black text-purple-400 mb-2">x12</div>
-                        <div class="text-[10px] text-white/30 uppercase tracking-widest font-black leading-tight">Apalancamiento</div>
+                    <div class="p-8 bg-purple-600/10 border border-purple-500/20 rounded-3xl backdrop-blur-sm shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+                        <div class="text-3xl font-black text-purple-400 mb-2 italic">x12 Real</div>
+                        <div class="text-[10px] text-white/30 uppercase tracking-widest font-black leading-tight">Capital Apalancado</div>
                     </div>
                     <div class="p-8 bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-sm">
                         <div class="text-3xl font-black text-white mb-2 italic">Día 3</div>
@@ -127,7 +127,7 @@ export function renderLX12Intro(content: Record<string, any>, brand: BrandConfig
 
 // ─── ACCOUNT SIZES ──────────────────────────────────────────
 export function renderLX12Pricing(content: Record<string, any>, brand: BrandConfig): string {
-    const ctaText = content.ctaPriceText || "Comprar ahora";
+    const ctaText = content.ctaText || "Comprar ahora";
     const ctaLink = brand.ctaLink || "#";
 
     const sizes = [
@@ -152,23 +152,23 @@ export function renderLX12Pricing(content: Record<string, any>, brand: BrandConf
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 section-reveal">
                 ${sizes.map(s => `
                     <div class="group relative p-10 bg-white/[0.02] border border-white/10 rounded-[2.5rem] hover:border-purple-500/50 transition-all hover:translate-y-[-8px]">
-                        <div class="absolute top-6 right-8 text-[10px] font-black text-purple-500 uppercase tracking-widest">x12 Real</div>
+                        <div class="absolute top-6 right-8 text-[10px] font-black text-purple-500 uppercase tracking-widest italic">x12 Real</div>
                         <div class="mb-8">
-                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2">Balance de Cuenta</span>
-                            <div class="text-4xl font-black text-white font-montserrat">${s.b} <span class="text-sm font-light text-white/30">USD</span></div>
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-2 italic">Balance de Cuenta</span>
+                            <div class="text-4xl font-black text-white font-montserrat italic">${s.b} <span class="text-sm font-light text-white/30">USD</span></div>
                         </div>
                         <div class="mb-10 p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-1">Precio de Compra</span>
-                            <div class="text-2xl font-black text-purple-400">${s.p} <span class="text-xs font-light text-white/30">USD</span></div>
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-widest block mb-1 italic">Precio de Compra</span>
+                            <div class="text-2xl font-black text-purple-400 italic">${s.p} <span class="text-xs font-light text-white/30">USD</span></div>
                         </div>
-                        <a href="${ctaLink}" class="block w-full py-4 bg-white text-black text-center font-black rounded-xl uppercase tracking-widest text-[10px] hover:bg-purple-600 hover:text-white transition-all">
+                        <a href="${ctaLink}" class="block w-full py-4 bg-white text-black text-center font-black rounded-xl uppercase tracking-widest text-[10px] hover:bg-purple-600 hover:text-white transition-all shadow-xl">
                             ${ctaText}
                         </a>
                     </div>
                 `).join('')}
             </div>
             
-            <p class="mt-12 text-center text-[10px] text-white/20 uppercase tracking-[0.2em] font-black">
+            <p class="mt-12 text-center text-[10px] text-white/20 uppercase tracking-[0.2em] font-black italic">
                 Los precios pueden variar. Consulta condiciones vigentes en tu portal de cliente.
             </p>
         </div>
@@ -393,28 +393,54 @@ export function renderLX12Benefits(content: Record<string, any>, brand: BrandCon
 // ─── COMMUNITY ──────────────────────────────────────────────
 export function renderLX12Community(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.ibName || 'Nuestra Comunidad';
-    const message = content.communityMessage || 'Únete a nuestro ecosistema de traders apalancados.';
-    const telegram = brand.telegram || '#';
-    const whatsapp = brand.whatsapp || '#';
+    const message = content.communityMessage || 'Únete a nuestro ecosistema de traders apalancados. Aquí operamos con capital real desde el primer día.';
+    const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80";
+    
+    const telegram = content.socialTelegram || brand.telegram || "#";
+    const whatsapp = content.socialWhatsApp || brand.whatsapp || "#";
+    const instagram = content.socialInstagram || brand.instagram || "#";
+    const youtube = content.socialYouTube || brand.youtube || "#";
+    
+    const supportLabel = content.supportLabel || "Soporte del IB";
+    const ctaText = content.ctaText || "Habla con un asesor";
+    const ctaLink = brand.ctaLink || "#";
 
     return `
-    <section id="comunidad" class="py-32 px-8 bg-[#080808]">
+    <section id="comunidad" class="py-32 px-8 bg-[#080808] relative overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="bg-gradient-to-br from-purple-600/10 via-transparent to-slate-900 border border-white/10 rounded-[4rem] p-12 md:p-24 relative overflow-hidden section-reveal">
-                <div class="max-w-3xl relative z-10">
-                    <span class="text-purple-500 font-black text-xs uppercase tracking-[0.4em] mb-8 block">Sección Personalizada</span>
-                    <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-10 uppercase">${ibName}</h2>
-                    <div class="text-white/60 text-lg md:text-xl leading-relaxed mb-12 italic">
-                        ${message}
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+                    <div>
+                        <span class="text-purple-500 font-black text-xs uppercase tracking-[0.4em] mb-8 block italic">Sección Personalizada</span>
+                        <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-10 uppercase italic leading-none">${ibName}</h2>
+                        <div class="text-white/60 text-lg md:text-xl leading-relaxed mb-12 italic">
+                            ${message}
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-4 mb-12">
+                            ${whatsapp !== '#' ? `<a href="https://wa.me/${whatsapp}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#25D366] transition-all"><span class="material-symbols-outlined text-sm italic">chat</span></a>` : ''}
+                            ${telegram !== '#' ? `<a href="${telegram}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#24A1DE] transition-all"><span class="material-symbols-outlined text-sm italic">send</span></a>` : ''}
+                            ${instagram !== '#' ? `<a href="${instagram}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#E1306C] transition-all"><span class="material-symbols-outlined text-sm italic">photo_camera</span></a>` : ''}
+                            ${youtube !== '#' ? `<a href="${youtube}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[#FF0000] transition-all"><span class="material-symbols-outlined text-sm italic">play_circle</span></a>` : ''}
+                        </div>
+
+                        <div class="flex flex-wrap gap-6">
+                            <a href="${ctaLink}" class="px-10 py-5 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-purple-600 hover:text-white transition-all shadow-xl italic">
+                                ${ctaText}
+                            </a>
+                            <a href="${whatsapp !== '#' ? `https://wa.me/${whatsapp}` : '#'}" class="px-10 py-5 bg-purple-600/20 text-purple-400 border border-purple-500/30 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-purple-600 hover:text-white transition-all italic">
+                                ${supportLabel}
+                            </a>
+                        </div>
                     </div>
-                    
-                    <div class="flex flex-wrap gap-4">
-                        <a href="${telegram}" class="px-10 py-5 bg-[#24A1DE] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">Telegram</a>
-                        <a href="${whatsapp}" class="px-10 py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all">WhatsApp</a>
+                    <div class="relative hidden lg:block">
+                        <div class="aspect-square rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl group">
+                            <img src="${photoUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" alt="Community">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="absolute -bottom-20 -right-20 w-1/2 h-1/2 opacity-10 pointer-events-none">
+                <div class="absolute -bottom-20 -right-20 w-1/2 h-1/2 opacity-5 pointer-events-none">
                     <img src="/images/imagenes%20nuevas/caballo rosa.png" class="w-full h-full object-contain transform -rotate-12">
                 </div>
             </div>
@@ -481,3 +507,46 @@ export function renderLX12FinalCTA(content: Record<string, any>, brand: BrandCon
     </section>
     `;
 }
+
+// ─── FOOTER (EDITABLE) ──────────────────────────────────────
+export function renderLX12Footer(content: Record<string, any>, brand: BrandConfig): string {
+    const ibName = brand.communityName || brand.ibName || "Partner Oficial";
+    const supportLink = content.socialWhatsApp ? `https://wa.me/${content.socialWhatsApp}` : (brand.whatsapp ? `https://wa.me/${brand.whatsapp}` : brand.ctaLink || "#");
+
+    return `
+    <footer class="py-20 px-8 bg-[#020202] border-t border-purple-500/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+                <div>
+                    <div class="text-2xl font-black text-white mb-6 uppercase tracking-tighter italic">Bridge <span class="text-purple-500">Markets</span></div>
+                    <p class="text-white/30 text-[10px] leading-relaxed uppercase tracking-[0.2em] font-black italic">Presentado por ${ibName}</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] italic">Contacto Corporativo</div>
+                    <p class="text-sm text-white/60 font-medium italic">corporate@bridgemarkets.global</p>
+                    <p class="text-sm text-white/60 font-medium italic">+1 (786) 979-3392</p>
+                </div>
+                <div class="space-y-4 text-right md:text-right">
+                    <div class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] italic">Soporte y Portal</div>
+                    <a href="https://www.bridgemarkets.global" class="text-sm text-white/60 hover:text-purple-400 transition-colors block font-medium italic">www.bridgemarkets.global</a>
+                    <a href="${supportLink}" class="text-sm text-white/60 hover:text-purple-400 transition-colors block font-medium italic">Soporte del IB</a>
+                </div>
+            </div>
+            
+            <div class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl mb-12">
+                <p class="text-[9px] text-white/20 leading-relaxed uppercase tracking-widest font-medium italic">
+                    Aviso Legal: El trading de CFDs con apalancamiento conlleva un alto nivel de riesgo para su capital y puede dar lugar a pérdidas que superen su depósito inicial. Los productos de Bridge Markets no son adecuados para todos los inversores. Asegúrese de comprender plenamente los riesgos implicados y busque asesoramiento independiente si es necesario. Bridge Markets LTD no ofrece sus servicios a residentes de ciertas jurisdicciones como EE. UU., Irán, Corea del Norte, entre otros.
+                </p>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[10px] text-white/10 uppercase tracking-widest font-black italic">© 2026 Bridge Markets. Todos los derechos reservados.</p>
+                <div class="flex gap-8">
+                    <a href="#" class="text-[10px] text-white/10 uppercase tracking-widest hover:text-white transition-colors font-black italic">Aviso Legal</a>
+                    <a href="#" class="text-[10px] text-white/10 uppercase tracking-widest hover:text-white transition-colors font-black italic">Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>`;
+}
+

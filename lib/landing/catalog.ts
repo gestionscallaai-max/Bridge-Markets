@@ -51,16 +51,26 @@ export const SECTION_CATALOG: LandingProduct[] = [
     { id: 'mc_footer', name: 'MAM & Copy: Footer', icon: 'dock', category: 'Official', description: 'Pie de página unificado', sourceTemplate: 3, defaultContent: {} },
 
     // ─── PRO LEVERAGE X12 (Blueprint 4) ──────────────────
-    { id: 'lx12_hero', name: 'LX12 Hero', icon: 'bolt', category: 'Official', description: 'Hero potente para apalancamiento x12.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_intro', name: 'LX12 Introducción', icon: 'rocket', category: 'Official', description: 'Explicación del multiplicador x12.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_pricing', name: 'LX12 Planes', icon: 'payments', category: 'Official', description: 'Costos y beneficios de las cuentas.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_example', name: 'LX12 Caso Éxito', icon: 'query_stats', category: 'Official', description: 'Ejemplo de operativa apalancada.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_rules', name: 'LX12 Reglas', icon: 'gavel', category: 'Official', description: 'Reglas del programa x12.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_withdrawals', name: 'LX12 Retiros', icon: 'account_balance_wallet', category: 'Official', description: 'Información de pagos y retiros.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_benefits', name: 'LX12 Beneficios', icon: 'auto_awesome', category: 'Official', description: 'Por qué elegir Leverage x12.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_community', name: 'LX12 Comunidad', icon: 'forum', category: 'Official', description: 'Acceso a grupos exclusivos.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_faq', name: 'LX12 FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas sobre x12.', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_final_cta', name: 'LX12 Final CTA', icon: 'login', category: 'Official', description: 'CTA final de registro.', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_hero', name: 'LX12: Hero', icon: 'bolt', category: 'Official', description: 'Hero potente para apalancamiento x12', sourceTemplate: 4, defaultContent: { ibPhrase: '', ctaText: 'Quiero mi cuenta apalancada' } },
+    { id: 'lx12_intro', name: 'LX12: Definición', icon: 'info', category: 'Official', description: 'Explicación del producto y comparativa', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_pricing', name: 'LX12: Tamaños', icon: 'payments', category: 'Official', description: 'Selector de cuentas apalancadas', sourceTemplate: 4, defaultContent: { ctaText: 'Comprar ahora' } },
+    { id: 'lx12_example', name: 'LX12: Ejemplo', icon: 'calculate', category: 'Official', description: 'Ejemplo visual de apalancamiento', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_rules', name: 'LX12: Reglas', icon: 'gavel', category: 'Official', description: 'Condiciones operativas oficiales', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_withdrawals', name: 'LX12: Retiros', icon: 'event_repeat', category: 'Official', description: 'Ventanas de retiro Día 3 / Día 45', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_benefits', name: 'LX12: Ventajas', icon: 'stars', category: 'Official', description: 'Beneficios clave del producto', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_community', name: 'LX12: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable del IB para LX12', sourceTemplate: 4, defaultContent: { 
+        communityMessage: 'Únete a nuestro ecosistema de traders apalancados. Aquí operamos con capital real desde el primer día.', 
+        photoUrl: '',
+        socialWhatsApp: '',
+        socialTelegram: '',
+        socialInstagram: '',
+        socialYouTube: '',
+        supportLabel: 'Soporte del IB',
+        ctaText: 'Habla con un asesor'
+    } },
+    { id: 'lx12_faq', name: 'LX12: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas frecuentes de apalancamiento', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_final_cta', name: 'LX12: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre con botones de compra', sourceTemplate: 4, defaultContent: { ctaText: 'Activar mi cuenta X12' } },
+    { id: 'lx12_footer', name: 'LX12: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página temático LX12', sourceTemplate: 4, defaultContent: {} },
 
     // ─── INSTITUTIONAL (Blueprint 5) ─────────────────────
     { id: 'inst_hero', name: 'Inst Hero Bold', icon: 'account_balance', category: 'Official', description: 'Hero institucional asimétrico y potente.', sourceTemplate: 5, defaultContent: {} },

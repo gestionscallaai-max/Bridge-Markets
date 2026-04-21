@@ -1,7 +1,7 @@
 import { BrandConfig } from '../types';
 import { renderPropHero, renderPropEducation, renderPropProgramsForex, renderPropProgramsSynthetic, renderPropSteps, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropFinalCTA, renderPropFooter, renderPropRegistration } from './propFirm';
 import { renderMamCopyHero, renderMamCopyNav, renderMamCopyIntro, renderMamBlock, renderCopyBlock, renderMamCopyComparison, renderMamCopyBenefits, renderMamCopySteps, renderMamCopyFAQ, renderMamCopyFinalCTA, renderMCCommunity, renderMCFooter, renderMCRegistration } from './mamCopy';
-import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA } from './proLeverage';
+import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA, renderLX12Footer } from './proLeverage';
 import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
 import { renderSNUHero, renderSNUMetrics, renderSNUUniversesIntro, renderSNUU1BM, renderSNUU2Deriv, renderSNUU3Welt, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUCTA, renderSNUFooter } from './syntheticUniverse';
 import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
@@ -50,6 +50,7 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     lx12_community: renderLX12Community,
     lx12_faq: renderLX12Faq,
     lx12_final_cta: renderLX12FinalCTA,
+    lx12_footer: renderLX12Footer,
 
     // INSTITUTIONAL
     inst_hero: renderInstHero,
