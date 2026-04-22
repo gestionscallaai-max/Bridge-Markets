@@ -591,17 +591,28 @@ export function renderPropRegistration(content: Record<string, any>, brand: Bran
             btn.innerText = '...';
             
             const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
+            const rawData = Object.fromEntries(formData.entries());
+            
+            // Map fields to match /api/leads expectation
+            const data = {
+                name: rawData.name,
+                email: rawData.email,
+                whatsapp: rawData.phone,
+                partnerId: rawData.partner_id,
+                landingSlug: "${brand.slug || 'default'}",
+                source: 'prop_firm_registration'
+            };
             
             try {
-                const res = await fetch('https://crm.bridgemarkets.global/api/register', {
+                const res = await fetch('/api/leads', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
                 if (res.ok) {
-                    window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partner_id;
+                    // Success: Redirect to portal
+                    window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partnerId;
                 } else {
                     alert('Error en el registro. Por favor intenta de nuevo.');
                     btn.disabled = false;
@@ -610,7 +621,7 @@ export function renderPropRegistration(content: Record<string, any>, brand: Bran
             } catch (err) {
                 console.error(err);
                 // Fallback to direct redirect if API fails
-                window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partner_id;
+                window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partnerId;
             }
         });
     </script>

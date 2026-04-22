@@ -355,27 +355,68 @@ export function renderPSContact(content: Record<string, any>, brand: BrandConfig
 
             <div class="max-w-5xl mx-auto bg-white p-16 md:p-24 rounded-[5rem] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.15)] relative z-10 border border-slate-100">
                 <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <input type="hidden" name="partner_id" value="${partnerId}">
+                    <input type="hidden" name="partnerId" value="${partnerId}">
+                    <input type="hidden" name="landingSlug" value="${brand.slug || 'default'}">
                     <div class="space-y-6">
                         <label class="text-[12px] font-black text-[#0C0027] uppercase tracking-[0.5em] opacity-40">Tu Nombre</label>
-                        <input type="text" placeholder="John Doe" class="w-full px-8 py-6 bg-slate-50 border-2 border-transparent rounded-3xl font-bold text-lg focus:border-[#865BFF] focus:bg-white outline-none transition-all">
+                        <input type="text" name="name" required placeholder="John Doe" class="w-full px-8 py-6 bg-slate-50 border-2 border-transparent rounded-3xl font-bold text-lg focus:border-[#865BFF] focus:bg-white outline-none transition-all">
                     </div>
                     <div class="space-y-6">
                         <label class="text-[12px] font-black text-[#0C0027] uppercase tracking-[0.5em] opacity-40">Email Corporativo</label>
-                        <input type="email" placeholder="john@company.com" class="w-full px-8 py-6 bg-slate-50 border-2 border-transparent rounded-3xl font-bold text-lg focus:border-[#865BFF] focus:bg-white outline-none transition-all">
+                        <input type="email" name="email" required placeholder="john@company.com" class="w-full px-8 py-6 bg-slate-50 border-2 border-transparent rounded-3xl font-bold text-lg focus:border-[#865BFF] focus:bg-white outline-none transition-all">
                     </div>
                     <div class="md:col-span-2 space-y-6">
                         <label class="text-[12px] font-black text-[#0C0027] uppercase tracking-[0.5em] opacity-40">Consulta Detallada</label>
-                        <textarea placeholder="Cuéntanos más sobre tu operativa..." rows="5" class="w-full px-8 py-6 bg-slate-50 border-2 border-transparent rounded-3xl font-bold text-lg focus:border-[#865BFF] focus:bg-white outline-none transition-all"></textarea>
+                        <textarea name="message" placeholder="Cuéntanos más sobre tu operativa..." rows="5" class="w-full px-8 py-6 bg-slate-50 border-2 border-transparent rounded-3xl font-bold text-lg focus:border-[#865BFF] focus:bg-white outline-none transition-all"></textarea>
                     </div>
                     <div class="md:col-span-2 pt-10">
-                        <button type="submit" class="w-full py-8 bg-[#0C0027] text-white font-black rounded-[2.5rem] text-2xl uppercase tracking-[0.2em] hover:bg-[#865BFF] shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                        <button type="submit" id="contact-submit-btn" class="w-full py-8 bg-[#0C0027] text-white font-black rounded-[2.5rem] text-2xl uppercase tracking-[0.2em] hover:bg-[#865BFF] shadow-2xl hover:-translate-y-2 transition-all duration-500">
                             Enviar Solicitud
                         </button>
                     </div>
                 </form>
             </div>
         </div>
+        <script>
+            document.getElementById("contact-form").addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("contact-submit-btn");
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Add a default source
+                data.source = 'propfirm_sinteticos_contact';
+                
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "PROCESANDO...";
+                
+                try {
+                    const res = await fetch("/api/leads", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (res.ok) {
+                        btn.textContent = "¡ENVIADO!";
+                        this.reset();
+                        setTimeout(() => {
+                            btn.disabled = false;
+                            btn.textContent = originalText;
+                        }, 3000);
+                    } else {
+                        throw new Error();
+                    }
+                } catch (err) {
+                    btn.textContent = "ERROR AL ENVIAR";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                    }, 3000);
+                }
+            });
+        </script>
     </section>`;
 }
 

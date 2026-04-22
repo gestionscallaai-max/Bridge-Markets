@@ -243,44 +243,26 @@ export default function LandingHistory({ partnerId, onEdit }: LandingHistoryProp
                             {/* Actions */}
                             <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 grid grid-cols-3 gap-2">
                                 <button 
-                                    onClick={() => landing.status !== 'rejected' && window.open(`/l/${landing.slug}`, '_blank')}
-                                    disabled={landing.status === 'rejected'}
-                                    className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
-                                        landing.status !== 'rejected' 
-                                            ? 'hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]' 
-                                            : 'opacity-40 cursor-not-allowed text-slate-400'
-                                    }`}
-                                    title={landing.status === 'rejected' ? 'Landing rechazada' : 'Ver Landing'}
+                                    onClick={() => window.open(`/l/${landing.slug}`, '_blank')}
+                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]"
+                                    title="Ver Landing"
                                 >
                                     <Eye className="w-4 h-4" />
                                     <span className="text-[10px] font-bold uppercase tracking-tight">Ver</span>
                                 </button>
                                 
                                 <button 
-                                    onClick={() => landing.status !== 'rejected' && handleCopyLink(landing.slug)}
-                                    disabled={landing.status === 'rejected'}
-                                    className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
-                                        landing.status !== 'rejected'
-                                            ? 'hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]'
-                                            : 'opacity-40 cursor-not-allowed text-slate-400'
-                                    }`}
-                                    title={landing.status === 'rejected' ? 'No disponible' : 'Copiar Link'}
+                                    onClick={() => handleCopyLink(landing.slug)}
+                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all hover:bg-white hover:shadow-sm text-slate-600 hover:text-[#865BFF]"
+                                    title="Copiar Link"
                                 >
                                     {copying === landing.slug ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                                     <span className="text-[10px] font-bold uppercase tracking-tight">Link</span>
                                 </button>
                                 <button 
-                                    onClick={() => (landing.status === 'rejected' || landing.status === 'approved') && onEdit && onEdit(landing)}
-                                    disabled={landing.status === 'pending'}
-                                    className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
-                                        landing.status !== 'pending'
-                                            ? 'hover:bg-slate-50 hover:shadow-sm text-slate-600 hover:text-indigo-500'
-                                            : 'opacity-40 cursor-not-allowed text-slate-400'
-                                    }`}
-                                    title={
-                                        landing.status === 'pending' ? 'No se puede editar mientras está en revisión' :
-                                        'Editar Landing'
-                                    }
+                                    onClick={() => onEdit && onEdit(landing)}
+                                    className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl hover:bg-slate-50 hover:shadow-sm transition-all text-slate-600 hover:text-indigo-500"
+                                    title="Editar Landing"
                                 >
                                     <Pencil className="w-4 h-4" />
                                     <span className="text-[9px] font-black uppercase">Editar</span>
