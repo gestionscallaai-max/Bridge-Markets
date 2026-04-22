@@ -50,9 +50,9 @@ export default function SuccessStep({
                     </motion.div>
                 </div>
 
-                <h2 className="text-4xl font-black text-slate-800 tracking-tight mb-4">{t.landing.deploySuccess}</h2>
+                <h2 className="text-4xl font-black text-slate-800 tracking-tight mb-4">{t.landing.landingGenerated}</h2>
                 <p className="text-slate-400 font-medium max-w-md mx-auto mb-10">
-                    {t.landing.deploySuccessDesc}
+                    {t.landing.landingReadyToShare}
                 </p>
 
                 <div className="max-w-2xl mx-auto p-2 bg-slate-50 rounded-[2rem] border border-slate-100 flex flex-col md:flex-row items-center gap-2 mb-12">
@@ -66,7 +66,7 @@ export default function SuccessStep({
                             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-600 font-black rounded-2xl hover:shadow-md transition-all text-xs uppercase tracking-widest border border-slate-100"
                         >
                             {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                            {copied ? t.common.copied : t.common.copyLink}
+                            {copied ? t.common.success : t.landing.copyLink}
                         </button>
                         <a
                             href={landingUrl}
@@ -74,7 +74,7 @@ export default function SuccessStep({
                             rel="noopener noreferrer"
                             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-[#865BFF] text-white font-black rounded-2xl hover:bg-[#7349e5] shadow-lg shadow-[#865BFF]/20 transition-all text-xs uppercase tracking-widest"
                         >
-                            <ExternalLink className="w-4 h-4" /> {t.common.viewNow}
+                            <ExternalLink className="w-4 h-4" /> {t.landing.viewLive}
                         </a>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function SuccessStep({
                         onClick={onReset}
                         className="flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-black transition-all text-xs uppercase tracking-widest"
                     >
-                        <Plus className="w-4 h-4" /> {t.landing.createNew}
+                        <Plus className="w-4 h-4" /> {t.landing.createAnother}
                     </button>
                     {onGoToHistory && (
                         <button
