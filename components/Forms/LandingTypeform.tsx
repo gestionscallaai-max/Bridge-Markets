@@ -21,7 +21,7 @@ import GenerateStep from '../Landing/LandingGenerator/Steps/GenerateStep';
 import SuccessStep from '../Landing/LandingGenerator/Steps/SuccessStep';
 import {
     generateLandingHTML, generateModularLandingHTML, openLandingPreview,
-    type LandingData, type ModularConfig, type BrandConfig
+    type LandingData, type ModularConfig, type BrandConfig, LANGUAGES
 } from '@/lib/landing-generator';
 import {
     SECTION_CATALOG, SECTION_CATEGORIES, SECTION_RENDERERS,
