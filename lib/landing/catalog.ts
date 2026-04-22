@@ -1,7 +1,9 @@
 import { SectionMeta } from './types';
 
+export const SECTION_CATEGORIES = ['Official', 'Community', 'Utility', 'Marketing'];
+
 export const SECTION_CATALOG: SectionMeta[] = [
-    // ... (other sections omitted for brevity if you want, but I'll provide the whole array for safety)
+    // Blueprints para PropFirm (Blueprint 2)
     { id: 'prop_hero', name: 'PropFirm: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero oficial de cuentas fondeadas', sourceTemplate: 2, defaultContent: { ibPhrase: '', ctaText: 'Comenzar ahora', ctaUrl: '' } },
     { id: 'prop_about', name: 'PropFirm: Definición', icon: 'info', category: 'Official', description: '¿Qué es PropTrading? Explicación fija', sourceTemplate: 2, defaultContent: {} },
     { id: 'prop_matrix_forex', name: 'PropFirm: Forex Matrix', icon: 'grid_view', category: 'Official', description: 'Tabla comparativa de retos Forex', sourceTemplate: 2, defaultContent: {} },
@@ -69,7 +71,7 @@ export const SECTION_CATALOG: SectionMeta[] = [
     { id: 'snu_cta', name: 'SNU: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional SNU', sourceTemplate: 6, defaultContent: { ctaText: 'Empezar ahora', ctaUrl: '' } },
     { id: 'snu_footer', name: 'SNU: Pie de página', icon: 'bottom_panel_open', category: 'Official', description: 'Pie corporativo con atribución IB', sourceTemplate: 6, defaultContent: {} },
 
-    // Blueprints para Índices Sintéticos (Blueprint 8 - EL QUE ESTAMOS REFACTORIZANDO)
+    // Blueprints para Índices Sintéticos (Blueprint 8)
     { id: 'sp_hero', name: 'SP: Hero Oficial', icon: 'rocket_launch', category: 'Official', description: 'Hero institucional de sintéticos', sourceTemplate: 8, defaultContent: { 
         communityName: '',
         ibPhrase: '', 

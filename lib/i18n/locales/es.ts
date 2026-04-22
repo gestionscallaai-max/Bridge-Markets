@@ -129,7 +129,6 @@ export const es: TranslationKeys = {
         fullName: 'Nombre completo', whatsapp: 'WhatsApp', email: 'Correo electrónico',
         landingType: 'Tipo de landing', generating: 'Generando...',
         generatedTitle: '¡Landing generada!', generatedSubtitle: 'Tu página está lista para compartir',
-        generatedSubtitle: 'Tu página está lista para compartir',
         landingLang: 'Idioma de la landing', history: 'Ver mis guardadas', changeLangHint: 'Cambiar idioma de la landing',
         digitalIdentity: 'Identidad Digital', officialInfo: 'Información oficial que aparecerá en tu landing',
         publicName: 'Nombre Público', publicNamePlaceholder: 'Tu nombre o marca personal',
