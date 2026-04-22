@@ -69,9 +69,11 @@ function SectionCard({
     const [expanded, setExpanded] = useState(false);
     const content = { ...section.defaultContent, ...overrides };
 
-    // Get editable string and array fields from content
+    // Get editable string and array fields from content, excluding redundant brand/social fields
     const editableFields = Object.entries(content).filter(
-        ([, v]) => typeof v === 'string' || Array.isArray(v)
+        ([key, v]) => (typeof v === 'string' || Array.isArray(v)) && 
+                      !key.startsWith('social') && 
+                      !['communityName', 'communityMessage', 'welcomeMsg', 'heroPhrase', 'ibPhrase'].includes(key)
     );
 
     return (
@@ -199,10 +201,19 @@ function SectionPicker({
 }) {
     const { t } = useLanguage();
     const [filterCat, setFilterCat] = useState<SectionCategory | 'all'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filterTemplate, setFilterTemplate] = useState<number | 'all'>('all');
 
-    const filtered = filterCat === 'all'
-        ? SECTION_CATALOG
-        : SECTION_CATALOG.filter(s => s.category === filterCat);
+    const filtered = SECTION_CATALOG.filter(section => {
+        const matchesCat = filterCat === 'all' || section.category === filterCat;
+        const matchesTemplate = filterTemplate === 'all' || section.sourceTemplate === filterTemplate;
+        const matchesSearch = section.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                             section.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                             section.id.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCat && matchesTemplate && matchesSearch;
+    });
+
+    const templates = Array.from(new Set(SECTION_CATALOG.map(s => s.sourceTemplate))).sort((a, b) => a - b);
 
     return (
         <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4 md:p-8">
@@ -248,58 +259,100 @@ function SectionPicker({
 
                 {/* Right Side Content Area */}
                 <div className="flex-1 flex flex-col relative z-10 bg-white">
-                    {/* Header */}
-                    <div className="flex justify-between items-center px-8 py-6 border-b border-slate-100 backdrop-blur-md sticky top-0 z-20 bg-white/80">
-                        <div>
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.landing.showingResults}</span>
-                            <h4 className="text-lg font-bold text-slate-800 mt-1">
-                                {filterCat === 'all' ? t.landing.completeCatalog : SECTION_CATEGORIES[filterCat as string].label}
-                            </h4>
+                    {/* Header with Search */}
+                    <div className="px-8 py-6 border-b border-slate-100 backdrop-blur-md sticky top-0 z-20 bg-white/80 space-y-4">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{t.landing.showingResults} ({filtered.length})</span>
+                                <h4 className="text-lg font-bold text-slate-800 mt-1">
+                                    {filterCat === 'all' ? t.landing.completeCatalog : SECTION_CATEGORIES[filterCat as string].label}
+                                </h4>
+                            </div>
+                            <button onClick={onClose} className="p-3 bg-slate-100 rounded-2xl hover:bg-slate-200 hover:rotate-90 text-slate-500 hover:text-slate-800 transition-all duration-300">
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
-                        <button onClick={onClose} className="p-3 bg-slate-100 rounded-2xl hover:bg-slate-200 hover:rotate-90 text-slate-500 hover:text-slate-800 transition-all duration-300">
-                            <X className="w-5 h-5" />
-                        </button>
+
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <div className="flex-1 relative group">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 group-focus-within:text-[#865BFF] transition-colors">search</span>
+                                <input 
+                                    type="text"
+                                    placeholder="Buscar por nombre o descripción..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full bg-slate-100 border border-transparent focus:border-[#865BFF]/20 focus:bg-white rounded-2xl py-3.5 pl-12 pr-4 text-sm outline-none transition-all font-medium"
+                                />
+                            </div>
+                            <div className="flex gap-2">
+                                <select 
+                                    value={filterTemplate}
+                                    onChange={(e) => setFilterTemplate(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                                    className="bg-slate-100 border border-transparent focus:border-[#865BFF]/20 rounded-2xl px-4 py-3.5 text-xs font-bold outline-none cursor-pointer hover:bg-slate-200 transition-all"
+                                >
+                                    <option value="all">Todos los Blueprints</option>
+                                    {templates.map(num => (
+                                        <option key={num} value={num}>Blueprint L{num}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Section Grid */}
                     <div className="flex-1 overflow-y-auto p-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {filtered.map(section => {
                                 const isAlready = alreadySelected.includes(section.id);
                                 return (
-                                    <div
+                                    <motion.div
                                         key={section.id}
-                                        className={`group relative overflow-hidden flex flex-col justify-between p-6 rounded-[28px] border transition-all duration-500 ease-out ${
+                                        layout
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        whileHover={!isAlready ? { y: -8, transition: { duration: 0.2 } } : {}}
+                                        className={`group relative overflow-hidden flex flex-col justify-between p-8 rounded-[32px] border transition-all duration-500 ${
                                             isAlready
-                                                ? 'border-brand-purple/20 bg-brand-purple/5 shadow-sm cursor-not-allowed'
-                                                : 'border-slate-200 bg-white hover:border-brand-purple/40 cursor-pointer hover:-translate-y-1 shadow-sm hover:shadow-xl hover:shadow-brand-purple/10'
+                                                ? 'border-brand-purple/10 bg-brand-purple/[0.02] opacity-60 cursor-not-allowed'
+                                                : 'border-slate-200 bg-white hover:border-brand-purple/40 cursor-pointer shadow-sm hover:shadow-2xl hover:shadow-brand-purple/10'
                                         }`}
                                         onClick={() => !isAlready && onAdd(section.id)}
                                     >
                                         <div className="flex items-start justify-between relative z-10 mb-6">
-                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${isAlready ? 'bg-brand-purple text-white' : 'bg-slate-50 text-brand-purple border border-slate-100 group-hover:scale-110 group-hover:bg-brand-purple group-hover:text-white'}`}>
+                                            <div className={`w-16 h-16 rounded-[22px] flex items-center justify-center transition-all duration-700 ${isAlready ? 'bg-brand-purple text-white shadow-lg shadow-brand-purple/30' : 'bg-slate-50 text-brand-purple border border-slate-100 group-hover:scale-110 group-hover:bg-brand-purple group-hover:text-white shadow-sm'}`}>
                                                 <span className="material-symbols-outlined text-2xl">{section.icon}</span>
                                             </div>
-                                            {isAlready ? (
-                                                <div className="bg-white border border-brand-purple/30 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm">
-                                                    <Check className="w-3 h-3 text-brand-purple" />
-                                                    <span className="text-[9px] font-black tracking-widest text-brand-purple uppercase">{t.landing.sectionAdded}</span>
-                                                </div>
-                                            ) : (
-                                                <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center bg-slate-50 group-hover:border-brand-purple group-hover:bg-brand-purple transition-all duration-300">
-                                                    <Plus className="w-4 h-4 text-slate-400 group-hover:text-white" />
-                                                </div>
-                                            )}
-                                        </div>
-                                        
-                                        <div className="relative z-10">
-                                            <h4 className="text-base font-bold text-slate-800 mb-2 tracking-tight group-hover:text-brand-purple transition-colors">{t.sections[`${section.id}_name`] || section.name}</h4>
-                                            <p className="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors line-clamp-2">{t.sections[`${section.id}_desc`] || section.description}</p>
+                                            
+                                            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all duration-500 ${
+                                                isAlready ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-100 text-slate-400 group-hover:bg-brand-purple/10 group-hover:text-brand-purple'
+                                            }`}>
+                                                {isAlready ? (
+                                                    <><span className="material-symbols-outlined text-[12px]">check_circle</span> {t.landing.sectionAdded || 'Añadida'}</>
+                                                ) : (
+                                                    <><span className="material-symbols-outlined text-[12px]">add_circle</span> {t.landing.available || 'Disponible'}</>
+                                                )}
+                                            </div>
                                         </div>
 
-                                        {/* Hover geometric decoration */}
-                                        <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-gradient-to-tl from-brand-purple/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl"></div>
-                                    </div>
+                                        <div className="relative z-10">
+                                            <h5 className="font-black text-slate-800 uppercase tracking-tight text-lg mb-2 group-hover:text-brand-purple transition-colors">
+                                                {t.sections[`${section.id}_name`] || section.name}
+                                            </h5>
+                                            <p className="text-xs text-slate-500 font-medium leading-relaxed mb-4 line-clamp-2 italic group-hover:text-slate-600 transition-colors">
+                                                {t.sections[`${section.id}_desc`] || section.description}
+                                            </p>
+                                            
+                                            <div className="flex items-center gap-3">
+                                                <span className="px-3 py-1 bg-slate-100 rounded-lg text-[9px] font-bold text-slate-500 uppercase tracking-wider group-hover:bg-brand-purple/5 transition-colors">Blueprint L{section.sourceTemplate}</span>
+                                                <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{section.id}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Decorative Background Icon */}
+                                        <div className="absolute -bottom-6 -right-6 opacity-[0.03] group-hover:opacity-[0.08] group-hover:scale-125 transition-all duration-1000">
+                                            <span className="material-symbols-outlined text-[120px]">{section.icon}</span>
+                                        </div>
+                                    </motion.div>
                                 );
                             })}
                         </div>

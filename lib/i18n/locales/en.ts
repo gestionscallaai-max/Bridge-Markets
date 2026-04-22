@@ -135,7 +135,7 @@ export const en: TranslationKeys = {
         contactEmail: 'Contact Email', brandSettings: 'Brand Settings',
         communityName: 'Community Name (Optional)', heroPhrase: 'Impact Phrase (Hero)',
         communityPlaceholder: 'E.g.: Wolf Trading Club', heroPlaceholder: 'E.g.: Your gateway to success',
-        channels: 'Communication Channels', ctaLinkLabel: 'Action Button (Custom Link)',
+        channels: 'Communication Channels', ctaLinkLabel: 'Your Referral Link (Bridge Markets)',
         landingLanguageLabel: 'Landing Language', nextBtn: 'Next',
         step2Badge: 'Step 02 — Studio Designs', selectBlueprint: 'Select your Blueprint',
         selectBlueprintDesc: 'Choose a professional base designed for maximum conversion. You can edit each section in the next step.',
