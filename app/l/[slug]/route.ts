@@ -75,8 +75,8 @@ export async function GET(request: Request, { params }: { params: { slug: string
                 referer: referer,
                 source: searchParams.get('source') || 'direct',
                 country: country
-            }).then(({ error }) => {
-                if (error) console.error('Error tracking click in /l/[slug]:', error);
+            }).then((result) => {
+                if (result.error) console.error('Error tracking click in /l/[slug]:', result.error);
             });
         }
     } catch (e) {
