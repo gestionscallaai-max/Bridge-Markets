@@ -60,6 +60,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     const [step, setStep] = useState<Step>(initialTemplate ? 2 : 1);
     const [userId, setUserId] = useState('');
     const [partnerId, setPartnerId] = useState('');
+    const isInitialLoad = React.useRef(true);
 
     // Step 1: Basic Data
     const [fullName, setFullName] = useState('');
@@ -153,38 +154,58 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
         loadUser();
     }, []);
 
-    // When template is selected, pre-fill sections
+    // When template is selected, pre-fill sections ONLY if not the very first load of an edit
     useEffect(() => {
         if (selectedTemplate) {
+            // If we are editing, we skip the first run because editData effect will handle it
+            if (editData && isInitialLoad.current) {
+                isInitialLoad.current = false;
+                return;
+            }
+            
             const template = LANDING_TEMPLATES.find(t => t.id === selectedTemplate);
             if (template) {
                 setSelectedSections([...template.sections]);
                 setSectionOverrides({});
             }
         }
-    }, [selectedTemplate]);
+    }, [selectedTemplate, editData]);
 
     // Pre-select if initialTemplate or editData passed
     useEffect(() => {
         if (editData) {
             setStep(3); // Go straight to editor
-            setFullName(editData.fullName || editData.config?.fullName || '');
-            setCountry(editData.country || editData.config?.country || '');
-            setWhatsapp(editData.whatsapp || editData.config?.whatsapp || '');
-            setEmail(editData.email || editData.config?.email || '');
-            setCommunityName(editData.communityName || editData.config?.communityName || '');
-            setHeroPhrase(editData.heroPhrase || editData.config?.heroPhrase || '');
-            setInstagram(editData.instagram || editData.config?.instagram || '');
-            setTelegram(editData.telegram || editData.config?.telegram || '');
-            setTiktok(editData.tiktok || editData.config?.tiktok || '');
-            setYoutube(editData.youtube || editData.config?.youtube || '');
-            setCtaLink(editData.ctaLink || editData.config?.ctaLink || '');
-            setVideoUrl(editData.videoUrl || editData.config?.videoUrl || '');
-            setCustomLogoUrl(editData.customLogoUrl || editData.config?.customLogoUrl || '');
-            setLanguage(editData.config?.language || editData.language || 'ES');
-            setSelectedTemplate(editData.template_id || editData.landingType || '');
-            setSelectedSections(editData.sections || editData.modularConfig?.sections || []);
-            setSectionOverrides(editData.modularConfig?.overrides || editData.config?.sectionOverrides || {});
+            
+            // Handle both flat structure and nested 'data' structure from Supabase
+            const d = editData.data || editData;
+            const config = editData.config || d;
+            const modular = d.modularConfig || config.modularConfig || editData.modularConfig;
+
+            setFullName(d.fullName || config.fullName || editData.fullName || '');
+            setCountry(d.country || config.country || editData.country || '');
+            setWhatsapp(d.whatsapp || config.whatsapp || editData.whatsapp || '');
+            setEmail(d.email || config.email || editData.email || '');
+            setCommunityName(d.communityName || config.communityName || editData.communityName || '');
+            setHeroPhrase(d.heroPhrase || config.heroPhrase || editData.heroPhrase || '');
+            setInstagram(d.instagram || config.instagram || editData.instagram || '');
+            setTelegram(d.telegram || config.telegram || editData.telegram || '');
+            setTiktok(d.tiktok || config.tiktok || editData.tiktok || '');
+            setYoutube(d.youtube || config.youtube || editData.youtube || '');
+            setCtaLink(d.ctaLink || config.ctaLink || editData.ctaLink || '');
+            setVideoUrl(d.videoUrl || config.videoUrl || editData.videoUrl || '');
+            setCustomLogoUrl(d.customLogoUrl || config.customLogoUrl || editData.customLogoUrl || '');
+            setLanguage(editData.language || d.language || config.language || 'ES');
+            
+            // Handle template ID mapping (database uses landing_type)
+            setSelectedTemplate(editData.landing_type || editData.template_id || editData.landingType || '');
+            
+            // Handle modular sections mapping
+            const sections = editData.sections || modular?.sections || [];
+            if (sections.length > 0) {
+                setSelectedSections(sections);
+            }
+            
+            setSectionOverrides(modular?.overrides || config.sectionOverrides || {});
         } else if (initialTemplate) {
             setSelectedTemplate(initialTemplate);
             setStep(2);
