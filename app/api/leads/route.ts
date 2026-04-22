@@ -16,16 +16,18 @@ const getSupabaseAdmin = () => {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name, email, whatsapp, phone, landingSlug, partnerId, clickId, countryCode, source } = body;
+        const { name, email, whatsapp, phone, landingSlug, partnerId, clickId, countryCode, source, message } = body;
 
         if (!name || !email) {
             return NextResponse.json({ success: false, error: 'Name and email are required' }, { status: 400 });
         }
 
-        const supabaseAdmin = getSupabaseAdmin();
-        if (!supabaseAdmin) {
-            console.error('Supabase Admin client not initialized');
-            return NextResponse.json({ success: false, error: 'Server configuration error' }, { status: 500 });
+        let supabaseClient = getSupabaseAdmin();
+        const isAdmin = !!supabaseClient;
+        
+        if (!supabaseClient) {
+            console.warn('Supabase Admin client not initialized (Service Role Key missing). Falling back to standard client.');
+            supabaseClient = supabase;
         }
 
         // Detectar país desde headers si no viene en el body
@@ -34,8 +36,8 @@ export async function POST(request: Request) {
                                request.headers.get('cf-ipcountry') || 
                                null;
 
-        // 1. Guardar el Lead en Supabase usando Admin para bypass RLS
-        const { error } = await supabaseAdmin
+        // 1. Guardar el Lead en Supabase
+        const { error } = await supabaseClient
             .from('leads')
             .insert({
                 name,
@@ -45,12 +47,18 @@ export async function POST(request: Request) {
                 partner_id: partnerId,
                 click_id: clickId || null,
                 country: detectedCountry,
-                source: source || 'direct'
+                source: source || 'direct',
+                message: message || null
             });
 
         if (error) {
             console.error('Error insertando lead en Supabase:', error);
-            throw error;
+            return NextResponse.json({ 
+                success: false, 
+                error: error.message,
+                details: error.details,
+                hint: error.hint
+            }, { status: 500 });
         }
 
         // 2. Disparo de Webhook (si está configurado)
@@ -72,8 +80,11 @@ export async function POST(request: Request) {
         }
         
         return NextResponse.json({ success: true, message: 'Lead captured successfully' });
-    } catch (e) {
+    } catch (e: any) {
         console.error('Error al capturar lead:', e);
-        return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+        return NextResponse.json({ 
+            success: false, 
+            error: e.message || 'Internal server error' 
+        }, { status: 500 });
     }
 }
