@@ -1,6 +1,13 @@
 import { SectionMeta } from './types';
 
-export const SECTION_CATEGORIES = ['Official', 'Community', 'Utility', 'Marketing'];
+export type SectionCategory = 'Official' | 'Community' | 'Utility' | 'Marketing';
+
+export const SECTION_CATEGORIES: Record<string, { label: string; icon: string }> = {
+    'Official': { label: 'Oficial', icon: 'verified_user' },
+    'Community': { label: 'Comunidad', icon: 'groups' },
+    'Utility': { label: 'Utilidad', icon: 'build' },
+    'Marketing': { label: 'Marketing', icon: 'campaign' }
+};
 
 export const SECTION_CATALOG: SectionMeta[] = [
     // Blueprints para PropFirm (Blueprint 2)
