@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // Lazy initialization of the admin client to avoid build-time errors
 let _supabaseAdmin: any = null;
@@ -41,6 +42,9 @@ export async function GET(request: Request, { params }: { params: { slug: string
     if (!data) {
         return new NextResponse('Landing Not Found', { status: 404 });
     }
+
+    // DEBUG: Ver qué estado está leyendo realmente el servidor
+    console.log(`[DEBUG] PUBLIC ROUTE - Slug: ${slug}, Status read: "${data.status}"`);
 
     // ─── Click Tracking Logic ───
     try {
@@ -84,23 +88,26 @@ export async function GET(request: Request, { params }: { params: { slug: string
         return renderBlockPage('Landing no encontrada', 'El enlace que intentas visitar no existe o aún no ha sido procesado por el sistema.', 'rose', slug);
     }
 
+    // Normalizar estado (limpiar posibles espacios)
+    const currentStatus = (data.status || 'pending').trim().toLowerCase();
+
     // Priority: Approved status
-    if (data.status === 'approved') {
+    if (currentStatus === 'approved') {
         return new NextResponse(data.html, {
             headers: { 'Content-Type': 'text/html; charset=utf-8' }
         });
     }
 
     // Block logic for other statuses
-    if (data.status === 'pending') {
+    if (currentStatus === 'pending') {
         return renderBlockPage('Página en Revisión', 'Esta landing page está siendo verificada por nuestro equipo de seguridad para garantizar que cumple con los estándares de Bridge Markets.', 'amber', slug);
     }
 
-    if (data.status === 'rejected') {
+    if (currentStatus === 'rejected') {
         return renderBlockPage('Acción Requerida', 'Esta página requiere correcciones antes de ser publicada. Por favor, revisa tu panel de socio para ver las observaciones.', 'rose', slug);
     }
 
-    return renderBlockPage('Acceso Restringido', `Esta página no está disponible en este momento.`, 'slate', slug);
+    return renderBlockPage('Acceso Restringido', `Esta página no está disponible en este momento (Estado: ${currentStatus}).`, 'slate', slug);
 }
 
 function renderBlockPage(title: string, message: string, color: 'rose' | 'amber' | 'slate' | 'indigo', slug: string) {

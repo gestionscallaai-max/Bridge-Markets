@@ -23,7 +23,7 @@ if (!url || !key) {
 const supabase = createClient(url, key);
 
 async function check() {
-    const slug = 'institutional_mother-es-1776869703896';
+    const slug = 'institutional_mother-es-1776871122844';
     const { data, error } = await supabase
         .from('landings')
         .select('id, slug, status, created_at')
