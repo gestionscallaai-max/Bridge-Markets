@@ -21,7 +21,7 @@ export default function SuccessStep({
     onReset
 }: SuccessStepProps) {
     const { t } = useLanguage();
-    const landingUrl = `https://landings.bridgemarkets.com/${finalSlug}`;
+    const landingUrl = `https://bridgemarkets.com/l/${finalSlug}`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(landingUrl);

@@ -265,7 +265,7 @@ export default function OverviewPage() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 pb-10 relative">
             {/* Background Watermark */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none opacity-[0.03] grayscale select-none -translate-y-20 translate-x-20 overflow-hidden">
-                <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                <img src="/images/logo-para-fondos.png" alt="" className="w-full h-full object-contain" />
             </div>
 
             {/* ── Header Banner */}

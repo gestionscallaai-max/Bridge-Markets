@@ -180,7 +180,6 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
             key: 'reports', label: t.nav.reports, icon: FileBarChart, isSubmenu: true, roles: ['admin', 'partner', 'partner_view'],
             children: [
                 { href: '/dashboard/reports/clients', label: t.nav.clients },
-                { href: '/dashboard/reports/accounts', label: t.nav.accounts },
                 { href: '/dashboard/reports/stats', label: t.nav.stats },
             ]
         },
@@ -212,7 +211,6 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
     const getPageTitle = () => {
         if (pathname === '/dashboard/overview') return { main: t.overview.title, accent: t.overview.subtitle };
         if (pathname?.startsWith('/dashboard/reports/clients')) return { main: t.nav.reports + ' /', accent: t.nav.clients };
-        if (pathname?.startsWith('/dashboard/reports/accounts')) return { main: t.nav.reports + ' /', accent: t.nav.accounts };
         if (pathname?.startsWith('/dashboard/reports/stats')) return { main: t.nav.reports + ' /', accent: t.nav.stats };
         if (pathname?.startsWith('/dashboard/settings')) return { main: t.nav.settings, accent: '' };
         if (pathname?.startsWith('/dashboard/support')) return { main: t.nav.support, accent: '' };

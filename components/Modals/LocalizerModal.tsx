@@ -334,27 +334,6 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                                                 </div>
                                                 <img src={currentResult.image} className="w-full h-full object-cover" alt="Localized Result" />
                                                 
-                                                {/* Meta Info */}
-                                                <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/90 backdrop-blur-xl rounded-[28px] border border-slate-200 shadow-2xl animate-in slide-in-from-bottom-10 duration-1000">
-                                                    <div className="flex justify-between items-start">
-                                                        <div className="pr-4">
-                                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2">Copy Publicitario</label>
-                                                            <p className="text-[13px] text-slate-700 leading-relaxed font-bold line-clamp-3">
-                                                                {currentResult.translation?.socialCopy || "Activo publicitario adaptado para Bridge Markets."}
-                                                            </p>
-                                                        </div>
-                                                        <Button 
-                                                            onClick={() => {
-                                                                navigator.clipboard.writeText(currentResult.translation?.socialCopy || "");
-                                                                setCopied(true);
-                                                                setTimeout(() => setCopied(false), 2000);
-                                                            }}
-                                                            className={`p-3 rounded-xl transition-all duration-300 ${copied ? 'bg-emerald-50 text-emerald-500' : 'bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600'}`}
-                                                        >
-                                                            {copied ? <Check className="w-4.5 h-4.5" /> : <Copy className="w-4.5 h-4.5" />}
-                                                        </Button>
-                                                    </div>
-                                                </div>
                                             </div>
                                         ) : (
                                             <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
@@ -370,7 +349,7 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-slate-50/30 relative">
                                 <div className="absolute inset-0 opacity-[0.03] grayscale select-none pointer-events-none p-20">
-                                    <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                                    <img src="/images/logo-para-fondos.png" alt="" className="w-full h-full object-contain" />
                                 </div>
                                 
                                 <div className="w-28 h-28 bg-white rounded-[44px] border border-slate-200 flex items-center justify-center mb-8 relative group shadow-xl">

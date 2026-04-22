@@ -12,8 +12,14 @@ export async function GET(request: Request, { params }: { params: { slug: string
         .eq('slug', slug)
         .single();
     
-    if (error || !data) {
-        return new NextResponse('Not Found', { status: 404 });
+    if (error) {
+        console.error('Database error fetching landing:', error);
+        return new NextResponse(`Error: ${error.message}`, { status: 500 });
+    }
+
+    if (!data) {
+        console.warn(`Landing not found for slug: ${slug}`);
+        return new NextResponse('Landing Not Found', { status: 404 });
     }
 
     // ─── Click Tracking Logic ───

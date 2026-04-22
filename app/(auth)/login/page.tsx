@@ -107,7 +107,7 @@ export default function LoginPage() {
                 
                 {/* Large Background Watermark */}
                 <div className="absolute -left-20 -bottom-20 w-[600px] h-[600px] opacity-[0.05] grayscale brightness-0 invert pointer-events-none rotate-12">
-                    <img src="/images/LOGO PARA FONDOS.png" alt="" className="w-full h-full object-contain" />
+                    <img src="/images/logo-para-fondos.png" alt="" className="w-full h-full object-contain" />
                 </div>
 
                 {/* Content */}
@@ -118,7 +118,7 @@ export default function LoginPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="mx-auto mb-12"
                     >
-                        <img src="/images/logo BM blanco.png" alt="Bridge Markets" className="h-40 mx-auto object-contain drop-shadow-[0_0_30px_rgba(134,91,255,0.3)]" />
+                        <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" className="h-40 mx-auto object-contain drop-shadow-[0_0_30px_rgba(134,91,255,0.3)]" />
                     </motion.div>
 
                     <motion.div
