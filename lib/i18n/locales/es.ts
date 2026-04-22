@@ -70,7 +70,7 @@ export const es: TranslationKeys = {
         growth: 'Crec.',
         adminPanel: 'Panel Administrador',
         welcomePartner: 'Bienvenido, Partner',
-        realtimeData: 'Datos en tiempo real de tu actividad',
+        realtimeData: 'Datos en tiempo real de tu activity',
         adminStatLeads: 'Total Red - Leads',
         adminStatClicks: 'Total Clicks en Red',
         adminStatLandings: 'Landings Activas',
@@ -129,6 +129,7 @@ export const es: TranslationKeys = {
         fullName: 'Nombre completo', whatsapp: 'WhatsApp', email: 'Correo electrónico',
         landingType: 'Tipo de landing', generating: 'Generando...',
         generatedTitle: '¡Landing generada!', generatedSubtitle: 'Tu página está lista para compartir',
+        generatedSubtitle: 'Tu página está lista para compartir',
         landingLang: 'Idioma de la landing', history: 'Ver mis guardadas', changeLangHint: 'Cambiar idioma de la landing',
         digitalIdentity: 'Identidad Digital', officialInfo: 'Información oficial que aparecerá en tu landing',
         publicName: 'Nombre Público', publicNamePlaceholder: 'Tu nombre o marca personal',
@@ -273,8 +274,6 @@ export const es: TranslationKeys = {
         translateIA: 'Traducir con IA'
     },
     templates: {
-        synthetic_edu_name: 'Índices Sintéticos PRO V3 (FINAL)',
-        synthetic_edu_desc: 'La landing oficial definitiva de Bridge Markets. Diseño premium con elementos 3D y contenido institucional.',
         propfirm_pro_name: 'PropFirm (Cuentas fondeadas)',
         propfirm_pro_desc: 'Landing de alta conversión para los retos de PropFirm (Obsidian, Basalt, Elite, Ultra).',
         unified_copy_mam_name: 'Cuentas MAM y Copy Trading — Bridge Markets | Para uso de IBs',

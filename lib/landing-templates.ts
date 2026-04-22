@@ -132,30 +132,6 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         theme: 'dark',
     },
     {
-        id: 'bridge_v3_premium',
-        name: 'Índices Sintéticos PRO V3 (FINAL)',
-        category: 'Official',
-        description: 'La landing oficial definitiva de Bridge Markets. Diseño premium con elementos 3D y contenido institucional.',
-        sourceFile: 'Blueprint V3',
-        sections: [
-            'v3_header',
-            'v3_hero',
-            'v3_features',
-            'inst_about',
-            'inst_ecosystem',
-            'inst_tech',
-            'inst_workflow',
-            'v3_community',
-            'inst_faq',
-            'v3_footer'
-        ],
-        gradient: 'linear-gradient(135deg, #050505 0%, #0c0027 50%, #865BFF 100%)',
-        accentColor: '#865BFF',
-        badge: 'Premium',
-        badgeColor: '#865BFF',
-        theme: 'dark',
-    },
-    {
         id: 'synthetic_product_official',
         name: 'Índices Sintéticos — Bridge Markets | Para uso de IBs',
         category: 'Official',
@@ -174,10 +150,10 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
             'sp_final_cta',
             'sp_footer'
         ],
-        gradient: 'linear-gradient(135deg, #000000 0%, #050515 50%, #4f46e5 100%)',
-        accentColor: '#6366f1',
+        gradient: 'linear-gradient(135deg, #050505 0%, #0a0a0a 50%, #10b981 100%)',
+        accentColor: '#10b981',
         badge: 'Official',
-        badgeColor: '#6366f1',
+        badgeColor: '#10b981',
         theme: 'dark',
     }
 ];
