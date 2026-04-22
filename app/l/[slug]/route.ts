@@ -109,8 +109,11 @@ export async function GET(request: Request, { params }: { params: { slug: string
                         </svg>
                     </div>
                     <h1 class="text-2xl font-black mb-4">Página en Revisión</h1>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
                         Esta landing page está siendo verificada por nuestro equipo de seguridad para garantizar que cumple con los estándares de la red. Estará disponible en breve.
+                    </p>
+                    <p class="text-[10px] text-slate-300 mb-8">
+                        Estado actual: <span class="font-bold text-[#865BFF] uppercase">${data.status}</span>
                     </p>
                     <div class="h-1 w-24 bg-indigo-100 mx-auto rounded-full mb-8">
                         <div class="h-full bg-[#865BFF] rounded-full w-1/3 animate-[spin_3s_linear_infinite]"></div>
