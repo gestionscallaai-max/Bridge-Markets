@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/lib/i18n/context';
 import {
-    Check, Smartphone, Monitor, AlertCircle
+    Check, Smartphone, Monitor, AlertCircle, User, Layout, Sparkles, Rocket, Globe, History as HistoryIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ModularPreview from '@/components/Landing/ModularPreview';
