@@ -70,6 +70,7 @@ export const ar: TranslationKeys = {
         growth: 'نمو',
         adminPanel: 'لوحة المسؤول',
         welcomePartner: 'مرحباً، شريك',
+        thisWeek: 'هذا الأسبوع',
         realtimeData: 'بيانات نشاطك في الوقت الفعلي',
         adminStatLeads: 'إجمالي الشبكة - العملاء المحتملون',
         adminStatClicks: 'نقرات الشبكة الإجمالية',
@@ -213,7 +214,7 @@ export const ar: TranslationKeys = {
         filters: 'فلاتر', exportLeads: 'تصدير العملاء', leadsIdentified: 'العملاء المحددون',
         colClientInfo: 'معلومات العميل', colContact: 'الاتصال', colStatus: 'الحالة',
         colOrigin: 'قناة المصدر', colDate: 'التاريخ', syncing: 'مزامنة قاعدة البيانات...',
-        noLeads: 'لم يتم اكتشاف عملاء', noLeadsDesc: 'سيظهر عملاؤك المستقبليون هنا بمجرد تفاعلهم مع موادك.',
+        noLeads: 'لم يتم اكتشاف عملاء', noLeadsDesc: 'سيظهر عملاؤك المستقبليون هنا بمجرد تفاعلهم con موادك.',
         endOfRecords: 'نهاية السجلات الأخيرة', statusRegistered: 'مسجّل', statusFunded: 'ممول',
         accountsTitle: 'الحسابات التشغيلية', accountsSubtitle: 'راقب نشاط ووضع الإحالات المالي.',
         totalAccounts: 'إجمالي الحسابات', colHolder: 'صاحب الحساب', colContactDetails: 'تفاصيل الاتصال',
@@ -272,7 +273,7 @@ export const ar: TranslationKeys = {
         copyLink: 'Copy Link',
         translateIA: 'الترجمة بالذكاء الاصطناعي'
     },
-        templates: {
+    templates: {
         synthetic_edu_name: 'Synthetic Indices (Educational)',
         synthetic_edu_desc: 'Focused on explaining and educating about the synthetics market. Ideal to capture new traders.',
         propfirm_pro_name: 'PropFirm (Funded Accounts)',

@@ -273,6 +273,8 @@ export const es: TranslationKeys = {
         translateIA: 'Traducir con IA'
     },
     templates: {
+        synthetic_edu_name: 'Índices Sintéticos — Bridge Markets | Para uso de IBs',
+        synthetic_edu_desc: 'Landing institucional optimizada para la promoción de índices sintéticos con enfoque educativo.',
         propfirm_pro_name: 'PropFirm (Cuentas fondeadas)',
         propfirm_pro_desc: 'Landing de alta conversión para los retos de PropFirm (Obsidian, Basalt, Elite, Ultra).',
         unified_copy_mam_name: 'Cuentas MAM y Copy Trading — Bridge Markets | Para uso de IBs',
