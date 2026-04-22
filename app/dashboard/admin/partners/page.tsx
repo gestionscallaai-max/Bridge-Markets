@@ -21,6 +21,8 @@ export default function PartnersManagementPage() {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchPartners();
@@ -69,6 +71,16 @@ export default function PartnersManagementPage() {
         const { partner, targetRole } = showConfirmModal;
 
         try {
+            // Get current user to prevent self-demotion without warning
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user?.id === partner.id && targetRole !== 'admin') {
+                const proceed = window.confirm('Estás a punto de quitarte tus propios permisos de administrador. Perderás acceso a este panel inmediatamente. ¿Deseas continuar?');
+                if (!proceed) {
+                    setIsProcessing(false);
+                    return;
+                }
+            }
+
             const { error } = await supabase
                 .from('partners')
                 .update({ role: targetRole })
@@ -76,8 +88,14 @@ export default function PartnersManagementPage() {
             
             if (error) throw error;
             
+            // Success feedback
             setPartners(partners.map(p => p.id === partner.id ? { ...p, role: targetRole } : p));
             setShowConfirmModal({ show: false, partner: null, targetRole: '' });
+            
+            // If the user changed their own role, we might want to reload to update global context
+            if (user?.id === partner.id) {
+                window.location.reload();
+            }
         } catch (err) {
             alert('Error actualizando rol: ' + (err as any).message);
         } finally {
@@ -89,6 +107,17 @@ export default function PartnersManagementPage() {
         (p.name || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
         (p.email || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const totalPages = Math.ceil(filteredPartners.length / itemsPerPage);
+    const paginatedPartners = filteredPartners.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
 
     if (loading) {
         return (
@@ -145,7 +174,7 @@ export default function PartnersManagementPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
-                            {filteredPartners.map((partner, idx) => (
+                            {paginatedPartners.map((partner, idx) => (
                                 <motion.tr 
                                     key={partner.id} 
                                     initial={{ opacity: 0, x: -10 }}
@@ -244,12 +273,39 @@ export default function PartnersManagementPage() {
 
                 {/* Pagination */}
                 <div className="px-8 py-6 bg-slate-50/20 border-t border-slate-100/60 flex items-center justify-between">
-                    <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest italic">Mostrando <span className="text-slate-800">{filteredPartners.length}</span> socios institucionales</span>
+                    <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest italic">
+                        Mostrando <span className="text-slate-800">{paginatedPartners.length}</span> de <span className="text-slate-800">{filteredPartners.length}</span> socios
+                    </span>
                     <div className="flex items-center gap-3">
-                        <button className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-300 cursor-not-allowed transition-all">
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                            className={`p-2.5 rounded-xl bg-white border border-slate-200 transition-all ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:border-[#865BFF] hover:text-[#865BFF] shadow-sm'}`}
+                        >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <button className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-300 cursor-not-allowed transition-all">
+                        
+                        <div className="flex items-center gap-1">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                <button
+                                    key={page}
+                                    onClick={() => setCurrentPage(page)}
+                                    className={`w-9 h-9 rounded-xl text-[11px] font-black transition-all ${
+                                        currentPage === page 
+                                            ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
+                                            : 'bg-white text-slate-400 border border-slate-200 hover:border-slate-300'
+                                    }`}
+                                >
+                                    {page}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                            className={`p-2.5 rounded-xl bg-white border border-slate-200 transition-all ${currentPage === totalPages || totalPages === 0 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:border-[#865BFF] hover:text-[#865BFF] shadow-sm'}`}
+                        >
                             <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>

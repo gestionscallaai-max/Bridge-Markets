@@ -14,6 +14,8 @@ export default function AdminMasterLeadsPage() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterSource, setFilterSource] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchMasterLeads();
@@ -44,8 +46,19 @@ export default function AdminMasterLeadsPage() {
         l.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
         l.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (l.partners?.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        l.landing_slug.toLowerCase().includes(searchQuery.toLowerCase())
+        (l.landing_slug || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const totalPages = Math.ceil(filteredLeads.length / itemsPerPage);
+    const paginatedLeads = filteredLeads.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
 
     const exportToCSV = () => {
         const headers = ['Fecha', 'Lead', 'Email', 'WhatsApp', 'Socio', 'Landing'];
@@ -121,7 +134,7 @@ export default function AdminMasterLeadsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
-                            {filteredLeads.map((lead) => (
+                            {paginatedLeads.map((lead) => (
                                 <tr key={lead.id} className="hover:bg-slate-50/30 transition-colors group">
                                     <td className="px-6 py-5">
                                         <div className="flex flex-col gap-0.5">
@@ -175,6 +188,46 @@ export default function AdminMasterLeadsPage() {
                         <h3 className="text-slate-400 font-bold uppercase tracking-widest text-xs">No hay prospectos registrados</h3>
                     </div>
                 )}
+
+                {/* Pagination */}
+                <div className="px-8 py-6 bg-slate-50/20 border-t border-slate-100/60 flex items-center justify-between">
+                    <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest italic">
+                        Mostrando <span className="text-slate-800">{paginatedLeads.length}</span> de <span className="text-slate-800">{filteredLeads.length}</span> prospectos
+                    </span>
+                    <div className="flex items-center gap-3">
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                            className={`p-2.5 rounded-xl bg-white border border-slate-200 transition-all ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:border-[#865BFF] hover:text-[#865BFF] shadow-sm'}`}
+                        >
+                            <Download className="w-4 h-4 rotate-90 scale-x-[-1]" />
+                        </button>
+                        
+                        <div className="flex items-center gap-1">
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                <button
+                                    key={page}
+                                    onClick={() => setCurrentPage(page)}
+                                    className={`w-9 h-9 rounded-xl text-[11px] font-black transition-all ${
+                                        currentPage === page 
+                                            ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
+                                            : 'bg-white text-slate-400 border border-slate-200 hover:border-slate-300'
+                                    }`}
+                                >
+                                    {page}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages || totalPages === 0}
+                            className={`p-2.5 rounded-xl bg-white border border-slate-200 transition-all ${currentPage === totalPages || totalPages === 0 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:border-[#865BFF] hover:text-[#865BFF] shadow-sm'}`}
+                        >
+                            <Download className="w-4 h-4 -rotate-90" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );

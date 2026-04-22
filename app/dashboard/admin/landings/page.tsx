@@ -19,6 +19,8 @@ export default function AdminLandingApprovalPage() {
     const [previewContent, setPreviewContent] = useState<string>('');
     const [adminNotes, setAdminNotes] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchLandings();
@@ -80,6 +82,17 @@ export default function AdminLandingApprovalPage() {
         const matchesStatus = filterStatus === 'all' || l.status === filterStatus;
         return matchesSearch && matchesStatus;
     });
+
+    const totalPages = Math.ceil(filteredLandings.length / itemsPerPage);
+    const paginatedLandings = filteredLandings.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    // Reset to page 1 when search or filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery, filterStatus]);
 
     const pendingCount = landings.filter(l => l.status === 'pending').length;
 
@@ -175,7 +188,7 @@ export default function AdminLandingApprovalPage() {
                         <p className="text-slate-400 font-bold">No se encontraron landings</p>
                     </div>
                 ) : (
-                    filteredLandings.map(landing => (
+                    paginatedLandings.map(landing => (
                         <div key={landing.id} className="bg-white rounded-[24px] border border-slate-200/60 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group">
                             <div className="flex items-start gap-4 flex-1 min-w-0">
                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${
@@ -237,6 +250,46 @@ export default function AdminLandingApprovalPage() {
                         </div>
                     ))
                 )}
+            </div>
+
+            {/* Pagination */}
+            <div className="mt-8 px-8 py-6 bg-white rounded-[24px] border border-slate-200/60 shadow-sm flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest italic">
+                    Mostrando <span className="text-slate-800">{paginatedLandings.length}</span> de <span className="text-slate-800">{filteredLandings.length}</span> landings
+                </span>
+                <div className="flex items-center gap-3">
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                        className={`p-2.5 rounded-xl bg-white border border-slate-200 transition-all ${currentPage === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:border-[#865BFF] hover:text-[#865BFF] shadow-sm'}`}
+                    >
+                        <ChevronRight className="w-4 h-4 rotate-180" />
+                    </button>
+                    
+                    <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                            <button
+                                key={page}
+                                onClick={() => setCurrentPage(page)}
+                                className={`w-9 h-9 rounded-xl text-[11px] font-black transition-all ${
+                                    currentPage === page 
+                                        ? 'bg-[#865BFF] text-white shadow-lg shadow-[#865BFF]/20' 
+                                        : 'bg-white text-slate-400 border border-slate-200 hover:border-slate-300'
+                                }`}
+                            >
+                                {page}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages || totalPages === 0}
+                        className={`p-2.5 rounded-xl bg-white border border-slate-200 transition-all ${currentPage === totalPages || totalPages === 0 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:border-[#865BFF] hover:text-[#865BFF] shadow-sm'}`}
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
             {/* Review Modal */}

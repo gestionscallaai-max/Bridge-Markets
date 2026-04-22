@@ -95,7 +95,7 @@ BEGIN
     WHERE id = auth.uid() AND role = 'admin'
   );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- Partners: Sólo ven y editan su perfil (Admins ven todo)
 DROP POLICY IF EXISTS "Users can view their own partner profile" ON public.partners;

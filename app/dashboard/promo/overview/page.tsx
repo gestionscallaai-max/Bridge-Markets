@@ -377,14 +377,7 @@ export default function PromoMaterialsPage() {
                                     </div>
 
                                     {/* Non-selected CTA */}
-                                    {!isSelected && (
-                                        <button
-                                            onClick={() => setSelectedLanding(template.id)}
-                                            className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold text-[#865BFF] bg-[#865BFF]/5 hover:bg-[#865BFF]/10 transition-all border border-[#865BFF]/10"
-                                        >
-                                            <Link2 className="w-3.5 h-3.5" /> {t.gallery.copyLink} <ArrowRight className="w-3 h-3 ml-0.5" />
-                                        </button>
-                                    )}
+
                                 </div>
                             </div>
                         );
