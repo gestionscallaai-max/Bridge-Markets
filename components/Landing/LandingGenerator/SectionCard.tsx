@@ -29,8 +29,7 @@ export default function SectionCard({
     // Get editable string and array fields from content, excluding redundant brand/social fields
     const editableFields = Object.entries(content).filter(
         ([key, v]) => (typeof v === 'string' || Array.isArray(v)) && 
-                      !key.startsWith('social') && 
-                      !['communityName', 'communityMessage', 'welcomeMsg', 'heroPhrase', 'ibPhrase'].includes(key)
+                      !key.startsWith('social')
     );
 
     return (

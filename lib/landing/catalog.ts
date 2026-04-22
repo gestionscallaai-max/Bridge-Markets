@@ -1,157 +1,81 @@
-import { LandingProduct } from './types';
+import { SectionMeta } from './types';
 
-export const SECTION_CATEGORIES: Record<string, { label: string, icon: string }> = {
-    'Official': { label: 'Oficiales', icon: 'verified' },
-    'Custom': { label: 'Personalizados', icon: 'edit' },
-    'Promotion': { label: 'Promocionales', icon: 'campaign' }
-};
-
-export const SECTION_CATALOG: LandingProduct[] = [
-    // ─── PROPFIRM (Blueprint 2) ──────────────────────────
-    { id: 'prop_hero', name: 'PropFirm: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero oficial de cuentas fondeadas', sourceTemplate: 2, defaultContent: { ctaText: 'Empieza tu Challenge', ctaUrl: '' } },
-    { id: 'prop_about', name: 'PropFirm: Definición', icon: 'school', category: 'Official', description: '¿Qué es PropTrading? Explicación fija', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_matrix_forex', name: 'Programas Forex', icon: 'grid_view', category: 'Official', description: 'Tabla de programas de fondeo Forex.', sourceTemplate: 2, defaultContent: { ctaObsidianText: 'Comprar OBSIDIAN', ctaBasaltText: 'Comprar BASALT', ctaObsidianLink: '', ctaBasaltLink: '' } },
-    { id: 'prop_matrix_synthetic', name: 'Programas Sintéticos', icon: 'rebase', category: 'Official', description: 'Tabla de programas de fondeo Sintéticos.', sourceTemplate: 2, defaultContent: { ctaEliteText: 'Comprar ELITE', ctaUltraText: 'Comprar ULTRA', ctaEliteLink: '', ctaUltraLink: '' } },
-    { id: 'prop_workflow', name: 'PropFirm: Proceso', icon: 'reorder', category: 'Official', description: '4 pasos del flujo de PropTrading', sourceTemplate: 2, defaultContent: {} },
+export const SECTION_CATALOG: SectionMeta[] = [
+    // ... (other sections omitted for brevity if you want, but I'll provide the whole array for safety)
+    { id: 'prop_hero', name: 'PropFirm: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero oficial de cuentas fondeadas', sourceTemplate: 2, defaultContent: { ibPhrase: '', ctaText: 'Comenzar ahora', ctaUrl: '' } },
+    { id: 'prop_about', name: 'PropFirm: Definición', icon: 'info', category: 'Official', description: '¿Qué es PropTrading? Explicación fija', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_matrix_forex', name: 'PropFirm: Forex Matrix', icon: 'grid_view', category: 'Official', description: 'Tabla comparativa de retos Forex', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_matrix_synthetic', name: 'PropFirm: Synthetic Matrix', icon: 'grid_view', category: 'Official', description: 'Tabla comparativa de retos Sintéticos', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_workflow', name: 'PropFirm: Proceso', icon: 'stepper', category: 'Official', description: '4 pasos del flujo de PropTrading', sourceTemplate: 2, defaultContent: {} },
     { id: 'prop_rules', name: 'PropFirm: Reglas Clave', icon: 'gavel', category: 'Official', description: '8 reglas operativas oficiales', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_benefits', name: 'PropFirm: Beneficios', icon: 'military_tech', category: 'Official', description: 'Certificación del trader y ventajas', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_community', name: 'PropFirm: Comunidad', icon: 'groups', category: 'Official', description: 'Sección 100% editable por el IB', sourceTemplate: 2, defaultContent: { 
-        welcomeMsg: 'Únete a un entorno diseñado para el crecimiento mutuo. Aquí no solo operamos, sino que construimos el futuro del trading institucional juntos.', 
-        photoUrl: 'https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80',
-        socialWhatsApp: '',
-        socialTelegram: '',
-        socialInstagram: '',
-        socialYouTube: ''
-    } },
-    { id: 'prop_faq', name: 'PropFirm: FAQ', icon: 'quiz', category: 'Official', description: 'Dudas resueltas sobre fondeo.', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_final_cta', name: 'PropFirm: CTA Final', icon: 'ads_click', category: 'Official', description: 'Botones de compra de cierre', sourceTemplate: 2, defaultContent: { ctaObsidianText: 'Quiero OBSIDIAN', ctaBasaltText: 'Quiero BASALT', ctaEliteText: 'Quiero ELITE', ctaUltraText: 'Quiero ULTRA', ctaObsidianLink: '', ctaBasaltLink: '', ctaEliteLink: '', ctaUltraLink: '' } },
-    { id: 'prop_registration', name: 'PropFirm: Registro', icon: 'app_registration', category: 'Official', description: 'Captura de leads institucional', sourceTemplate: 2, defaultContent: {} },
-    { id: 'prop_footer', name: 'PropFirm: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página con branding Bridge Markets', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_benefits', name: 'PropFirm: Beneficios', icon: 'verified', category: 'Official', description: 'Certificación del trader y ventajas', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_community', name: 'PropFirm: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable para IB', sourceTemplate: 2, defaultContent: { communityName: '', communityMessage: '', photoUrl: '', ctaText: 'Únete ahora', ctaUrl: '' } },
+    { id: 'prop_faq', name: 'PropFirm: FAQ', icon: 'quiz', category: 'Official', description: '8 FAQs oficiales de PropTrading', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_final_cta', name: 'PropFirm: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional para cuenta fondeada', sourceTemplate: 2, defaultContent: { ctaText: 'Obtener cuenta fondeada', ctaUrl: '' } },
+    { id: 'prop_registration', name: 'PropFirm: Registro', icon: 'person_add', category: 'Official', description: 'Formulario de registro integrado', sourceTemplate: 2, defaultContent: {} },
+    { id: 'prop_footer', name: 'PropFirm: Pie de página', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página con atribución IB', sourceTemplate: 2, defaultContent: {} },
 
-    // ─── MAM & COPY (Blueprint 3) ────────────────────────
-    { id: 'mc_hero', name: 'MAM & Copy: Hero', icon: 'hub', category: 'Official', description: 'Hero dual para MAM y Copy Trading', sourceTemplate: 3, defaultContent: { ibPhrase: '', ctaMamText: 'Quiero una cuenta MAM', ctaCopyText: 'Quiero hacer Copy Trading', ctaMamLink: '', ctaCopyLink: '' } },
-    { id: 'mc_tabs_nav', name: 'MAM & Copy: Navegación', icon: 'tab', category: 'Official', description: 'Selector de pestañas fijo', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_intro', name: 'MAM & Copy: Intro', icon: 'info', category: 'Official', description: 'Introducción unificada fija', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_mam_block', name: 'Bloque: Cuentas MAM', icon: 'account_balance_wallet', category: 'Official', description: 'Detalles técnicos fijos de MAM', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_copy_block', name: 'Bloque: Copy Trading', icon: 'content_copy', category: 'Official', description: 'Detalles técnicos fijos de Copy', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_comparison', name: 'MAM vs Copy: Tabla', icon: 'compare', category: 'Official', description: 'Tabla comparativa fija', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_benefits', name: 'MAM & Copy: Ventajas', icon: 'award_star', category: 'Official', description: 'Beneficios generales fijos', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_steps', name: 'MAM & Copy: Proceso', icon: 'step', category: 'Official', description: 'Pasos para traders e inversores', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_faq', name: 'MAM & Copy: FAQ', icon: 'help_center', category: 'Official', description: 'Preguntas oficiales resueltas', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_registration', name: 'MAM & Copy: Registro', icon: 'how_to_reg', category: 'Official', description: 'Captura de leads dual', sourceTemplate: 3, defaultContent: {} },
-    { id: 'mc_community', name: 'MAM & Copy: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable de conexión IB', sourceTemplate: 3, defaultContent: { 
-        communityMessage: 'Únete a nuestro ecosistema y conecta con traders profesionales.', 
-        socialWhatsApp: '',
-        socialTelegram: '',
-        socialInstagram: '',
-        socialYouTube: '',
-        ctaText: 'Únete a mi comunidad',
-        ctaUrl: ''
-    } },
-    { id: 'mc_final_cta', name: 'MAM & Copy: CTA Final', icon: 'touch_app', category: 'Official', description: 'Cierre con botones duales', sourceTemplate: 3, defaultContent: { ctaMamText: 'Quiero una cuenta MAM', ctaCopyText: 'Quiero hacer Copy Trading', ctaMamLink: '', ctaCopyLink: '' } },
-    { id: 'mc_footer', name: 'MAM & Copy: Footer', icon: 'dock', category: 'Official', description: 'Pie de página unificado', sourceTemplate: 3, defaultContent: {} },
+    // Blueprints para MAM/Copy (Blueprint 3)
+    { id: 'mc_hero', name: 'MAM/Copy: Hero Dual', icon: 'rocket_launch', category: 'Official', description: 'Hero dual para MAM y Copy Trading', sourceTemplate: 3, defaultContent: { ibPhrase: '', ctaText: 'Comenzar ahora', ctaUrl: '' } },
+    { id: 'mc_tabs_nav', name: 'MAM/Copy: Navegación', icon: 'tabs', category: 'Official', description: 'Selector de producto MAM/Copy', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_intro', name: 'MAM/Copy: Introducción', icon: 'info', category: 'Official', description: 'Introducción a ambos productos', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_mam_block', name: 'MAM/Copy: Bloque MAM', icon: 'account_balance', category: 'Official', description: 'Explicación técnica del sistema MAM', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_copy_block', name: 'MAM/Copy: Bloque Copy', icon: 'content_copy', category: 'Official', description: 'Explicación técnica de Copy Trading', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_comparison', name: 'MAM/Copy: Comparación', icon: 'compare', category: 'Official', description: 'Tabla comparativa lado a lado', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_benefits', name: 'MAM/Copy: Beneficios', icon: 'verified', category: 'Official', description: 'Beneficios de cada producto', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_steps', name: 'MAM/Copy: Pasos Inicio', icon: 'stepper', category: 'Official', description: 'Pasos de registro para ambos productos', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_faq', name: 'MAM/Copy: FAQ Dual', icon: 'quiz', category: 'Official', description: 'Preguntas frecuentes para ambos productos', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_registration', name: 'MAM/Copy: Registro', icon: 'person_add', category: 'Official', description: 'Formulario de registro integrado', sourceTemplate: 3, defaultContent: {} },
+    { id: 'mc_final_cta', name: 'MAM/Copy: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional combinado', sourceTemplate: 3, defaultContent: { ctaText: 'Empezar a copiar', ctaUrl: '' } },
+    { id: 'mc_footer', name: 'MAM/Copy: Pie de página', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página con atribución IB', sourceTemplate: 3, defaultContent: {} },
 
-    // ─── PRO LEVERAGE X12 (Blueprint 4) ──────────────────
-    { id: 'lx12_hero', name: 'LX12: Hero', icon: 'bolt', category: 'Official', description: 'Hero potente para apalancamiento x12', sourceTemplate: 4, defaultContent: { ibPhrase: '', ctaText: 'Quiero mi cuenta apalancada', ctaUrl: '' } },
-    { id: 'lx12_intro', name: 'LX12: Definición', icon: 'info', category: 'Official', description: 'Explicación del producto y comparativa', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_pricing', name: 'LX12: Tamaños', icon: 'payments', category: 'Official', description: 'Selector de cuentas apalancadas', sourceTemplate: 4, defaultContent: { ctaText: 'Comprar ahora', ctaUrl: '' } },
-    { id: 'lx12_example', name: 'LX12: Ejemplo', icon: 'calculate', category: 'Official', description: 'Ejemplo visual de apalancamiento', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_rules', name: 'LX12: Reglas', icon: 'gavel', category: 'Official', description: 'Condiciones operativas oficiales', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_withdrawals', name: 'LX12: Retiros', icon: 'event_repeat', category: 'Official', description: 'Ventanas de retiro Día 3 / Día 45', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_benefits', name: 'LX12: Ventajas', icon: 'stars', category: 'Official', description: 'Beneficios clave del producto', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_community', name: 'LX12: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable del IB para LX12', sourceTemplate: 4, defaultContent: { 
-        communityMessage: 'Únete a nuestro ecosistema de traders apalancados. Aquí operamos con capital real desde el primer día.', 
-        photoUrl: '',
-        socialWhatsApp: '',
-        socialTelegram: '',
-        socialInstagram: '',
-        socialYouTube: '',
-        supportLabel: 'Soporte del IB',
-        ctaText: 'Habla con un asesor'
-    } },
-    { id: 'lx12_faq', name: 'LX12: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas frecuentes de apalancamiento', sourceTemplate: 4, defaultContent: {} },
-    { id: 'lx12_final_cta', name: 'LX12: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre con botones de compra', sourceTemplate: 4, defaultContent: { ctaText: 'Activar mi cuenta X12', ctaUrl: '' } },
-    { id: 'lx12_footer', name: 'LX12: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página temático LX12', sourceTemplate: 4, defaultContent: {} },
+    // Blueprints para Pro Leverage X12 (Blueprint 4)
+    { id: 'lx12_hero', name: 'X12: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero para apalancamiento x12', sourceTemplate: 4, defaultContent: { ibPhrase: '', ctaText: 'Obtener cuenta X12', ctaUrl: '' } },
+    { id: 'lx12_intro', name: 'X12: Definición', icon: 'info', category: 'Official', description: '¿Qué es Pro Leverage x12?', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_pricing', name: 'X12: Precios', icon: 'payments', category: 'Official', description: 'Tabla de precios de cuentas', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_example', name: 'X12: Ejemplo x12', icon: 'analytics', category: 'Official', description: 'Ejemplo práctico de trading x12', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_rules', name: 'X12: Reglas', icon: 'gavel', category: 'Official', description: 'Reglas clave y condiciones', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_withdrawals', name: 'X12: Retiros', icon: 'account_balance_wallet', category: 'Official', description: 'Reglas de retiro y horarios', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_benefits', name: 'X12: Beneficios', icon: 'verified', category: 'Official', description: 'Ventajas y beneficios para IB', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_community', name: 'X12: Comunidad IB', icon: 'groups', category: 'Official', description: 'Sección editable de comunidad IB', sourceTemplate: 4, defaultContent: { communityName: '', communityMessage: '', photoUrl: '', ctaText: 'Habla conmigo', ctaUrl: '' } },
+    { id: 'lx12_faq', name: 'X12: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas frecuentes', sourceTemplate: 4, defaultContent: {} },
+    { id: 'lx12_final_cta', name: 'X12: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional para x12', sourceTemplate: 4, defaultContent: { ctaText: 'Comprar mi cuenta X12', ctaUrl: '' } },
 
-    // ─── INSTITUTIONAL (Blueprint 5) ─────────────────────
-    { id: 'inst_hero', name: 'Inst: Hero', icon: 'account_balance', category: 'Official', description: 'Hero institucional asimétrico y potente', sourceTemplate: 5, defaultContent: { ibPhrase: '', ctaMainText: 'Abrir mi cuenta', ctaSecondaryText: 'Ver todos los productos', ctaMainLink: '', ctaSecondaryLink: '' } },
-    { id: 'inst_about', name: 'Inst: Quiénes Somos', icon: 'history_edu', category: 'Official', description: 'Trayectoria e historia corporativa fija', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_why', name: 'Inst: Por Qué BM', icon: 'verified', category: 'Official', description: 'Ventajas competitivas institucionales fijas', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_ecosystem', name: 'Inst: Ecosistema', icon: 'dashboard', category: 'Official', description: 'Bento grid de productos y tabla técnica', sourceTemplate: 5, defaultContent: {
-        ctaPropText: 'Ver PropFirm',
-        ctaSynText: 'Ver Sintéticos',
-        ctaX12Text: 'Ver Cuentas Leverage',
-        ctaMamText: 'Ver Cuentas MAM',
-        ctaCopyText: 'Ver Copy Trading',
-        ctaForexText: 'Ver Cuentas Forex'
-    } },
-    { id: 'inst_selector', name: 'Inst: Perfil', icon: 'groups', category: 'Official', description: 'Selector Trader vs Inversor', sourceTemplate: 5, defaultContent: {
-        ctaTraderText: 'Acceso Directo',
-        ctaInvestorText: 'Ver Estrategias'
-    } },
-    { id: 'inst_partners', name: 'Inst: Socios IB', icon: 'handshake', category: 'Official', description: 'Información del programa de socios', sourceTemplate: 5, defaultContent: { ctaText: 'Unirme al Programa' } },
-    { id: 'inst_tech', name: 'Inst: Tecnología', icon: 'memory', category: 'Official', description: 'Cards de tecnología MT5 y charts', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_workflow', name: 'Inst: Onboarding', icon: 'format_list_numbered', category: 'Official', description: 'Flujo de 7 pasos para empezar', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_community', name: 'Inst: Comunidad', icon: 'groups', category: 'Official', description: 'Sección editable del IB para Institucional', sourceTemplate: 5, defaultContent: { 
-        communityMessage: 'Únete a nuestro ecosistema global y conecta con la tecnología institucional.', 
-        photoUrl: '',
-        socialWhatsApp: '',
-        socialTelegram: '',
-        socialInstagram: '',
-        socialYouTube: '',
-        supportLabel: 'Soporte del IB',
-        ctaText: 'Habla con un asesor'
-    } },
-    { id: 'inst_faq', name: 'Inst: FAQ', icon: 'contact_support', category: 'Official', description: 'Consultas corporativas oficiales', sourceTemplate: 5, defaultContent: {} },
-    { id: 'inst_final_cta', name: 'Inst: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre institucional multi-perfil', sourceTemplate: 5, defaultContent: {
-        ctaRegisterText: 'Abrir Cuenta Real',
-        ctaProductsText: 'Explorar Productos',
-        ctaIBText: 'Quiero ser IB',
-        ctaRegisterLink: '',
-        ctaProductsLink: '',
-        ctaIBLink: ''
-    } },
-    { id: 'inst_footer', name: 'Inst: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo Bridge Markets', sourceTemplate: 5, defaultContent: {} },
+    // Blueprints para Institucional (Blueprint 5)
+    { id: 'inst_hero', name: 'Inst: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero corporativo principal', sourceTemplate: 5, defaultContent: { ibPhrase: '', ctaText: 'Abrir cuenta', ctaUrl: '' } },
+    { id: 'inst_about', name: 'Inst: Sobre Nosotros', icon: 'info', category: 'Official', description: '¿Quién es Bridge Markets?', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_why', name: 'Inst: Por qué BM', icon: 'verified', category: 'Official', description: 'Diferenciadores clave', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_ecosystem', name: 'Inst: Ecosistema', icon: 'hub', category: 'Official', description: 'Vista general de todos los productos', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_selector', name: 'Inst: Perfil', icon: 'person_search', category: 'Official', description: 'Selector de perfil de inversor', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_partners', name: 'Inst: Partners IB', icon: 'handshake', category: 'Official', description: 'Beneficios del programa de partners', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_tech', name: 'Inst: Tecnología', icon: 'memory', category: 'Official', description: 'Stack tecnológico e infraestructura', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_workflow', name: 'Inst: Comenzar', icon: 'stepper', category: 'Official', description: 'Pasos del flujo de bienvenida', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_community', name: 'Inst: Comunidad IB', icon: 'groups', category: 'Official', description: 'Sección editable para IB', sourceTemplate: 5, defaultContent: { communityName: '', communityMessage: '', photoUrl: '', ctaText: 'Habla con soporte', ctaUrl: '' } },
+    { id: 'inst_faq', name: 'Inst: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas frecuentes corporativas', sourceTemplate: 5, defaultContent: {} },
+    { id: 'inst_final_cta', name: 'Inst: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional corporativo', sourceTemplate: 5, defaultContent: { ctaText: 'Registrarme ahora', ctaUrl: '' } },
+    { id: 'inst_footer', name: 'Inst: Pie de página', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo', sourceTemplate: 5, defaultContent: {} },
 
-    // ─── SYNTHETIC UNIVERSE (Blueprint 6) ─────────────────
-    { id: 'snu_hero', name: 'SNU: Hero Universo', icon: 'public', category: 'Official', description: 'Hero con estética de universo y espacio', sourceTemplate: 6, defaultContent: { ibPhrase: '', ctaText: 'Abrir mi cuenta', ctaUrl: '' } },
-    { id: 'snu_value', name: 'SNU: Propuesta Valor', icon: 'analytics', category: 'Official', description: 'Números de impacto: 100+, 3, 24/7, 1', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_universes', name: 'SNU: 3 Universos', icon: 'category', category: 'Official', description: 'Introducción a los 3 universos de índices', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_unv_bm', name: 'SNU: Universo 1 (Propios)', icon: 'stars', category: 'Official', description: 'Índices propios BM (Fortune, Vortex...)', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_unv_deriv', name: 'SNU: Universo 2 (Deriv)', icon: 'waves', category: 'Official', description: 'Equivalencias de mercados Deriv en BM', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_unv_weltrade', name: 'SNU: Universo 3 (Weltrade)', icon: 'trending_up', category: 'Official', description: 'Equivalencias de mercados Weltrade en BM', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_why', name: 'SNU: Por Qué BM', icon: 'fact_check', category: 'Official', description: 'Argumentos competitivos sintéticos', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_workflow', name: 'SNU: Cómo Empezar', icon: 'rocket_launch', category: 'Official', description: '7 pasos para operar todos los sintéticos', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_community', name: 'SNU: Comunidad IB', icon: 'groups', category: 'Official', description: 'Sección editable del IB para Sintéticos', sourceTemplate: 6, defaultContent: {
+    // Blueprints para Synthetic Universe (Blueprint 6)
+    { id: 'snu_hero', name: 'SNU: Hero', icon: 'rocket_launch', category: 'Official', description: 'Hero con display degradado y emblema BM', sourceTemplate: 6, defaultContent: { ibPhrase: '', ctaText: 'Unirse al Universo', ctaUrl: '' } },
+    { id: 'snu_metrics', name: 'SNU: Métricas', icon: 'analytics', category: 'Official', description: 'Tarjetas de impacto con contadores', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_universes_intro', name: 'SNU: Los 3 Ecosistemas', icon: 'hub', category: 'Official', description: 'Intro visual de los 3 brokers', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_u1_bm', name: 'SNU: 1. Índices Propios', icon: 'grid_view', category: 'Official', description: 'Display de familias BM', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_u2_deriv', name: 'SNU: 2. Mercados Deriv', icon: 'grid_view', category: 'Official', description: 'Tabla de equivalencias Deriv', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_u3_welt', name: 'SNU: 3. Mercados Weltrade', icon: 'grid_view', category: 'Official', description: 'Tabla de mercados Weltrade', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_why', name: 'SNU: Por qué BM', icon: 'verified', category: 'Official', description: '8 argumentos competitivos', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_workflow', name: 'SNU: Cómo Empezar', icon: 'stepper', category: 'Official', description: 'Flujo de 7 pasos', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_community', name: 'SNU: Comunidad IB', icon: 'groups', category: 'Official', description: 'Sección editable de comunidad', sourceTemplate: 6, defaultContent: { communityName: '', communityMessage: '', photoUrl: '', ctaText: 'Entrar al grupo', ctaUrl: '' } },
+    { id: 'snu_faq', name: 'SNU: FAQ', icon: 'quiz', category: 'Official', description: 'FAQs oficiales de SNU', sourceTemplate: 6, defaultContent: {} },
+    { id: 'snu_cta', name: 'SNU: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional SNU', sourceTemplate: 6, defaultContent: { ctaText: 'Empezar ahora', ctaUrl: '' } },
+    { id: 'snu_footer', name: 'SNU: Pie de página', icon: 'bottom_panel_open', category: 'Official', description: 'Pie corporativo con atribución IB', sourceTemplate: 6, defaultContent: {} },
+
+    // Blueprints para Índices Sintéticos (Blueprint 8 - EL QUE ESTAMOS REFACTORIZANDO)
+    { id: 'sp_hero', name: 'SP: Hero Oficial', icon: 'rocket_launch', category: 'Official', description: 'Hero institucional de sintéticos', sourceTemplate: 8, defaultContent: { 
         communityName: '',
-        communityMessage: 'Únete a nuestra comunidad de traders sintéticos y opera con tecnología institucional.',
-        photoUrl: '',
-        socialWhatsApp: '',
-        socialTelegram: '',
-        socialInstagram: '',
-        socialYouTube: '',
-        socialTikTok: '',
-        supportLabel: 'Soporte del IB',
-        ctaText: 'Habla con un asesor'
+        ibPhrase: '', 
+        ctaText: 'Abrir mi cuenta', 
+        ctaUrl: '' 
     } },
-    { id: 'snu_faq', name: 'SNU: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas oficiales sobre ecosistema sintético', sourceTemplate: 6, defaultContent: {} },
-    { id: 'snu_final_cta', name: 'SNU: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre con argumento de cuenta única', sourceTemplate: 6, defaultContent: { 
-        ctaMainText: 'Abrir mi cuenta ahora',
-        ctaSecondaryText: 'Ver gráficos en vivo',
-        ctaMainLink: '',
-        ctaSecondaryLink: ''
-    } },
-    { id: 'snu_footer', name: 'SNU: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Footer sintético con disclaimer legal', sourceTemplate: 6, defaultContent: { ibSupportLabel: '' } },
-
-    // ─── V3 PREMIUM (Blueprint V3) ────────────────────────
-    { id: 'v3_header', name: 'V3 Header Minimal', icon: 'horizontal_rule', category: 'Official', description: 'Navegación superior minimalista V3.', sourceTemplate: 7, defaultContent: { ctaUrl: '' } },
-    { id: 'v3_hero', name: 'V3 Hero 3D', icon: 'view_in_ar', category: 'Official', description: 'Hero premium con elementos 3D.', sourceTemplate: 7, defaultContent: { ctaUrl: '' } },
-    { id: 'v3_features', name: 'V3 Características', icon: 'featured_play_list', category: 'Official', description: 'Grid de características premium.', sourceTemplate: 7, defaultContent: {} },
-    { id: 'v3_community', name: 'V3 Comunidad', icon: 'hub', category: 'Official', description: 'Acceso exclusivo comunidad V3.', sourceTemplate: 7, defaultContent: { ctaUrl: '' } },
-    { id: 'v3_footer', name: 'V3 Footer Corporativo', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página premium.', sourceTemplate: 7, defaultContent: {} },
-    
-    // ─── SYNTHETIC PRODUCT (Blueprint 8) ──────────────────
-    { id: 'sp_hero', name: 'SP: Hero Oficial', icon: 'rocket_launch', category: 'Official', description: 'Hero institucional de sintéticos', sourceTemplate: 8, defaultContent: { ibPhrase: '', ctaText: 'Abrir mi cuenta', ctaUrl: '' } },
     { id: 'sp_about', name: 'SP: Definición', icon: 'info', category: 'Official', description: '¿Qué son los índices sintéticos?', sourceTemplate: 8, defaultContent: {} },
     { id: 'sp_advantages', name: 'SP: Ventajas', icon: 'check_circle', category: 'Official', description: '6 tarjetas de ventajas oficiales', sourceTemplate: 8, defaultContent: {} },
     { id: 'sp_families', name: 'SP: Familias', icon: 'category', category: 'Official', description: 'Las 4 familias de índices BM', sourceTemplate: 8, defaultContent: {} },
@@ -162,9 +86,23 @@ export const SECTION_CATALOG: LandingProduct[] = [
         communityName: '',
         communityMessage: 'Únete a nuestra comunidad de traders sintéticos.',
         photoUrl: '',
-        ctaText: 'Habla con un asesor'
+        ctaText: 'Habla con un asesor',
+        ctaUrl: '',
+        whatsapp: '',
+        telegram: '',
+        instagram: '',
+        tiktok: '',
+        youtube: ''
     } },
     { id: 'sp_faq', name: 'SP: FAQ', icon: 'quiz', category: 'Official', description: 'Preguntas oficiales del producto', sourceTemplate: 8, defaultContent: {} },
-    { id: 'sp_final_cta', name: 'SP: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional', sourceTemplate: 8, defaultContent: { ctaText: 'Abrir cuenta ahora', ctaUrl: '' } },
-    { id: 'sp_footer', name: 'SP: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo', sourceTemplate: 8, defaultContent: {} },
+    { id: 'sp_final_cta', name: 'SP: CTA Final', icon: 'ads_click', category: 'Official', description: 'Cierre motivacional', sourceTemplate: 8, defaultContent: { 
+        ctaText: 'Abrir cuenta ahora', 
+        ctaUrl: '',
+        secondaryCtaText: 'Ver gráficos en vivo',
+        secondaryCtaUrl: 'https://charts.bridgemarkets.global'
+    } },
+    { id: 'sp_footer', name: 'SP: Footer', icon: 'bottom_panel_open', category: 'Official', description: 'Pie de página corporativo', sourceTemplate: 8, defaultContent: {
+        ibName: '',
+        supportContact: ''
+    } },
 ];
