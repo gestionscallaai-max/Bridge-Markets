@@ -3,17 +3,31 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-// Initialize admin client to bypass RLS for public landing resolution
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+// Lazy initialization of the admin client to avoid build-time errors
+let _supabaseAdmin: any = null;
+const getSupabaseAdmin = () => {
+    if (_supabaseAdmin) return _supabaseAdmin;
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+    
+    if (!url || !key) {
+        // Return null instead of throwing to handle error gracefully in the handler
+        return null;
+    }
+    
+    _supabaseAdmin = createClient(url, key);
+    return _supabaseAdmin;
+};
 
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
     const { slug } = params;
     
-    // We use the admin client because public 'anon' key might not have permissions 
-    // to see the 'status' column due to RLS policies.
+    const supabaseAdmin = getSupabaseAdmin();
+    if (!supabaseAdmin) {
+        console.error('Supabase Admin Client could not be initialized (missing keys)');
+        return new NextResponse('Server Configuration Error', { status: 500 });
+    }
+
     const { data, error } = await supabaseAdmin
         .from('landings')
         .select('html, status')
