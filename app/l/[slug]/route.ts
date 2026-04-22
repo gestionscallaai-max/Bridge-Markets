@@ -62,12 +62,13 @@ export async function GET(request: Request, { params }: { params: { slug: string
     }
     // ───────────────────────────
 
-    const status = (data.status || '').toLowerCase();
-    const isValidStatus = status === 'approved' || status === 'active';
+    const status = (data.status || '').toLowerCase().trim();
+    const isValidStatus = ['approved', 'active', 'activa', 'activo', 'aprobada'].includes(status);
     
     if (!isValidStatus) {
-        console.log(`Landing ${slug} blocked. Status: "${data.status}"`);
+        console.log(`Landing ${slug} blocked. Status found: "${data.status}"`);
         return new NextResponse(`
+            <!-- DEBUG_STATUS: "${data.status}" -->
             <!DOCTYPE html>
             <html lang="es">
             <head>
