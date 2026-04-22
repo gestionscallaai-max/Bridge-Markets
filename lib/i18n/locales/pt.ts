@@ -168,6 +168,10 @@ export const pt: TranslationKeys = {
         allSections: 'Todas as Seções', showingResults: 'Mostrando Resultados',
         completeCatalog: 'Catálogo Completo', sectionAdded: 'Adicionado', available: 'Disponível',
         arraysDefaultNote: 'Arrays (itens, traders, etc.) usam valores padrão. Edite os textos básicos aqui.',
+        urlHelpCta: 'Link para onde o usuário irá ao clicar (ex: seu link de registro).',
+        urlHelpImage: 'Link direto para uma imagem hospedada na internet (URL pública).',
+        urlHelpVideo: 'Link de vídeo (YouTube, Vimeo, etc.) para o player.',
+        urlHelpSocial: 'Link para o seu perfil de rede social.',
     },
     links: {
         title: 'Links de Referência', subtitle: 'Gerencie suas campanhas e maximize as conversões.',

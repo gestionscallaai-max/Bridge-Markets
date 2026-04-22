@@ -168,6 +168,10 @@ export const hi: TranslationKeys = {
         allSections: 'सभी अनुभाग', showingResults: 'परिणाम दिखा रहा है',
         completeCatalog: 'पूरा कैटलॉग', sectionAdded: 'जोड़ा गया', available: 'उपलब्ध',
         arraysDefaultNote: 'ऐरे (आइटम, ट्रेडर्स, आदि) डिफ़ॉल्ट मानों का उपयोग करते हैं। यहां मूल पाठ संपादित करें।',
+        urlHelpCta: 'लिंक जहां उपयोगकर्ता क्लिक करने पर जाएगा (उदा: आपका पंजीकरण लिंक)।',
+        urlHelpImage: 'इंटरनेट पर होस्ट की गई छवि का सीधा लिंक (सार्वजनिक URL)।',
+        urlHelpVideo: 'प्लेयर के लिए वीडियो लिंक (YouTube, Vimeo, आदि)।',
+        urlHelpSocial: 'आपके सोशल मीडिया प्रोफाइल का लिंक।',
     },
     links: {
         title: 'रेफरल लिंक', subtitle: 'अपने अभियानों को प्रबंधित करें और रूपांतरणों को अधिकतम करें।',

@@ -168,6 +168,10 @@ export const ja: TranslationKeys = {
         allSections: 'すべてのセクション', showingResults: '結果を表示中',
         completeCatalog: '完全なカタログ', sectionAdded: '追加済み', available: '利用可能',
         arraysDefaultNote: '配列（項目、トレーダーなど）はデフォルト値を使用します。ここで基本テキストを編集してください。',
+        urlHelpCta: 'クリック時にユーザーが移動するリンク（例：登録リンク）。',
+        urlHelpImage: 'インターネット上にホストされている画像への直接リンク（パブリック URL）。',
+        urlHelpVideo: 'プレーヤーのビデオリンク（YouTube、Vimeo など）。',
+        urlHelpSocial: 'ソーシャルメディアプロフィールへのリンク。',
     },
     links: {
         title: '紹介リンク', subtitle: 'キャンペーンを管理し、コンバージョンを最大化します。',

@@ -168,6 +168,10 @@ export const fr: TranslationKeys = {
         allSections: 'Toutes les Sections', showingResults: 'Affichage des Résultats',
         completeCatalog: 'Catalogue Complet', sectionAdded: 'Ajouté', available: 'Disponible',
         arraysDefaultNote: 'Les tableaux (éléments, traders, etc.) utilisent des valeurs par défaut. Modifiez les textes de base ici.',
+        urlHelpCta: "Lien vers lequel l'utilisateur ira en cliquant (ex : votre lien d'inscription).",
+        urlHelpImage: "Lien direct vers une image hébergée sur internet (URL publique).",
+        urlHelpVideo: "Lien vidéo (YouTube, Vimeo, etc.) pour le lecteur.",
+        urlHelpSocial: "Lien vers votre profil de réseau social.",
     },
     links: {
         title: 'Liens de Parrainage', subtitle: 'Gérez vos campagnes et maximisez les conversions.',

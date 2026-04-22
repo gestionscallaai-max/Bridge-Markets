@@ -168,6 +168,10 @@ export const zh: TranslationKeys = {
         allSections: '所有部分', showingResults: '显示结果',
         completeCatalog: '完整目录', sectionAdded: '已添加', available: '可用',
         arraysDefaultNote: '数组（项目、交易者等）使用默认值。在此处编辑基础文本。',
+        urlHelpCta: '用户点击后将跳转的链接（例如：您的注册链接）。',
+        urlHelpImage: '互联网上托管图片的直接链接（公开 URL）。',
+        urlHelpVideo: '播放器的视频链接（YouTube、Vimeo 等）。',
+        urlHelpSocial: '指向您的社交媒体个人资料的链接。',
     },
     links: {
         title: '推荐链接', subtitle: '管理您的活动并最大化转化率。',

@@ -167,6 +167,10 @@ export const bn: TranslationKeys = {
         allSections: 'সব সেকশন', showingResults: 'ফলাফল দেখানো হচ্ছে',
         completeCatalog: 'সম্পূর্ণ ক্যাটালগ', sectionAdded: 'যোগ হয়েছে', available: 'উপলব্ধ',
         arraysDefaultNote: 'Arrays (আইটেম, ট্রেডার্স, ইত্যাদি) ডিফল্ট মান ব্যবহার করে। এখানে মূল টেক্সট সম্পাদনা করুন।',
+        urlHelpCta: 'লিঙ্ক যেখানে ব্যবহারকারী ক্লিক করলে যাবে (যেমন: আপনার রেজিস্ট্রেশন লিঙ্ক)।',
+        urlHelpImage: 'ইন্টারনেটে হোস্ট করা ছবির সরাসরি লিঙ্ক (পাবলিক URL)।',
+        urlHelpVideo: 'প্লেয়ারের জন্য ভিডিও লিঙ্ক (YouTube, Vimeo, ইত্যাদি)।',
+        urlHelpSocial: 'আপনার সোশ্যাল মিডিয়া প্রোফাইলের লিঙ্ক।',
     },
     links: {
         title: 'রেফারেল লিংক', subtitle: 'আপনার প্রচারাভিযান পরিচালনা করুন এবং রূপান্তর বাড়ান।',
