@@ -302,54 +302,54 @@ export async function PATCH(request: Request) {
 
         // --- Notificar al socio (Dashboard + Email) ---
         if (data && data.length > 0) {
-            const landing = data[0];
-            
-            // Fetch partner data (email and name)
-            const { data: partner } = await supabaseAdmin
-                .from('partners')
-                .select('name, email')
-                .eq('id', landing.partner_id)
-                .single();
+            try {
+                const landing = data[0];
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                
+                let partner = null;
+                if (landing.partner_id && uuidRegex.test(landing.partner_id)) {
+                    const { data: pData } = await supabaseAdmin
+                        .from('partners')
+                        .select('name, email')
+                        .eq('id', landing.partner_id)
+                        .maybeSingle();
+                    partner = pData;
+                }
 
-            const notifTitle = status === 'approved' ? '¡Landing Aprobada!' : 'Landing Rechazada';
-            const notifMessage = status === 'approved' 
-                ? `Tu landing "${landing.slug}" ha sido aprobada y ya es pública.`
-                : `Tu landing "${landing.slug}" requiere cambios. Nota: ${adminNotes || 'Ver detalles'}`;
-            
-            // Dashboard Notification
-            await supabaseAdmin
-                .from('notifications')
-                .insert({
-                    user_id: landing.partner_id,
-                    title: notifTitle,
-                    message: notifMessage,
-                    type: status === 'approved' ? 'success' : 'error',
-                    link: '/dashboard/promo/overview'
-                });
+                const notifTitle = status === 'approved' ? '¡Landing Aprobada!' : 'Landing Rechazada';
+                const notifMessage = status === 'approved' 
+                    ? `Tu landing "${landing.slug}" ha sido aprobada y ya es pública.`
+                    : `Tu landing "${landing.slug}" requiere cambios. Nota: ${adminNotes || 'Ver detalles'}`;
+                
+                // Dashboard Notification
+                if (landing.partner_id && uuidRegex.test(landing.partner_id)) {
+                    await supabaseAdmin
+                        .from('notifications')
+                        .insert({
+                            user_id: landing.partner_id,
+                            title: notifTitle,
+                            message: notifMessage,
+                            type: status === 'approved' ? 'success' : 'error',
+                            link: '/dashboard/promo/overview'
+                        });
+                }
 
-            // Email Notification
-            console.log('DEBUG PATCH: Fetching partner email fallback...');
-            const partnerEmail = partner?.email || (landing.data as any)?.email;
-            const partnerName = partner?.name || (landing.data as any)?.fullName || 'Socio';
-            
-            console.log('DEBUG PATCH: Partner Info Found:', { partnerEmail, partnerName });
-
-            if (partnerEmail) {
-                console.log(`DEBUG PATCH: Sending ${status} email to: ${partnerEmail}`);
-                try {
+                // Email Notification
+                const partnerEmail = partner?.email || (landing.data as any)?.email;
+                const partnerName = partner?.name || (landing.data as any)?.fullName || 'Socio';
+                
+                if (partnerEmail) {
                     await notifyPartnerStatusUpdate({
                         partnerEmail: partnerEmail,
                         partnerName: partnerName,
                         landingSlug: landing.slug,
                         status: status as 'approved' | 'rejected',
                         adminNotes
-                    });
-                    console.log('DEBUG PATCH: Email sent successfully');
-                } catch (emailErr) {
-                    console.error('DEBUG PATCH: Email sending failed:', emailErr);
+                    }).catch(e => console.error('Email notification failed:', e));
                 }
-            } else {
-                console.warn('DEBUG PATCH: No partner email found. Landing Data:', JSON.stringify(landing.data).substring(0, 100));
+            } catch (notifyErr) {
+                console.error('Non-critical notification error during approval:', notifyErr);
+                // We don't fail the request if notifications fail
             }
         }
 
