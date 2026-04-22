@@ -85,12 +85,11 @@ export async function GET(request: Request, { params }: { params: { slug: string
     // ───────────────────────────
 
     const status = (data.status || '').toLowerCase().trim();
-    const isValidStatus = ['approved', 'active', 'activa', 'activo', 'aprobada'].includes(status);
+    const isValidStatus = ['approved', 'active'].includes(status);
     
     if (!isValidStatus) {
         console.log(`Landing ${slug} blocked. Status found: "${data.status}"`);
         return new NextResponse(`
-            <!-- DEBUG_STATUS: "${data.status}" -->
             <!DOCTYPE html>
             <html lang="es">
             <head>
@@ -109,12 +108,8 @@ export async function GET(request: Request, { params }: { params: { slug: string
                         </svg>
                     </div>
                     <h1 class="text-2xl font-black mb-4">Página en Revisión</h1>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8">
                         Esta landing page está siendo verificada por nuestro equipo de seguridad para garantizar que cumple con los estándares de la red. Estará disponible en breve.
-                    </p>
-                    <p class="text-[10px] text-slate-300 mb-8">
-                        Estado actual: <span class="font-bold text-[#865BFF] uppercase">${data.status}</span><br/>
-                        ID: <span class="font-mono text-[9px] opacity-60">${data.id}</span>
                     </p>
                     <div class="h-1 w-24 bg-indigo-100 mx-auto rounded-full mb-8">
                         <div class="h-full bg-[#865BFF] rounded-full w-1/3 animate-[spin_3s_linear_infinite]"></div>
