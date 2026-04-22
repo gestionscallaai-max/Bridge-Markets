@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
     const { slug } = params;
     
@@ -54,7 +56,9 @@ export async function GET(request: Request, { params }: { params: { slug: string
     }
     // ───────────────────────────
 
-    if (data.status !== 'approved') {
+    const isValidStatus = data.status === 'approved' || data.status === 'active';
+    
+    if (!isValidStatus) {
         return new NextResponse(`
             <!DOCTYPE html>
             <html lang="es">
