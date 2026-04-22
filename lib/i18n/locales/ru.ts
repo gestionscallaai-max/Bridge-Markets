@@ -231,7 +231,7 @@ export const ru: TranslationKeys = {
         impact: 'Влияние', reach: 'Охват', improveTitle: 'Хотите улучшить свои показатели?',
         improveDesc: 'Зайдите в нашу премиум-академию для партнеров и откройте для себя новые стратегии.',
         goToAcademy: 'Перейти в академию',
-        dayMon: 'Пн', dayTue: 'Вт', dayWed: 'Ср', dayTue: 'Чт', dayFri: 'Пт', daySat: 'Сб', daySun: 'Вс',
+        dayMon: 'Пн', dayTue: 'Вт', dayWed: 'Ср', dayThu: 'Чт', dayFri: 'Пт', daySat: 'Сб', daySun: 'Вс',
     },
 
     gallery: {

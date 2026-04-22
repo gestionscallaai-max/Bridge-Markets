@@ -70,7 +70,6 @@ export const ar: TranslationKeys = {
         growth: 'نمو',
         adminPanel: 'لوحة المسؤول',
         welcomePartner: 'مرحباً، شريك',
-        thisWeek: 'هذا الأسبوع',
         realtimeData: 'بيانات نشاطك في الوقت الفعلي',
         adminStatLeads: 'إجمالي الشبكة - العملاء المحتملون',
         adminStatClicks: 'نقرات الشبكة الإجمالية',
