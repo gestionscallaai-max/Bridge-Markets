@@ -5,5 +5,5 @@
 
 export * from './landing/types';
 export * from './landing/catalog';
-export { SECTION_CATEGORIES } from './landing/catalog';
 export { SECTION_RENDERERS } from './landing/renderers';
+

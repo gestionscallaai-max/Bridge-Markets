@@ -3,7 +3,7 @@
 // Extracted from 14 bocetos for mix-and-match landing pages
 // ─────────────────────────────────────────────────────────────
 
-export type SectionCategory = string;
+export type SectionCategory = 'Official' | 'Community' | 'Utility' | 'Marketing';
 
 export interface SectionMeta {
     id: string;

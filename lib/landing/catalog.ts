@@ -1,6 +1,6 @@
 import { SectionMeta } from './types';
 
-export type SectionCategory = 'Official' | 'Community' | 'Utility' | 'Marketing';
+
 
 export const SECTION_CATEGORIES: Record<string, { label: string; icon: string }> = {
     'Official': { label: 'Oficial', icon: 'verified_user' },
