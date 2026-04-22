@@ -168,23 +168,23 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     useEffect(() => {
         if (editData) {
             setStep(3); // Go straight to editor
-            setFullName(editData.config?.fullName || '');
-            setCountry(editData.config?.country || '');
-            setWhatsapp(editData.config?.whatsapp || '');
-            setEmail(editData.config?.email || '');
-            setCommunityName(editData.config?.communityName || '');
-            setHeroPhrase(editData.config?.heroPhrase || '');
-            setInstagram(editData.config?.instagram || '');
-            setTelegram(editData.config?.telegram || '');
-            setTiktok(editData.config?.tiktok || '');
-            setYoutube(editData.config?.youtube || '');
-            setCtaLink(editData.config?.ctaLink || '');
-            setVideoUrl(editData.config?.videoUrl || '');
-            setCustomLogoUrl(editData.config?.customLogoUrl || '');
-            setLanguage(editData.config?.language || 'ES');
-            setSelectedTemplate(editData.template_id);
-            setSelectedSections(editData.sections || []);
-            setSectionOverrides(editData.config?.sectionOverrides || {});
+            setFullName(editData.fullName || editData.config?.fullName || '');
+            setCountry(editData.country || editData.config?.country || '');
+            setWhatsapp(editData.whatsapp || editData.config?.whatsapp || '');
+            setEmail(editData.email || editData.config?.email || '');
+            setCommunityName(editData.communityName || editData.config?.communityName || '');
+            setHeroPhrase(editData.heroPhrase || editData.config?.heroPhrase || '');
+            setInstagram(editData.instagram || editData.config?.instagram || '');
+            setTelegram(editData.telegram || editData.config?.telegram || '');
+            setTiktok(editData.tiktok || editData.config?.tiktok || '');
+            setYoutube(editData.youtube || editData.config?.youtube || '');
+            setCtaLink(editData.ctaLink || editData.config?.ctaLink || '');
+            setVideoUrl(editData.videoUrl || editData.config?.videoUrl || '');
+            setCustomLogoUrl(editData.customLogoUrl || editData.config?.customLogoUrl || '');
+            setLanguage(editData.config?.language || editData.language || 'ES');
+            setSelectedTemplate(editData.template_id || editData.landingType || '');
+            setSelectedSections(editData.sections || editData.modularConfig?.sections || []);
+            setSectionOverrides(editData.modularConfig?.overrides || editData.config?.sectionOverrides || {});
         } else if (initialTemplate) {
             setSelectedTemplate(initialTemplate);
             setStep(2);

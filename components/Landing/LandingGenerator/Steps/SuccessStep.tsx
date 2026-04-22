@@ -21,7 +21,13 @@ export default function SuccessStep({
     onReset
 }: SuccessStepProps) {
     const { t } = useLanguage();
-    const landingUrl = `https://bridgemarkets.com/l/${finalSlug}`;
+    const [origin, setOrigin] = React.useState('');
+    
+    React.useEffect(() => {
+        setOrigin(window.location.origin);
+    }, []);
+
+    const landingUrl = `${origin}/l/${finalSlug}`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(landingUrl);
