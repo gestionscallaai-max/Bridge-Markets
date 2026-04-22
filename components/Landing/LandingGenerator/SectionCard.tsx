@@ -130,8 +130,22 @@ export default function SectionCard({
                                         type="text"
                                         value={(overrides[key] ?? val) as string}
                                         onChange={(e) => onUpdateOverride(key, e.target.value)}
+                                        placeholder={
+                                            key.toLowerCase().includes('url') 
+                                            ? 'https://...' 
+                                            : ''
+                                        }
                                         className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-[#865BFF] focus:ring-1 focus:ring-[#865BFF]/10"
                                     />
+                                )}
+                                {key.toLowerCase().includes('url') && (
+                                    <p className="text-[9px] text-[#865BFF] mt-1 font-medium italic opacity-80">
+                                        {key.toLowerCase().includes('cta') ? t.landing.urlHelpCta : 
+                                         key.toLowerCase().includes('image') || key.toLowerCase().includes('photo') ? t.landing.urlHelpImage :
+                                         key.toLowerCase().includes('video') ? t.landing.urlHelpVideo :
+                                         key.toLowerCase().includes('social') ? t.landing.urlHelpSocial : 
+                                         'Asegúrate de incluir https:// al inicio del enlace.'}
+                                    </p>
                                 )}
                             </div>
                         );

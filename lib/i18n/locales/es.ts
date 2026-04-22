@@ -167,6 +167,10 @@ export const es: TranslationKeys = {
         allSections: 'Todas las Secciones', showingResults: 'Mostrando Resultados',
         completeCatalog: 'Catálogo Completo', sectionAdded: 'Añadida', available: 'Disponible',
         arraysDefaultNote: 'Los arrays (items, traders, etc.) usan valores por defecto. Edita los textos básicos aquí.',
+        urlHelpCta: 'Enlace a donde irá el usuario al hacer clic (ej: tu link de registro).',
+        urlHelpImage: 'Enlace directo a una imagen alojada en internet (URL pública).',
+        urlHelpVideo: 'Enlace de video (YouTube, Vimeo, etc.) para el reproductor.',
+        urlHelpSocial: 'Enlace a tu perfil de red social.',
     },
     links: {
         title: 'Links de Referido', subtitle: 'Gestiona tus campañas y maximiza tus conversiones.',

@@ -112,9 +112,14 @@ export default function IdentityStep({
                             placeholder="https://bridgemarkets.com/BM_XXXXXX"
                             className="w-full bg-white border border-slate-200 rounded-2xl py-4 px-5 text-sm font-bold text-slate-700 outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all shadow-sm"
                         />
-                        <div className="mt-2 flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#865BFF] animate-pulse"></span>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Este enlace se usará en todos los botones de registro de tu landing</p>
+                        <div className="mt-2 flex flex-col gap-1.5">
+                            <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#865BFF] animate-pulse"></span>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Este enlace se usará en todos los botones de registro de tu landing</p>
+                            </div>
+                            <p className="text-[9px] text-[#865BFF] font-medium italic opacity-80 px-1">
+                                {t.landing.urlHelpCta}
+                            </p>
                         </div>
                     </div>
                 </div>

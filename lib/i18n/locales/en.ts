@@ -168,6 +168,10 @@ export const en: TranslationKeys = {
         allSections: 'All Sections', showingResults: 'Showing Results',
         completeCatalog: 'Complete Catalog', sectionAdded: 'Added', available: 'Available',
         arraysDefaultNote: 'Arrays (items, traders, etc.) use default values. Edit the basic texts here.',
+        urlHelpCta: 'Link where the user will go when clicking (e.g.: your registration link).',
+        urlHelpImage: 'Direct link to an image hosted on the internet (Public URL).',
+        urlHelpVideo: 'Video link (YouTube, Vimeo, etc.) for the player.',
+        urlHelpSocial: 'Link to your social media profile.',
     },
     links: {
         title: 'Referral Links', subtitle: 'Manage your campaigns and maximize conversions.',

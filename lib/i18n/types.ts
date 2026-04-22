@@ -303,6 +303,10 @@ export type TranslationKeys = {
         available: string;
         // Section card
         arraysDefaultNote: string;
+        urlHelpCta: string;
+        urlHelpImage: string;
+        urlHelpVideo: string;
+        urlHelpSocial: string;
     };
     // Referral Links page
     links: {
