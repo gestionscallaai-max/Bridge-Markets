@@ -1,12 +1,20 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
+
+// Initialize admin client to bypass RLS for public landing resolution
+const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
     const { slug } = params;
     
-    const { data, error } = await supabase
+    // We use the admin client because public 'anon' key might not have permissions 
+    // to see the 'status' column due to RLS policies.
+    const { data, error } = await supabaseAdmin
         .from('landings')
         .select('html, status')
         .eq('slug', slug)
@@ -31,7 +39,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
             let targetUserId = ref;
             // Si es un partner_id (BM_XXX), buscar el UUID
             if (ref.startsWith('BM_')) {
-                const { data: profile } = await supabase
+                const { data: profile } = await supabaseAdmin
                     .from('profiles')
                     .select('id')
                     .eq('partner_id', ref)
@@ -45,7 +53,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
             const country = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || null;
 
             // Guardar el clic de forma asíncrona para no retrasar la carga de la página
-            supabase.from('clicks').insert({
+            supabaseAdmin.from('clicks').insert({
                 partner_id: targetUserId,
                 landing_slug: slug,
                 ip_address: ip,
