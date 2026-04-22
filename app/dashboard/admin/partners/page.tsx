@@ -7,10 +7,13 @@ import {
     MoreHorizontal, ArrowUpRight, Mail, Calendar,
     ChevronLeft, ChevronRight, Loader2, Award
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { formatDateUpperCase } from '@/lib/utils';
 
 export default function PartnersManagementPage() {
+    const [partners, setPartners] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState<{show: boolean, partner: any, targetRole: string}>({
         show: false,
         partner: null,
