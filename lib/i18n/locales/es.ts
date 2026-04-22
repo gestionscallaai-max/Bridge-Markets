@@ -165,7 +165,7 @@ export const es: TranslationKeys = {
         reviewNote: 'Recibirás una notificación en tu panel en cuanto sea aprobada (usualmente en menos de 24h).',
         modularLibrary: 'Librería\nModular', modularLibraryDesc: 'Arrastra o toca para inyectar secciones al Blueprint actual.',
         allSections: 'Todas las Secciones', showingResults: 'Mostrando Resultados',
-        completeCatalog: 'Catálogo Completo', sectionAdded: 'Añadida',
+        completeCatalog: 'Catálogo Completo', sectionAdded: 'Añadida', available: 'Disponible',
         arraysDefaultNote: 'Los arrays (items, traders, etc.) usan valores por defecto. Edita los textos básicos aquí.',
     },
     links: {

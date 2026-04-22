@@ -166,7 +166,7 @@ export const en: TranslationKeys = {
         modularLibrary: 'Modular\nLibrary',
         modularLibraryDesc: 'Tap to inject sections into the current Blueprint.',
         allSections: 'All Sections', showingResults: 'Showing Results',
-        completeCatalog: 'Complete Catalog', sectionAdded: 'Added',
+        completeCatalog: 'Complete Catalog', sectionAdded: 'Added', available: 'Available',
         arraysDefaultNote: 'Arrays (items, traders, etc.) use default values. Edit the basic texts here.',
     },
     links: {

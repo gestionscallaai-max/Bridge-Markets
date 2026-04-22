@@ -300,6 +300,7 @@ export type TranslationKeys = {
         showingResults: string;
         completeCatalog: string;
         sectionAdded: string;
+        available: string;
         // Section card
         arraysDefaultNote: string;
     };

@@ -165,7 +165,7 @@ export const ar: TranslationKeys = {
         reviewNote: 'ستتلقى إشعاراً في لوحة التحكم بمجرد الموافقة عليها (عادةً في أقل من 24 ساعة).',
         modularLibrary: 'مكتبة\nمعيارية', modularLibraryDesc: 'انقر لإدراج الأقسام في المخطط الحالي.',
         allSections: 'جميع الأقسام', showingResults: 'عرض النتائج',
-        completeCatalog: 'الكاتالوج الكامل', sectionAdded: 'تمت الإضافة',
+        completeCatalog: 'الكاتالوج الكامل', sectionAdded: 'تمت الإضافة', available: 'متاح',
         arraysDefaultNote: 'تستخدم المصفوفات (العناصر والمتداولون وما إلى ذلك) القيم الافتراضية. قم بتحرير النصوص الأساسية هنا.',
     },
     links: {

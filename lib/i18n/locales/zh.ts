@@ -111,7 +111,7 @@ export const zh: TranslationKeys = {
         reviewNote: '一旦通过审核（通常在24小时内），您将在控制面板收到通知。',
         modularLibrary: '模块\n库', modularLibraryDesc: '点击将板块注入当前蓝图。',
         allSections: '所有板块', showingResults: '正在显示',
-        completeCatalog: '完整目录', sectionAdded: '已添加',
+        completeCatalog: '完整目录', sectionAdded: '已添加', available: '可用',
         arraysDefaultNote: '数组（项目、交易者等）使用默认值。在此编辑基本文本。',
     },
     links: {

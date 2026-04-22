@@ -165,7 +165,7 @@ export const bn: TranslationKeys = {
         reviewNote: 'অনুমোদিত হওয়ার সাথে সাথে আপনি আপনার ড্যাশবোর্ডে একটি বিজ্ঞপ্তি পাবেন (সাধারণত ২৪ ঘণ্টার কম সময়ের মধ্যে)।',
         modularLibrary: 'মডুলার\nলাইব্রেরি', modularLibraryDesc: 'বর্তমান ব্লুপ্রিন্টে সেকশন যোগ করতে ট্যাপ করুন।',
         allSections: 'সব সেকশন', showingResults: 'ফলাফল দেখানো হচ্ছে',
-        completeCatalog: 'সম্পূর্ণ ক্যাটালগ', sectionAdded: 'যোগ হয়েছে',
+        completeCatalog: 'সম্পূর্ণ ক্যাটালগ', sectionAdded: 'যোগ হয়েছে', available: 'উপলব্ধ',
         arraysDefaultNote: 'Arrays (আইটেম, ট্রেডার্স, ইত্যাদি) ডিফল্ট মান ব্যবহার করে। এখানে মূল টেক্সট সম্পাদনা করুন।',
     },
     links: {

@@ -165,7 +165,7 @@ export const ru: TranslationKeys = {
         reviewNote: 'Вы получите уведомление в панели управления, как только он будет одобрен (обычно менее чем за 24 часа).',
         modularLibrary: 'Модульная\nБиблиотека', modularLibraryDesc: 'Нажмите, чтобы добавить секции в текущий Blueprint.',
         allSections: 'Все Секции', showingResults: 'Результаты',
-        completeCatalog: 'Полный Каталог', sectionAdded: 'Добавлена',
+        completeCatalog: 'Полный Каталог', sectionAdded: 'Добавлена', available: 'Доступно',
         arraysDefaultNote: 'Массивы (элементы, трейдеры и т.д.) используют значения по умолчанию. Редактируйте базовые тексты здесь.',
     },
     links: {

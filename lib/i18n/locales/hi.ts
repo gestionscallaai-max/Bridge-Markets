@@ -165,7 +165,7 @@ export const hi: TranslationKeys = {
         reviewNote: 'स्वीकृत होते ही आपको अपने डैशबोर्ड पर एक सूचना प्राप्त होगी (आमतौर पर 24 घंटे से कम समय में)।',
         modularLibrary: 'मॉड्यूलर\nलाइब्रेरी', modularLibraryDesc: 'वर्तमान ब्लूप्रिंट में सेक्शन जोड़ने के लिए टैप करें।',
         allSections: 'सभी सेक्शन', showingResults: 'परिणाम दिखाए जा रहे हैं',
-        completeCatalog: 'पूरी सूची', sectionAdded: 'जोड़ा गया',
+        completeCatalog: 'पूरी सूची', sectionAdded: 'जोड़ा गया', available: 'उपलब्ध',
         arraysDefaultNote: 'Arrays (आइटम, ट्रेडर्स आदि) डिफ़ॉल्ट मान उपयोग करते हैं। यहाँ बेसिक टेक्स्ट संपादित करें।',
     },
     links: {

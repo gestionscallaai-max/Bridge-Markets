@@ -165,7 +165,7 @@ export const ja: TranslationKeys = {
         reviewNote: '承認され次第（通常は24時間以内）、ダッシュボードに通知が届きます。',
         modularLibrary: 'モジュラー\nライブラリ', modularLibraryDesc: 'タップしてセクションを現在のブループリントに挿入します。',
         allSections: 'すべてのセクション', showingResults: '検索結果',
-        completeCatalog: '完全なカタログ', sectionAdded: '追加済み',
+        completeCatalog: '完全なカタログ', sectionAdded: '追加済み', available: '利用可能',
         arraysDefaultNote: '配列（アイテム、トレーダーなど）はデフォルト値を使用します。基本テキストをここで編集してください。',
     },
     links: {

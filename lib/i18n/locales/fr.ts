@@ -165,7 +165,7 @@ export const fr: TranslationKeys = {
         reviewNote: 'Vous recevrez une notification sur votre tableau de bord dès qu\'elle sera approuvée (généralement en moins de 24h).',
         modularLibrary: 'Bibliothèque\nModulaire', modularLibraryDesc: 'Appuyez pour injecter des sections dans le Blueprint actuel.',
         allSections: 'Toutes les Sections', showingResults: 'Affichage des Résultats',
-        completeCatalog: 'Catalogue Complet', sectionAdded: 'Ajoutée',
+        completeCatalog: 'Catalogue Complet', sectionAdded: 'Ajoutée', available: 'Disponible',
         arraysDefaultNote: 'Les tableaux (items, traders, etc.) utilisent des valeurs par défaut. Modifiez les textes de base ici.',
     },
     links: {

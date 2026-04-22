@@ -165,7 +165,7 @@ export const pt: TranslationKeys = {
         reviewNote: 'Você receberá uma notificação no seu painel assim que for aprovada (geralmente em menos de 24h).',
         modularLibrary: 'Biblioteca\nModular', modularLibraryDesc: 'Toque para injetar seções no Blueprint atual.',
         allSections: 'Todas as Seções', showingResults: 'Mostrando Resultados',
-        completeCatalog: 'Catálogo Completo', sectionAdded: 'Adicionada',
+        completeCatalog: 'Catálogo Completo', sectionAdded: 'Adicionada', available: 'Disponível',
         arraysDefaultNote: 'Arrays (itens, traders, etc.) usam valores padrão. Edite os textos básicos aqui.',
     },
     links: {
