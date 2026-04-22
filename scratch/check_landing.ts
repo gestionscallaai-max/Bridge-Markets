@@ -9,14 +9,15 @@ const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(url, key);
 
 async function check() {
+    const slug = 'institutional_mother-es-1776869703896';
     const { data, error } = await supabase
         .from('landings')
-        .select('slug, status')
-        .eq('slug', 'prop_official_v3-es-1776829007838')
-        .single();
+        .select('id, slug, status, created_at')
+        .eq('slug', slug);
     
-    console.log('Landing Data:', data);
-    console.log('Error:', error);
+    console.log('Results for slug:', slug);
+    console.log(JSON.stringify(data, null, 2));
+    if (error) console.error('Error:', error);
 }
 
 check();

@@ -37,19 +37,24 @@ export async function POST(request: Request) {
                                null;
 
         // 1. Guardar el Lead en Supabase
+        const leadData: any = {
+            name,
+            email,
+            whatsapp: whatsapp || phone,
+            landing_slug: landingSlug,
+            partner_id: partnerId,
+            country: detectedCountry,
+            source: source || 'direct',
+            message: message || null
+        };
+
+        // NOTA: click_id es opcional. Si la columna no existe en la DB (error PGRST204),
+        // el insert fallará si se incluye. Solo lo activamos si estamos seguros de que existe.
+        // if (clickId) leadData.click_id = clickId; 
+
         const { error } = await supabaseClient
             .from('leads')
-            .insert({
-                name,
-                email,
-                whatsapp: whatsapp || phone,
-                landing_slug: landingSlug,
-                partner_id: partnerId,
-                click_id: clickId || null,
-                country: detectedCountry,
-                source: source || 'direct',
-                message: message || null
-            });
+            .insert(leadData);
 
         if (error) {
             console.error('Error insertando lead en Supabase:', error);

@@ -11,7 +11,6 @@ const getSupabaseAdmin = () => {
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
     
     if (!url || !key) {
-        // Return null instead of throwing to handle error gracefully in the handler
         return null;
     }
     
@@ -30,17 +29,16 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
     const { data, error } = await supabaseAdmin
         .from('landings')
-        .select('id, html, status')
+        .select('id, html, status, partner_id')
         .eq('slug', slug)
         .single();
     
     if (error) {
-        console.error('Database error fetching landing:', error);
+        console.error(`Database error fetching landing [${slug}]:`, error.message);
         return new NextResponse(`Error: ${error.message}`, { status: 500 });
     }
 
     if (!data) {
-        console.warn(`Landing not found for slug: ${slug}`);
         return new NextResponse('Landing Not Found', { status: 404 });
     }
 
@@ -51,7 +49,6 @@ export async function GET(request: Request, { params }: { params: { slug: string
         
         if (ref) {
             let targetUserId = ref;
-            // Si es un partner_id (BM_XXX), buscar el UUID
             if (ref.startsWith('BM_')) {
                 const { data: profile } = await supabaseAdmin
                     .from('profiles')
@@ -66,7 +63,6 @@ export async function GET(request: Request, { params }: { params: { slug: string
             const referer = request.headers.get('referer') || '';
             const country = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry') || null;
 
-            // Guardar el clic de forma asíncrona para no retrasar la carga de la página
             supabaseAdmin.from('clicks').insert({
                 partner_id: targetUserId,
                 landing_slug: slug,
@@ -76,19 +72,26 @@ export async function GET(request: Request, { params }: { params: { slug: string
                 source: searchParams.get('source') || 'direct',
                 country: country
             }).then((result: any) => {
-                if (result.error) console.error('Error tracking click in /l/[slug]:', result.error);
+                if (result.error) console.error('Error tracking click:', result.error);
             });
         }
     } catch (e: any) {
         console.error('Error in click tracking:', e);
     }
-    // ───────────────────────────
 
     // ─── Status Control Logic ───
     if (!data || !data.html) {
         return renderBlockPage('Landing no encontrada', 'El enlace que intentas visitar no existe o aún no ha sido procesado por el sistema.', 'rose', slug);
     }
 
+    // Priority: Approved status
+    if (data.status === 'approved') {
+        return new NextResponse(data.html, {
+            headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        });
+    }
+
+    // Block logic for other statuses
     if (data.status === 'pending') {
         return renderBlockPage('Página en Revisión', 'Esta landing page está siendo verificada por nuestro equipo de seguridad para garantizar que cumple con los estándares de Bridge Markets.', 'amber', slug);
     }
@@ -97,19 +100,9 @@ export async function GET(request: Request, { params }: { params: { slug: string
         return renderBlockPage('Acción Requerida', 'Esta página requiere correcciones antes de ser publicada. Por favor, revisa tu panel de socio para ver las observaciones.', 'rose', slug);
     }
 
-    if (data.status !== 'approved') {
-        return renderBlockPage('Acceso Restringido', 'Esta página no está disponible en este momento.', 'slate', slug);
-    }
-    
-    // If approved, return the HTML
-    return new NextResponse(data.html, {
-        headers: {
-            'Content-Type': 'text/html; charset=utf-8'
-        }
-    });
+    return renderBlockPage('Acceso Restringido', `Esta página no está disponible en este momento.`, 'slate', slug);
 }
 
-// ─── Helper to render consistent block pages ───
 function renderBlockPage(title: string, message: string, color: 'rose' | 'amber' | 'slate' | 'indigo', slug: string) {
     const colors = {
         rose: { bg: 'bg-rose-50', text: 'text-rose-500', border: 'border-rose-100', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>' },
