@@ -270,15 +270,14 @@ export default function LandingHistory({ partnerId, onEdit }: LandingHistoryProp
                                     <span className="text-[10px] font-bold uppercase tracking-tight">Link</span>
                                 </button>
                                 <button 
-                                    onClick={() => landing.status === 'rejected' && onEdit && onEdit(landing)}
-                                    disabled={landing.status !== 'rejected'}
+                                    onClick={() => (landing.status === 'rejected' || landing.status === 'approved') && onEdit && onEdit(landing)}
+                                    disabled={landing.status === 'pending'}
                                     className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-all ${
-                                        landing.status === 'rejected'
+                                        landing.status !== 'pending'
                                             ? 'hover:bg-slate-50 hover:shadow-sm text-slate-600 hover:text-indigo-500'
                                             : 'opacity-40 cursor-not-allowed text-slate-400'
                                     }`}
                                     title={
-                                        landing.status === 'approved' ? 'No se puede editar una landing activa' :
                                         landing.status === 'pending' ? 'No se puede editar mientras está en revisión' :
                                         'Editar Landing'
                                     }

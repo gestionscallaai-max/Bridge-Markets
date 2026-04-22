@@ -227,52 +227,40 @@ export default function LandingHistoryPage() {
                                         </td>
                                         <td className="px-8 py-6">
                                             <div className="flex items-center justify-end gap-2">
-                                                {landing.status === 'approved' ? (
-                                                    <div className="flex items-center gap-2">
-                                                        <button 
-                                                            onClick={() => handleCopy(landing.slug)}
-                                                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                                                copied === landing.slug 
-                                                                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
-                                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                                            }`}
-                                                        >
-                                                            {copied === landing.slug ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                                                            {copied === landing.slug ? 'Copiado' : 'Copiar URL'}
-                                                        </button>
-                                                        <a 
-                                                            href={`/l/${landing.slug}`} 
-                                                            target="_blank" 
-                                                            className="p-2 rounded-xl bg-[#865BFF]/10 text-[#865BFF] hover:bg-[#865BFF] hover:text-white transition-all"
-                                                            title="Ver en vivo"
-                                                        >
-                                                            <ExternalLink className="w-4 h-4" />
-                                                        </a>
-                                                    </div>
-                                                ) : landing.status === 'rejected' ? (
-                                                    <div className="flex items-center gap-3">
-                                                        {landing.admin_notes && (
-                                                            <div className="group relative">
-                                                                <div className="p-2 rounded-xl bg-amber-50 text-amber-600 cursor-help">
-                                                                    <MessageSquare className="w-4 h-4" />
-                                                                </div>
-                                                                <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-slate-900 text-white text-[10px] rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-2xl">
-                                                                    <div className="font-black text-[#865BFF] uppercase mb-1">Notas del Admin:</div>
-                                                                    <p className="font-medium leading-relaxed italic">{landing.admin_notes}</p>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        <button 
-                                                            onClick={() => router.push(`/dashboard/landing?template=${landing.landing_type}&edit=${landing.id}`)}
-                                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#865BFF] text-white text-xs font-bold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                                                        >
-                                                            <Pencil className="w-3.5 h-3.5" /> Editar y Re-enviar
-                                                        </button>
-                                                    </div>
-                                                ) : (
+                                                {landing.status === 'pending' ? (
                                                     <div className="flex items-center gap-2 text-slate-300 italic text-[10px] font-bold uppercase tracking-widest">
                                                         <ShieldCheck className="w-3.5 h-3.5 animate-pulse" />
                                                         En proceso de revisión
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <button 
+                                                                onClick={() => handleCopy(landing.slug)}
+                                                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                                                                    copied === landing.slug 
+                                                                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                                                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                                }`}
+                                                            >
+                                                                {copied === landing.slug ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                                                {copied === landing.slug ? 'Copiado' : 'Copiar URL'}
+                                                            </button>
+                                                            <a 
+                                                                href={`/l/${landing.slug}`} 
+                                                                target="_blank" 
+                                                                className="p-2 rounded-xl bg-[#865BFF]/10 text-[#865BFF] hover:bg-[#865BFF] hover:text-white transition-all"
+                                                                title="Ver en vivo"
+                                                            >
+                                                                <ExternalLink className="w-4 h-4" />
+                                                            </a>
+                                                        </div>
+                                                        <button 
+                                                            onClick={() => router.push(`/dashboard/landing?template=${landing.landing_type}&edit=${landing.id}`)}
+                                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 text-slate-600 border border-slate-200 text-xs font-bold hover:bg-slate-100 transition-all"
+                                                        >
+                                                            <Pencil className="w-3.5 h-3.5" /> Editar
+                                                        </button>
                                                     </div>
                                                 )}
                                                 
