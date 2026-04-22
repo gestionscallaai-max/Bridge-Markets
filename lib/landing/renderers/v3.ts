@@ -12,7 +12,7 @@ export function renderV3Hero(content: Record<string, any>, brand: BrandConfig): 
         ...content 
     };
     
-    const ctaLink = brand.ctaLink || '#registro';
+    const ctaLink = content.ctaUrl || brand.ctaLink || '#registro';
 
     return `
     <section class="relative overflow-hidden px-3 lg:px-5 pt-3 lg:pt-7 bg-[#F8F9FA]">
@@ -110,7 +110,7 @@ export function renderV3Features(content: Record<string, any>, brand: BrandConfi
  */
 export function renderV3Header(content: Record<string, any>, brand: BrandConfig): string {
     const logoUrl = brand.logoUrl || '/src/logo.svg';
-    const ctaLink = brand.ctaLink || '#registro';
+    const ctaLink = content.ctaUrl || brand.ctaLink || '#registro';
 
     return `
     <header class="fixed top-0 inset-x-0 z-[1000] px-4 py-6 pointer-events-none">
@@ -162,7 +162,7 @@ export function renderV3Community(content: Record<string, any>, brand: BrandConf
                         ${c.subtitle}
                     </p>
                     <div class="flex flex-wrap gap-6">
-                        <a href="${brand.telegram || '#'}" class="px-12 py-5 bg-white text-[#865BFF] font-black rounded-2xl hover:scale-105 transition-all shadow-2xl flex items-center gap-4 uppercase tracking-widest text-sm">
+                        <a href="${content.ctaUrl || brand.telegram || '#'}" class="px-12 py-5 bg-white text-[#865BFF] font-black rounded-2xl hover:scale-105 transition-all shadow-2xl flex items-center gap-4 uppercase tracking-widest text-sm">
                             <span class="material-symbols-outlined">send</span> ${c.ctaText}
                         </a>
                     </div>

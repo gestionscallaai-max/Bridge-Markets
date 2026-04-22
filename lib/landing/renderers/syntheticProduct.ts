@@ -5,7 +5,7 @@ export function renderSPHero(content: Record<string, any>, brand: BrandConfig): 
     const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaText = content.ctaText || "Abrir mi cuenta";
-    const ctaLink = brand.ctaLink || "#";
+    const ctaLink = content.ctaUrl || brand.ctaLink || "#";
 
     return `
     <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#000]">
@@ -343,7 +343,7 @@ export function renderSPCommunity(content: Record<string, any>, brand: BrandConf
     const message = content.communityMessage || 'Únete a nuestra comunidad de traders sintéticos y opera con tecnología institucional.';
     const photoUrl = content.photoUrl || "https://images.unsplash.com/photo-1611974717482-aa8a29910609?auto=format&fit=crop&q=80";
     const ctaText = content.ctaText || 'Habla con un asesor';
-    const ctaLink = brand.whatsapp ? `https://wa.me/${brand.whatsapp}` : (brand.ctaLink || "#");
+    const ctaLink = content.ctaUrl || (brand.whatsapp ? `https://wa.me/${brand.whatsapp}` : (brand.ctaLink || "#"));
 
     return `
     <section class="py-40 px-8 bg-[#020202] relative">
@@ -401,7 +401,7 @@ export function renderSPFAQ(content: Record<string, any>, brand: BrandConfig): s
 // ─── SECTION 10 — FINAL CTA ─────────────────────────────────
 export function renderSPFinalCTA(content: Record<string, any>, brand: BrandConfig): string {
     const ctaText = content.ctaText || "Abrir cuenta ahora";
-    const ctaLink = brand.ctaLink || "#";
+    const ctaLink = content.ctaUrl || brand.ctaLink || "#";
 
     return `
     <section class="py-60 px-8 bg-[#000] relative overflow-hidden text-center">

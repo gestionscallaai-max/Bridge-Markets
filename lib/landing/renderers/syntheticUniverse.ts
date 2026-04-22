@@ -5,7 +5,7 @@ export function renderSNUHero(content: Record<string, any>, brand: BrandConfig):
     const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaText = content.ctaText || "Abrir mi cuenta";
-    const ctaLink = brand.ctaLink || "#";
+    const ctaLink = content.ctaUrl || brand.ctaLink || "#";
 
     return `
     <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#000]">
@@ -352,7 +352,7 @@ export function renderSNUCommunity(content: Record<string, any>, brand: BrandCon
     
     const supportLabel = content.supportLabel || "Soporte del IB";
     const ctaText = content.ctaText || "Habla con un asesor";
-    const ctaLink = brand.ctaLink || "#";
+    const ctaLink = content.ctaUrl || brand.ctaLink || "#";
 
     return `
     <section id="comunidad" class="py-40 px-8 bg-[#000]">
@@ -430,7 +430,8 @@ export function renderSNUFAQ(content: Record<string, any>, brand: BrandConfig): 
 export function renderSNUFinalCTA(content: Record<string, any>, brand: BrandConfig): string {
     const ctaMainText = content.ctaMainText || "Abrir mi cuenta ahora";
     const ctaSecondaryText = content.ctaSecondaryText || "Ver gráficos en vivo";
-    const ctaMainLink = brand.ctaLink || "#";
+    const ctaMainLink = content.ctaMainLink || brand.ctaLink || "#";
+    const ctaSecondaryLink = content.ctaSecondaryLink || "https://charts.bridgemarkets.global";
 
     return `
     <section class="py-60 px-8 bg-[#000] text-center relative overflow-hidden">
@@ -447,7 +448,7 @@ export function renderSNUFinalCTA(content: Record<string, any>, brand: BrandConf
                 <a href="${ctaMainLink}" class="px-16 py-8 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-xs hover:scale-105 active:scale-95 transition-all shadow-2xl italic">
                     ${ctaMainText}
                 </a>
-                <a href="https://charts.bridgemarkets.global" class="px-12 py-8 bg-white/5 text-white border border-white/10 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all italic">
+                <a href="${ctaSecondaryLink}" class="px-12 py-8 bg-white/5 text-white border border-white/10 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all italic">
                     ${ctaSecondaryText}
                 </a>
             </div>

@@ -12,7 +12,7 @@ export function renderHeroDark(content: Record<string, any>, brand: BrandConfig)
                 </h1>
                 <p class="text-xl text-white/60 leading-relaxed mb-10 max-w-xl font-light">${c.subtitle}</p>
                 <div class="flex flex-wrap gap-6">
-                    <a href="#register" class="px-10 py-5 bg-primary text-white font-bold asym-card hover:shadow-2xl transition-all scale-100 hover:scale-105 inline-block">${c.cta1}</a>
+                    <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="px-10 py-5 bg-primary text-white font-bold asym-card hover:shadow-2xl transition-all scale-100 hover:scale-105 inline-block">${c.cta1}</a>
                     <a href="#learn" class="px-10 py-5 glass-panel text-white font-bold asym-card hover:bg-white/10 transition-all inline-block">${c.cta2}</a>
                 </div>
             </div>
@@ -51,7 +51,7 @@ export function renderHeroLight(content: Record<string, any>, brand: BrandConfig
                 </h1>
                 <p class="text-xl text-[#494455] max-w-lg mb-12 leading-relaxed font-medium">${c.subtitle}</p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="#register" class="bg-primary px-10 py-5 asym-card-rev text-white font-bold flex items-center gap-3 shadow-2xl hover:translate-y-[-2px] transition-all inline-flex">
+                    <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="bg-primary px-10 py-5 asym-card-rev text-white font-bold flex items-center gap-3 shadow-2xl hover:translate-y-[-2px] transition-all inline-flex">
                         ${c.cta1} <span class="material-symbols-outlined">arrow_forward</span>
                     </a>
                     <a href="#learn" class="px-10 py-5 asym-card bg-white border border-gray-200 text-[#211635] font-bold hover:bg-gray-50 transition-all inline-block">${c.cta2}</a>
@@ -94,7 +94,7 @@ export function renderHeroGradient(content: Record<string, any>, brand: BrandCon
             </h1>
             <p class="text-xl text-white/60 leading-relaxed mb-12 max-w-2xl mx-auto">${c.subtitle}</p>
             <div class="flex flex-wrap justify-center gap-6">
-                <a href="#register" class="px-10 py-5 bg-white text-primary font-bold rounded-full hover:shadow-2xl transition-all scale-100 hover:scale-105 inline-block text-lg">${c.cta1}</a>
+                <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="px-10 py-5 bg-white text-primary font-bold rounded-full hover:shadow-2xl transition-all scale-100 hover:scale-105 inline-block text-lg">${c.cta1}</a>
                 <a href="#learn" class="px-10 py-5 glass-panel text-white font-bold rounded-full hover:bg-white/10 transition-all inline-block text-lg">${c.cta2}</a>
             </div>
             <div class="mt-16 inline-flex items-center gap-4 glass-panel px-8 py-4 rounded-full">
@@ -124,7 +124,7 @@ export function renderHeroOfficial(content: Record<string, any>, brand: BrandCon
                 </h1>
                 <p class="text-2xl text-white/50 leading-relaxed max-w-2xl mb-12 font-light">${subtitle}</p>
                 <div class="flex flex-wrap gap-8 items-center">
-                    <a href="#register" class="px-12 py-6 bg-primary text-white font-black asym-card text-xl hover:shadow-[0_0_50px_rgba(102,53,222,0.4)] transition-all transform hover:scale-105">${c.ctaText}</a>
+                    <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="px-12 py-6 bg-primary text-white font-black asym-card text-xl hover:shadow-[0_0_50px_rgba(102,53,222,0.4)] transition-all transform hover:scale-105">${c.ctaText}</a>
                     
                     ${brand.videoUrl ? `
                     <button onclick="openVideoModal('${brand.videoUrl}')" class="px-8 py-6 glass-panel border border-white/10 text-white font-black asym-card text-lg hover:bg-white/10 transition-all flex items-center gap-4">

@@ -6,7 +6,8 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
     const ibPhrase = content.ibPhrase || brand.heroPhrase || "";
     const ctaMainText = content.ctaMainText || "Abrir mi cuenta";
     const ctaSecondaryText = content.ctaSecondaryText || "Ver todos los productos";
-    const ctaLink = brand.ctaLink || "#";
+    const ctaLink = content.ctaMainLink || brand.ctaLink || "#";
+    const ctaSecondaryLink = content.ctaSecondaryLink || "#ecosistema";
 
     return `
     <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#020202]">
@@ -46,7 +47,7 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
                             <span class="relative z-10 uppercase tracking-widest text-xs">${ctaMainText}</span>
                             <span class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all material-symbols-outlined">arrow_forward</span>
                         </a>
-                        <a href="#ecosistema" class="text-xs font-black text-white/60 hover:text-white uppercase tracking-widest border-b border-white/10 pb-1 transition-all">
+                        <a href="${ctaSecondaryLink}" class="text-xs font-black text-white/60 hover:text-white uppercase tracking-widest border-b border-white/10 pb-1 transition-all">
                             ${ctaSecondaryText}
                         </a>
                     </div>
@@ -244,7 +245,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
                         <h3 class="text-3xl font-black text-white mb-4 uppercase tracking-tight italic leading-tight">Leverage <br>X12</h3>
                         <p class="text-xs text-white/30 uppercase tracking-widest leading-relaxed mb-8">Sin evaluación. Capital apalancado 12x con retiros desde el tercer día de operativa.</p>
                     </div>
-                    <a href="${ctaLink}" class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all">
+                    <a href="${content.ctaX12Link || ctaLink}" class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all">
                         <span class="material-symbols-outlined text-white text-sm">bolt</span>
                     </a>
                 </div>
@@ -257,7 +258,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
                             <h3 class="text-2xl font-black text-white mb-4 uppercase italic">MAM Accounts</h3>
                             <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest font-medium mb-8">MAM Equity · MAM Cash Gestión centralizada con transparencia institucional total.</p>
                         </div>
-                        <a href="${ctaLink}" class="text-[10px] font-black text-white/60 group-hover:text-indigo-400 flex items-center gap-2 uppercase tracking-widest italic transition-colors">LPOA PROTECTED <span class="material-symbols-outlined text-[10px]">arrow_forward</span></a>
+                        <a href="${content.ctaMamLink || ctaLink}" class="text-[10px] font-black text-white/60 group-hover:text-indigo-400 flex items-center gap-2 uppercase tracking-widest italic transition-colors">LPOA PROTECTED <span class="material-symbols-outlined text-[10px]">arrow_forward</span></a>
                     </div>
                     <div class="flex flex-col justify-between group">
                         <div>
@@ -265,7 +266,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
                             <h3 class="text-2xl font-black text-white mb-4 uppercase italic">Copy Trading</h3>
                             <p class="text-xs text-white/40 leading-relaxed uppercase tracking-widest font-medium mb-8">Replica estrategias verificadas. Control total del capital y transparencia de resultados.</p>
                         </div>
-                        <a href="${ctaLink}" class="text-[10px] font-black text-white/60 group-hover:text-indigo-400 flex items-center gap-2 uppercase tracking-widest italic transition-colors">START COPYING <span class="material-symbols-outlined text-[10px]">arrow_forward</span></a>
+                        <a href="${content.ctaCopyLink || ctaLink}" class="text-[10px] font-black text-white/60 group-hover:text-indigo-400 flex items-center gap-2 uppercase tracking-widest italic transition-colors">START COPYING <span class="material-symbols-outlined text-[10px]">arrow_forward</span></a>
                     </div>
                 </div>
             </div>
@@ -309,7 +310,8 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
 
 // ─── TRADER vs INVESTOR (REFACTORED: SPLIT SCREEN EXPERIENCE) ──
 export function renderInstSelector(content: Record<string, any>, brand: BrandConfig): string {
-    const ctaLink = brand.ctaLink || "#";
+    const traderLink = content.ctaTraderLink || brand.ctaLink || "#";
+    const investorLink = content.ctaInvestorLink || brand.ctaLink || "#";
     const traderText = content.ctaTraderText || "Acceso Directo";
     const investorText = content.ctaInvestorText || "Ver Estrategias";
 
@@ -335,7 +337,7 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
                         <span class="w-1 h-1 bg-indigo-500 rounded-full"></span> Forex retail: Spreads 0.0
                     </li>
                 </ul>
-                <a href="${ctaLink}" class="inline-block px-12 py-6 border-2 border-white text-white font-black uppercase tracking-widest text-[10px] hover:bg-white hover:text-black transition-all italic shadow-2xl">
+                <a href="${traderLink}" class="inline-block px-12 py-6 border-2 border-white text-white font-black uppercase tracking-widest text-[10px] hover:bg-white hover:text-black transition-all italic shadow-2xl">
                     ${traderText}
                 </a>
             </div>
@@ -361,7 +363,7 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
                         <span class="w-1 h-1 bg-slate-500 rounded-full"></span> Social Trading: Conecta pro
                     </li>
                 </ul>
-                <a href="${ctaLink}" class="inline-block px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-[10px] hover:bg-indigo-600 hover:text-white transition-all shadow-xl italic">
+                <a href="${investorLink}" class="inline-block px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-[10px] hover:bg-indigo-600 hover:text-white transition-all shadow-xl italic">
                     ${investorText}
                 </a>
             </div>
@@ -570,13 +572,13 @@ export function renderInstFinalCTA(content: Record<string, any>, brand: BrandCon
             <p class="text-xl text-white/40 mb-20 max-w-2xl mx-auto italic">No importa si eres trader, inversor o gestor. En Bridge Markets tienes el ecosistema completo para crecer.</p>
             
             <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-24">
-                <a href="${ctaMainLink}" class="px-12 py-6 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-[10px] hover:scale-105 active:scale-95 transition-all shadow-2xl italic">
+                <a href="${content.ctaRegisterLink || ctaMainLink}" class="px-12 py-6 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-[10px] hover:scale-105 active:scale-95 transition-all shadow-2xl italic">
                     ${ctaRegisterText}
                 </a>
-                <a href="#ecosistema" class="px-12 py-6 bg-white/5 text-white border border-white/10 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all italic">
+                <a href="${content.ctaProductsLink || '#ecosistema'}" class="px-12 py-6 bg-white/5 text-white border border-white/10 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all italic">
                     ${ctaProductsText}
                 </a>
-                <a href="${ctaMainLink}" class="px-12 py-6 bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-600 hover:text-white transition-all italic">
+                <a href="${content.ctaIBLink || ctaMainLink}" class="px-12 py-6 bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-600 hover:text-white transition-all italic">
                     ${ctaIBText}
                 </a>
             </div>

@@ -4,7 +4,7 @@ import { BrandConfig } from '../types';
 export function renderPropHero(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
     const ctaText = content.ctaText || "Empieza tu Challenge";
-    const ctaLink = brand.ctaLink || "#register";
+    const ctaLink = content.ctaUrl || brand.ctaLink || "#register";
     const heroPhrase = brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
 
     return `
@@ -373,6 +373,7 @@ export function renderPropCommunity(content: Record<string, any>, brand: BrandCo
                     </div>
 
                     <div class="flex flex-wrap gap-6">
+                        ${content.ctaUrl || brand.ctaLink ? `<a href="${content.ctaUrl || brand.ctaLink}" class="px-10 py-5 bg-[#D4AF37] text-black font-black rounded-2xl hover:scale-105 transition-all shadow-xl uppercase tracking-widest text-xs italic">${content.ctaText || 'Unirse Ahora'}</a>` : ''}
                         ${whatsapp ? `<a href="https://wa.me/${whatsapp}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined italic">chat</span></a>` : ''}
                         ${telegram ? `<a href="${telegram}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined italic">send</span></a>` : ''}
                         ${instagram ? `<a href="${instagram}" class="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-[#E1306C] hover:text-white transition-all duration-500 shadow-xl"><span class="material-symbols-outlined italic">photo_camera</span></a>` : ''}
