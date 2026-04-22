@@ -75,11 +75,11 @@ export async function GET(request: Request, { params }: { params: { slug: string
                 referer: referer,
                 source: searchParams.get('source') || 'direct',
                 country: country
-            }).then((result) => {
+            }).then((result: any) => {
                 if (result.error) console.error('Error tracking click in /l/[slug]:', result.error);
             });
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error('Error in click tracking:', e);
     }
     // ───────────────────────────
