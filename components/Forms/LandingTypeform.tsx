@@ -134,7 +134,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                 // Querying 'partners' table as defined in init_production.sql
                 const { data: partnerData } = await supabase
                     .from('partners')
-                    .select('id, name, email')
+                    .select('id, name, email, referral_link')
                     .eq('id', user.id)
                     .single();
                 
@@ -143,6 +143,7 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
                     setPartnerId(partnerData.id);
                     if (partnerData.name) setFullName(partnerData.name);
                     if (partnerData.email) setEmail(partnerData.email);
+                    if (partnerData.referral_link) setCtaLink(partnerData.referral_link);
                 } else {
                     // Fallback to BM_ ID if partner record doesn't exist
                     setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
