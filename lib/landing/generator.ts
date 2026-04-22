@@ -298,22 +298,9 @@ export function generateLandingHTML(data: LandingData): string {
 </head>
 <body class="font-sans text-gray-800 antialiased">
     <script>document.body.classList.add('js-enabled');</script>
-    <header class="fixed top-0 w-full z-50 px-6 py-4 glass border-b border-purple-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-brand-purple rounded-lg flex items-center justify-center text-white font-bold">B</div>
-                <span class="text-xl font-extrabold tracking-tighter text-brand-dark">BRIDGE <span class="text-brand-purple">MARKETS</span></span>
-            </div>
-            <nav class="hidden md:flex gap-8 text-sm font-semibold">
-                ${sections.hero ? '<a href="#social-trading" class="hover:text-brand-purple transition">Social Trading</a>' : ''}
-                ${sections.accounts ? '<a href="#cuentas" class="hover:text-brand-purple transition">Cuentas</a>' : ''}
-                ${sections.whyBridge ? '<a href="#ib-program" class="hover:text-brand-purple transition">Programa IB</a>' : ''}
-            </nav>
-            <a href="#registro" class="bg-brand-dark text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-brand-purple transition-all">${t.cta}</a>
-        </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-24">
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-16 space-y-24">
         ${heroSection}
         ${benefitsSection}
         ${accountsSection}
@@ -672,7 +659,6 @@ export function generateModularLandingHTML(config: ModularConfig, brand: BrandCo
     const hasCustomForm = sectionIds.some(id => id.includes('registration') || id.includes('contact'));
     
     const fullContent = `
-        ${navHtml}
         <main class="">
             ${sectionsHtml}
             ${!hasCustomForm ? `

@@ -407,42 +407,19 @@ export default function PromoMaterialsPage() {
             {showPreviewModal && typeof document !== 'undefined' && createPortal(
                 <div className="fixed inset-0 z-[9999] bg-[#0d0221]/80 backdrop-blur-md flex items-center justify-center p-0 md:p-8">
                     <div className="bg-white rounded-none md:rounded-[2.5rem] w-full max-w-7xl h-full md:h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-white/20 animate-in fade-in zoom-in-95 duration-300">
-                        {/* Header Premium */}
-                        <div className="flex items-center justify-between px-8 py-4 border-b border-slate-100 bg-white/50 backdrop-blur-xl sticky top-0 z-50">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-[#865BFF]/10 flex items-center justify-center">
-                                    <Sparkles className="w-5 h-5 text-[#865BFF]" />
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest leading-none">Modular Preview</h3>
-                                    <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">Bridge Markets Institutional Standard (HD Preview)</p>
-                                </div>
-                            </div>
-
+                        {/* Header Premium - Removed for cleaner view */}
+                        <div className="absolute top-8 right-8 z-[100]">
                             <button 
                                 onClick={() => setShowPreviewModal(false)} 
-                                className="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-all flex items-center justify-center border border-slate-100"
+                                className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white transition-all flex items-center justify-center border border-white/20 shadow-2xl"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="w-6 h-6" />
                             </button>
                         </div>
 
-                        {/* Content Area: Native Responsive Browser Frame */}
-                        <div className="flex-1 bg-slate-100/50 overflow-hidden relative p-4 md:p-8 flex items-center justify-center">
-                            <div className="w-full h-full max-w-5xl mx-auto flex flex-col shadow-[0_30px_100px_rgba(0,0,0,0.2)] rounded-2xl overflow-hidden border border-white/20 bg-white">
-                                {/* Browser Window Header */}
-                                <div className="h-10 bg-slate-50 border-b border-slate-100 flex items-center px-4 gap-2 shrink-0">
-                                    <div className="flex gap-1.5">
-                                        <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-                                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                                        <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
-                                    </div>
-                                    <div className="mx-auto flex items-center gap-2 bg-white px-3 py-1 rounded-md border border-slate-100 min-w-[300px] justify-center">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">bridge-markets.com/preview-standard</span>
-                                    </div>
-                                </div>
-                                
+                        {/* Content Area: Pure Landing View */}
+                        <div className="flex-1 bg-black overflow-hidden relative">
+                            <div className="w-full h-full flex flex-col">
                                 {/* Responsive Iframe: NO SCALING = 60FPS */}
                                 <div className="flex-1 relative bg-white">
                                     <ModularPreview 
