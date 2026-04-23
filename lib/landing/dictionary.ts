@@ -91,7 +91,7 @@ export const SECTION_LABELS: Record<keyof SectionConfig, { label: string; desc: 
 };
 
 // ─── Traducciones ────────────────────────────────────────────
-export const TRANSLATIONS: Record<string, {
+export interface TranslationValue {
     heroTitle: string; heroHighlight: string; heroSub: string; cta: string; ctaSec: string;
     statsLabel: string[]; statsVal: string[];
     featTitle: string; features: { icon: string; title: string; desc: string }[];
@@ -111,7 +111,143 @@ export const TRANSLATIONS: Record<string, {
     };
     finalCTA: { title: string; desc: string; btn: string };
     finalInfo: { title: string; desc: string; quote: string };
-}> = {
+    v3: {
+        syntheticProduct: {
+            aboutTag: string;
+            aboutTitle: string;
+            aboutText: string;
+            advantagesTag: string;
+            advantagesTitle: string;
+            advantagesList: { i: string; t: string; d: string }[];
+            familiesTag: string;
+            familiesTitle: string;
+            familiesSub: string;
+            familiesList: { icon: string; name: string; tag: string; desc: string; sub: string }[];
+            workflowTitle: string;
+            workflowSteps: { t: string; d: string }[];
+            techTitle: string;
+            techDesc: string;
+            techCert: string;
+            techCertDesc: string;
+            techTable: { family: string; spread: string; minLot: string; costTick: string };
+            activationTag: string;
+            activationTitle: string;
+            activationSteps: string[];
+            communityTag: string;
+            communityMsg: string;
+            faqTitle: string;
+            faqList: { q: string; a: string }[];
+            finalTitle: string;
+            finalSub: string;
+            finalBtnSec: string;
+            finalRisk: string;
+        };
+    };
+}
+
+const V3_ES = {
+    syntheticProduct: {
+        aboutTag: "Concepto Core",
+        aboutTitle: "¿Qué son los Índices Sintéticos?",
+        aboutText: "Los Índices Sintéticos de Bridge Markets son instrumentos financieros generados algorítmicamente que simulan los movimientos del mercado real con base en volatilidad y patrones de comportamiento. No dependen de noticias externas, ofreciendo condiciones puramente técnicas y consistentes las 24 horas del día.",
+        advantagesTag: "Ventajas Exclusivas",
+        advantagesTitle: "¿Por qué operar Sintéticos?",
+        advantagesList: [
+            { i: "all_inclusive", t: "Disponibilidad 24/7", d: "Opera sin interrupciones, los 365 días del año. Los sintéticos no cierran." },
+            { i: "block", t: "Sin influencia de noticias", d: "Olvídate de los eventos macroeconómicos. Las condiciones son puramente técnicas." },
+            { i: "memory", t: "Ideal para Algoritmos", d: "Diseñados para bots y estrategias cuantitativas en entornos consistentes." }
+        ],
+        familiesTag: "Diversificación",
+        familiesTitle: "Familias de Índices",
+        familiesSub: "Diseñadas para adaptarse a cualquier perfil de riesgo y estilo de trading.",
+        familiesList: [
+            { icon: "rocket_launch", name: "Fortune", tag: "Escalonados", desc: "Movimientos rítmicos ideales para seguir tendencias y rupturas.", sub: "Fortune 100, 250, 500, 1000" },
+            { icon: "bolt", name: "Vortex", tag: "Volatilidad", desc: "Captura impulsos agresivos y rupturas repentinas en tendencias.", sub: "Vortex 20, 40, 60, 80, 100" },
+            { icon: "trending_up", name: "Bull/Bear", tag: "Direccionales", desc: "Mercados con sesgo alcista o bajista constante.", sub: "BullX / BearX 400-1000" },
+            { icon: "speed", name: "FomoX", tag: "Alta Velocidad", desc: "Oscilaciones rápidas para traders de alta intensidad.", sub: "FomoX 111, 333, 888" }
+        ],
+        workflowTitle: "¿Cómo empezar a operar?",
+        workflowSteps: [
+            { t: "Registro", d: "Crea tu cuenta en el portal de Bridge Markets." },
+            { t: "Verificación", d: "Completa tu perfil para activar el acceso total." },
+            { t: "Depósito", d: "Fondea tu cuenta de trading en USD." },
+            { t: "Plataforma", d: "Descarga e instala MT5 en tu dispositivo." },
+            { t: "Operación", d: "Busca tus símbolos favoritos y comienza." }
+        ],
+        techTitle: "Tecnología de Vanguardia",
+        techDesc: "Infraestructura propietaria diseñada para ofrecer la latencia más baja del mercado.",
+        techCert: "Transparencia Total",
+        techCertDesc: "Algoritmos RNG auditados que garantizan imparcialidad estadística.",
+        techTable: { family: "Familia", spread: "Spread", minLot: "Lote Mín", costTick: "Valor Tick" },
+        activationTag: "Protocolo de Lanzamiento",
+        activationTitle: "Pasos para Activar",
+        activationSteps: ["Crea tu cuenta real", "Realiza tu primer depósito", "Conéctate a MT5", "Selecciona tu índice"],
+        communityTag: "Comunidad IB",
+        communityMsg: "Únete a nuestra comunidad de traders y opera con tecnología institucional.",
+        faqTitle: "Preguntas Frecuentes",
+        faqList: [
+            { q: "¿Los índices sintéticos cierran el fin de semana?", a: "No, operan 24 horas al día, los 7 días de la semana, sin excepciones." },
+            { q: "¿Puedo usar mis indicadores habituales?", a: "Sí, se comportan como cualquier mercado real y responden al análisis técnico." }
+        ],
+        finalTitle: "Toma tu posición en el tablero",
+        finalSub: "No importa si el mercado real está cerrado. Aquí, siempre es momento de operar.",
+        finalBtnSec: "Ver Gráficos en Vivo",
+        finalRisk: "Advertencia: El trading de índices sintéticos implica un alto riesgo de pérdida."
+    }
+};
+
+const V3_GB = {
+    syntheticProduct: {
+        aboutTag: "Core Concept",
+        aboutTitle: "What are Synthetic Indices?",
+        aboutText: "Bridge Markets Synthetic Indices are algorithmically generated financial instruments that simulate real market movements based on volatility and behavior patterns. They do not depend on external news, offering purely technical and consistent conditions 24 hours a day.",
+        advantagesTag: "Exclusive Advantages",
+        advantagesTitle: "Why Trade Synthetics?",
+        advantagesList: [
+            { i: "all_inclusive", t: "24/7 Availability", d: "Trade without interruptions, 365 days a year. Synthetics never close." },
+            { i: "block", t: "No News Influence", d: "Forget about macroeconomic events. Conditions are purely technical." },
+            { i: "memory", t: "Ideal for Algorithms", d: "Designed for bots and quantitative strategies in consistent environments." }
+        ],
+        familiesTag: "Diversification",
+        familiesTitle: "Index Families",
+        familiesSub: "Designed to adapt to any risk profile and trading style.",
+        familiesList: [
+            { icon: "rocket_launch", name: "Fortune", tag: "Step Indices", desc: "Rhythmic movements ideal for following trends and breakouts.", sub: "Fortune 100, 250, 500, 1000" },
+            { icon: "bolt", name: "Vortex", tag: "Volatility", desc: "Capture aggressive impulses and sudden breakouts in trends.", sub: "Vortex 20, 40, 60, 80, 100" },
+            { icon: "trending_up", name: "Bull/Bear", tag: "Directional", desc: "Markets with constant bullish or bearish bias.", sub: "BullX / BearX 400-1000" },
+            { icon: "speed", name: "FomoX", tag: "High Speed", desc: "Fast oscillations for high-intensity traders.", sub: "FomoX 111, 333, 888" }
+        ],
+        workflowTitle: "How to start trading?",
+        workflowSteps: [
+            { t: "Registration", d: "Create your account in the Bridge Markets portal." },
+            { t: "Verification", d: "Complete your profile to activate full access." },
+            { t: "Deposit", d: "Fund your trading account in USD." },
+            { t: "Platform", d: "Download and install MT5 on your device." },
+            { t: "Operation", d: "Find your favorite symbols and start." }
+        ],
+        techTitle: "Cutting-Edge Technology",
+        techDesc: "Proprietary infrastructure designed to offer the lowest latency in the market.",
+        techCert: "Total Transparency",
+        techCertDesc: "Audited RNG algorithms that guarantee statistical impartiality.",
+        techTable: { family: "Family", spread: "Spread", minLot: "Min Lot", costTick: "Tick Value" },
+        activationTag: "Launch Protocol",
+        activationTitle: "Steps to Activate",
+        activationSteps: ["Create your real account", "Make your first deposit", "Connect to MT5", "Select your index"],
+        communityTag: "IB Community",
+        communityMsg: "Join our trading community and trade with institutional technology.",
+        faqTitle: "Frequently Asked Questions",
+        faqList: [
+            { q: "Do synthetic indices close on weekends?", a: "No, they operate 24 hours a day, 7 days a week, without exceptions." },
+            { q: "Can I use my usual indicators?", a: "Yes, they behave like any real market and respond to technical analysis." }
+        ],
+        finalTitle: "Take your position on the board",
+        finalSub: "It doesn't matter if the real market is closed. Here, it is always time to trade.",
+        finalBtnSec: "View Live Charts",
+        finalRisk: "Warning: Synthetic index trading involves a high risk of loss."
+    }
+};
+
+export const TRANSLATIONS: Record<string, TranslationValue> = {
     ES: {
         heroTitle: '¡Empieza a copiar', heroHighlight: 'Traders', heroSub: 'El Social Trading te permite operar en el mercado sin necesidad de experiencia previa. Copia automáticamente las estrategias de Traders exitosos y decide a quién seguir según su rendimiento.',
         cta: 'Acceso Clientes', ctaSec: 'Me interesa',
@@ -194,7 +330,8 @@ export const TRANSLATIONS: Record<string, {
             title: 'Gana comisiones referiendo Éxito',
             desc: 'Como Introducing Broker, recibirás reembolsos por cada transacción que realicen tus referidos. Sin restricciones de ganancias y con el apoyo de un broker líder.',
             quote: '*El éxito de tus clientes se traduce en tu éxito comercial. No hay límites para el volumen que puedes gestionar ni para las comisiones que puedes generar.'
-        }
+        },
+        v3: V3_ES
     },
     GB: {
         heroTitle: 'Start copying', heroHighlight: 'Traders', heroSub: 'Social Trading allows you to trade in the market without needing prior experience. Automatically copy the strategies of successful Traders and decide who to follow based on their performance.',
@@ -278,15 +415,16 @@ export const TRANSLATIONS: Record<string, {
             title: 'Earn commissions referring Success',
             desc: 'As an Introducing Broker, you will receive rebates for every transaction made by your referrals.',
             quote: '*The success of your clients translates into your commercial success. There are no limits to the volume you can manage.'
-        }
+        },
+        v3: V3_GB
     },
-    BR: { heroTitle: 'Comece a copiar', heroHighlight: 'Traders', heroSub: 'Social Trading permite que você opere no mercado sem experiência.', cta: 'Acesso', ctaSec: 'Interesse', statsLabel: ['Ativos', 'Países', 'Volume', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Ultra Rápido',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Conta',link:''}], testTitle: 'Traders', testimonials: [{name:'C',country:'C',text:'Bom'}], formTitle: 'Início', formSub: 'Dados', fields: ['N', 'E', 'T'], submit: 'Começar', footerText: 'Tech', disclaimer: 'Risco', chessTitle: 'Copiar', chessSubtitle: 'Sem exp', chessBenefits: [{icon:'shield',title:'Transparência',desc:'Stats'}], chessSteps: {title:'Acesso',subtitle:'Social',steps:[{num:'1',text:'Reg',link:''}]}, chessAccounts: [{title:'Cap',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Interesse'}], servicesGrid: [{icon:'flag',title:'Sinais',desc:'Ref',btn:'Saber'}], whyBridge: {title:'Por que?',cards:[{icon:'payments',title:'Renda',desc:'6 USD'}],info:[{icon:'group',title:'Incrível',desc:'Free'}]}, finalCTA: {title:'Ative',desc:'Tech',btn:'Conta'}, finalInfo: {title:'Sucesso',desc:'Rebates',quote:'*Win'} },
-    FR: { heroTitle: 'Copier', heroHighlight: 'Traders', heroSub: 'Social Trading sans expérience.', cta: 'Accès', ctaSec: 'Intérêt', statsLabel: ['Actifs', 'Pays', 'Volume', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Rapide',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Compte',link:''}], testTitle: 'Traders', testimonials: [{name:'C',country:'C',text:'Bien'}], formTitle: 'Début', formSub: 'Infos', fields: ['N', 'E', 'T'], submit: 'Commencer', footerText: 'Tech', disclaimer: 'Risque', chessTitle: 'Copier', chessSubtitle: 'Sans exp', chessBenefits: [{icon:'shield',title:'Transparence',desc:'Stats'}], chessSteps: {title:'Accès',subtitle:'Social',steps:[{num:'1',text:'Reg',link:''}]}, chessAccounts: [{title:'Lev',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Intérêt'}], servicesGrid: [{icon:'flag',title:'Signaux',desc:'Ref',btn:'Savoir'}], whyBridge: {title:'Pourquoi?',cards:[{icon:'payments',title:'Revenus',desc:'6 USD'}],info:[{icon:'group',title:'Incrédible',desc:'Free'}]}, finalCTA: {title:'Activer',desc:'Tech',btn:'Compte'}, finalInfo: {title:'Succès',desc:'Rebates',quote:'*Win'} },
-    AR: { heroTitle: 'ابدأ بالنسخ', heroHighlight: 'المتداولين', heroSub: 'التداول الاجتماعي دون خبرة.', cta: 'دخول', ctaSec: 'مهتم', statsLabel: ['نشط', 'دول', 'حجم', 'ترتيب'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'سريع',desc:'< 1ms.'}], stepsTitle: 'التداول الاجتماعي', steps: [{num:'1',text:'حساب',link:''}], testTitle: 'متداولون', testimonials: [{name:'C',country:'C',text:'جيد'}], formTitle: 'بداية', formSub: 'بيانات', fields: ['ن', 'ب', 'هـ'], submit: 'ابدأ', footerText: 'تكنولوجيا', disclaimer: 'خطر', chessTitle: 'نسخ', chessSubtitle: 'دون خبرة', chessBenefits: [{icon:'shield',title:'شفافية',desc:'إحصائيات'}], chessSteps: {title:'دخول',subtitle:'اجتماعي',steps:[{num:'1',text:'تسجيل',link:''}]}, chessAccounts: [{title:'رافعة',desc:'قوة',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'مهتم'}], servicesGrid: [{icon:'flag',title:'إشارات',desc:'مرجع',btn:'اعرف'}], whyBridge: {title:'لماذا؟',cards:[{icon:'payments',title:'دخل',desc:'6 USD'}],info:[{icon:'group',title:'رائع',desc:'مجاني'}]}, finalCTA: {title:'نشط',desc:'تكنولوجيا',btn:'حساب'}, finalInfo: {title:'نجاح',desc:'عمولات',quote:'*ربح'} },
-    ZH: { heroTitle: '复制交易', heroHighlight: '交易者', heroSub: '无需经验。', cta: '登录', ctaSec: '兴趣', statsLabel: ['活跃', '国家', '交易量', '排名'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'快速',desc:'< 1ms.'}], stepsTitle: '社交交易', steps: [{num:'1',text:'开户',link:''}], testTitle: '交易者', testimonials: [{name:'C',country:'C',text:'好'}], formTitle: '开始', formSub: '信息', fields: ['名', '邮', '话'], submit: '开始', footerText: '技术', disclaimer: '风险', chessTitle: '复制', chessSubtitle: '无需经验', chessBenefits: [{icon:'shield',title:'透明',desc:'数据'}], chessSteps: {title:'访问',subtitle:'社交',steps:[{num:'1',text:'注册',link:''}]}, chessAccounts: [{title:'杠杆',desc:'力量',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'兴趣'}], servicesGrid: [{icon:'flag',title:'信号',desc:'参考',btn:'了解'}], whyBridge: {title:'为什么?',cards:[{icon:'payments',title:'收入',desc:'6 USD'}],info:[{icon:'group',title:'免费',desc:'注册'}]}, finalCTA: {title:'激活',desc:'技术',btn:'开户'}, finalInfo: {title:'成功',desc:'返佣',quote:'*赢'} },
-    ID: { heroTitle: 'Salin', heroHighlight: 'Trader', heroSub: 'Tanpa pengalaman.', cta: 'Akses', ctaSec: 'Tertarik', statsLabel: ['Aktif', 'Negara', 'Volume', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Cepat',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Akun',link:''}], testTitle: 'Trader', testimonials: [{name:'C',country:'C',text:'Bagus'}], formTitle: 'Mulai', formSub: 'Data', fields: ['N', 'E', 'T'], submit: 'Mulai', footerText: 'Tech', disclaimer: 'Risiko', chessTitle: 'Salin', chessSubtitle: 'Tanpa exp', chessBenefits: [{icon:'shield',title:'Transparansi',desc:'Stats'}], chessSteps: {title:'Akses',subtitle:'Social',steps:[{num:'1',text:'Reg',link:''}]}, chessAccounts: [{title:'Lev',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Tertarik'}], servicesGrid: [{icon:'flag',title:'Sinyal',desc:'Ref',btn:'Tahu'}], whyBridge: {title:'Kenapa?',cards:[{icon:'payments',title:'Income',desc:'6 USD'}],info:[{icon:'group',title:'Free',desc:'Daftar'}]}, finalCTA: {title:'Aktif',desc:'Tech',btn:'Akun'}, finalInfo: {title:'Sukses',desc:'Rebates',quote:'*Win'} },
-    VI: { heroTitle: 'Sao chép', heroHighlight: 'Trader', heroSub: 'Không cần kinh nghiệm.', cta: 'Truy cập', ctaSec: 'Quan tâm', statsLabel: ['Hoạt động', 'Quốc gia', 'Khối lượng', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Nhanh',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Tài khoản',link:''}], testTitle: 'Trader', testimonials: [{name:'C',country:'C',text:'Tốt'}], formTitle: 'Bắt đầu', formSub: 'Dữ liệu', fields: ['T', 'E', 'S'], submit: 'Bắt đầu', footerText: 'Tech', disclaimer: 'Rủi ro', chessTitle: 'Sao chép', chessSubtitle: 'Không exp', chessBenefits: [{icon:'shield',title:'Minh bạch',desc:'Stats'}], chessSteps: {title:'Truy cập',subtitle:'Social',steps:[{num:'1',text:'Đăng ký',link:''}]}, chessAccounts: [{title:'Đòn bẩy',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Quan tâm'}], servicesGrid: [{icon:'flag',title:'Tín hiệu',desc:'Ref',btn:'Biết'}], whyBridge: {title:'Tại sao?',cards:[{icon:'payments',title:'Thu nhập',desc:'6 USD'}],info:[{icon:'group',title:'Free',desc:'Đăng ký'}]}, finalCTA: {title:'Kích hoạt',desc:'Tech',btn:'Tài khoản'}, finalInfo: {title:'Thành công',desc:'Rebates',quote:'*Win'} },
-    JP: { heroTitle: 'コピー', heroHighlight: 'トレーダー', heroSub: '経験不要。', cta: 'アクセス', ctaSec: '興味', statsLabel: ['活動', '国', '出来高', '順位'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'高速',desc:'< 1ms.'}], stepsTitle: 'ソーシャルトレード', steps: [{num:'1',text:'口座',link:''}], testTitle: 'トレーダー', testimonials: [{name:'C',country:'C',text:'良'}], formTitle: '開始', formSub: '情報', fields: ['名', 'メ', '電'], submit: '開始', footerText: '技術', disclaimer: 'リスク', chessTitle: 'コピー', chessSubtitle: '経験不要', chessBenefits: [{icon:'shield',title:'透明性',desc:'データ'}], chessSteps: {title:'アクセス',subtitle:'ソーシャル',steps:[{num:'1',text:'登録',link:''}]}, chessAccounts: [{title:'レバ',desc:'パワー',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'興味'}], servicesGrid: [{icon:'flag',title:'シグナル',desc:'参考',btn:'知る'}], whyBridge: {title:'なぜ?',cards:[{icon:'payments',title:'報酬',desc:'6 USD'}],info:[{icon:'group',title:'無料',desc:'登録'}]}, finalCTA: {title:'有効化',desc:'技術',btn:'口座'}, finalInfo: {title:'成功',desc:'報酬',quote:'*勝'} },
+    BR: { heroTitle: 'Comece a copiar', heroHighlight: 'Traders', heroSub: 'Social Trading permite que você opere no mercado sem experiência.', cta: 'Acesso', ctaSec: 'Interesse', statsLabel: ['Ativos', 'Países', 'Volume', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Ultra Rápido',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Conta',link:''}], testTitle: 'Traders', testimonials: [{name:'C',country:'C',text:'Bom'}], formTitle: 'Início', formSub: 'Dados', fields: ['N', 'E', 'T'], submit: 'Começar', footerText: 'Tech', disclaimer: 'Risco', chessTitle: 'Copiar', chessSubtitle: 'Sem exp', chessBenefits: [{icon:'shield',title:'Transparência',desc:'Stats'}], chessSteps: {title:'Acesso',subtitle:'Social',steps:[{num:'1',text:'Reg',link:''}]}, chessAccounts: [{title:'Cap',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Interesse'}], servicesGrid: [{icon:'flag',title:'Sinais',desc:'Ref',btn:'Saber'}], whyBridge: {title:'Por que?',cards:[{icon:'payments',title:'Renda',desc:'6 USD'}],info:[{icon:'group',title:'Incrível',desc:'Free'}]}, finalCTA: {title:'Ative',desc:'Tech',btn:'Conta'}, finalInfo: {title:'Sucesso',desc:'Rebates',quote:'*Win'}, v3: V3_ES },
+    FR: { heroTitle: 'Copier', heroHighlight: 'Traders', heroSub: 'Social Trading sans expérience.', cta: 'Accès', ctaSec: 'Intérêt', statsLabel: ['Actifs', 'Pays', 'Volume', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Rapide',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Compte',link:''}], testTitle: 'Traders', testimonials: [{name:'C',country:'C',text:'Bien'}], formTitle: 'Début', formSub: 'Infos', fields: ['N', 'E', 'T'], submit: 'Commencer', footerText: 'Tech', disclaimer: 'Risque', chessTitle: 'Copier', chessSubtitle: 'Sans exp', chessBenefits: [{icon:'shield',title:'Transparence',desc:'Stats'}], chessSteps: {title:'Accès',subtitle:'Social',steps:[{num:'1',text:'Reg',link:''}]}, chessAccounts: [{title:'Lev',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Intérêt'}], servicesGrid: [{icon:'flag',title:'Signaux',desc:'Ref',btn:'Savoir'}], whyBridge: {title:'Pourquoi?',cards:[{icon:'payments',title:'Revenus',desc:'6 USD'}],info:[{icon:'group',title:'Incrédible',desc:'Free'}]}, finalCTA: {title:'Activer',desc:'Tech',btn:'Compte'}, finalInfo: {title:'Succès',desc:'Rebates',quote:'*Win'}, v3: V3_ES },
+    AR: { heroTitle: 'ابدأ بالنسخ', heroHighlight: 'المتداولين', heroSub: 'التداول الاجتماعي دون خبرة.', cta: 'دخول', ctaSec: 'مهتم', statsLabel: ['نشط', 'دول', 'حجم', 'ترتيب'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'سريع',desc:'< 1ms.'}], stepsTitle: 'التداول الاجتماعي', steps: [{num:'1',text:'حساب',link:''}], testTitle: 'متداولون', testimonials: [{name:'C',country:'C',text:'جيد'}], formTitle: 'بداية', formSub: 'بيانات', fields: ['ن', 'ب', 'هـ'], submit: 'ابدأ', footerText: 'تكنولوجيا', disclaimer: 'خطر', chessTitle: 'نسخ', chessSubtitle: 'دون خبرة', chessBenefits: [{icon:'shield',title:'شفافية',desc:'إحصائيات'}], chessSteps: {title:'دخول',subtitle:'اجتماعي',steps:[{num:'1',text:'تسجيل',link:''}]}, chessAccounts: [{title:'رافعة',desc:'قوة',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'مهتم'}], servicesGrid: [{icon:'flag',title:'إشارات',desc:'مرجع',btn:'اعرف'}], whyBridge: {title:'لماذا؟',cards:[{icon:'payments',title:'دخل',desc:'6 USD'}],info:[{icon:'group',title:'رائع',desc:'مجاني'}]}, finalCTA: {title:'نشط',desc:'تكنولوجيا',btn:'حساب'}, finalInfo: {title:'نجاح',desc:'عمولات',quote:'*ربح'}, v3: V3_ES },
+    ZH: { heroTitle: '复制交易', heroHighlight: '交易者', heroSub: '无需经验。', cta: '登录', ctaSec: '兴趣', statsLabel: ['活跃', '国家', '交易量', '排名'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'快速',desc:'< 1ms.'}], stepsTitle: '社交交易', steps: [{num:'1',text:'开户',link:''}], testTitle: '交易者', testimonials: [{name:'C',country:'C',text:'好'}], formTitle: '开始', formSub: '信息', fields: ['名', '邮', '话'], submit: '开始', footerText: '技术', disclaimer: '风险', chessTitle: '复制', chessSubtitle: '无需经验', chessBenefits: [{icon:'shield',title:'透明',desc:'数据'}], chessSteps: {title:'访问',subtitle:'社交',steps:[{num:'1',text:'注册',link:''}]}, chessAccounts: [{title:'杠杆',desc:'力量',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'兴趣'}], servicesGrid: [{icon:'flag',title:'信号',desc:'参考',btn:'了解'}], whyBridge: {title:'为什么?',cards:[{icon:'payments',title:'收入',desc:'6 USD'}],info:[{icon:'group',title:'免费',desc:'注册'}]}, finalCTA: {title:'激活',desc:'技术',btn:'开户'}, finalInfo: {title:'成功',desc:'返佣',quote:'*赢'}, v3: V3_ES },
+    ID: { heroTitle: 'Salin', heroHighlight: 'Trader', heroSub: 'Tanpa pengalaman.', cta: 'Akses', ctaSec: 'Tertarik', statsLabel: ['Aktif', 'Negara', 'Volume', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Cepat',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Akun',link:''}], testTitle: 'Trader', testimonials: [{name:'C',country:'C',text:'Bagus'}], formTitle: 'Mulai', formSub: 'Data', fields: ['N', 'E', 'T'], submit: 'Mulai', footerText: 'Tech', disclaimer: 'Risiko', chessTitle: 'Salin', chessSubtitle: 'Tanpa exp', chessBenefits: [{icon:'shield',title:'Transparansi',desc:'Stats'}], chessSteps: {title:'Akses',subtitle:'Social',steps:[{num:'1',text:'Reg',link:''}]}, chessAccounts: [{title:'Lev',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Tertarik'}], servicesGrid: [{icon:'flag',title:'Sinyal',desc:'Ref',btn:'Tahu'}], whyBridge: {title:'Kenapa?',cards:[{icon:'payments',title:'Income',desc:'6 USD'}],info:[{icon:'group',title:'Free',desc:'Daftar'}]}, finalCTA: {title:'Aktif',desc:'Tech',btn:'Akun'}, finalInfo: {title:'Sukses',desc:'Rebates',quote:'*Win'}, v3: V3_ES },
+    VI: { heroTitle: 'Sao chép', heroHighlight: 'Trader', heroSub: 'Không cần kinh nghiệm.', cta: 'Truy cập', ctaSec: 'Quan tâm', statsLabel: ['Hoạt động', 'Quốc gia', 'Khối lượng', 'Rank'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'Nhanh',desc:'< 1ms.'}], stepsTitle: 'Social Trading', steps: [{num:'1',text:'Tài khoản',link:''}], testTitle: 'Trader', testimonials: [{name:'C',country:'C',text:'Tốt'}], formTitle: 'Bắt đầu', formSub: 'Dữ liệu', fields: ['T', 'E', 'S'], submit: 'Bắt đầu', footerText: 'Tech', disclaimer: 'Rủi ro', chessTitle: 'Sao chép', chessSubtitle: 'Không exp', chessBenefits: [{icon:'shield',title:'Minh bạch',desc:'Stats'}], chessSteps: {title:'Truy cập',subtitle:'Social',steps:[{num:'1',text:'Đăng ký',link:''}]}, chessAccounts: [{title:'Đòn bẩy',desc:'Power',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'Quan tâm'}], servicesGrid: [{icon:'flag',title:'Tín hiệu',desc:'Ref',btn:'Biết'}], whyBridge: {title:'Tại sao?',cards:[{icon:'payments',title:'Thu nhập',desc:'6 USD'}],info:[{icon:'group',title:'Free',desc:'Đăng ký'}]}, finalCTA: {title:'Kích hoạt',desc:'Tech',btn:'Tài khoản'}, finalInfo: {title:'Thành công',desc:'Rebates',quote:'*Win'}, v3: V3_ES },
+    JP: { heroTitle: 'コピー', heroHighlight: 'トレーダー', heroSub: '経験不要。', cta: 'アクセス', ctaSec: '興味', statsLabel: ['活動', '国', '出来高', '順位'], statsVal: ['500K+', '170+', '$2.5B+', '#1'], featTitle: 'Bridge Markets', features: [{icon:'ads_click',title:'高速',desc:'< 1ms.'}], stepsTitle: 'ソーシャルトレード', steps: [{num:'1',text:'口座',link:''}], testTitle: 'トレーダー', testimonials: [{name:'C',country:'C',text:'良'}], formTitle: '開始', formSub: '情報', fields: ['名', 'メ', '電'], submit: '開始', footerText: '技術', disclaimer: 'リスク', chessTitle: 'コピー', chessSubtitle: '経験不要', chessBenefits: [{icon:'shield',title:'透明性',desc:'データ'}], chessSteps: {title:'アクセス',subtitle:'ソーシャル',steps:[{num:'1',text:'登録',link:''}]}, chessAccounts: [{title:'レバ',desc:'パワー',img:'/images/imagenes%20nuevas/rey%20rosa.png',btn:'興味'}], servicesGrid: [{icon:'flag',title:'シグナル',desc:'参考',btn:'知る'}], whyBridge: {title:'なぜ?',cards:[{icon:'payments',title:'報酬',desc:'6 USD'}],info:[{icon:'group',title:'無料',desc:'登録'}]}, finalCTA: {title:'有効化',desc:'技術',btn:'口座'}, finalInfo: {title:'成功',desc:'報酬',quote:'*勝'}, v3: V3_ES },
     HI: {
         heroTitle: 'ट्रेडर्स को कॉपी करना शुरू करें', heroHighlight: 'अभी!', heroSub: 'सोशल ट्रेडिंग आपको बिना किसी पूर्व अनुभव के बाजार में ट्रेड करने की सुविधा देता है। सफल ट्रेडर्स की रणनीतियों को स्वतः कॉपी करें।',
         cta: 'ग्राहक पहुंच', ctaSec: 'मुझे दिलचस्पी है',
@@ -362,6 +500,7 @@ export const TRANSLATIONS: Record<string, {
         },
         finalCTA: { title: 'अपना वित्तीय ब्रह्मांड सक्रिय करें', desc: 'अगले स्तर की तकनीक के साथ उड़ान भरें।', btn: 'अभी खाता खोलें' },
         finalInfo: { title: 'सफलता का संदर्भ देकर कमीशन कमाएं', desc: 'Introducing Broker के रूप में, आपके रेफरल के प्रत्येक लेनदेन पर रिबेट प्राप्त करें।', quote: '*आपके ग्राहकों की सफलता आपकी व्यावसायिक सफलता में तब्दील होती है।' },
+        v3: V3_ES
     },
     BN: {
         heroTitle: 'ট্রেডারদের কপি করা শুরু করুন', heroHighlight: 'এখনই!', heroSub: 'সোশ্যাল ট্রেডিং আপনাকে কোনো পূর্ব অভিজ্ঞতা ছাড়াই বাজারে ট্রেড করতে দেয়। সফল ট্রেডারদের কৌশল স্বয়ংক্রিয়ভাবে কপি করুন।',
@@ -438,6 +577,7 @@ export const TRANSLATIONS: Record<string, {
         },
         finalCTA: { title: 'আপনার আর্থিক মহাবিশ্ব সক্রিয় করুন', desc: 'পরবর্তী স্তরের প্রযুক্তি দিয়ে উড়ান নিন।', btn: 'এখনই আপনার অ্যাকাউন্ট খুলুন' },
         finalInfo: { title: 'সাফল্যের রেফারেন্স দিয়ে কমিশন আয় করুন', desc: 'Introducing Broker হিসাবে, আপনার রেফারেলের প্রতিটি লেনদেনে রিবেট পাবেন।', quote: '*আপনার ক্লায়েন্টদের সাফল্য আপনার বাণিজ্যিক সাফল্যে রূপান্তরিত হয়।' },
+        v3: V3_ES
     },
     RU: {
         heroTitle: 'Начните копировать', heroHighlight: 'трейдеров', heroSub: 'Социальная торговля позволяет вам торговать на рынке без предварительного опыта. Автоматически копируйте стратегии успешных трейдеров.',
@@ -514,10 +654,16 @@ export const TRANSLATIONS: Record<string, {
         },
         finalCTA: { title: 'Активируйте свою финансовую вселенную', desc: 'Взлетайте с технологиями следующего уровня и покорите глобальные рынки.', btn: 'Открыть счёт сейчас' },
         finalInfo: { title: 'Зарабатывайте комиссии, рекомендуя успех', desc: 'Как Introducing Broker, получайте рибейты за каждую транзакцию ваших рефералов.', quote: '*Успех ваших клиентов равен вашему коммерческому успеху. Никаких ограничений по объёму.' },
+        v3: V3_ES
     },
 };
 
 // ─── Helper: get translations for a language ──────────────────
-export function getTranslationsForLanguage(lang: string) {
-    return TRANSLATIONS[lang] || TRANSLATIONS['ES'];
+export function getTranslationsForLanguage(lang: string): TranslationValue {
+    const base = TRANSLATIONS['ES'];
+    const selected = TRANSLATIONS[lang] || base;
+    return { 
+        ...selected,
+        v3: selected.v3 || base.v3 
+    };
 }
