@@ -59,52 +59,34 @@ export default function GlobalNotice() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className={`relative overflow-hidden z-[60] ${getStyles()}`}
+                className={`relative overflow-hidden z-[60] shadow-lg border-b border-white/10 ${getStyles()}`}
             >
-                <div className="flex items-center h-9">
-                    {/* Icon Label */}
-                    <div className="flex items-center gap-2 px-4 h-full bg-black/10 z-10">
-                        {getIcon()}
-                        <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Aviso</span>
-                    </div>
-
-                    {/* Marquee Container */}
-                    <div className="flex-1 overflow-hidden relative h-full flex items-center">
-                        <div className="marquee-content whitespace-nowrap will-change-transform flex items-center gap-20">
-                            {[1, 2, 3].map((i) => (
-                                <span key={i} className="text-[12px] font-bold tracking-tight inline-flex items-center gap-4">
-                                    {config.text}
-                                    <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
-                                </span>
-                            ))}
+                <div className="flex items-center justify-center min-h-[56px] relative px-12 py-3">
+                    <div className="flex items-center gap-4 max-w-4xl mx-auto text-center">
+                        <div className="flex items-center gap-2.5 shrink-0">
+                            <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
+                                {getIcon()}
+                            </div>
+                            <span className="text-[11px] font-black uppercase tracking-[0.2em] hidden sm:inline opacity-90">Aviso Institucional</span>
                         </div>
+                        <div className="w-px h-5 bg-white/20 hidden sm:block" />
+                        <span className="text-base md:text-lg font-bold tracking-tight leading-tight">
+                            {config.text}
+                        </span>
+                        <div className="w-2 h-2 rounded-full bg-white/30 animate-pulse hidden sm:block" />
                     </div>
 
                     {/* Close Button */}
                     <button 
                         onClick={() => setIsVisible(false)}
-                        className="p-2 hover:bg-black/10 transition-colors z-10"
+                        className="absolute right-4 p-2.5 hover:bg-black/10 rounded-xl transition-all active:scale-90 z-10"
+                        title="Cerrar aviso"
                     >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-5 h-5" />
                     </button>
                 </div>
-
-                <style jsx global>{`
-                    .marquee-content {
-                        display: inline-flex;
-                        animation: marquee 25s linear infinite;
-                    }
-                    
-                    .marquee-content:hover {
-                        animation-play-state: paused;
-                    }
-
-                    @keyframes marquee {
-                        0% { transform: translateX(0); }
-                        100% { transform: translateX(-50%); }
-                    }
-                `}</style>
             </motion.div>
         </AnimatePresence>
     );
 }
+

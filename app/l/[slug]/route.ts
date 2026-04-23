@@ -127,27 +127,70 @@ function renderBlockPage(title: string, message: string, color: 'rose' | 'amber'
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${title} | Bridge Markets</title>
-            <script src="https://cdn.tailwindcss.com"></script>
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-            <style>body { font-family: 'Inter', sans-serif; }</style>
+            <style>
+                body { 
+                    font-family: 'Inter', sans-serif; 
+                    background-color: #f8fafc; 
+                    margin: 0; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    min-height: 100vh;
+                    padding: 24px;
+                    color: #1e293b;
+                }
+                .card {
+                    max-width: 448px;
+                    width: 100%;
+                    background: white;
+                    border-radius: 24px;
+                    padding: 40px;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+                    border: 1px solid #f1f5f9;
+                    text-align: center;
+                }
+                .icon-box {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 32px;
+                }
+                .icon-box.rose { background-color: #fff1f2; color: #f43f5e; }
+                .icon-box.amber { background-color: #fffbeb; color: #f59e0b; }
+                .icon-box.slate { background-color: #f8fafc; color: #64748b; }
+                .icon-box.indigo { background-color: #eef2ff; color: #6366f1; }
+                
+                h1 { font-size: 24px; font-weight: 900; margin: 0 0 16px; }
+                p { color: #64748b; font-size: 14px; line-height: 1.6; margin: 0 0 32px; }
+                
+                .loader-track { height: 4px; width: 96px; background-color: #e0e7ff; margin: 0 auto 32px; border-radius: 9999px; overflow: hidden; }
+                .loader-bar { height: 100%; background-color: #865BFF; width: 33.33%; border-radius: 9999px; animation: slide 2s linear infinite; }
+                
+                @keyframes slide {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(300%); }
+                }
+                
+                .footer-text { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(134, 91, 255, 0.6); }
+            </style>
         </head>
-        <body class="bg-[#f8fafc] min-h-screen flex items-center justify-center p-6 text-slate-800">
-            <div class="max-w-md w-full bg-white rounded-3xl p-10 shadow-2xl shadow-indigo-500/10 border border-slate-100 text-center">
-                <div class="w-20 h-20 ${c.bg} rounded-2xl flex items-center justify-center mx-auto mb-8">
-                    <svg class="w-10 h-10 ${c.text}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <body>
+            <div class="card">
+                <div class="icon-box ${color}">
+                    <svg style="width: 40px; height: 40px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         ${c.icon}
                     </svg>
                 </div>
-                <h1 class="text-2xl font-black mb-4">${title}</h1>
-                <p class="text-slate-500 text-sm leading-relaxed mb-8">
-                    ${message}
-                </p>
-                <div class="h-1 w-24 bg-indigo-100 mx-auto rounded-full mb-8">
-                    <div class="h-full bg-[#865BFF] rounded-full w-1/3 animate-[spin_3s_linear_infinite]"></div>
+                <h1>${title}</h1>
+                <p>${message}</p>
+                <div class="loader-track">
+                    <div class="loader-bar"></div>
                 </div>
-                <p class="text-[10px] font-black uppercase tracking-widest text-[#865BFF]/60 cursor-default">
-                    Bridge Markets Security
-                </p>
+                <div class="footer-text">Bridge Markets Security</div>
             </div>
         </body>
         </html>
