@@ -61,29 +61,55 @@ export default function GlobalNotice() {
                 exit={{ height: 0, opacity: 0 }}
                 className={`relative overflow-hidden z-[60] shadow-lg border-b border-white/10 ${getStyles()}`}
             >
-                <div className="flex items-center justify-center min-h-[56px] relative px-12 py-3">
-                    <div className="flex items-center gap-4 max-w-4xl mx-auto text-center">
-                        <div className="flex items-center gap-2.5 shrink-0">
+                <div className="flex items-center min-h-[56px] relative overflow-hidden">
+                    {/* Left Fixed Label */}
+                    <div className="flex items-center gap-4 shrink-0 bg-inherit z-10 pl-8 pr-4 py-3 border-r border-white/10 shadow-[10px_0_15px_-5px_rgba(0,0,0,0.1)]">
+                        <div className="flex items-center gap-2.5">
                             <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                                 {getIcon()}
                             </div>
-                            <span className="text-[11px] font-black uppercase tracking-[0.2em] hidden sm:inline opacity-90">Aviso Institucional</span>
+                            <span className="text-[11px] font-black uppercase tracking-[0.2em] hidden sm:inline opacity-90 whitespace-nowrap">Aviso Institucional</span>
                         </div>
-                        <div className="w-px h-5 bg-white/20 hidden sm:block" />
-                        <span className="text-base md:text-lg font-bold tracking-tight leading-tight">
-                            {config.text}
-                        </span>
-                        <div className="w-2 h-2 rounded-full bg-white/30 animate-pulse hidden sm:block" />
+                    </div>
+
+                    {/* Marquee Container */}
+                    <div className="flex-1 overflow-hidden relative">
+                        <motion.div
+                            animate={{
+                                x: [1000, -2000],
+                            }}
+                            transition={{
+                                x: {
+                                    repeat: Infinity,
+                                    repeatType: "loop",
+                                    duration: 25,
+                                    ease: "linear",
+                                },
+                            }}
+                            className="flex items-center gap-12 whitespace-nowrap"
+                        >
+                            <span className="text-base md:text-lg font-bold tracking-tight leading-tight">
+                                {config.text}
+                            </span>
+                            {/* Duplicate for seamless effect or spacing */}
+                            <div className="w-2 h-2 rounded-full bg-white/30 animate-pulse" />
+                            <span className="text-base md:text-lg font-bold tracking-tight leading-tight">
+                                {config.text}
+                            </span>
+                            <div className="w-2 h-2 rounded-full bg-white/30 animate-pulse" />
+                        </motion.div>
                     </div>
 
                     {/* Close Button */}
-                    <button 
-                        onClick={() => setIsVisible(false)}
-                        className="absolute right-4 p-2.5 hover:bg-black/10 rounded-xl transition-all active:scale-90 z-10"
-                        title="Cerrar aviso"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
+                    <div className="bg-inherit z-10 px-4 flex items-center shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.1)]">
+                        <button 
+                            onClick={() => setIsVisible(false)}
+                            className="p-2.5 hover:bg-black/10 rounded-xl transition-all active:scale-90"
+                            title="Cerrar aviso"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
             </motion.div>
         </AnimatePresence>
