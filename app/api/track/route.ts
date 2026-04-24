@@ -24,12 +24,22 @@ export async function GET(req: Request) {
         
         let targetUserId = partnerId;
         if (partnerId.startsWith('BM_')) {
-            const { data: partner } = await supabase
-                .from('partners')
-                .select('id')
-                .eq('partner_id', partnerId)
-                .single();
-            if (partner) targetUserId = partner.id;
+            try {
+                const { data: partner } = await supabase
+                    .from('partners')
+                    .select('id')
+                    .eq('partner_id', partnerId)
+                    .maybeSingle();
+                
+                if (partner) {
+                    targetUserId = partner.id;
+                } else {
+                    // Try another way: maybe partnerId is already the UUID in some cases
+                    // but we stay safe
+                }
+            } catch (pErr) {
+                console.error('Error resolving partner in track:', pErr);
+            }
         }
 
         await supabase.from('clicks').insert({

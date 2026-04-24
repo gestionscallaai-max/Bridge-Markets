@@ -13,6 +13,16 @@ const getSupabaseAdmin = () => {
     return _supabaseAdmin;
 };
 
+export async function GET() {
+    const admin = getSupabaseAdmin();
+    return NextResponse.json({ 
+        status: 'online', 
+        service_role_configured: !!admin,
+        timestamp: new Date().toISOString(),
+        env_keys: Object.keys(process.env).filter(k => k.includes('SUPABASE'))
+    });
+}
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -32,10 +42,10 @@ export async function POST(request: Request) {
         let resolvedPartnerId = partnerId;
         let originalPartnerId = partnerId;
         
+        // Strategy A: Direct resolution from 'partners' table
         if (partnerId && typeof partnerId === 'string' && partnerId.startsWith('BM_')) {
             try {
-                // Use 'partners' table instead of 'profiles'
-                const { data: partnerData } = await supabaseClient
+                const { data: partnerData, error: pErr } = await supabaseClient
                     .from('partners')
                     .select('id')
                     .eq('partner_id', partnerId)
@@ -44,18 +54,38 @@ export async function POST(request: Request) {
                 if (partnerData) {
                     resolvedPartnerId = partnerData.id;
                 } else {
-                    console.warn(`Could not resolve partner_id ${partnerId} to a UUID.`);
+                    console.warn(`Could not resolve partner_id ${partnerId} directly from partners table.`);
                 }
-            } catch (pErr) {
-                console.error('Error resolving partner ID:', pErr);
+            } catch (err) {
+                console.error('Error in Strategy A resolution:', err);
             }
         }
 
-        // Final check: if resolvedPartnerId is NOT a UUID, we must NOT put it in the partner_id column
+        // Strategy B: Fallback resolution from 'landings' table (if we have landingSlug)
         const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(resolvedPartnerId);
-        if (!isUUID) {
-            console.warn('Resolved Partner ID is not a valid UUID:', resolvedPartnerId);
-            resolvedPartnerId = null; // Prevent DB error
+        if (!isUUID && landingSlug) {
+            try {
+                console.log(`Attempting Strategy B resolution for slug: ${landingSlug}`);
+                const { data: landingData } = await supabaseClient
+                    .from('landings')
+                    .select('partner_id')
+                    .eq('slug', landingSlug)
+                    .single();
+                
+                if (landingData?.partner_id) {
+                    resolvedPartnerId = landingData.partner_id;
+                    console.log(`Resolved Partner ID via landing slug: ${resolvedPartnerId}`);
+                }
+            } catch (err) {
+                console.error('Error in Strategy B resolution:', err);
+            }
+        }
+
+        // Final check: if resolvedPartnerId is STILL not a UUID, we null it to prevent DB errors
+        const finalIsUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(resolvedPartnerId);
+        if (!finalIsUUID) {
+            console.warn('Resolved Partner ID is still not a valid UUID after all strategies:', resolvedPartnerId);
+            resolvedPartnerId = null;
         }
 
         // --- 2. Detect Country ---
@@ -77,44 +107,53 @@ export async function POST(request: Request) {
 
         const phoneValue = whatsapp || phone || body.whatsapp || body.phone;
         const msgValue = message || notes || body.message || body.notes;
+        const finalLandingSlug = landingSlug || body.landingSlug || body.landing_slug;
 
         const leadData: any = {
             name,
             email,
-            landing_slug: landingSlug || body.landingSlug,
+            landing_slug: finalLandingSlug,
             partner_id: resolvedPartnerId,
             whatsapp: phoneValue,
             source: source || 'direct',
-            status: 'new',
+            status: 'registered', // Match DB default in init_production.sql
             notes: `Original Partner ID: ${originalPartnerId} | ${msgValue || ''}${Object.keys(extraFields).length > 0 ? ' | Extras: ' + JSON.stringify(extraFields) : ''}`
         };
 
         // --- 4. Insert with Fallback logic ---
-        // We try a clean insert. If it fails because of a missing column, we'll prune and retry.
-        // The correct Postgres error code for "Undefined Column" is '42703'.
-        let { error } = await supabaseClient.from('leads').insert(leadData);
+        console.log('Inserting lead into Supabase:', { email, slug: finalLandingSlug, partner: resolvedPartnerId });
+        let { error, data: insertedData } = await supabaseClient.from('leads').insert(leadData).select();
 
-        if (error && (error.code === '42703' || error.message?.includes('column'))) {
-            console.warn('Column mismatch detected, pruning leadData and retrying...');
-            // Prune known problematic columns and retry based on 001_create_tables.sql
-            const prunedData = { ...leadData };
+        if (error) {
+            console.error('Supabase Insert Error:', error);
             
-            // Remove columns that ARE NOT in the migration 001
-            delete prunedData.phone;
-            delete prunedData.message;
-            delete prunedData.country; // Migration 001 doesn't have country in leads table!
-            
-            const { error: retryError } = await supabaseClient.from('leads').insert(prunedData);
-            error = retryError;
+            // Fallback for column mismatch
+            if (error.code === '42703' || error.message?.includes('column')) {
+                const prunedData = { ...leadData };
+                delete prunedData.phone;
+                delete prunedData.message;
+                delete prunedData.country;
+                
+                const { error: retryError, data: retryData } = await supabaseClient.from('leads').insert(prunedData).select();
+                error = retryError;
+                insertedData = retryData;
+            }
         }
 
         if (error) {
-            console.error('Error insertando lead en Supabase:', error);
             return NextResponse.json({ 
                 success: false, 
-                error: error.message,
+                error: 'Database insertion failed',
+                message: error.message,
+                code: error.code,
                 details: error.details,
-                hint: error.hint
+                hint: error.hint,
+                attempted_data: { email, partner_id: resolvedPartnerId, slug: finalLandingSlug },
+                diagnostics: {
+                    has_admin: !!getSupabaseAdmin(),
+                    has_url: !!(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL),
+                    has_key: !!(process.env.SUPABASE_SERVICE_ROLE_KEY)
+                }
             }, { status: 500 });
         }
 
@@ -126,17 +165,22 @@ export async function POST(request: Request) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     event: 'new_lead',
-                    lead: { name, email, phone: phoneValue, landingSlug, partnerId: resolvedPartnerId }
+                    lead: insertedData?.[0] || leadData
                 })
             }).catch(err => console.error('Error enviando webhook:', err));
         }
         
-        return NextResponse.json({ success: true, message: 'Lead captured successfully' });
+        return NextResponse.json({ 
+            success: true, 
+            message: 'Lead captured successfully',
+            lead_id: insertedData?.[0]?.id 
+        });
     } catch (e: any) {
-        console.error('Error al capturar lead:', e);
+        console.error('Critical Catch in /api/leads:', e);
         return NextResponse.json({ 
             success: false, 
-            error: e.message || 'Internal server error' 
+            error: 'Internal server error',
+            message: e.message || 'Unknown error'
         }, { status: 500 });
     }
 }
