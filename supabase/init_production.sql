@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.partners (
     role TEXT DEFAULT 'partner_view', -- 'admin', 'partner', 'partner_view'
     referral_link TEXT, -- Link de referido del partner
     wallet_balance NUMERIC DEFAULT 0.00,
+    monthly_goal INTEGER DEFAULT 100,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

@@ -20,6 +20,7 @@ export interface PartnerData {
     tier?: string;
     referral_link?: string;
     wallet_balance?: number;
+    monthly_goal?: number;
 }
 
 export const RoleContext = createContext<{ 
