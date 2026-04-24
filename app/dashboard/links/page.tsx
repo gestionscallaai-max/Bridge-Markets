@@ -4,9 +4,11 @@ import { supabase } from '@/lib/supabaseClient';
 import { Link2, Copy, Check, ExternalLink, Loader2, Save, Edit3, Globe, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/context';
+import { useRole } from '@/lib/context';
 
 export default function ReferralLinksPage() {
     const { t } = useLanguage();
+    const { partnerData, loading: roleLoading } = useRole();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -14,34 +16,26 @@ export default function ReferralLinksPage() {
     const [mainLink, setMainLink] = useState('');
     const [initialLink, setInitialLink] = useState('');
 
-    useEffect(() => { fetchData(); }, []);
-
-    async function fetchData() {
-        setLoading(true);
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { setLoading(false); return; }
-
-        const { data: partner } = await supabase
-            .from('partners')
-            .select('referral_link')
-            .eq('id', user.id)
-            .single();
-        
-        const link = partner?.referral_link || '';
-        setMainLink(link);
-        setInitialLink(link);
-        setLoading(false);
-    }
+    useEffect(() => { 
+        if (roleLoading) return;
+        if (partnerData) {
+            const link = partnerData.referral_link || '';
+            setMainLink(link);
+            setInitialLink(link);
+            setLoading(false);
+        } else {
+            setLoading(false);
+        }
+    }, [partnerData, roleLoading]);
 
     async function handleSave() {
+        if (!partnerData?.id) return;
         setSaving(true);
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
 
         const { error } = await supabase
             .from('partners')
             .update({ referral_link: mainLink })
-            .eq('id', user.id);
+            .eq('id', partnerData.id);
 
         if (!error) {
             setInitialLink(mainLink);

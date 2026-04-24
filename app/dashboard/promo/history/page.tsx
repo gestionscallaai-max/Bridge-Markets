@@ -12,29 +12,34 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/context';
+import { useRole } from '@/lib/context';
 
 export default function LandingHistoryPage() {
     const { t } = useLanguage();
     const router = useRouter();
+    const { partnerData, loading: roleLoading } = useRole();
     const [landings, setLandings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [copied, setCopied] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchMyLandings();
-    }, []);
+        if (!roleLoading && partnerData) {
+            fetchMyLandings();
+        } else if (!roleLoading && !partnerData) {
+            setLoading(false);
+        }
+    }, [partnerData, roleLoading]);
 
     const fetchMyLandings = async () => {
+        if (!partnerData?.id) { setLoading(false); return; }
         setLoading(true);
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
 
             const { data, error } = await supabase
                 .from('landings')
                 .select('*')
-                .eq('partner_id', user.id)
+                .eq('partner_id', partnerData.id)
                 .order('created_at', { ascending: false });
 
             if (error) throw error;

@@ -29,6 +29,7 @@ import {
 } from '@/lib/landing-sections';
 import { LANDING_TEMPLATES, type LandingTemplate } from '@/lib/landing-templates';
 import { supabase } from '@/lib/supabaseClient';
+import { useRole } from '@/lib/context';
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -51,6 +52,7 @@ interface LandingTypeformProps {
 
 export default function LandingTypeform({ initialTemplate, onGoToHistory, editData }: LandingTypeformProps) {
     const { t, lang } = useLanguage();
+    const { partnerData } = useRole();
 
     // Dynamic languages: keep static list but translate the SOON label
     const DYNAMIC_LANGUAGES = LANGUAGES.map(l =>
@@ -126,33 +128,16 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile');
 
-    // Load user
+    // Load user data from context
     useEffect(() => {
-        const loadUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                setUserId(user.id);
-                // Querying 'partners' table as defined in init_production.sql
-                const { data: partnerData } = await supabase
-                    .from('partners')
-                    .select('id, name, email, referral_link')
-                    .eq('id', user.id)
-                    .single();
-                
-                if (partnerData) {
-                    // In the partners table, 'id' is used as the link to landings
-                    setPartnerId(partnerData.id);
-                    if (partnerData.name) setFullName(partnerData.name);
-                    if (partnerData.email) setEmail(partnerData.email);
-                    if (partnerData.referral_link) setCtaLink(partnerData.referral_link);
-                } else {
-                    // Fallback to BM_ ID if partner record doesn't exist
-                    setPartnerId('BM_' + user.id.substring(0, 24).toUpperCase());
-                }
-            }
-        };
-        loadUser();
-    }, []);
+        if (partnerData) {
+            setUserId(partnerData.id);
+            setPartnerId(partnerData.id);
+            if (!fullName && partnerData.name) setFullName(partnerData.name);
+            if (!email && partnerData.email) setEmail(partnerData.email);
+            if (!ctaLink && partnerData.referral_link) setCtaLink(partnerData.referral_link);
+        }
+    }, [partnerData]);
 
     // When template is selected, pre-fill sections ONLY if not the very first load of an edit
     useEffect(() => {

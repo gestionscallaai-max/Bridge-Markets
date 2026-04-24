@@ -20,7 +20,7 @@ import { useLanguage } from '@/lib/i18n/context';
 export default function OverviewPage() {
     const router = useRouter();
     const { isAdmin } = useAdmin();
-    const { userRole } = useRole();
+    const { userRole, partnerData, loading: roleLoading } = useRole();
     const { t, lang } = useLanguage();
     const [loading, setLoading] = useState(true);
     const [partnerId, setPartnerId] = useState('BM_PARTNER_01');
@@ -53,147 +53,173 @@ export default function OverviewPage() {
 
     const days = DAY_NAMES[lang] || DAY_NAMES['es'];
 
+    // Fetch data independently of language
     useEffect(() => {
         setMounted(true);
-        async function fetchStats() {
-            setLoading(true);
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                setLoading(false);
-                return;
-            }
-
-            try {
-                // ── Parallelized Initial Queries: Partner identity and total counts
-                const [p_res, l, c, ln] = await Promise.all([
-                    supabase.from('partners').select('name, role, partner_id').eq('id', user.id).single(),
-                    (isAdmin ? supabase.from('leads').select('*', { count: 'exact', head: true }) : supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id)),
-                    (isAdmin ? supabase.from('clicks').select('*', { count: 'exact', head: true }) : supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id)),
-                    (isAdmin ? supabase.from('landings').select('*', { count: 'exact', head: true }) : supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id))
-                ]);
-
-                if (p_res.data) {
-                    const p = p_res.data;
-                    if (p.name) setPartnerName(p.name);
-                    setPartnerId(p.partner_id || ('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase()));
-                }
-
-                // Global CR computation
-                const globalCR = c.count ? (l.count! / c.count) * 100 : 0;
-
-                // ── Sequential Admin Data (If needed, can also be parallelized if we know in advance)
-                let topPartnersData = [];
-                if (isAdmin) {
-                    const [pCount, topLeads] = await Promise.all([
-                        supabase.from('partners').select('*', { count: 'exact', head: true }),
-                        supabase.from('leads').select('partner_id, partners(name)').limit(200)
-                    ]);
-                    setTotalPartners(pCount.count || 0);
-
-                    if (topLeads.data) {
-                        const countMap: Record<string, { name: string; count: number }> = {};
-                        topLeads.data.forEach((lead: any) => {
-                            const pid = lead.partner_id;
-                            const name = lead.partners?.name || 'Unknown';
-                            if (!countMap[pid]) countMap[pid] = { name, count: 0 };
-                            countMap[pid].count++;
-                        });
-                        topPartnersData = Object.values(countMap).sort((a, b) => b.count - a.count).slice(0, 5);
-                        setTopPartners(topPartnersData);
-                    }
-                }
-
-                // ── Parallelized Historical & Performance Data (Last 7 Days)
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-                let actQuery = supabase.from('leads').select('created_at, country, landing_slug').gte('created_at', sevenDaysAgo.toISOString());
-                let geoQuery = supabase.from('clicks').select('country, landing_slug').gte('created_at', sevenDaysAgo.toISOString());
-
-                if (!isAdmin) {
-                    actQuery = actQuery.eq('partner_id', user.id);
-                    geoQuery = geoQuery.eq('partner_id', user.id);
-                }
-
-                const [hLeads, hClicks] = await Promise.all([actQuery, geoQuery]);
-                const leadsData = hLeads.data || [];
-                const clicksGeoData = hClicks.data || [];
-
-                const activityMap: Record<string, number> = {};
-                for (let i = 6; i >= 0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
-                    activityMap[days[d.getDay()]] = 0;
-                }
-
-                const countryStats: Record<string, { leads: number; clicks: number; topPartner?: string }> = {};
-                const perfMap: Record<string, { leads: number; clicks: number }> = {};
-
-                leadsData.forEach(lead => {
-                    const d = new Date(lead.created_at);
-                    const dayName = days[d.getDay()];
-                    if (activityMap[dayName] !== undefined) activityMap[dayName]++;
-
-                    // Performance grouping
-                    const slug = (lead as any).landing_slug || (lead as any).slug || 'N/A';
-                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
-                    perfMap[slug].leads++;
-
-                    if (lead.country) {
-                        if (!countryStats[lead.country]) countryStats[lead.country] = { leads: 0, clicks: 0 };
-                        countryStats[lead.country].leads++;
-                        if (isAdmin && (lead as any).partners?.name) {
-                            countryStats[lead.country].topPartner = (lead as any).partners.name;
-                        }
-                    }
-                });
-
-                clicksGeoData.forEach(click => {
-                    const slug = (click as any).landing_slug || (click as any).slug || 'N/A';
-                    if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
-                    perfMap[slug].clicks++;
-
-                    if (click.country) {
-                        if (!countryStats[click.country]) countryStats[click.country] = { leads: 0, clicks: 0 };
-                        countryStats[click.country].clicks++;
-                    }
-                });
-
-                const chartData = Object.entries(activityMap).map(([day, count]) => ({ day, count }));
-                const formattedCountryData = Object.entries(countryStats).map(([country, data]) => ({
-                    country,
-                    leads: data.leads,
-                    clicks: data.clicks,
-                    conversion: data.clicks > 0 ? ((data.leads / data.clicks) * 100).toFixed(1) + '%' : '0%',
-                    topPartner: data.topPartner || 'N/A'
-                }));
-
-                const landingPerf = Object.entries(perfMap)
-                    .map(([slug, data]) => ({
-                        slug,
-                        leads: data.leads,
-                        clicks: data.clicks,
-                        cr: data.clicks > 0 ? (data.leads / data.clicks) * 100 : 0
-                    }))
-                    .sort((a, b) => b.leads - a.leads)
-                    .slice(0, 5);
-
-                setStats({
-                    leads: l.count || 0,
-                    clicks: c.count || 0,
-                    landings: ln.count || 0,
-                    conversionRate: globalCR,
-                    weeklyData: chartData,
-                    countryData: formattedCountryData as any,
-                    landingPerformance: landingPerf,
-                });
-            } catch (err) {
-                console.error('Error fetching stats:', err);
-            }
+        if (roleLoading) return;
+        if (!partnerData) {
             setLoading(false);
+            return;
         }
         fetchStats();
-    }, [isAdmin, lang]);
+    }, [isAdmin, partnerData, roleLoading]);
+
+    async function fetchStats() {
+        setLoading(true);
+        const userId = partnerData.id;
+
+        try {
+            // ── Parallelized Initial Queries: Partner identity and total counts
+            const [l, c, ln] = await Promise.all([
+                (isAdmin ? supabase.from('leads').select('*', { count: 'exact', head: true }) : supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', userId)),
+                (isAdmin ? supabase.from('clicks').select('*', { count: 'exact', head: true }) : supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', userId)),
+                (isAdmin ? supabase.from('landings').select('*', { count: 'exact', head: true }) : supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', userId))
+            ]);
+
+            if (partnerData) {
+                if (partnerData.name) setPartnerName(partnerData.name);
+                setPartnerId(partnerData.partner_id || ('BM_' + userId.replace(/-/g, '').substring(0, 24).toUpperCase()));
+            }
+
+            const globalCR = c.count ? (l.count! / c.count) * 100 : 0;
+
+            let topPartnersData = [];
+            if (isAdmin) {
+                const [pCount, topLeads] = await Promise.all([
+                    supabase.from('partners').select('*', { count: 'exact', head: true }),
+                    supabase.from('leads').select('partner_id, partners(name)').limit(500)
+                ]);
+                setTotalPartners(pCount.count || 0);
+
+                if (topLeads.data) {
+                    const countMap: Record<string, { name: string; count: number }> = {};
+                    topLeads.data.forEach((lead: any) => {
+                        const pid = lead.partner_id;
+                        const name = lead.partners?.name || 'Unknown';
+                        if (!countMap[pid]) countMap[pid] = { name, count: 0 };
+                        countMap[pid].count++;
+                    });
+                    topPartnersData = Object.values(countMap).sort((a, b) => b.count - a.count).slice(0, 5);
+                    setTopPartners(topPartnersData);
+                }
+            }
+
+            // ── Parallelized Historical & Performance Data (Last 7 Days)
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            let actQuery = supabase.from('leads')
+                .select('created_at, country_code, landing_slug')
+                .gte('created_at', sevenDaysAgo.toISOString())
+                .limit(1000); // Safety limit
+            
+            let geoQuery = supabase.from('clicks')
+                .select('created_at, landing_slug')
+                .gte('created_at', sevenDaysAgo.toISOString())
+                .limit(2000); // Safety limit
+
+            if (!isAdmin) {
+                actQuery = actQuery.eq('partner_id', userId);
+                geoQuery = geoQuery.eq('partner_id', userId);
+            }
+
+            const [hLeads, hClicks] = await Promise.all([actQuery, geoQuery]);
+            const leadsData = hLeads.data || [];
+            const clicksGeoData = hClicks.data || [];
+
+            // Process data for charts
+            const activityMap: Record<string, number> = {};
+            // We use day index to keep it language agnostic during processing
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const dayIndex = d.getDay();
+                activityMap[dayIndex] = 0;
+            }
+
+            const countryStats: Record<string, { leads: number; clicks: number; topPartner?: string }> = {};
+            const perfMap: Record<string, { leads: number; clicks: number }> = {};
+
+            leadsData.forEach(lead => {
+                const d = new Date(lead.created_at);
+                const dayIndex = d.getDay();
+                if (activityMap[dayIndex] !== undefined) activityMap[dayIndex]++;
+
+                const slug = (lead as any).landing_slug || (lead as any).slug || 'N/A';
+                if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
+                perfMap[slug].leads++;
+
+                const country = (lead as any).country_code || (lead as any).country;
+                if (country) {
+                    if (!countryStats[country]) countryStats[country] = { leads: 0, clicks: 0 };
+                    countryStats[country].leads++;
+                }
+            });
+
+            clicksGeoData.forEach(click => {
+                const slug = (click as any).landing_slug || (click as any).slug || 'N/A';
+                if (!perfMap[slug]) perfMap[slug] = { leads: 0, clicks: 0 };
+                perfMap[slug].clicks++;
+
+                const country = (click as any).country || (click as any).country_code;
+                if (country) {
+                    if (!countryStats[country]) countryStats[country] = { leads: 0, clicks: 0 };
+                    countryStats[country].clicks++;
+                }
+            });
+
+            // Map day index to actual language labels only when storing in state
+            const chartData = Object.entries(activityMap).map(([dayIdx, count]) => ({
+                day: days[parseInt(dayIdx)],
+                count,
+                rawDay: parseInt(dayIdx) // Keep for potential re-labeling
+            }));
+
+            const formattedCountryData = Object.entries(countryStats).map(([country, data]) => ({
+                country,
+                leads: data.leads,
+                clicks: data.clicks,
+                conversion: data.clicks > 0 ? ((data.leads / data.clicks) * 100).toFixed(1) + '%' : '0%',
+                topPartner: data.topPartner || 'N/A'
+            }));
+
+            const landingPerf = Object.entries(perfMap)
+                .map(([slug, data]) => ({
+                    slug,
+                    leads: data.leads,
+                    clicks: data.clicks,
+                    cr: data.clicks > 0 ? (data.leads / data.clicks) * 100 : 0
+                }))
+                .sort((a, b) => b.leads - a.leads)
+                .slice(0, 5);
+
+            setStats({
+                leads: l.count || 0,
+                clicks: c.count || 0,
+                landings: ln.count || 0,
+                conversionRate: globalCR,
+                weeklyData: chartData as any,
+                countryData: formattedCountryData as any,
+                landingPerformance: landingPerf,
+            });
+        } catch (err) {
+            console.error('Error fetching stats:', err);
+        }
+        setLoading(false);
+    }
+
+    // Update chart labels when language changes without re-fetching
+    useEffect(() => {
+        if (stats.weeklyData.length > 0) {
+            setStats(prev => ({
+                ...prev,
+                weeklyData: prev.weeklyData.map((d: any) => ({
+                    ...d,
+                    day: days[d.rawDay !== undefined ? d.rawDay : 0]
+                }))
+            }));
+        }
+    }, [lang]);
 
     const adminStatCards = [
         { title: t.overview.adminStatLeads, value: stats.leads.toString(), icon: Users, iconColor: 'text-[#865BFF]', iconBg: 'bg-[#865BFF]/10', accent: '#865BFF', badge: t.overview.global },
@@ -385,9 +411,9 @@ export default function OverviewPage() {
                         </button>
                     </div>
 
-                    <div className="flex-1 w-full min-h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={stats.weeklyData}>
+                    <div className="flex-1 w-full min-h-[350px] relative">
+                        <ResponsiveContainer width="100%" height="100%" aspect={2}>
+                            <AreaChart data={stats.weeklyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor={isAdmin ? '#f59e0b' : '#865BFF'} stopOpacity={0.8} />
@@ -396,7 +422,7 @@ export default function OverviewPage() {
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 500 }} dy={10} />
-                                <YAxis hide />
+                                <YAxis hide domain={[0, 'auto']} />
                                 <Tooltip contentStyle={{ backgroundColor: '#0d0221', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)', fontSize: '12px' }} />
                                 <Area type="monotone" dataKey="count" stroke={isAdmin ? '#f59e0b' : '#865BFF'} strokeWidth={4} fillOpacity={1} fill="url(#colorCount)" />
                             </AreaChart>

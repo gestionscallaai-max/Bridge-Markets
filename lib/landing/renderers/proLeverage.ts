@@ -550,3 +550,113 @@ export function renderLX12Footer(content: Record<string, any>, brand: BrandConfi
     </footer>`;
 }
 
+
+/**
+ * Renders the Pro Leverage Registration Form.
+ * High-performance dark style with purple highlights.
+ */
+export function renderLX12Registration(content: Record<string, any>, brand: BrandConfig): string {
+    const partnerId = brand.partnerId || "BM_GLOBAL";
+    const slug = brand.slug || 'default';
+    
+    return `
+    <section id="registro" class="py-40 px-8 bg-[#050505] relative overflow-hidden">
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="bg-white/[0.02] border border-white/10 rounded-[4rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row">
+                <!-- Info -->
+                <div class="lg:w-1/2 p-16 lg:p-24 bg-gradient-to-br from-purple-900/20 to-transparent flex flex-col justify-center">
+                    <span class="text-purple-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Inicia tu operativa</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">Tu Cuenta <br><span class="text-purple-400 italic">X12</span> te espera.</h2>
+                    <p class="text-lg text-white/40 font-light mb-12 leading-relaxed italic">
+                        No pierdas más tiempo en evaluaciones. Registra tus datos, elige tu balance y empieza a operar con el apalancamiento institucional de Bridge Markets.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-[10px] font-black text-white/20 uppercase tracking-widest italic">
+                            <span class="material-symbols-outlined text-purple-500 text-sm">verified</span>
+                            Sin Exámenes de acceso
+                        </div>
+                        <div class="flex items-center gap-4 text-[10px] font-black text-white/20 uppercase tracking-widest italic">
+                            <span class="material-symbols-outlined text-purple-500 text-sm">verified</span>
+                            Retiros desde el día 3
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="lg:w-1/2 p-16 lg:p-24 bg-white/[0.01]">
+                    <form id="lx12LeadForm" class="space-y-8">
+                        <input type="hidden" name="partnerId" value="${partnerId}">
+                        <input type="hidden" name="landingSlug" value="${slug}">
+                        <input type="hidden" name="source" value="pro_leverage_registration">
+                        
+                        <div>
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">Nombre del Trader</label>
+                            <input type="text" required name="name" placeholder="NOMBRE COMPLETO" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-purple-500 transition-all placeholder:text-white/5 uppercase font-bold tracking-widest">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">Email de Contacto</label>
+                            <input type="email" required name="email" placeholder="EMAIL@TRADING.COM" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-purple-500 transition-all placeholder:text-white/5 uppercase font-bold tracking-widest">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">WhatsApp / Teléfono</label>
+                            <input type="tel" required name="whatsapp" placeholder="+00 000 000 000" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-purple-500 transition-all placeholder:text-white/5 uppercase font-bold tracking-widest">
+                        </div>
+
+                        <button type="submit" id="lx12SubmitBtn" class="w-full py-6 bg-purple-600 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl hover:bg-purple-500 transition-all shadow-xl active:scale-95 italic">
+                            Activar Acceso Directo →
+                        </button>
+                    </form>
+                    <div id="lx12FormMessage" class="mt-8 text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("lx12LeadForm").addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("lx12SubmitBtn");
+                const msg = document.getElementById("lx12FormMessage");
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+                
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "ACTIVANDO CUENTA...";
+                
+                try {
+                    const res = await fetch("/api/leads", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (res.ok) {
+                        btn.style.backgroundColor = "#10b981";
+                        btn.textContent = "CUENTA ACTIVADA";
+                        msg.innerHTML = '<p class="text-emerald-500 font-black text-[10px] uppercase tracking-widest italic">Tu solicitud de acceso directo ha sido recibida.</p>';
+                        this.reset();
+                        
+                        setTimeout(() => {
+                            window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partnerId;
+                        }, 2000);
+                    } else {
+                        throw new Error();
+                    }
+                } catch (err) {
+                    btn.style.backgroundColor = "#ef4444";
+                    btn.textContent = "ERROR DE ACTIVACIÓN";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.style.backgroundColor = "#9333ea";
+                        btn.textContent = originalText;
+                    }, 3000);
+                }
+            });
+        </script>
+    </section>`;
+}

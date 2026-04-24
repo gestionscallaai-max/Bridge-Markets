@@ -30,33 +30,32 @@ export async function POST(request: Request) {
 
         // --- 1. Resolve Partner ID (BM_... to UUID) ---
         let resolvedPartnerId = partnerId;
+        let originalPartnerId = partnerId;
         
         if (partnerId && typeof partnerId === 'string' && partnerId.startsWith('BM_')) {
             try {
-                // Try to find the partner in the 'partners' or 'profiles' table
-                // Based on init_production.sql, we might need to search by a derived ID or a mapping
-                // For now, we try a direct query on partners if they have a partner_id column, 
-                // or we use the 'profiles' table if it exists.
-                const { data: partnerData, error: pError } = await supabaseClient
+                // Use 'partners' table instead of 'profiles'
+                const { data: partnerData } = await supabaseClient
                     .from('partners')
                     .select('id')
-                    .or(`id.eq.${partnerId.replace('BM_', '')},name.ilike.%${partnerId}%`) // Extreme fallback
+                    .eq('partner_id', partnerId)
                     .single();
-
+                
                 if (partnerData) {
                     resolvedPartnerId = partnerData.id;
                 } else {
-                    // Try profiles table (from 001_create_tables.sql)
-                    const { data: profileData } = await supabaseClient
-                        .from('profiles')
-                        .select('id')
-                        .eq('partner_id', partnerId)
-                        .single();
-                    if (profileData) resolvedPartnerId = profileData.id;
+                    console.warn(`Could not resolve partner_id ${partnerId} to a UUID.`);
                 }
             } catch (pErr) {
                 console.error('Error resolving partner ID:', pErr);
             }
+        }
+
+        // Final check: if resolvedPartnerId is NOT a UUID, we must NOT put it in the partner_id column
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(resolvedPartnerId);
+        if (!isUUID) {
+            console.warn('Resolved Partner ID is not a valid UUID:', resolvedPartnerId);
+            resolvedPartnerId = null; // Prevent DB error
         }
 
         // --- 2. Detect Country ---
@@ -66,45 +65,44 @@ export async function POST(request: Request) {
                                null;
 
         // --- 3. Prepare Lead Data (Compatible with both schemas) ---
+        // We collect all fields into notes as a backup so no data is lost
+        const extraFields: Record<string, any> = {};
+        const standardFields = ['name', 'email', 'whatsapp', 'phone', 'landingSlug', 'partnerId', 'source', 'status', 'notes', 'message'];
+        
+        Object.keys(body).forEach(key => {
+            if (!standardFields.includes(key)) {
+                extraFields[key] = body[key];
+            }
+        });
+
+        const phoneValue = whatsapp || phone || body.whatsapp || body.phone;
+        const msgValue = message || notes || body.message || body.notes;
+
         const leadData: any = {
             name,
             email,
-            landing_slug: landingSlug,
+            landing_slug: landingSlug || body.landingSlug,
             partner_id: resolvedPartnerId,
-            country: detectedCountry,
+            whatsapp: phoneValue,
             source: source || 'direct',
-            status: 'new'
+            status: 'new',
+            notes: `Original Partner ID: ${originalPartnerId} | ${msgValue || ''}${Object.keys(extraFields).length > 0 ? ' | Extras: ' + JSON.stringify(extraFields) : ''}`
         };
-
-        // Handle phone/whatsapp field mapping
-        const phoneValue = whatsapp || phone;
-        if (phoneValue) {
-            // We'll set both to be safe if the DB has one or the other
-            // Supabase ignore columns that don't exist in some cases, but usually it errors.
-            // So we try to be precise based on what we saw in the files.
-            leadData.whatsapp = phoneValue;
-            leadData.phone = phoneValue;
-        }
-
-        // Handle message/notes mapping
-        const msgValue = message || notes;
-        if (msgValue) {
-            leadData.message = msgValue;
-            leadData.notes = msgValue;
-        }
 
         // --- 4. Insert with Fallback logic ---
         // We try a clean insert. If it fails because of a missing column, we'll prune and retry.
+        // The correct Postgres error code for "Undefined Column" is '42703'.
         let { error } = await supabaseClient.from('leads').insert(leadData);
 
-        if (error && error.code === 'PGRST204') { // Column not found
+        if (error && (error.code === '42703' || error.message?.includes('column'))) {
             console.warn('Column mismatch detected, pruning leadData and retrying...');
-            // Prune known problematic columns and retry
+            // Prune known problematic columns and retry based on 001_create_tables.sql
             const prunedData = { ...leadData };
-            if (error.message.includes('whatsapp')) delete prunedData.whatsapp;
-            if (error.message.includes('phone')) delete prunedData.phone;
-            if (error.message.includes('message')) delete prunedData.message;
-            if (error.message.includes('notes')) delete prunedData.notes;
+            
+            // Remove columns that ARE NOT in the migration 001
+            delete prunedData.phone;
+            delete prunedData.message;
+            delete prunedData.country; // Migration 001 doesn't have country in leads table!
             
             const { error: retryError } = await supabaseClient.from('leads').insert(prunedData);
             error = retryError;

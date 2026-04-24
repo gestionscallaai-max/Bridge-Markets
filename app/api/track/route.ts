@@ -24,12 +24,12 @@ export async function GET(req: Request) {
         
         let targetUserId = partnerId;
         if (partnerId.startsWith('BM_')) {
-            const { data: profile } = await supabase
-                .from('profiles')
+            const { data: partner } = await supabase
+                .from('partners')
                 .select('id')
                 .eq('partner_id', partnerId)
                 .single();
-            if (profile) targetUserId = profile.id;
+            if (partner) targetUserId = partner.id;
         }
 
         await supabase.from('clicks').insert({

@@ -5,11 +5,12 @@ import { supabase } from '@/lib/supabaseClient';
 import { Users, Filter, Download, Loader2, Mail, Smartphone, Globe, Calendar, UserCheck, Crown, Shield, Search, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/context';
-import { useAdmin } from '@/lib/context';
+import { useAdmin, useRole } from '@/lib/context';
 
 export default function ReportsClientsPage() {
     const { t, lang } = useLanguage();
     const { isAdmin } = useAdmin();
+    const { partnerData, loading: roleLoading } = useRole();
     const [leads, setLeads] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,12 +24,17 @@ export default function ReportsClientsPage() {
     const [statusFilter, setStatusFilter] = useState<string>('all');
     const [showFilters, setShowFilters] = useState(false);
 
-    useEffect(() => { fetchLeads(); }, [isAdmin, currentPage, statusFilter]);
+    useEffect(() => { 
+        if (!roleLoading && partnerData) {
+            fetchLeads(); 
+        } else if (!roleLoading && !partnerData) {
+            setLoading(false);
+        }
+    }, [isAdmin, currentPage, statusFilter, partnerData, roleLoading]);
 
     const fetchLeads = async () => {
+        if (!partnerData?.id) { setLoading(false); return; }
         setLoading(true);
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { setLoading(false); return; }
 
         try {
             const start = (currentPage - 1) * pageSize;
@@ -37,7 +43,7 @@ export default function ReportsClientsPage() {
             let query = supabase.from('leads').select('*, partners(name, email)', { count: 'exact' });
 
             if (!isAdmin) {
-                query = query.eq('partner_id', user.id);
+                query = query.eq('partner_id', partnerData.id);
             }
 
             if (statusFilter !== 'all') {

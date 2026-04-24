@@ -22,7 +22,7 @@ import { getTemplateDescription, getTemplateBadge, getSectionName } from '@/lib/
 import LibraryDocuments from '@/components/LibraryDocuments';
 import MaterialGallery from '@/components/Promo/MaterialGallery';
 import ModularPreview from '@/components/Landing/ModularPreview';
-import { RoleContext } from '@/lib/context';
+import { RoleContext, useRole } from '@/lib/context';
 import { getT, LANGUAGE_META } from '@/lib/i18n/translations';
 import type { LangCode } from '@/lib/i18n/types';
 
@@ -34,7 +34,7 @@ const LANGUAGES = Object.entries(LANGUAGE_META).map(([code, meta]) => ({
 }));
 
 export default function PromoMaterialsPage() {
-    const { userRole } = useContext(RoleContext);
+    const { userRole, partnerData, loading: roleLoading } = useRole();
     const router = useRouter();
     const { t, lang } = useLanguage();
     const [mainTab, setMainTab] = useState<'landings' | 'banners' | 'documents'>('landings');
@@ -70,31 +70,19 @@ export default function PromoMaterialsPage() {
 
     useEffect(() => {
         setBaseUrl(window.location.origin);
-        const loadInitialData = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                // Fetch consolidated data from 'partners'
-                const { data: partner } = await supabase
-                    .from('partners')
-                    .select('partner_id, full_name, email, name')
-                    .eq('id', user.id)
-                    .single();
+        
+        if (partnerData) {
+            const fId = partnerData.partner_id || 'BM_' + partnerData.id?.replace(/-/g, '').substring(0, 24).toUpperCase();
+            setFriendlyPartnerId(fId);
+            setPartnerId(partnerData.id || '');
 
-                const fId = partner?.partner_id || 'BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase();
-                setFriendlyPartnerId(fId);
-                setPartnerId(user.id);
-
-                if (partner) {
-                    setFormData(prev => ({
-                        ...prev,
-                        fullName: partner.full_name || partner.name || prev.fullName,
-                        email: partner.email || prev.email,
-                    }));
-                }
-            }
-        };
-        loadInitialData();
-    }, []);
+            setFormData(prev => ({
+                ...prev,
+                fullName: partnerData.full_name || partnerData.name || prev.fullName,
+                email: partnerData.email || prev.email,
+            }));
+        }
+    }, [partnerData]);
 
     // Template categories
     const categories = ['all', ...Array.from(new Set(LANDING_TEMPLATES.map(t => t.category)))];

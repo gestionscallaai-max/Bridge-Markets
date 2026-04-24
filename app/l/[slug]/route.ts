@@ -54,12 +54,12 @@ export async function GET(request: Request, { params }: { params: { slug: string
         if (ref) {
             let targetUserId = ref;
             if (ref.startsWith('BM_')) {
-                const { data: profile } = await supabaseAdmin
-                    .from('profiles')
+                const { data: partner } = await supabaseAdmin
+                    .from('partners')
                     .select('id')
                     .eq('partner_id', ref)
                     .single();
-                if (profile) targetUserId = profile.id;
+                if (partner) targetUserId = partner.id;
             }
 
             const ip = request.headers.get('x-forwarded-for') || '0.0.0.0';

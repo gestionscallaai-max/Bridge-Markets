@@ -7,11 +7,13 @@ import { useSearchParams } from 'next/navigation';
 import { History as HistoryIcon, Layout, Loader2 } from 'lucide-react';
 import { supabase } from "@/lib/supabaseClient";
 import { useLanguage } from '@/lib/i18n/context';
+import { useRole } from "@/lib/context";
 
 function LandingPageContent() {
     const searchParams = useSearchParams();
     const templateId = searchParams.get('template') || undefined;
     const { t } = useLanguage();
+    const { partnerData } = useRole();
     
     const [activeTab, setActiveTab] = useState<'generator' | 'history'>('generator');
     const [partnerId, setPartnerId] = useState<string>('');
@@ -30,41 +32,10 @@ function LandingPageContent() {
     };
 
     useEffect(() => {
-        const loadPartner = async () => {
-            // First try localStorage for speed
-            const userDataStr = localStorage.getItem('user_data');
-            if (userDataStr) {
-                try {
-                    const userData = JSON.parse(userDataStr);
-                    const id = userData.partner_id || userData.id;
-                    if (id) {
-                        setPartnerId(id);
-                        return; // Found in localStorage
-                    }
-                } catch (e) {
-                    console.error("Error parsing user data", e);
-                }
-            }
-
-            // Fallback: Fetch directly from Supabase
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                const { data: partnerData } = await supabase
-                    .from('partners')
-                    .select('id')
-                    .eq('id', user.id)
-                    .single();
-                
-                if (partnerData) {
-                    setPartnerId(partnerData.id);
-                } else {
-                    setPartnerId(user.id); // Ultimate fallback
-                }
-            }
-        };
-        
-        loadPartner();
-    }, []);
+        if (partnerData) {
+            setPartnerId(partnerData.id || '');
+        }
+    }, [partnerData]);
 
     return (
         <div className="flex flex-col gap-8 pb-20">

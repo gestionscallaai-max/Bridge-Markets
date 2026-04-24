@@ -661,3 +661,115 @@ export function renderInstFooter(content: Record<string, any>, brand: BrandConfi
     </footer>
     `;
 }
+
+/**
+ * Renders the Institutional Registration Form.
+ * Minimalist, professional, and corporate style.
+ */
+export function renderInstRegistration(content: Record<string, any>, brand: BrandConfig): string {
+    const partnerId = brand.partnerId || "BM_GLOBAL";
+    const slug = brand.slug || 'default';
+    
+    return `
+    <section id="registro" class="py-40 px-8 bg-[#020202] relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 border border-white/10 rounded-[4rem] overflow-hidden shadow-2xl">
+                <!-- Info -->
+                <div class="p-16 md:p-24 bg-[#050505] flex flex-col justify-center">
+                    <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Apertura de Cuenta</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">Forma parte de la <br><span class="text-white/40 italic">Nueva Era.</span></h2>
+                    <p class="text-lg text-white/40 font-light mb-12 leading-relaxed italic">
+                        Inicia tu proceso de registro institucional. Un especialista se pondrá en contacto contigo para finalizar la configuración de tu portafolio.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-6">
+                            <span class="w-12 h-px bg-indigo-600"></span>
+                            <span class="text-[10px] font-black text-white/60 uppercase tracking-widest italic">Verificación KYC Instantánea</span>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <span class="w-12 h-px bg-indigo-600"></span>
+                            <span class="text-[10px] font-black text-white/60 uppercase tracking-widest italic">Soporte Multilingüe 24/7</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="p-16 md:p-24 bg-[#080808]">
+                    <form id="instLeadForm" class="space-y-10">
+                        <input type="hidden" name="partnerId" value="${partnerId}">
+                        <input type="hidden" name="landingSlug" value="${slug}">
+                        <input type="hidden" name="source" value="institutional_registration">
+                        
+                        <div class="relative group">
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4 group-focus-within:text-indigo-500 transition-colors">Nombre Completo</label>
+                            <input type="text" required name="name" placeholder="JUAN PÉREZ" 
+                                class="w-full bg-transparent border-b border-white/10 py-4 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-white/5 uppercase tracking-widest font-bold">
+                        </div>
+                        
+                        <div class="relative group">
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4 group-focus-within:text-indigo-500 transition-colors">Email Corporativo</label>
+                            <input type="email" required name="email" placeholder="JUAN@EMPRESA.COM" 
+                                class="w-full bg-transparent border-b border-white/10 py-4 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-white/5 uppercase tracking-widest font-bold">
+                        </div>
+
+                        <div class="relative group">
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4 group-focus-within:text-indigo-500 transition-colors">WhatsApp / Móvil</label>
+                            <input type="tel" required name="whatsapp" placeholder="+34 600 000 000" 
+                                class="w-full bg-transparent border-b border-white/10 py-4 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-white/5 uppercase tracking-widest font-bold">
+                        </div>
+
+                        <button type="submit" id="instSubmitBtn" class="w-full py-8 bg-white text-black font-black uppercase tracking-[0.3em] text-[10px] hover:bg-indigo-600 hover:text-white transition-all shadow-2xl active:scale-95 italic">
+                            Solicitar Acceso →
+                        </button>
+                    </form>
+                    <div id="instFormMessage" class="mt-8 text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("instLeadForm").addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("instSubmitBtn");
+                const msg = document.getElementById("instFormMessage");
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+                
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "PROCESANDO SOLICITUD...";
+                
+                try {
+                    const res = await fetch("/api/leads", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (res.ok) {
+                        btn.style.backgroundColor = "#4f46e5";
+                        btn.style.color = "white";
+                        btn.textContent = "SOLICITUD ENVIADA CON ÉXITO";
+                        msg.innerHTML = '<p class="text-indigo-500 font-black text-[10px] uppercase tracking-widest italic">Un asesor se pondrá en contacto contigo a la brevedad.</p>';
+                        this.reset();
+                        
+                        setTimeout(() => {
+                            window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partnerId;
+                        }, 2000);
+                    } else {
+                        throw new Error();
+                    }
+                } catch (err) {
+                    btn.style.backgroundColor = "#ef4444";
+                    btn.textContent = "ERROR EN EL SISTEMA";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.style.backgroundColor = "white";
+                        btn.style.color = "black";
+                        btn.textContent = originalText;
+                    }, 3000);
+                }
+            });
+        </script>
+    </section>`;
+}

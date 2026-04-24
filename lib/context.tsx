@@ -10,5 +10,23 @@ export const AdminContext = createContext<{ isAdmin: boolean; setIsAdmin: (val: 
 export const useAdmin = () => useContext(AdminContext);
 
 // ─── Role Context ─────────────────────────────────────────────
-export const RoleContext = createContext<{ userRole: string }>({ userRole: 'partner' });
+export interface PartnerData {
+    id?: string;
+    partner_id?: string;
+    full_name?: string;
+    email?: string;
+    name?: string;
+    role?: string;
+}
+
+export const RoleContext = createContext<{ 
+    userRole: string; 
+    partnerData: PartnerData | null;
+    loading: boolean;
+}>({ 
+    userRole: 'partner', 
+    partnerData: null,
+    loading: true
+});
+
 export const useRole = () => useContext(RoleContext);

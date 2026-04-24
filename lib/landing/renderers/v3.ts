@@ -248,3 +248,120 @@ export function renderV3Footer(content: Record<string, any>, brand: BrandConfig)
     </footer>
     `;
 }
+
+/**
+ * Renders the V3 Premium Registration Form.
+ * High-end dark aesthetic with glassmorphism.
+ */
+export function renderV3Registration(content: Record<string, any>, brand: BrandConfig): string {
+    const partnerId = brand.partnerId || "BM_GLOBAL";
+    
+    return `
+    <section id="registro" class="py-32 px-8 bg-white relative overflow-hidden">
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="bg-[#0d0221] rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.2)] flex flex-col lg:flex-row">
+                <!-- Info Side -->
+                <div class="lg:w-1/2 p-16 lg:p-24 bg-gradient-to-br from-[#865BFF] to-[#6366f1] text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-5xl font-black mb-8 leading-tight uppercase tracking-tighter italic">Empieza tu <br><span class="text-white/60">camino al éxito</span></h2>
+                        <p class="text-xl text-white/80 font-medium mb-12 leading-relaxed">
+                            Regístrate ahora para acceder a la infraestructura de trading más avanzada y unirte a nuestra comunidad institucional.
+                        </p>
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-sm">verified_user</span>
+                                </div>
+                                <span class="text-sm font-bold uppercase tracking-widest">Seguridad Institucional</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-sm">bolt</span>
+                                </div>
+                                <span class="text-sm font-bold uppercase tracking-widest">Activación Instantánea</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Side -->
+                <div class="lg:w-1/2 p-16 lg:p-24 bg-[#0d0221] relative">
+                    <form id="v3LeadForm" class="space-y-8">
+                        <input type="hidden" name="partnerId" value="${partnerId}">
+                        <input type="hidden" name="landingSlug" value="${brand.slug || 'default'}">
+                        <input type="hidden" name="source" value="v3_premium_registration">
+                        
+                        <div>
+                            <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-4">Nombre Completo</label>
+                            <input type="text" required name="name" placeholder="John Doe" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-[#865BFF] transition-all placeholder:text-white/10">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-4">Email Corporativo</label>
+                            <input type="email" required name="email" placeholder="john@example.com" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-[#865BFF] transition-all placeholder:text-white/10">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-4">WhatsApp / Teléfono</label>
+                            <input type="tel" required name="whatsapp" placeholder="+1 234 567 890" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-[#865BFF] transition-all placeholder:text-white/10">
+                        </div>
+
+                        <button type="submit" id="v3SubmitBtn" class="w-full py-6 bg-[#865BFF] text-white font-black rounded-2xl uppercase tracking-[0.2em] text-xs hover:bg-[#7342FF] transition-all shadow-2xl shadow-[#865BFF]/20 active:scale-95">
+                            Crear Cuenta →
+                        </button>
+                        
+                        <p class="text-[10px] text-white/20 text-center uppercase tracking-widest mt-8 font-bold">
+                            Al registrarte, aceptas nuestros términos y condiciones.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("v3LeadForm").addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("v3SubmitBtn");
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+                
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "PROCESANDO...";
+                
+                try {
+                    const res = await fetch("/api/leads", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (res.ok) {
+                        btn.style.backgroundColor = "#10b981";
+                        btn.textContent = "¡SOLICITUD ENVIADA!";
+                        this.reset();
+                        
+                        // Redirect to registration portal
+                        setTimeout(() => {
+                            window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partnerId;
+                        }, 1500);
+                    } else {
+                        throw new Error();
+                    }
+                } catch (err) {
+                    btn.style.backgroundColor = "#ef4444";
+                    btn.textContent = "ERROR AL ENVIAR";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.style.backgroundColor = "#865BFF";
+                        btn.textContent = originalText;
+                    }, 3000);
+                }
+            });
+        </script>
+    </section>`;
+}

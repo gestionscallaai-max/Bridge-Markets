@@ -18,12 +18,18 @@ export const config = {
 export default async function middleware(req: NextRequest) {
     const url = req.nextUrl;
 
-    // 1. Manejo de Sesión de Supabase (Actualiza cookies y protege /dashboard)
-    const supabaseResponse = await updateSession(req);
+    // 1. Manejo de Sesión de Supabase (Only for relevant routes to save latency)
+    const isDashboardRoute = url.pathname.startsWith('/dashboard');
+    const isAuthRoute = url.pathname.startsWith('/login') || url.pathname.startsWith('/register');
     
-    // Si updateSession devolvió una redirección (ej. de /dashboard a /login), la ejecutamos de inmediato.
-    if (supabaseResponse.headers.get('location')) {
-        return supabaseResponse;
+    let supabaseResponse = NextResponse.next({ request: req });
+
+    if (isDashboardRoute || isAuthRoute) {
+        supabaseResponse = await updateSession(req);
+        // Si updateSession devolvió una redirección (ej. de /dashboard a /login), la ejecutamos de inmediato.
+        if (supabaseResponse.headers.get('location')) {
+            return supabaseResponse;
+        }
     }
 
     // 2. Manejo de Subdominios (Mantenemos la lógica original de afiliados)

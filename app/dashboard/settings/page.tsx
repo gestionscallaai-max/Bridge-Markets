@@ -11,9 +11,8 @@ export default function AccountSettingsPage() {
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [profile, setProfile] = useState({
-        full_name: '',
+        name: '',
         email: '',
-        country: '',
         partner_id: '',
     });
 
@@ -23,12 +22,12 @@ export default function AccountSettingsPage() {
             if (!user) { setLoading(false); return; }
 
             const { data } = await supabase
-                .from('profiles')
-                .select('full_name, email, country, partner_id')
+                .from('partners')
+                .select('name, email, partner_id')
                 .eq('id', user.id)
                 .single();
 
-            if (data) setProfile(data);
+            if (data) setProfile(data as any);
             setLoading(false);
         }
         fetchProfile();
@@ -41,10 +40,9 @@ export default function AccountSettingsPage() {
         if (!user) return;
 
         await supabase
-            .from('profiles')
+            .from('partners')
             .update({
-                full_name: profile.full_name,
-                country: profile.country,
+                name: profile.name,
             })
             .eq('id', user.id);
 
@@ -67,7 +65,7 @@ export default function AccountSettingsPage() {
                 <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                     <div className="relative group">
                         <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-[#865BFF] to-[#6335f8] flex items-center justify-center text-3xl font-black shadow-2xl">
-                            {profile.full_name?.substring(0, 2).toUpperCase() || 'BM'}
+                            {profile.name?.substring(0, 2).toUpperCase() || 'BM'}
                         </div>
                         <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-white text-[#0d0221] flex items-center justify-center shadow-lg border-4 border-[#0d0221] group-hover:scale-110 transition-transform cursor-pointer">
                             <Camera className="w-4 h-4" />
@@ -75,7 +73,7 @@ export default function AccountSettingsPage() {
                     </div>
                     <div className="text-center md:text-left">
                         <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
-                            <h1 className="text-3xl font-black tracking-tight">{profile.full_name || 'Partner'}</h1>
+                            <h1 className="text-3xl font-black tracking-tight">{profile.name || 'Partner'}</h1>
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">
                                 <BadgeCheck className="w-3 h-3" /> {t.settings.verified}
                             </span>
@@ -130,21 +128,21 @@ export default function AccountSettingsPage() {
                                     </label>
                                     <input
                                         type="text"
-                                        value={profile.full_name || ''}
-                                        onChange={e => setProfile({ ...profile, full_name: e.target.value })}
+                                        value={profile.name || ''}
+                                        onChange={e => setProfile({ ...profile, name: e.target.value })}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-semibold text-slate-800 focus:outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
                                         placeholder={t.settings.fullName}
                                     />
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 opacity-50">
                                     <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 ml-1">
                                         <Globe className="w-3 h-3" /> {t.settings.country}
                                     </label>
                                     <input
                                         type="text"
-                                        value={profile.country || ''}
-                                        onChange={e => setProfile({ ...profile, country: e.target.value })}
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-semibold text-slate-800 focus:outline-none focus:border-[#865BFF] focus:ring-4 focus:ring-[#865BFF]/5 transition-all"
+                                        value="--"
+                                        disabled
+                                        className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-5 text-sm font-semibold text-slate-400 cursor-not-allowed"
                                         placeholder={t.settings.country}
                                     />
                                 </div>

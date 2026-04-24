@@ -9,11 +9,12 @@ import {
     BarChart, Bar, Cell
 } from 'recharts';
 import { useLanguage } from '@/lib/i18n/context';
-import { useAdmin } from '@/lib/context';
+import { useAdmin, useRole } from '@/lib/context';
 
 export default function ReportsStatsPage() {
     const { t } = useLanguage();
     const { isAdmin } = useAdmin();
+    const { partnerData, loading: roleLoading } = useRole();
     const [stats, setStats] = useState({ leads: 0, clicks: 0, landings: 0, conversionRate: '0%', totalPartners: 0 });
     const [chartData, setChartData] = useState<any[]>([]);
     const [partnerRankings, setPartnerRankings] = useState<any[]>([]);
@@ -26,12 +27,17 @@ export default function ReportsStatsPage() {
 
     useEffect(() => {
         setMounted(true);
-        async function fetchData() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) { setLoading(false); return; }
+        if (roleLoading) return;
+        if (!partnerData) {
+            setLoading(false);
+            return;
+        }
 
-            // Fetch current goal and identity
-            const { data: partnerData } = await supabase.from('partners').select('monthly_goal, partner_id').eq('id', user.id).single();
+        async function fetchData() {
+            const userId = partnerData.id;
+            if (!userId) { setLoading(false); return; }
+
+            // Fetch current goal and identity from already loaded partnerData
             if (partnerData?.monthly_goal) setMonthlyGoal(partnerData.monthly_goal);
             if (partnerData?.partner_id) setPartnerId(partnerData.partner_id);
 
@@ -96,9 +102,9 @@ export default function ReportsStatsPage() {
             } else {
                 // Partner View: only their data
                 const [l, c, ln] = await Promise.all([
-                    supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
-                    supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
-                    supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', user.id),
+                    supabase.from('leads').select('*', { count: 'exact', head: true }).eq('partner_id', userId),
+                    supabase.from('clicks').select('*', { count: 'exact', head: true }).eq('partner_id', userId),
+                    supabase.from('landings').select('*', { count: 'exact', head: true }).eq('partner_id', userId),
                 ]);
 
                 const leadsCount = l.count || 0;
@@ -114,11 +120,11 @@ export default function ReportsStatsPage() {
                     supabase.from('clicks')
                         .select('created_at')
                         .gte('created_at', sevenDaysAgo.toISOString())
-                        .eq('partner_id', user.id),
+                        .eq('partner_id', userId),
                     supabase.from('leads')
                         .select('created_at')
                         .gte('created_at', sevenDaysAgo.toISOString())
-                        .eq('partner_id', user.id)
+                        .eq('partner_id', userId)
                 ]);
 
                 const dayMap: any[] = [];
@@ -143,16 +149,14 @@ export default function ReportsStatsPage() {
             setLoading(false);
         }
         fetchData();
-    }, [t, isAdmin]);
+    }, [t, isAdmin, partnerData, roleLoading]);
 
     const handleSaveGoal = async () => {
+        if (!partnerData?.id) return;
         setSavingGoal(true);
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                await supabase.from('partners').update({ monthly_goal: monthlyGoal }).eq('id', user.id);
-                setIsEditingGoal(false);
-            }
+            await supabase.from('partners').update({ monthly_goal: monthlyGoal }).eq('id', partnerData.id);
+            setIsEditingGoal(false);
         } catch (error) {
             console.error('Error saving goal:', error);
         }

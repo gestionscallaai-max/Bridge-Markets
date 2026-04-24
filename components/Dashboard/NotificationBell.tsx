@@ -4,6 +4,7 @@ import { Bell, Check, X, Clock, ExternalLink, Trash2, ShieldCheck, AlertCircle, 
 import { supabase } from '@/lib/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useRole } from '@/lib/context';
 
 interface Notification {
     id: string;
@@ -17,6 +18,7 @@ interface Notification {
 }
 
 export default function NotificationBell() {
+    const { partnerData, loading: roleLoading } = useRole();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -28,7 +30,9 @@ export default function NotificationBell() {
 
     useEffect(() => {
         setMounted(true);
-        fetchNotifications();
+        if (!roleLoading && partnerData) {
+            fetchNotifications();
+        }
         
         // Listen for clicks outside to close dropdown
         const handleClickOutside = (event: MouseEvent) => {
@@ -53,13 +57,12 @@ export default function NotificationBell() {
     };
 
     const fetchNotifications = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        if (!partnerData?.id) return;
 
         const { data, error } = await supabase
             .from('notifications')
             .select('*')
-            .eq('user_id', user.id)
+            .eq('user_id', partnerData.id)
             .order('created_at', { ascending: false })
             .limit(10);
 
@@ -78,13 +81,12 @@ export default function NotificationBell() {
     };
 
     const markAllAsRead = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        if (!partnerData?.id) return;
 
         const { error } = await supabase
             .from('notifications')
             .update({ read: true })
-            .eq('user_id', user.id)
+            .eq('user_id', partnerData.id)
             .eq('read', false);
 
         if (!error) {

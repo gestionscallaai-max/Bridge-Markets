@@ -512,3 +512,118 @@ export function renderSNUFooter(content: Record<string, any>, brand: BrandConfig
     </footer>
     `;
 }
+
+/**
+ * Renders the Synthetic Universe Registration Form.
+ * Galactic dark style with indigo highlights.
+ */
+export function renderSNURegistration(content: Record<string, any>, brand: BrandConfig): string {
+    const partnerId = brand.partnerId || "BM_GLOBAL";
+    const slug = brand.slug || 'default';
+    
+    return `
+    <section id="registro" class="py-40 px-8 bg-[#000] relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.05)_0%,_transparent_70%)]"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="bg-gradient-to-br from-indigo-950/20 via-[#050505] to-[#000] border border-indigo-500/20 rounded-[4rem] overflow-hidden shadow-[0_0_100px_rgba(79,70,229,0.1)] flex flex-col lg:flex-row">
+                <!-- Info -->
+                <div class="lg:w-1/2 p-16 lg:p-24 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full opacity-10 stars-container"></div>
+                    <div class="relative z-10">
+                        <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Acceso Galáctico</span>
+                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">Entra al Universo <br><span class="text-indigo-400">Sintético.</span></h2>
+                        <p class="text-lg text-white/40 font-light mb-12 leading-relaxed italic">
+                            La mayor oferta de índices sintéticos del planeta te espera. Regístrate y activa tu cuenta MT5 en minutos.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="p-6 bg-white/5 border border-white/5 rounded-2xl">
+                                <div class="text-xl font-black text-white mb-2">100+</div>
+                                <div class="text-[8px] text-white/30 uppercase tracking-widest font-black">Activos</div>
+                            </div>
+                            <div class="p-6 bg-white/5 border border-white/5 rounded-2xl">
+                                <div class="text-xl font-black text-white mb-2">24/7</div>
+                                <div class="text-[8px] text-white/30 uppercase tracking-widest font-black">Operativa</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="lg:w-1/2 p-16 lg:p-24 bg-white/[0.01] backdrop-blur-3xl border-l border-white/5">
+                    <form id="snuLeadForm" class="space-y-8">
+                        <input type="hidden" name="partnerId" value="${partnerId}">
+                        <input type="hidden" name="landingSlug" value="${slug}">
+                        <input type="hidden" name="source" value="synthetic_universe_registration">
+                        
+                        <div>
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">Identidad del Trader</label>
+                            <input type="text" required name="name" placeholder="NOMBRE COMPLETO" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-white/10 uppercase font-black">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">Canal de Contacto (Email)</label>
+                            <input type="email" required name="email" placeholder="EMAIL@TRADING.COM" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-white/10 uppercase font-black">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-4">WhatsApp / Signal</label>
+                            <input type="tel" required name="whatsapp" placeholder="+00 000 000 000" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-white/10 uppercase font-black">
+                        </div>
+
+                        <button type="submit" id="snuSubmitBtn" class="w-full py-6 bg-indigo-600 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl hover:bg-indigo-500 transition-all shadow-[0_20px_40px_rgba(79,70,229,0.3)] active:scale-95 italic">
+                            Iniciar mi Viaje →
+                        </button>
+                    </form>
+                    <div id="snuFormMessage" class="mt-8 text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById("snuLeadForm").addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById("snuSubmitBtn");
+                const msg = document.getElementById("snuFormMessage");
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+                
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "CONECTANDO CON EL HUB...";
+                
+                try {
+                    const res = await fetch("/api/leads", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (res.ok) {
+                        btn.style.backgroundColor = "#10b981";
+                        btn.textContent = "ACCESO CONCEDIDO";
+                        msg.innerHTML = '<p class="text-emerald-500 font-black text-[10px] uppercase tracking-widest italic">Tu solicitud ha sido enviada al universo Bridge Markets.</p>';
+                        this.reset();
+                        
+                        setTimeout(() => {
+                            window.location.href = 'https://portal.bridgemarkets.global/register?partner=' + data.partnerId;
+                        }, 2000);
+                    } else {
+                        throw new Error();
+                    }
+                } catch (err) {
+                    btn.style.backgroundColor = "#ef4444";
+                    btn.textContent = "ERROR DE CONEXIÓN";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.style.backgroundColor = "#4f46e5";
+                        btn.textContent = originalText;
+                    }, 3000);
+                }
+            });
+        </script>
+    </section>`;
+}

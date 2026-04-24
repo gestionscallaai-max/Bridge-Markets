@@ -9,10 +9,13 @@ import { supabase } from '@/lib/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LanguageProvider, useLanguage, type LangCode } from '@/lib/i18n/context';
 import { LANGUAGE_META } from '@/lib/i18n/translations';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 import { AdminContext, RoleContext } from '@/lib/context';
-import NotificationBell from '@/components/Dashboard/NotificationBell';
-import GlobalNotice from '@/components/Dashboard/GlobalNotice';
+
+const NotificationBell = dynamic(() => import('@/components/Dashboard/NotificationBell'), { ssr: false });
+const GlobalNotice = dynamic(() => import('@/components/Dashboard/GlobalNotice'), { ssr: false });
 
 // ─── Language Selector Dropdown ──────────────────────────────
 function LanguageSelector() {
@@ -121,30 +124,37 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [userRole, setUserRole] = useState('partner_view');
     const [partnerId, setPartnerId] = useState('...');
+    const [partnerData, setPartnerData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     React.useEffect(() => {
         const loadUserData = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                // Fetch all user data from 'partners' (Single source of truth)
-                const { data: partner } = await supabase
-                    .from('partners')
-                    .select('partner_id, role')
-                    .eq('id', user.id)
-                    .single();
-                
-                if (partner?.partner_id) {
-                    setPartnerId(partner.partner_id);
-                } else {
-                    // Fallback using the same logic as the DB trigger
-                    setPartnerId('BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase());
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    // Fetch all user data from 'partners' (Single source of truth)
+                    const { data: partner } = await supabase
+                        .from('partners')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single();
+                    
+                    if (partner) {
+                        setPartnerData(partner);
+                        setPartnerId(partner.partner_id || '...');
+                        setUserRole(partner.role || 'partner');
+                        setIsAdmin(partner.role === 'admin');
+                    } else {
+                        // Fallback
+                        const fId = 'BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase();
+                        setPartnerId(fId);
+                    }
                 }
-
-                if (partner) {
-                    setUserRole(partner.role || 'partner');
-                    setIsAdmin(partner.role === 'admin');
-                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+            } finally {
+                setLoading(false);
             }
         };
         loadUserData();
@@ -228,7 +238,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
     const title = getPageTitle();
 
     return (
-        <RoleContext.Provider value={{ userRole }}>
+        <RoleContext.Provider value={{ userRole, partnerData, loading }}>
         <AdminContext.Provider value={{ isAdmin, setIsAdmin }}>
             <div className={`flex h-screen bg-[#f8fafc] text-slate-800 overflow-hidden relative ${isRTL ? 'flex-row-reverse' : ''}`}>
 
@@ -260,7 +270,14 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
 
                     {/* Logo */}
                     <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-8 px-6">
-                        <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" className="w-full max-w-[220px] h-auto object-contain transition-transform duration-500 hover:scale-105" />
+                        <Image 
+                            src="/images/logo-bm-blanco.png" 
+                            alt="Bridge Markets" 
+                            width={220} 
+                            height={60} 
+                            className="h-auto object-contain transition-transform duration-500 hover:scale-105"
+                            priority
+                        />
                         <button 
                             onClick={() => setIsMobileMenuOpen(false)} 
                             className="lg:hidden absolute top-8 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all"
@@ -395,7 +412,14 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                             <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 shrink-0">
                                 <Menu className="w-5 h-5" />
                             </button>
-                            <img src="/images/logo-bm-negro.png" alt="Logo" className="lg:hidden h-8 object-contain shrink-0" />
+                            <div className="lg:hidden relative h-8 w-32">
+                                <Image 
+                                    src="/images/logo-bm-negro.png" 
+                                    alt="Logo" 
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
                             <div>
                                 <h1 className="text-sm lg:text-lg font-medium tracking-tight text-slate-800 leading-tight">
                                     {title.main}{' '}

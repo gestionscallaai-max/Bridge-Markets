@@ -3,10 +3,10 @@ import { BrandConfig } from '../types';
 
 import { renderPropHero, renderPropEducation, renderPropProgramsForex, renderPropProgramsSynthetic, renderPropSteps, renderPropRules, renderPropBenefits, renderPropCommunity, renderPropFAQ, renderPropFinalCTA, renderPropFooter, renderPropRegistration } from './propFirm';
 import { renderMamCopyHero, renderMamCopyNav, renderMamCopyIntro, renderMamBlock, renderCopyBlock, renderMamCopyComparison, renderMamCopyBenefits, renderMamCopySteps, renderMamCopyFAQ, renderMamCopyFinalCTA, renderMCCommunity, renderMCFooter, renderMCRegistration } from './mamCopy';
-import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA, renderLX12Footer } from './proLeverage';
-import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter } from './institutional';
-import { renderSNUHero, renderSNUValue, renderSNUUniverses, renderSNUUnvBM, renderSNUUnvDeriv, renderSNUUnvWeltrade, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUFinalCTA, renderSNUFooter } from './syntheticUniverse';
-import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer } from './v3';
+import { renderLX12Hero, renderLX12Intro, renderLX12Pricing, renderLX12Example, renderLX12Rules, renderLX12Withdrawals, renderLX12Benefits, renderLX12Community, renderLX12Faq, renderLX12FinalCTA, renderLX12Footer, renderLX12Registration } from './proLeverage';
+import { renderInstHero, renderInstAbout, renderInstWhy, renderInstEcosystem, renderInstSelector, renderInstPartners, renderInstTech, renderInstWorkflow, renderInstCommunity, renderInstFAQ, renderInstFinalCTA, renderInstFooter, renderInstRegistration } from './institutional';
+import { renderSNUHero, renderSNUValue, renderSNUUniverses, renderSNUUnvBM, renderSNUUnvDeriv, renderSNUUnvWeltrade, renderSNUWhy, renderSNUWorkflow, renderSNUCommunity, renderSNUFAQ, renderSNUFinalCTA, renderSNUFooter, renderSNURegistration } from './syntheticUniverse';
+import { renderV3Hero, renderV3Features, renderV3Header, renderV3Community, renderV3Footer, renderV3Registration } from './v3';
 import { renderSPHero, renderSPAbout, renderSPAdvantages, renderSPFamilies, renderSPWorkflow, renderSPTechSpecs, renderSPActivation, renderSPCommunity, renderSPFAQ, renderSPFinalCTA, renderSPFooter } from './syntheticProduct';
 import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
 import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator } from './features';
@@ -54,6 +54,7 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     lx12_faq: renderLX12Faq,
     lx12_final_cta: renderLX12FinalCTA,
     lx12_footer: renderLX12Footer,
+    lx12_registration: renderLX12Registration,
 
     // INSTITUTIONAL
     inst_hero: renderInstHero,
@@ -68,6 +69,7 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     inst_faq: renderInstFAQ,
     inst_final_cta: renderInstFinalCTA,
     inst_footer: renderInstFooter,
+    inst_registration: renderInstRegistration,
 
     // SYNTHETIC UNIVERSE
     snu_hero: renderSNUHero,
@@ -82,6 +84,7 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     snu_faq: renderSNUFAQ,
     snu_final_cta: renderSNUFinalCTA,
     snu_footer: renderSNUFooter,
+    snu_registration: renderSNURegistration,
 
     // V3 PREMIUM
     v3_hero: renderV3Hero,
@@ -89,6 +92,7 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     v3_header: renderV3Header,
     v3_community: renderV3Community,
     v3_footer: renderV3Footer,
+    v3_registration: renderV3Registration,
 
     // SYNTHETIC PRODUCT (Blueprint 8)
     sp_hero: renderSPHero,
