@@ -34,8 +34,8 @@ export default function ReportsStatsPage() {
         }
 
         async function fetchData() {
+            if (!partnerData?.id) { setLoading(false); return; }
             const userId = partnerData.id;
-            if (!userId) { setLoading(false); return; }
 
             // Fetch current goal and identity from already loaded partnerData
             if (partnerData?.monthly_goal) setMonthlyGoal(partnerData.monthly_goal);

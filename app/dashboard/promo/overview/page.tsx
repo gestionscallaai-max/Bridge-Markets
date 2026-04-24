@@ -71,10 +71,10 @@ export default function PromoMaterialsPage() {
     useEffect(() => {
         setBaseUrl(window.location.origin);
         
-        if (partnerData) {
-            const fId = partnerData.partner_id || 'BM_' + partnerData.id?.replace(/-/g, '').substring(0, 24).toUpperCase();
+        if (partnerData?.id) {
+            const fId = partnerData.partner_id || 'BM_' + partnerData.id.replace(/-/g, '').substring(0, 24).toUpperCase();
             setFriendlyPartnerId(fId);
-            setPartnerId(partnerData.id || '');
+            setPartnerId(partnerData.id);
 
             setFormData(prev => ({
                 ...prev,
