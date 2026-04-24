@@ -13,10 +13,13 @@ export const useAdmin = () => useContext(AdminContext);
 export interface PartnerData {
     id?: string;
     partner_id?: string;
+    name?: string;
     full_name?: string;
     email?: string;
-    name?: string;
     role?: string;
+    tier?: string;
+    referral_link?: string;
+    wallet_balance?: number;
 }
 
 export const RoleContext = createContext<{ 

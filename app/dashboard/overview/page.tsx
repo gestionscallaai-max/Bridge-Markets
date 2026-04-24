@@ -65,6 +65,7 @@ export default function OverviewPage() {
     }, [isAdmin, partnerData, roleLoading]);
 
     async function fetchStats() {
+        if (!partnerData?.id) return;
         setLoading(true);
         const userId = partnerData.id;
 
@@ -109,12 +110,12 @@ export default function OverviewPage() {
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
             let actQuery = supabase.from('leads')
-                .select('created_at, country_code, landing_slug')
+                .select('*')
                 .gte('created_at', sevenDaysAgo.toISOString())
                 .limit(1000); // Safety limit
             
             let geoQuery = supabase.from('clicks')
-                .select('created_at, landing_slug')
+                .select('*')
                 .gte('created_at', sevenDaysAgo.toISOString())
                 .limit(2000); // Safety limit
 
