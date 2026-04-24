@@ -131,11 +131,11 @@ export default function LandingTypeform({ initialTemplate, onGoToHistory, editDa
     // Load user data from context
     useEffect(() => {
         if (partnerData) {
-            setUserId(partnerData.id);
-            setPartnerId(partnerData.id);
-            if (!fullName && partnerData.name) setFullName(partnerData.name);
-            if (!email && partnerData.email) setEmail(partnerData.email);
-            if (!ctaLink && partnerData.referral_link) setCtaLink(partnerData.referral_link);
+            setUserId(partnerData.id || '');
+            setPartnerId(partnerData.id || '');
+            if (!fullName && partnerData.name) setFullName(partnerData.name || '');
+            if (!email && partnerData.email) setEmail(partnerData.email || '');
+            if (!ctaLink && partnerData.referral_link) setCtaLink(partnerData.referral_link || '');
         }
     }, [partnerData]);
 
