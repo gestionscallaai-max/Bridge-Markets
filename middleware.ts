@@ -62,7 +62,7 @@ export default async function middleware(req: NextRequest) {
                            url.pathname.includes('favicon.ico') ||
                            url.pathname.startsWith('/images');
 
-    if (affiliateId && affiliateId !== 'www' && affiliateId !== 'marketingtools' && !isInternalRoute && !url.pathname.startsWith(`/${affiliateId}`)) {
+    if (affiliateId && affiliateId !== 'www' && affiliateId !== 'marketingtools' && affiliateId !== 'marketing-tools' && !isInternalRoute && !url.pathname.startsWith(`/${affiliateId}`)) {
         return NextResponse.rewrite(new URL(`/${affiliateId}${url.pathname}`, req.url));
     }
 
