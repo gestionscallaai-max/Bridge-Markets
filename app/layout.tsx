@@ -7,6 +7,10 @@ const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "500", "600"]
 export const metadata: Metadata = {
     title: "Partner Dashboard | Bridge Markets",
     description: "Premium affiliate portal for Bridge Markets partners",
+    icons: {
+        icon: "/images/Logo%20Favicon.png",
+        apple: "/images/Logo%20Favicon.png",
+    },
 };
 
 export default function RootLayout({
