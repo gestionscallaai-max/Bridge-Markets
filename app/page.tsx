@@ -186,13 +186,17 @@ export default function VisuallyRichLanding() {
             {/* HERO SECTION */}
             <section className="relative z-10 pt-48 pb-32 px-6 lg:px-20 min-h-screen flex items-center overflow-visible">
                 <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                    <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1 }}>
+                    <motion.div 
+                        initial={{ opacity: 0, x: -30 }} 
+                        animate={{ opacity: 1, x: 0 }} 
+                        className="relative z-[50]"
+                    >
                         <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-full mb-10 backdrop-blur-md">
                             <Activity className="w-4 h-4 text-[#865BFF] animate-pulse" />
                             <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/60">Infraestructura de Grado Global</span>
                         </div>
-                        {/* Title Fix: Responsive sizing and padding to prevent cut-off */}
-                        <h1 className="text-6xl md:text-8xl lg:text-[9.5rem] font-black leading-[1.1] lg:leading-[0.9] mb-12 tracking-tightest font-heading text-gradient">
+                        {/* Final scaling and padding to prevent any character cut-off */}
+                        <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-black leading-[1.1] lg:leading-[0.9] mb-12 tracking-tightest font-heading text-gradient pr-12">
                             Marketing<br /><span className="text-white italic">Tools</span>
                         </h1>
                         <p className="text-xl lg:text-3xl text-white/40 max-w-xl mb-16 font-light leading-relaxed">
