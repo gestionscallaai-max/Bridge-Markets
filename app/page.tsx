@@ -191,10 +191,6 @@ export default function VisuallyRichLanding() {
                         animate={{ opacity: 1, x: 0 }} 
                         className="relative z-[50]"
                     >
-                        <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-full mb-10 backdrop-blur-md">
-                            <Activity className="w-4 h-4 text-[#865BFF] animate-pulse" />
-                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/60">Infraestructura de Grado Global</span>
-                        </div>
                         {/* Final scaling and padding to prevent any character cut-off */}
                         <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-black leading-[1.1] lg:leading-[0.9] mb-12 tracking-tightest font-heading text-gradient pr-12">
                             Marketing<br /><span className="text-white italic">Tools</span>
@@ -231,10 +227,10 @@ export default function VisuallyRichLanding() {
                 
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
                     {[
-                        { icon: <Shield className="w-12 h-12" />, title: "Cumplimiento Global", desc: "Todo el material cumple con las regulaciones internacionales de marketing financiero." },
-                        { icon: <Zap className="w-12 h-12" />, title: "Alta Conversión", desc: "Plantillas optimizadas mediante A/B testing para maximizar el registro de nuevos partners." },
-                        { icon: <Globe className="w-12 h-12" />, title: "Sincronización Cloud", desc: "Actualiza tus herramientas al instante desde cualquier parte del mundo sin latencia." },
-                        { icon: <Lock className="w-12 h-12" />, title: "Seguridad Bancaria", desc: "Protección de datos de nivel institucional para ti y todos tus prospectos." }
+                        { icon: <Shield className="w-12 h-12" />, title: "Cumplimiento Institucional", desc: "Material diseñado bajo estándares internacionales de transparencia y ética financiera." },
+                        { icon: <Zap className="w-12 h-12" />, title: "Máxima Conversión", desc: "Plantillas optimizadas para facilitar el registro y la captación efectiva de nuevos partners." },
+                        { icon: <Globe className="w-12 h-12" />, title: "Acceso Global", desc: "Gestiona tus activos de marketing desde cualquier lugar con sincronización instantánea." },
+                        { icon: <Lock className="w-12 h-12" />, title: "Seguridad de Datos", desc: "Protección avanzada de nivel institucional para garantizar la privacidad de toda tu red." }
                     ].map((item, i) => (
                         <motion.div key={i} {...fadeInUp} className="flex flex-col gap-8 group">
                             <div className="text-[#865BFF] p-6 bg-white/5 rounded-3xl w-fit group-hover:scale-110 group-hover:bg-[#865BFF]/10 transition-all">{item.icon}</div>
@@ -254,7 +250,7 @@ export default function VisuallyRichLanding() {
                             {[
                                 { title: "Afiliados y Referidores", desc: "Material listo para compartir en redes sociales y atraer tráfico masivo de forma profesional." },
                                 { title: "Introducing Brokers (IB)", desc: "Landings institucionales para formalizar tu presencia global y generar confianza inmediata." },
-                                { title: "Creadores de Contenido", desc: "Activos visuales en 4K y videos listos para tus transmisiones, reels y publicaciones." }
+                                { title: "Creadores de Contenido", desc: "Activos visuales en 4K y material gráfico de alto impacto listos para todas tus publicaciones." }
                             ].map((profile, i) => (
                                 <div key={i} className="flex gap-8 items-start group">
                                     <div className="mt-1 bg-[#865BFF]/20 p-2 rounded-full group-hover:bg-[#865BFF] transition-colors"><CheckCircle2 className="w-6 h-6 text-white" /></div>
@@ -284,7 +280,7 @@ export default function VisuallyRichLanding() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                         {[
                             { icon: <Layout />, title: "Landings Forge", desc: "6 plantillas base ultra-modulares con más de 192 millones de combinaciones únicas de edición.", img: "/Landing-principal/1.png" },
-                            { icon: <ImageIconIcon />, title: "Media Library", desc: "Acceso a miles de gráficas, videos y mockups oficiales en alta resolución.", img: "/Landing-principal/5.png" },
+                            { icon: <ImageIconIcon />, title: "Media Library", desc: "Acceso a miles de gráficas y mockups oficiales en alta resolución.", img: "/Landing-principal/5.png" },
                             { icon: <BarChart3 />, title: "Analytics Live", desc: "Mide el rendimiento de tus links y landings con precisión de milisegundos.", img: "/Landing-principal/2.png" },
                             { icon: <Globe />, title: "Global Sync", desc: "Todo el material disponible en 10 idiomas para dominar los mercados más importantes.", img: "/Landing-principal/3.png" },
                             { icon: <Cpu />, title: "Cloud Engine", desc: "Tus landings alojadas en servidores de ultra-alta velocidad y baja latencia.", img: "/Landing-principal/13.png" },
@@ -330,27 +326,31 @@ export default function VisuallyRichLanding() {
                         <p className="text-white/30 text-sm font-bold uppercase tracking-[0.8em] leading-loose max-w-sm">Infraestructura de marketing institucional para el éxito global.</p>
                     </div>
                     <div>
-                        <h5 className="text-xs font-black uppercase tracking-[0.4em] text-[#865BFF] mb-12">Navegación</h5>
-                        <ul className="space-y-8 text-xs font-bold uppercase tracking-widest text-white/30">
-                            <li className="hover:text-white cursor-pointer transition-colors">Academia</li>
-                            <li className="hover:text-white cursor-pointer transition-colors">Herramientas</li>
-                            <li className="hover:text-white cursor-pointer transition-colors">Legal</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h5 className="text-xs font-black uppercase tracking-[0.4em] text-[#865BFF] mb-12">Soporte</h5>
-                        <ul className="space-y-8 text-xs font-bold uppercase tracking-widest text-white/30">
-                            <li className="hover:text-white cursor-pointer transition-colors">Instagram</li>
-                            <li className="hover:text-white cursor-pointer transition-colors">Telegram</li>
-                            <li className="hover:text-white cursor-pointer transition-colors">Ayuda</li>
+                        <h5 className="text-xs font-black uppercase tracking-[0.4em] text-[#865BFF] mb-12">Soporte y Contacto</h5>
+                        <ul className="space-y-8 text-[11px] font-bold uppercase tracking-widest text-white/30">
+                            <li className="flex flex-col gap-2">
+                                <span className="text-white/60">Email Oficial:</span>
+                                <a href="mailto:support@bridgemarkets.global" className="hover:text-white transition-colors lowercase tracking-normal">support@bridgemarkets.global</a>
+                                <a href="mailto:clients@bridgemarkets.global" className="hover:text-white transition-colors lowercase tracking-normal">clients@bridgemarkets.global</a>
+                            </li>
+                            <li className="flex flex-col gap-2">
+                                <span className="text-white/60">Atención Telefónica:</span>
+                                <span className="text-white/40 tracking-normal">+44 784 844 0267 (Global)</span>
+                                <span className="text-white/40 tracking-normal">+1 530 773 2828 (English)</span>
+                            </li>
+                            <li className="flex flex-col gap-2">
+                                <span className="text-white/60">Dirección:</span>
+                                <span className="text-[9px] leading-relaxed tracking-normal normal-case">
+                                    Trust Company Complex, Ajeltake Road,<br />
+                                    Ajeltake Island, Majuro, MH96960<br />
+                                    Isbc Marshall Islands
+                                </span>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto mt-40 pt-20 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-16 text-[10px] font-bold uppercase tracking-[0.8em] text-white/10">
                     <span>© 2026 Bridge Markets Marketing Tools Hub</span>
-                    <div className="flex items-center gap-8 text-[#865BFF]">
-                        <Server className="w-6 h-6 opacity-60 animate-pulse" /> INFRA_LIVE_OK
-                    </div>
                 </div>
             </footer>
         </div>
