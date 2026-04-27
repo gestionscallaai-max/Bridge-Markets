@@ -315,41 +315,34 @@ export default function VisuallyRichLanding() {
                 </div>
             </section>
 
-            {/* FOOTER */}
-            <footer className="relative z-10 py-48 px-6 lg:px-20 border-t border-white/5 bg-[#010105]">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-32">
-                    <div className="lg:col-span-2">
-                        <div className="flex items-center gap-8 mb-16">
-                            <img src="/images/logo-bm-blanco.png" alt="Logo" className="h-16" />
-                            <span className="text-4xl font-black tracking-tighter uppercase font-heading">Bridge Markets</span>
-                        </div>
-                        <p className="text-white/30 text-sm font-bold uppercase tracking-[0.8em] leading-loose max-w-sm">Infraestructura de marketing institucional para el éxito global.</p>
-                    </div>
+            {/* FOOTER - COMPACT & THIN */}
+            <footer className="relative z-10 py-16 px-6 lg:px-20 border-t border-white/5 bg-[#010105]">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div>
-                        <h5 className="text-xs font-black uppercase tracking-[0.4em] text-[#865BFF] mb-12">Soporte y Contacto</h5>
-                        <ul className="space-y-8 text-[11px] font-bold uppercase tracking-widest text-white/30">
-                            <li className="flex flex-col gap-2">
-                                <span className="text-white/60">Email Oficial:</span>
-                                <a href="mailto:support@bridgemarkets.global" className="hover:text-white transition-colors lowercase tracking-normal">support@bridgemarkets.global</a>
-                                <a href="mailto:clients@bridgemarkets.global" className="hover:text-white transition-colors lowercase tracking-normal">clients@bridgemarkets.global</a>
-                            </li>
-                            <li className="flex flex-col gap-2">
-                                <span className="text-white/60">Atención Telefónica:</span>
-                                <span className="text-white/40 tracking-normal">+44 784 844 0267 (Global)</span>
-                                <span className="text-white/40 tracking-normal">+1 530 773 2828 (English)</span>
-                            </li>
-                            <li className="flex flex-col gap-2">
-                                <span className="text-white/60">Dirección:</span>
-                                <span className="text-[9px] leading-relaxed tracking-normal normal-case">
-                                    Trust Company Complex, Ajeltake Road,<br />
-                                    Ajeltake Island, Majuro, MH96960<br />
-                                    Isbc Marshall Islands
-                                </span>
-                            </li>
-                        </ul>
+                        <div className="flex items-center gap-6 mb-8">
+                            <img src="/images/logo-bm-blanco.png" alt="Logo" className="h-10" />
+                            <span className="text-2xl font-black tracking-tighter uppercase font-heading">Bridge Markets</span>
+                        </div>
+                        <p className="text-white/30 text-[9px] font-bold uppercase tracking-[0.3em] leading-relaxed max-w-sm">Infraestructura de marketing institucional para el éxito global.</p>
+                    </div>
+                    <div className="flex flex-col lg:flex-row lg:justify-end gap-16">
+                        <div className="flex flex-col gap-4">
+                            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#865BFF]">Soporte y Contacto</h5>
+                            <div className="flex flex-col gap-1 text-[10px] font-medium text-white/30">
+                                <a href="mailto:support@bridgemarkets.global" className="hover:text-white transition-colors lowercase tracking-tight">support@bridgemarkets.global</a>
+                                <span className="tracking-tight text-white/20">+44 784 844 0267 (Global)</span>
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#865BFF]">Ubicación</h5>
+                            <span className="text-[9px] leading-tight text-white/20 uppercase tracking-tight">
+                                Trust Company Complex, MH96960<br />
+                                Isbc Marshall Islands
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div className="max-w-7xl mx-auto mt-40 pt-20 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-16 text-[10px] font-bold uppercase tracking-[0.8em] text-white/10">
+                <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6 text-[9px] font-bold uppercase tracking-[0.4em] text-white/10">
                     <span>© 2026 Bridge Markets Marketing Tools Hub</span>
                 </div>
             </footer>
