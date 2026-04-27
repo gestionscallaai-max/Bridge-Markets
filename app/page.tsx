@@ -308,8 +308,7 @@ export default function VisuallyRichLanding() {
                     <div className="space-y-16">
                         {[
                             { q: "¿Es gratuito el acceso a las herramientas?", a: "Sí, todos los partners oficiales de Bridge Markets tienen acceso ilimitado al hub de marketing de forma vitalicia." },
-                            { q: "¿Necesito conocimientos técnicos para las landings?", a: "No, nuestro generador 'Forge' es 100% visual. Solo tienes que elegir, editar y publicar." },
-                            { q: "¿Puedo usar mi propio dominio?", a: "Totalmente. Puedes conectar tus propios dominios a las landings que generes para mantener tu marca personal." }
+                            { q: "¿Necesito conocimientos técnicos para las landings?", a: "No, nuestro generador 'Forge' es 100% visual. Solo tienes que elegir, editar y publicar." }
                         ].map((faq, i) => (
                             <div key={i} className="pb-16 border-b border-white/5 group cursor-help">
                                 <h4 className="text-2xl font-black font-heading uppercase tracking-tighter mb-6 group-hover:text-[#865BFF] transition-colors">{faq.q}</h4>
