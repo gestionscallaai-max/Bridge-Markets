@@ -133,53 +133,65 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                     if (!json.success) throw new Error(json.error || 'Error en la IA');
 
                     let finalImage = "";
-                    if (json.type === 'image') {
-                        finalImage = json.data;
-                    } else if (json.type === 'layers' || json.type === 'error') {
-                        // Fallback render logic if AI returns text instead of image
+                    if (json.type === 'layers') {
+                        // High-fidelity layer rendering
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         const img = new Image();
                         img.src = `data:image/jpeg;base64,${base64}`;
                         await new Promise((resolve) => img.onload = resolve);
+                        
                         canvas.width = img.width;
                         canvas.height = img.height;
+                        
                         if (ctx) {
                             ctx.drawImage(img, 0, 0);
                             
-                            // Dim the background slightly for text visibility
-                            ctx.fillStyle = 'rgba(0,0,0,0.4)';
-                            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                            // Simple text overlay as fallback
-                            ctx.fillStyle = 'white';
-                            ctx.font = 'bold 60px Inter, sans-serif';
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            
-                            const fallbackText = json.data?.socialCopy || json.socialCopy || json.message || `Localized to ${market}`;
-                            
-                            // Wrap text simple logic
-                            const words = fallbackText.split(' ');
-                            let line = '';
-                            let y = canvas.height / 2 - 50;
-                            const maxWidth = canvas.width - 100;
-                            
-                            for (let n = 0; n < words.length; n++) {
-                                const testLine = line + words[n] + ' ';
-                                const metrics = ctx.measureText(testLine);
-                                const testWidth = metrics.width;
-                                if (testWidth > maxWidth && n > 0) {
-                                    ctx.fillText(line, canvas.width / 2, y);
-                                    line = words[n] + ' ';
-                                    y += 80;
-                                } else {
-                                    line = testLine;
+                            // Draw each layer provided by the AI
+                            const layers = json.layers || [];
+                            layers.forEach((layer: any) => {
+                                const x = layer.x * canvas.width;
+                                const y = layer.y * canvas.height;
+                                const fontSize = (layer.fontSize || 40) * (canvas.width / 1080); // Responsive font size
+                                
+                                ctx.save();
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                
+                                // Text Shadow for better visibility
+                                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                                ctx.shadowBlur = 15;
+                                ctx.shadowOffsetX = 2;
+                                ctx.shadowOffsetY = 2;
+                                
+                                ctx.fillStyle = layer.color || '#FFFFFF';
+                                ctx.font = `${layer.bold ? 'black' : 'bold'} ${fontSize}px Inter, sans-serif`;
+                                
+                                // Simple word wrap if text is too long
+                                const maxWidth = canvas.width * 0.8;
+                                const words = layer.text.split(' ');
+                                let line = '';
+                                let curY = y;
+                                
+                                for(let n = 0; n < words.length; n++) {
+                                    const testLine = line + words[n] + ' ';
+                                    if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+                                        ctx.fillText(line, x, curY);
+                                        line = words[n] + ' ';
+                                        curY += fontSize * 1.2;
+                                    } else {
+                                        line = testLine;
+                                    }
                                 }
-                            }
-                            ctx.fillText(line, canvas.width / 2, y);
+                                ctx.fillText(line, x, curY);
+                                ctx.restore();
+                            });
                         }
-                        finalImage = canvas.toDataURL('image/jpeg');
+                        finalImage = canvas.toDataURL('image/jpeg', 0.9);
+                    } else if (json.type === 'image') {
+                        finalImage = json.data;
+                    } else if (json.type === 'error') {
+                        throw new Error(json.message || 'Error en la IA');
                     }
 
                     setResults(prev => prev.map(r => 
