@@ -13,26 +13,39 @@ export async function POST(req: NextRequest) {
 
         // Initialize Google AI with v1 (stable)
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }, { apiVersion: 'v1' });
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-2.5-flash",
+            generationConfig: {
+                responseMimeType: "application/json"
+            }
+        }, { apiVersion: 'v1' });
 
-        // Specialized localization prompt
+        // High-precision design layer prompt
         const prompt = `
-            LOCALIZE THIS MARKETING FLYER TO: ${market}.
+            You are "Nano Banana", a high-end marketing design engine.
+            TASK: Extract and translate all text layers from this flyer to ${market}.
             
-            TRANSLATION GUIDE (STRICT SPELLING):
-            - "CUPÓN" must be "COUPON" (Check spelling twice!)
+            RULES:
+            1. Extract EVERY text element.
+            2. Translate accurately but keep the marketing impact.
+            3. For the coordinates (x, y), use 0.0 to 1.0 (0.5 is center).
+            4. Identify the prominent visual style (color, font weight).
+            
+            TRANSLATION SPECIAL RULES:
+            - "CUPÓN" -> "COUPON"
             - "ESPECIAL" -> "SPECIAL"
-            - "PROGRAMA" -> "PROGRAM"
-            - "CÓDIGO" -> "CODE"
             - "DSCTO" -> "OFF"
             
-            CRITICAL INSTRUCTIONS:
-            1. RENDER A NEW IMAGE: Perform a native inpainting.
-            2. PERFECTION: Localized text must match the 3D metallic/silver style perfectly.
-            3. SOCIAL COPY: In addition to the image, provide a high-conversion marketing caption for Instagram/Facebook in ${market} as a separate text part.
-            4. DIMENSIONS: Maintain the EXACT SAME dimensions and aspect ratio as the original image.
-            
-            5. OUTPUT: Return the localized image and the marketing text.
+            RETURN ONLY THIS JSON SCHEMA:
+            {
+              "success": true,
+              "type": "layers",
+              "layers": [
+                { "text": "Translated Text", "x": 0.5, "y": 0.3, "fontSize": 60, "color": "#FFFFFF", "bold": true },
+                { "text": "Subtext", "x": 0.5, "y": 0.45, "fontSize": 24, "color": "#CCCCCC", "bold": false }
+              ],
+              "socialCopy": "A high-conversion marketing caption in ${market}"
+            }
         `;
 
         // Prepare image for SDK
@@ -46,58 +59,21 @@ export async function POST(req: NextRequest) {
         // Make the call
         const result = await model.generateContent([prompt, imagePart]);
         const response = await result.response;
-        
-        // Extract parts
         const responseText = response.text();
-        const parts = response.candidates?.[0]?.content?.parts || [];
-        const resultImagePart = parts.find((p: any) => p.inlineData);
 
-        if (resultImagePart && resultImagePart.inlineData) {
-            return NextResponse.json({ 
-                success: true, 
-                type: 'image',
-                data: `data:${resultImagePart.inlineData.mimeType};base64,${resultImagePart.inlineData.data}`,
-                socialCopy: responseText
-            });
-        }
-
-        // Fallback: If AI returned text/json instead of an image
         try {
-            const aiData = JSON.parse(responseText.replace(/```json|```/g, ''));
-            return NextResponse.json({ 
-                success: true, 
-                type: 'layers',
-                data: aiData,
-                socialCopy: responseText
-            });
+            const aiData = JSON.parse(responseText);
+            return NextResponse.json(aiData);
         } catch (e) {
+            console.error('Failed to parse AI JSON:', responseText);
             return NextResponse.json({ 
-                success: true, 
-                type: 'error',
-                message: "La IA generó el texto pero no pudo procesar la imagen directamente.",
-                socialCopy: responseText
-            });
+                success: false, 
+                error: "La IA no devolvió un formato de diseño válido." 
+            }, { status: 500 });
         }
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
-        
-        let modelsInfo = "";
-        try {
-            const listRes = await fetch(`https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`);
-            const listData = await listRes.json();
-            if (listData.models) {
-                modelsInfo = " | Modelos OK: " + listData.models.map((m: any) => m.name.split('/').pop()).join(', ');
-            } else {
-                modelsInfo = " | API Error: " + (listData.error?.message || JSON.stringify(listData));
-            }
-        } catch (e) {
-            modelsInfo = " | Error al listar modelos.";
-        }
-
-        return NextResponse.json({ 
-            success: false, 
-            error: `${error.message}${modelsInfo}` 
-        }, { status: 500 });
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
