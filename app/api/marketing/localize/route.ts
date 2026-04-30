@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const maxDuration = 60;
 
@@ -9,16 +10,13 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        console.log('Image Base64 Length:', image.length);
-        if (image.length > 4000000) { // Approx 4MB limit for many Gemini endpoints
-             console.warn('Image might be too large for inlineData');
-        }
+        // Initialize Google AI
+        const genAI = new GoogleGenerativeAI(apiKey);
+        
+        // Use gemini-1.5-flash which is standard for image tasks
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        // 1. Prepare AI Model
-        const modelId = "gemini-1.5-flash";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
-
-        // 2. Specialized localization prompt for Image-to-Image
+        // Specialized localization prompt
         const prompt = `
             LOCALIZE THIS MARKETING FLYER TO: ${market}.
             
@@ -33,76 +31,64 @@ export async function POST(req: NextRequest) {
             1. RENDER A NEW IMAGE: Perform a native inpainting.
             2. PERFECTION: Localized text must match the 3D metallic/silver style perfectly.
             3. SOCIAL COPY: In addition to the image, provide a high-conversion marketing caption for Instagram/Facebook in ${market} as a separate text part.
-            5. DIMENSIONS: Maintain the EXACT SAME dimensions and aspect ratio as the original image. Do not change square images to vertical.
-            6. OUTPUT: Return the localized image and the marketing text.
+            4. DIMENSIONS: Maintain the EXACT SAME dimensions and aspect ratio as the original image.
+            5. OUTPUT: Return the localized image and the marketing text.
         `;
 
-        // 3. Make the API call
-        const aiResponse = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [
-                        { text: prompt },
-                        { inlineData: { mimeType: 'image/jpeg', data: image } }
-                    ]
-                }],
-                generationConfig: {
-                    temperature: 0.4,
-                    topP: 0.95,
-                }
-            })
-        });
-
-        const result = await aiResponse.json();
-        console.log('--- NANO BANANA RESULT ---', JSON.stringify(result).substring(0, 500));
-
-        if (result.error) {
-            console.error('API ERROR:', result.error);
-            try {
-                const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                const listData = await listRes.json();
-                const availableModels = listData.models ? listData.models.map((m: any) => m.name.replace('models/', '')).join(', ') : JSON.stringify(listData);
-                throw new Error(`${result.error.message} | Modelos soportados por tu API Key: ${availableModels}`);
-            } catch (listErr: any) {
-                throw new Error(result.error.message);
+        // Prepare image for SDK
+        const imagePart = {
+            inlineData: {
+                data: image,
+                mimeType: "image/jpeg"
             }
-        }
+        };
 
-        // 4. Extract the image and text from the response
-        const imagePart = result.candidates?.[0]?.content?.parts?.find((p: any) => p.inlineData);
-        const textPart = result.candidates?.[0]?.content?.parts?.find((p: any) => p.text)?.text || "";
+        // Make the call
+        const result = await model.generateContent([prompt, imagePart]);
+        const response = await result.response;
         
-        if (imagePart) {
+        // Extract parts
+        const responseText = response.text();
+        const parts = response.candidates?.[0]?.content?.parts || [];
+        const resultImagePart = parts.find((p: any) => p.inlineData);
+
+        if (resultImagePart) {
             return NextResponse.json({ 
                 success: true, 
                 type: 'image',
-                data: `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`,
-                socialCopy: textPart
+                data: `data:${resultImagePart.inlineData.mimeType};base64,${resultImagePart.inlineData.data}`,
+                socialCopy: responseText
             });
         }
 
-        // 5. Fallback: If AI returned text (layers) instead of image, handle gracefully
-        const fallbackText = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        // Fallback: If AI returned text/json instead of an image
         try {
-            const aiData = JSON.parse(fallbackText);
+            // Check if text is JSON
+            const aiData = JSON.parse(responseText.replace(/```json|```/g, ''));
             return NextResponse.json({ 
                 success: true, 
                 type: 'layers',
-                data: aiData
+                data: aiData,
+                socialCopy: responseText
             });
         } catch (e) {
             return NextResponse.json({ 
                 success: true, 
                 type: 'error',
-                message: "La IA no devolvió una imagen válida.",
-                raw: fallbackText
+                message: "La IA generó el texto pero no pudo procesar la imagen directamente.",
+                socialCopy: responseText
             });
         }
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        
+        // Debug info if model not found
+        let debugMsg = error.message;
+        if (debugMsg.includes('not found') || debugMsg.includes('supported')) {
+            debugMsg += " | Sugerencia: Verifica que la API Key tenga habilitado el modelo gemini-1.5-flash en Google AI Studio.";
+        }
+
+        return NextResponse.json({ success: false, error: debugMsg }, { status: 500 });
     }
 }
