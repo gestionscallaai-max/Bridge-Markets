@@ -11,34 +11,19 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        // High-precision design layer prompt
+        // High-precision redesign prompt
         const prompt = `
-            STRICT OUTPUT RULE: RETURN ONLY A JSON OBJECT. NO CONVERSATION. NO MARKDOWN.
+            IMAGE GENERATION TASK:
+            Re-design this marketing flyer for the ${market} market.
             
-            You are "Nano Banana", a high-end marketing design engine.
-            TASK: Extract and translate all text layers from this flyer to ${market}.
+            STYLE REQUIREMENTS:
+            - Maintain the EXACT 3D metallic silver/purple aesthetic.
+            - Keep the "Bridge Markets" branding.
+            - The main text must be "${market === 'French' ? 'COUPON' : 'CUPÓN'}".
+            - Include "10% OFF" in 3D metallic numbers.
+            - The layout must be identical to the original but NATIVELY rendered in ${market} language.
             
-            RULES:
-            1. Extract EVERY text element.
-            2. Translate accurately but keep the marketing impact.
-            3. For the coordinates (x, y), use 0.0 to 1.0 (0.5 is center).
-            4. Identify the prominent visual style (color, font weight).
-            
-            TRANSLATION SPECIAL RULES:
-            - "CUPÓN" -> "COUPON"
-            - "ESPECIAL" -> "SPECIAL"
-            - "DSCTO" -> "OFF"
-            
-            RETURN ONLY THIS JSON SCHEMA:
-            {
-              "success": true,
-              "type": "layers",
-              "layers": [
-                { "text": "Translated Text", "x": 0.5, "y": 0.3, "fontSize": 60, "color": "#FFFFFF", "bold": true },
-                { "text": "Subtext", "x": 0.5, "y": 0.45, "fontSize": 24, "color": "#CCCCCC", "bold": false }
-              ],
-              "socialCopy": "A high-conversion marketing caption in ${market}"
-            }
+            OUTPUT: You MUST return a NEW image file.
         `;
 
         // Prepare image for SDK
@@ -49,8 +34,8 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        // List of models to try in order of preference
-        const modelsToTry = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"];
+        // List of models to try
+        const modelsToTry = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash"];
         let lastError = null;
 
         for (const modelId of modelsToTry) {
@@ -60,22 +45,38 @@ export async function POST(req: NextRequest) {
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
-                const responseText = response.text();
+                
+                // Check for image parts in the response
+                const parts = response.candidates?.[0]?.content?.parts || [];
+                const imagePartFound = parts.find((p: any) => p.inlineData);
 
-                const aiData = JSON.parse(responseText.replace(/```json|```/g, ''));
-                return NextResponse.json(aiData);
+                if (imagePartFound && imagePartFound.inlineData) {
+                    return NextResponse.json({ 
+                        success: true, 
+                        type: 'image',
+                        data: `data:${imagePartFound.inlineData.mimeType};base64,${imagePartFound.inlineData.data}`,
+                        socialCopy: response.text() || ""
+                    });
+                }
+
+                // If no image part, but it returned text, try to see if it's a base64 string (rare)
+                const text = response.text();
+                if (text.includes('data:image')) {
+                    const match = text.match(/data:image\/[a-zA-Z]*;base64,[^"']*/);
+                    if (match) {
+                        return NextResponse.json({ success: true, type: 'image', data: match[0], socialCopy: text });
+                    }
+                }
+
+                throw new Error("El modelo no generó una imagen nueva, solo texto.");
             } catch (e: any) {
                 lastError = e;
-                console.warn(`Model ${modelId} failed, trying next...`, e.message);
-                // If it's not a 503 or 429, it might be a prompt/auth error, so we stop
-                if (!e.message.includes('503') && !e.message.includes('429') && !e.message.includes('not found')) {
-                    break;
-                }
-                continue;
+                if (!e.message.includes('503') && !e.message.includes('429')) continue;
+                break;
             }
         }
 
-        throw lastError || new Error("Todos los modelos de IA están saturados.");
+        throw lastError || new Error("No se pudo rediseñar la imagen.");
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
