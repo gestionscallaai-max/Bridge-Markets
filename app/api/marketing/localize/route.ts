@@ -11,19 +11,27 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        // High-precision redesign prompt
+        // High-precision design extraction prompt
         const prompt = `
-            IMAGE GENERATION TASK:
-            Re-design this marketing flyer for the ${market} market.
+            You are "Nano Banana", a high-end design engine.
+            TASK: Extract every text layer and its background context for a SEAMLESS redesign.
             
-            STYLE REQUIREMENTS:
-            - Maintain the EXACT 3D metallic silver/purple aesthetic.
-            - Keep the "Bridge Markets" branding.
-            - The main text must be "${market === 'French' ? 'COUPON' : 'CUPÓN'}".
-            - Include "10% OFF" in 3D metallic numbers.
-            - The layout must be identical to the original but NATIVELY rendered in ${market} language.
+            FOR EACH TEXT ELEMENT, IDENTIFY:
+            1. originalText: The text in the image.
+            2. translatedText: The translation to ${market}.
+            3. x, y: Coordinates (0.0 to 1.0).
+            4. fontSize: Estimated size.
+            5. color: Text color (HEX).
+            6. bgColor: The EXACT background color/hex behind this specific text (CRITICAL for erasing it).
+            7. bold: boolean.
             
-            OUTPUT: You MUST return a NEW image file.
+            RETURN ONLY THIS JSON:
+            {
+              "success": true,
+              "type": "layers",
+              "layers": [...],
+              "socialCopy": "..."
+            }
         `;
 
         // Prepare image for SDK
@@ -34,57 +42,27 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        // List of models to try
-        const modelsToTry = [
-            "gemini-2.5-pro", 
-            "gemini-2.5-flash", 
-            "gemini-2.0-flash",
-            "gemini-1.5-pro",
-            "imagen-3"
-        ];
-        
+        const modelsToTry = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash"];
         let lastError = null;
 
         for (const modelId of modelsToTry) {
             try {
-                console.log(`Intentando con modelo: ${modelId}...`);
                 const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1' });
+                const model = genAI.getGenerativeModel({ 
+                    model: modelId,
+                    generationConfig: { responseMimeType: "application/json" }
+                }, { apiVersion: 'v1' });
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
-                
-                // Check for image parts
-                const parts = response.candidates?.[0]?.content?.parts || [];
-                const imagePartFound = parts.find((p: any) => p.inlineData);
-
-                if (imagePartFound && imagePartFound.inlineData) {
-                    return NextResponse.json({ 
-                        success: true, 
-                        type: 'image',
-                        data: `data:${imagePartFound.inlineData.mimeType};base64,${imagePartFound.inlineData.data}`,
-                        socialCopy: response.text() || ""
-                    });
-                }
-
-                // Fallback for base64 in text
-                const text = response.text();
-                const match = text.match(/data:image\/[a-zA-Z]*;base64,[^"']*/);
-                if (match) {
-                    return NextResponse.json({ success: true, type: 'image', data: match[0], socialCopy: text });
-                }
-
-                console.warn(`Modelo ${modelId} no generó imagen, probando el siguiente.`);
-                lastError = new Error(`El modelo ${modelId} no soportó generación de imagen directa.`);
+                return NextResponse.json(JSON.parse(response.text()));
             } catch (e: any) {
                 lastError = e;
-                console.error(`Error en modelo ${modelId}:`, e.message);
-                // Si es un error de saturación o no encontrado, seguimos intentando
                 continue;
             }
         }
 
-        throw lastError || new Error("No se pudo rediseñar la imagen con los modelos disponibles.");
+        throw lastError || new Error("No se pudo procesar el rediseño.");
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);

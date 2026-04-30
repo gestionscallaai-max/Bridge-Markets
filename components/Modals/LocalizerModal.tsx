@@ -152,38 +152,29 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                             layers.forEach((layer: any) => {
                                 const x = layer.x * canvas.width;
                                 const y = layer.y * canvas.height;
-                                const fontSize = (layer.fontSize || 40) * (canvas.width / 1080); // Responsive font size
+                                const fontSize = (layer.fontSize || 40) * (canvas.width / 1080);
                                 
                                 ctx.save();
+                                
+                                // SMART MASKING: Erase the original text by drawing its background color
+                                if (layer.bgColor) {
+                                    ctx.fillStyle = layer.bgColor;
+                                    const textWidth = ctx.measureText(layer.text).width || 200;
+                                    // Draw a rectangle over the original spot
+                                    ctx.fillRect(x - textWidth/2 - 20, y - fontSize/2 - 10, textWidth + 40, fontSize + 20);
+                                }
+
                                 ctx.textAlign = 'center';
                                 ctx.textBaseline = 'middle';
                                 
-                                // Text Shadow for better visibility
-                                ctx.shadowColor = 'rgba(0,0,0,0.8)';
-                                ctx.shadowBlur = 15;
-                                ctx.shadowOffsetX = 2;
-                                ctx.shadowOffsetY = 2;
+                                // Text Shadow for better integration
+                                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                                ctx.shadowBlur = 10;
                                 
                                 ctx.fillStyle = layer.color || '#FFFFFF';
                                 ctx.font = `${layer.bold ? 'black' : 'bold'} ${fontSize}px Inter, sans-serif`;
                                 
-                                // Simple word wrap if text is too long
-                                const maxWidth = canvas.width * 0.8;
-                                const words = layer.text.split(' ');
-                                let line = '';
-                                let curY = y;
-                                
-                                for(let n = 0; n < words.length; n++) {
-                                    const testLine = line + words[n] + ' ';
-                                    if (ctx.measureText(testLine).width > maxWidth && n > 0) {
-                                        ctx.fillText(line, x, curY);
-                                        line = words[n] + ' ';
-                                        curY += fontSize * 1.2;
-                                    } else {
-                                        line = testLine;
-                                    }
-                                }
-                                ctx.fillText(line, x, curY);
+                                ctx.fillText(layer.translatedText || layer.text, x, y);
                                 ctx.restore();
                             });
                         }
