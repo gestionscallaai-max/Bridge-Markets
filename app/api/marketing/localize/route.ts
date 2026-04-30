@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
              console.warn('Image might be too large for inlineData');
         }
 
-        // 1. Prepare AI Model (using gemini-pro-vision for maximum compatibility with older API keys)
-        const modelId = "gemini-pro-vision";
+        // 1. Prepare AI Model
+        const modelId = "gemini-1.5-flash";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
         // 2. Specialized localization prompt for Image-to-Image
@@ -59,8 +59,15 @@ export async function POST(req: NextRequest) {
         console.log('--- NANO BANANA RESULT ---', JSON.stringify(result).substring(0, 500));
 
         if (result.error) {
-            console.error('NANO BANANA ERROR:', result.error);
-            throw new Error(result.error.message);
+            console.error('API ERROR:', result.error);
+            try {
+                const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                const listData = await listRes.json();
+                const availableModels = listData.models ? listData.models.map((m: any) => m.name.replace('models/', '')).join(', ') : JSON.stringify(listData);
+                throw new Error(`${result.error.message} | Modelos soportados por tu API Key: ${availableModels}`);
+            } catch (listErr: any) {
+                throw new Error(result.error.message);
+            }
         }
 
         // 4. Extract the image and text from the response
