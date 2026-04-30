@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
             2. PERFECTION: Localized text must match the 3D metallic/silver style perfectly.
             3. SOCIAL COPY: In addition to the image, provide a high-conversion marketing caption for Instagram/Facebook in ${market} as a separate text part.
             4. DIMENSIONS: Maintain the EXACT SAME dimensions and aspect ratio as the original image.
+            
             5. OUTPUT: Return the localized image and the marketing text.
         `;
 
