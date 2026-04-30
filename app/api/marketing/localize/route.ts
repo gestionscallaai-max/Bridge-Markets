@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         }
 
         // 1. Prepare AI Model
-        const modelId = "gemini-1.5-flash";
+        const modelId = "gemini-1.5-flash-latest";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
         // 2. Specialized localization prompt for Image-to-Image
