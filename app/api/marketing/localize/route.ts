@@ -14,14 +14,13 @@ export async function POST(req: NextRequest) {
         // Initialize Google AI with v1 (stable)
         const genAI = new GoogleGenerativeAI(apiKey);
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash",
-            generationConfig: {
-                responseMimeType: "application/json"
-            }
+            model: "gemini-2.5-flash"
         }, { apiVersion: 'v1' });
 
         // High-precision design layer prompt
         const prompt = `
+            STRICT OUTPUT RULE: RETURN ONLY A JSON OBJECT. NO CONVERSATION. NO MARKDOWN.
+            
             You are "Nano Banana", a high-end marketing design engine.
             TASK: Extract and translate all text layers from this flyer to ${market}.
             
