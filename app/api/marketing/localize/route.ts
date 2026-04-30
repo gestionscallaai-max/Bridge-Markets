@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
              console.warn('Image might be too large for inlineData');
         }
 
-        // 1. Prepare AI Model
-        const modelId = "gemini-1.5-flash-latest";
+        // 1. Prepare AI Model (using gemini-pro-vision for maximum compatibility with older API keys)
+        const modelId = "gemini-pro-vision";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
         // 2. Specialized localization prompt for Image-to-Image
