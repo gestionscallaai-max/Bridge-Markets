@@ -4,9 +4,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
     try {
         const { market, image } = await req.json();
-        const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
