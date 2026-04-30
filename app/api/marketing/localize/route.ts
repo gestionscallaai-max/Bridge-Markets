@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
     try {
         const { market, image } = await req.json();
@@ -12,8 +14,8 @@ export async function POST(req: NextRequest) {
              console.warn('Image might be too large for inlineData');
         }
 
-        // 1. Prepare Nano Banana 2 API (gemini-3.1-flash-image-preview)
-        const modelId = "gemini-3.1-flash-image-preview";
+        // 1. Prepare AI Model
+        const modelId = "gemini-1.5-pro";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
         // 2. Specialized localization prompt for Image-to-Image

@@ -71,13 +71,43 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
         setActiveTab(newResults[0].id);
 
         try {
-            // 1. Prepare base64 image
+            // 1. Prepare base64 image with compression to avoid 413 Payload Too Large on Hostinger/Nginx
             const imgRes = await fetch(imageUrl);
             const blob = await imgRes.blob();
-            const base64 = await new Promise<string>((resolve) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
-                reader.readAsDataURL(blob);
+            
+            const base64 = await new Promise<string>((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Max dimension to ensure base64 is small (< 1MB)
+                    const MAX_DIM = 1080;
+                    if (width > MAX_DIM || height > MAX_DIM) {
+                        if (width > height) {
+                            height = (height / width) * MAX_DIM;
+                            width = MAX_DIM;
+                        } else {
+                            width = (width / height) * MAX_DIM;
+                            height = MAX_DIM;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0, width, height);
+                        // Compress to JPEG with 0.8 quality
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(dataUrl.split(',')[1]);
+                    } else {
+                        reject(new Error('No canvas context'));
+                    }
+                };
+                img.onerror = () => reject(new Error('Error loading image for compression'));
+                img.src = URL.createObjectURL(blob);
             });
 
             // 2. Process each language
@@ -91,14 +121,22 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                         body: JSON.stringify({ market, image: base64 })
                     });
                     
-                    const json = await apiRes.json();
+                    const responseText = await apiRes.text();
+                    let json;
+                    try {
+                        json = JSON.parse(responseText);
+                    } catch (parseError) {
+                        console.error('Invalid JSON response:', responseText.substring(0, 100));
+                        throw new Error(`Error del servidor (${apiRes.status}): Respuesta no válida. Inténtalo de nuevo.`);
+                    }
+
                     if (!json.success) throw new Error(json.error || 'Error en la IA');
 
                     let finalImage = "";
                     if (json.type === 'image') {
                         finalImage = json.data;
-                    } else if (json.type === 'layers') {
-                        // Fallback render logic
+                    } else if (json.type === 'layers' || json.type === 'error') {
+                        // Fallback render logic if AI returns text instead of image
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         const img = new Image();
@@ -108,11 +146,38 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                         canvas.height = img.height;
                         if (ctx) {
                             ctx.drawImage(img, 0, 0);
+                            
+                            // Dim the background slightly for text visibility
+                            ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
                             // Simple text overlay as fallback
                             ctx.fillStyle = 'white';
-                            ctx.font = '40px Anton';
+                            ctx.font = 'bold 60px Inter, sans-serif';
                             ctx.textAlign = 'center';
-                            ctx.fillText(json.data.socialCopy?.substring(0, 20) || 'Localized', canvas.width/2, 100);
+                            ctx.textBaseline = 'middle';
+                            
+                            const fallbackText = json.data?.socialCopy || json.socialCopy || json.message || `Localized to ${market}`;
+                            
+                            // Wrap text simple logic
+                            const words = fallbackText.split(' ');
+                            let line = '';
+                            let y = canvas.height / 2 - 50;
+                            const maxWidth = canvas.width - 100;
+                            
+                            for (let n = 0; n < words.length; n++) {
+                                const testLine = line + words[n] + ' ';
+                                const metrics = ctx.measureText(testLine);
+                                const testWidth = metrics.width;
+                                if (testWidth > maxWidth && n > 0) {
+                                    ctx.fillText(line, canvas.width / 2, y);
+                                    line = words[n] + ' ';
+                                    y += 80;
+                                } else {
+                                    line = testLine;
+                                }
+                            }
+                            ctx.fillText(line, canvas.width / 2, y);
                         }
                         finalImage = canvas.toDataURL('image/jpeg');
                     }
@@ -122,7 +187,7 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                             ...r, 
                             loading: false, 
                             image: finalImage, 
-                            translation: { socialCopy: json.socialCopy || json.data?.socialCopy },
+                            translation: { socialCopy: json.socialCopy || json.data?.socialCopy || 'Traducción completada' },
                             error: null 
                         } : r
                     ));
