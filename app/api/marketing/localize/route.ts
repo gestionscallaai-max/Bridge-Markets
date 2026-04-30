@@ -10,11 +10,9 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        // Initialize Google AI
+        // Initialize Google AI with v1 (stable)
         const genAI = new GoogleGenerativeAI(apiKey);
-        
-        // Use gemini-1.5-flash which is standard for image tasks
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: 'v1' });
 
         // Specialized localization prompt
         const prompt = `
@@ -63,7 +61,6 @@ export async function POST(req: NextRequest) {
 
         // Fallback: If AI returned text/json instead of an image
         try {
-            // Check if text is JSON
             const aiData = JSON.parse(responseText.replace(/```json|```/g, ''));
             return NextResponse.json({ 
                 success: true, 
@@ -83,12 +80,22 @@ export async function POST(req: NextRequest) {
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
         
-        // Debug info if model not found
-        let debugMsg = error.message;
-        if (debugMsg.includes('not found') || debugMsg.includes('supported')) {
-            debugMsg += " | Sugerencia: Verifica que la API Key tenga habilitado el modelo gemini-1.5-flash en Google AI Studio.";
+        let modelsInfo = "";
+        try {
+            const listRes = await fetch(`https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`);
+            const listData = await listRes.json();
+            if (listData.models) {
+                modelsInfo = " | Modelos OK: " + listData.models.map((m: any) => m.name.split('/').pop()).join(', ');
+            } else {
+                modelsInfo = " | API Error: " + (listData.error?.message || JSON.stringify(listData));
+            }
+        } catch (e) {
+            modelsInfo = " | Error al listar modelos.";
         }
 
-        return NextResponse.json({ success: false, error: debugMsg }, { status: 500 });
+        return NextResponse.json({ 
+            success: false, 
+            error: `${error.message}${modelsInfo}` 
+        }, { status: 500 });
     }
 }
