@@ -49,13 +49,13 @@ export async function POST(req: NextRequest) {
             try {
                 const genAI = new GoogleGenerativeAI(apiKey);
                 const model = genAI.getGenerativeModel({ 
-                    model: modelId,
-                    generationConfig: { responseMimeType: "application/json" }
+                    model: modelId
                 }, { apiVersion: 'v1' });
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
-                return NextResponse.json(JSON.parse(response.text()));
+                const responseText = response.text().replace(/```json|```/g, '').trim();
+                return NextResponse.json(JSON.parse(responseText));
             } catch (e: any) {
                 lastError = e;
                 continue;
