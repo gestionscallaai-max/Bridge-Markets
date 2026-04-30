@@ -35,18 +35,26 @@ export async function POST(req: NextRequest) {
         };
 
         // List of models to try
-        const modelsToTry = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash"];
+        const modelsToTry = [
+            "gemini-2.5-pro", 
+            "gemini-2.5-flash", 
+            "gemini-2.0-flash",
+            "gemini-1.5-pro",
+            "imagen-3"
+        ];
+        
         let lastError = null;
 
         for (const modelId of modelsToTry) {
             try {
+                console.log(`Intentando con modelo: ${modelId}...`);
                 const genAI = new GoogleGenerativeAI(apiKey);
                 const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1' });
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
                 
-                // Check for image parts in the response
+                // Check for image parts
                 const parts = response.candidates?.[0]?.content?.parts || [];
                 const imagePartFound = parts.find((p: any) => p.inlineData);
 
@@ -59,24 +67,24 @@ export async function POST(req: NextRequest) {
                     });
                 }
 
-                // If no image part, but it returned text, try to see if it's a base64 string (rare)
+                // Fallback for base64 in text
                 const text = response.text();
-                if (text.includes('data:image')) {
-                    const match = text.match(/data:image\/[a-zA-Z]*;base64,[^"']*/);
-                    if (match) {
-                        return NextResponse.json({ success: true, type: 'image', data: match[0], socialCopy: text });
-                    }
+                const match = text.match(/data:image\/[a-zA-Z]*;base64,[^"']*/);
+                if (match) {
+                    return NextResponse.json({ success: true, type: 'image', data: match[0], socialCopy: text });
                 }
 
-                throw new Error("El modelo no generó una imagen nueva, solo texto.");
+                console.warn(`Modelo ${modelId} no generó imagen, probando el siguiente.`);
+                lastError = new Error(`El modelo ${modelId} no soportó generación de imagen directa.`);
             } catch (e: any) {
                 lastError = e;
-                if (!e.message.includes('503') && !e.message.includes('429')) continue;
-                break;
+                console.error(`Error en modelo ${modelId}:`, e.message);
+                // Si es un error de saturación o no encontrado, seguimos intentando
+                continue;
             }
         }
 
-        throw lastError || new Error("No se pudo rediseñar la imagen.");
+        throw lastError || new Error("No se pudo rediseñar la imagen con los modelos disponibles.");
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
