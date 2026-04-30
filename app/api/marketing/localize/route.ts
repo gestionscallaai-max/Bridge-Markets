@@ -11,12 +11,6 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        // Initialize Google AI with v1 (stable)
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash"
-        }, { apiVersion: 'v1' });
-
         // High-precision design layer prompt
         const prompt = `
             STRICT OUTPUT RULE: RETURN ONLY A JSON OBJECT. NO CONVERSATION. NO MARKDOWN.
@@ -55,21 +49,33 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        // Make the call
-        const result = await model.generateContent([prompt, imagePart]);
-        const response = await result.response;
-        const responseText = response.text();
+        // List of models to try in order of preference
+        const modelsToTry = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"];
+        let lastError = null;
 
-        try {
-            const aiData = JSON.parse(responseText);
-            return NextResponse.json(aiData);
-        } catch (e) {
-            console.error('Failed to parse AI JSON:', responseText);
-            return NextResponse.json({ 
-                success: false, 
-                error: "La IA no devolvió un formato de diseño válido." 
-            }, { status: 500 });
+        for (const modelId of modelsToTry) {
+            try {
+                const genAI = new GoogleGenerativeAI(apiKey);
+                const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1' });
+
+                const result = await model.generateContent([prompt, imagePart]);
+                const response = await result.response;
+                const responseText = response.text();
+
+                const aiData = JSON.parse(responseText.replace(/```json|```/g, ''));
+                return NextResponse.json(aiData);
+            } catch (e: any) {
+                lastError = e;
+                console.warn(`Model ${modelId} failed, trying next...`, e.message);
+                // If it's not a 503 or 429, it might be a prompt/auth error, so we stop
+                if (!e.message.includes('503') && !e.message.includes('429') && !e.message.includes('not found')) {
+                    break;
+                }
+                continue;
+            }
         }
+
+        throw lastError || new Error("Todos los modelos de IA están saturados.");
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
