@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         const parts = response.candidates?.[0]?.content?.parts || [];
         const resultImagePart = parts.find((p: any) => p.inlineData);
 
-        if (resultImagePart) {
+        if (resultImagePart && resultImagePart.inlineData) {
             return NextResponse.json({ 
                 success: true, 
                 type: 'image',
