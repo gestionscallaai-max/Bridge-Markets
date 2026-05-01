@@ -18,7 +18,7 @@ const LANG_META: Record<string, { en: string; native: string }> = {
 };
 
 export async function POST(req: NextRequest) {
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     try {
         const { market, image } = await req.json();
