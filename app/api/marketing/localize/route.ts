@@ -138,23 +138,10 @@ Rules:
 
         if (!pass1) throw new Error('El modelo no generó la imagen.');
 
-        await new Promise(r => setTimeout(r, 3000));
-
-        // ── STEP 3: Validation pass — catch any text the map missed ─────────────
-        const pass2 = await generateImage(pass1, `
-Check this image for any remaining Spanish words that were NOT yet translated to ${targetEn} (${targetNative}).
-
-If you find any Spanish word, phrase, or partial text — translate it to ${targetEn} now, keeping the same visual style.
-If the image is already 100% in ${targetEn}, return it unchanged.
-
-Do NOT change: "Bridge Markets", promo codes, numbers, percentages, non-text graphic elements.
-Output ONLY the final image.
-`);
-
         return NextResponse.json({
             success: true,
             type: 'image',
-            data: `data:image/jpeg;base64,${pass2 || pass1}`,
+            data: `data:image/jpeg;base64,${pass1}`,
             socialCopy: `Flyer localizado a ${market}.`,
             debug: { translationMap },
         });
