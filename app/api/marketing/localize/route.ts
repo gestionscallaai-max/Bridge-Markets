@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        const modelsToTry = ["gemini-1.5-pro", "gemini-1.5-flash"];
+        const modelsToTry = ["gemini-1.5-pro-latest", "gemini-1.5-flash-latest", "gemini-1.5-pro", "gemini-1.5-flash"];
         let lastError = null;
 
         for (const modelId of modelsToTry) {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
                 const genAI = new GoogleGenerativeAI(apiKey);
                 const model = genAI.getGenerativeModel({ 
                     model: modelId
-                }, { apiVersion: 'v1' });
+                }, { apiVersion: 'v1beta' });
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
