@@ -53,9 +53,15 @@ export async function updateSession(request: NextRequest) {
   )
 
   // refresca la sesion si expiro
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch (err) {
+    // Si falla la verificación de sesión (e.g., token inválido, red),
+    // tratamos al usuario como no autenticado y dejamos que el route handler lo maneje.
+    console.warn('[Middleware] supabase.auth.getUser() failed:', err);
+  }
 
   // Protection logic
   const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
