@@ -9,19 +9,35 @@ export async function POST(req: NextRequest) {
     try {
         const { market, image } = await req.json();
 
-        if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key de Gemini' }, { status: 500 });
+        if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        // Pure Pixel-by-Pixel Reconstruction Prompt (Optimized for Imagen 3 via Gemini API)
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-pro",
+            generationConfig: { responseMimeType: "application/json" }
+        });
+
+        // Prompt for High-Fidelity Design Extraction
         const prompt = `
-            TASK: RECONSTRUCT THIS IMAGE PIXEL-BY-PIXEL.
-            Maintain the EXACT 3D metallic silver typography and purple aesthetic of Bridge Markets.
+            You are a professional design reconstruction engine. 
+            TASK: Identify every text block in this flyer and its background context for a PIXEL-PERFECT replacement.
             
-            TRANSLATION REQUIREMENTS:
-            - Change all Spanish text to ${market}.
-            - "CUPÓN" must be replaced by "${market === 'French' ? 'COUPON' : 'CUPÓN'}" using the SAME chrome/silver 3D style.
-            - "ESPECIAL" -> "${market === 'French' ? 'SPÉCIAL' : 'SPECIAL'}".
+            FOR EACH BLOCK, PROVIDE:
+            1. originalText: Exact text in the image.
+            2. translatedText: The translation to ${market}.
+            3. x, y: Center coordinates (0.0 to 1.0).
+            4. fontSize: Estimated size in pixels.
+            5. color: Text color (HEX).
+            6. bgColor: The EXACT background color/hex behind this specific text (CRITICAL).
+            7. bold: boolean.
             
-            OUTPUT: YOU MUST RETURN A NEW IMAGE BLOB.
+            RETURN ONLY THIS JSON SCHEMA:
+            {
+              "layers": [
+                { "originalText": "...", "translatedText": "...", "x": 0.5, "y": 0.5, "fontSize": 50, "color": "#FFFFFF", "bgColor": "#2D1B4E", "bold": true }
+              ],
+              "socialCopy": "..."
+            }
         `;
 
         const imagePart = {
@@ -31,41 +47,19 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        const modelsToTry = ["gemini-1.5-pro", "gemini-1.5-flash", "gemini-2.5-pro"];
-        let lastError = null;
+        const result = await model.generateContent([prompt, imagePart]);
+        const response = await result.response;
+        const aiData = JSON.parse(response.text());
 
-        for (const modelId of modelsToTry) {
-            try {
-                const genAI = new GoogleGenerativeAI(apiKey);
-                // Use v1beta for advanced image generation features
-                const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1beta' });
-
-                const result = await model.generateContent([prompt, imagePart]);
-                const response = await result.response;
-                
-                const parts = response.candidates?.[0]?.content?.parts || [];
-                const imagePartFound = parts.find((p: any) => p.inlineData);
-
-                if (imagePartFound && imagePartFound.inlineData) {
-                    return NextResponse.json({ 
-                        success: true, 
-                        type: 'image',
-                        data: `data:${imagePartFound.inlineData.mimeType};base64,${imagePartFound.inlineData.data}`,
-                        socialCopy: response.text() || "Flyer reconstruido píxel a píxel."
-                    });
-                }
-                
-                throw new Error(`El modelo ${modelId} no generó la imagen reconstruida.`);
-            } catch (e: any) {
-                lastError = e;
-                continue;
-            }
-        }
-
-        throw lastError || new Error("No se pudo reconstruir la imagen con Gemini.");
+        return NextResponse.json({
+            success: true,
+            type: 'layers',
+            layers: aiData.layers,
+            socialCopy: aiData.socialCopy
+        });
 
     } catch (error: any) {
-        console.error('Error in Gemini reconstruction:', error);
+        console.error('Error in design analysis:', error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }

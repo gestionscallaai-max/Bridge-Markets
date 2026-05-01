@@ -156,23 +156,32 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                                 
                                 ctx.save();
                                 
-                                // SMART MASKING: Erase the original text by drawing its background color
+                                // INVISIBLE INPAINTING: Erase old text with blurred background patch
                                 if (layer.bgColor) {
+                                    const textWidth = ctx.measureText(layer.originalText || layer.text).width || 300;
+                                    const rectWidth = textWidth * 1.5;
+                                    const rectHeight = fontSize * 1.8;
+                                    
+                                    // Soft shadow to act as a blur/blend around the patch
+                                    ctx.shadowColor = layer.bgColor;
+                                    ctx.shadowBlur = 40;
                                     ctx.fillStyle = layer.bgColor;
-                                    const textWidth = ctx.measureText(layer.text).width || 200;
-                                    // Draw a rectangle over the original spot
-                                    ctx.fillRect(x - textWidth/2 - 20, y - fontSize/2 - 10, textWidth + 40, fontSize + 20);
+                                    
+                                    // Draw the patch to hide the original
+                                    ctx.fillRect(x - rectWidth/2, y - rectHeight/2, rectWidth, rectHeight);
                                 }
 
                                 ctx.textAlign = 'center';
                                 ctx.textBaseline = 'middle';
                                 
-                                // Text Shadow for better integration
-                                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                                ctx.shadowBlur = 10;
+                                // Text Rendering: Professional 3D Effect
+                                ctx.shadowColor = 'rgba(0,0,0,0.7)';
+                                ctx.shadowBlur = 15;
+                                ctx.shadowOffsetX = 2;
+                                ctx.shadowOffsetY = 2;
                                 
                                 ctx.fillStyle = layer.color || '#FFFFFF';
-                                ctx.font = `${layer.bold ? 'black' : 'bold'} ${fontSize}px Inter, sans-serif`;
+                                ctx.font = `${layer.bold ? '900' : 'bold'} ${fontSize}px Inter, sans-serif`;
                                 
                                 ctx.fillText(layer.translatedText || layer.text, x, y);
                                 ctx.restore();
