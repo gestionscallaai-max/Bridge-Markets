@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     try {
         const { market, image } = await req.json();
 
-        if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
+        if (!apiKey) return NextResponse.json({ success: false, error: 'ERROR_SISTEMA: API_KEY_NO_DETECTADA' }, { status: 500 });
 
         // Prompt for High-Fidelity Design Extraction
         const prompt = `
@@ -48,13 +48,13 @@ export async function POST(req: NextRequest) {
             try {
                 const genAI = new GoogleGenerativeAI(apiKey);
                 const model = genAI.getGenerativeModel({ 
-                    model: modelId,
-                    generationConfig: { responseMimeType: "application/json" }
+                    model: modelId
                 }, { apiVersion: 'v1' });
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
-                const aiData = JSON.parse(response.text());
+                const responseText = response.text().replace(/```json|```/g, '').trim();
+                const aiData = JSON.parse(responseText);
 
                 return NextResponse.json({
                     success: true,
