@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 
-export const maxDuration = 180;
+export const maxDuration = 120;
 
 // ── Language metadata ────────────────────────────────────────────────────────
 const LANG_META: Record<string, { en: string; native: string }> = {
-    'French':     { en: 'French',              native: 'français' },
-    'English':    { en: 'English',             native: 'English' },
-    'Portuguese': { en: 'Portuguese',          native: 'português' },
-    'Chinese':    { en: 'Chinese (Simplified)', native: '中文' },
-    'Hindi':      { en: 'Hindi',               native: 'हिन्दी' },
-    'Japanese':   { en: 'Japanese',            native: '日本語' },
-    'Russian':    { en: 'Russian',             native: 'русский' },
-    'Arabic':     { en: 'Arabic',              native: 'العربية' },
-    'Bengali':    { en: 'Bengali',             native: 'বাংলা' },
-    'Spanish':    { en: 'Spanish',             native: 'español' },
+    'French':     { en: 'French',               native: 'français' },
+    'English':    { en: 'English',               native: 'English' },
+    'Portuguese': { en: 'Portuguese',            native: 'português' },
+    'Chinese':    { en: 'Chinese (Simplified)',  native: '中文' },
+    'Hindi':      { en: 'Hindi',                 native: 'हिन्दी' },
+    'Japanese':   { en: 'Japanese',              native: '日本語' },
+    'Russian':    { en: 'Russian',               native: 'русский' },
+    'Arabic':     { en: 'Arabic',                native: 'العربية' },
+    'Bengali':    { en: 'Bengali',               native: 'বাংলা' },
+    'Spanish':    { en: 'Spanish',               native: 'español' },
 };
 
 export async function POST(req: NextRequest) {
@@ -29,121 +29,65 @@ export async function POST(req: NextRequest) {
         const ai = new GoogleGenAI({ apiKey });
         const { en: targetEn, native: targetNative } = LANG_META[market] ?? { en: market, native: market };
 
-        // ── Helper: image generation with retry ─────────────────────────────────
-        const generateImage = async (inputImage: string, prompt: string): Promise<string | null> => {
-            for (let attempt = 0; attempt < 3; attempt++) {
+        // ── Single image edit call with retry ────────────────────────────────────
+        const IMAGE_MODELS = ['gemini-2.5-flash-image', 'gemini-3.1-flash-image-preview'];
+
+        let resultImage: string | null = null;
+
+        for (const model of IMAGE_MODELS) {
+            for (let attempt = 0; attempt < 2; attempt++) {
                 try {
                     const res = await ai.models.generateContent({
-                        model: 'gemini-3.1-flash-image-preview',
+                        model,
                         contents: [{
                             role: 'user',
                             parts: [
-                                { inlineData: { mimeType: 'image/jpeg', data: inputImage } },
-                                { text: prompt },
+                                { inlineData: { mimeType: 'image/jpeg', data: image } },
+                                { text: `Translate all Spanish text in this image to ${targetEn} (${targetNative}).
+
+WHAT TO TRANSLATE: every word, phrase, headline, subtitle, body text, label, button, caption, watermark, and disclaimer that is written in Spanish.
+
+WHAT NOT TO TRANSLATE: the brand name "Bridge Markets", promo/discount codes (e.g. BM10%), numbers, percentages, and non-text graphic elements.
+
+IMPORTANT — the large stylized or 3D headline text in the center is also in Spanish. Translate it too. It is not a brand name.
+
+OUTPUT RULES:
+- Keep the exact same visual design: colors, layout, background, images, fonts, sizes, and 3D effects.
+- Output only the translated image, no commentary.` },
                             ],
                         }],
                         config: { responseModalities: ['IMAGE', 'TEXT'] },
                     } as any);
 
                     for (const part of res.candidates?.[0]?.content?.parts ?? []) {
-                        if (part.inlineData?.data) return part.inlineData.data;
+                        if (part.inlineData?.data) {
+                            resultImage = part.inlineData.data;
+                            break;
+                        }
                     }
-                    return null;
+
+                    if (resultImage) break;
                 } catch (e: any) {
-                    if (attempt < 2) { await new Promise(r => setTimeout(r, (attempt + 1) * 5000)); continue; }
-                    throw e;
+                    const isRetryable = attempt === 0 && (e.status === 429 || e.status === 503);
+                    if (isRetryable) {
+                        await new Promise(r => setTimeout(r, 4000));
+                        continue;
+                    }
+                    // Try next model on non-retryable error
+                    console.warn(`[Localize] Model ${model} failed (attempt ${attempt}):`, e.message);
+                    break;
                 }
             }
-            return null;
-        };
-
-        // ── Helper: text-only generation with retry ──────────────────────────────
-        const generateText = async (inputImage: string, prompt: string): Promise<string> => {
-            for (let attempt = 0; attempt < 3; attempt++) {
-                try {
-                    const res = await ai.models.generateContent({
-                        model: 'gemini-2.5-flash',
-                        contents: [{
-                            role: 'user',
-                            parts: [
-                                { inlineData: { mimeType: 'image/jpeg', data: inputImage } },
-                                { text: prompt },
-                            ],
-                        }],
-                    } as any);
-                    return res.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-                } catch (e: any) {
-                    if (attempt < 2) { await new Promise(r => setTimeout(r, (attempt + 1) * 3000)); continue; }
-                    throw e;
-                }
-            }
-            return '';
-        };
-
-        // ── STEP 1: Extract & translate all text using a text model ──────────────
-        // We let the language model (which is excellent at translation) produce
-        // an exact translation map. The image model only needs to do visual replacement.
-        const translationRaw = await generateText(image, `
-You are a professional translator from Spanish to ${targetEn}.
-
-Look at this marketing image and do the following:
-1. Find EVERY piece of visible text in the image (headline, subheadline, body copy, labels, buttons, captions, disclaimers, small print, text inside icons, watermarks).
-2. For each text piece, provide its EXACT translation into ${targetEn} (${targetNative}).
-
-Rules:
-- Do NOT translate: brand names ("Bridge Markets"), promo codes (e.g. BM10%), ticker symbols, percentages/numbers.
-- Translate EVERYTHING else, including large 3D headlines, even if they look like a title or product name — they are in Spanish and must be translated.
-- Provide NATURAL, fluent, grammatically correct ${targetEn}. Do not transliterate.
-
-Respond ONLY with a valid JSON array, no extra text, no markdown:
-[
-  { "original": "<exact Spanish text as it appears>", "translation": "<correct ${targetEn} translation>" },
-  ...
-]
-`);
-
-        // Parse translation map — fall back gracefully if JSON is malformed
-        let translationMap: Array<{ original: string; translation: string }> = [];
-        try {
-            const jsonMatch = translationRaw.match(/\[[\s\S]*\]/);
-            if (jsonMatch) translationMap = JSON.parse(jsonMatch[0]);
-        } catch {
-            console.warn('Translation map parse failed, proceeding without map:', translationRaw);
+            if (resultImage) break;
         }
 
-        // Build a human-readable replacement guide for the image model
-        const replacementGuide = translationMap.length > 0
-            ? translationMap.map(t => `• "${t.original}" → "${t.translation}"`).join('\n')
-            : '(No translation map available — translate all Spanish text to ' + targetEn + ')';
-
-        console.log(`[Localize] Translation map for ${market}:\n${replacementGuide}`);
-
-        await new Promise(r => setTimeout(r, 2000));
-
-        // ── STEP 2: Image edit using the exact translation map ───────────────────
-        // The model now knows EXACTLY what to write — no guessing needed.
-        const pass1 = await generateImage(image, `
-Edit this image by replacing Spanish text with its ${targetEn} (${targetNative}) translation.
-
-Use this EXACT translation map — replace each original text with its translation as written below:
-${replacementGuide}
-
-Rules:
-- Replace EVERY original text listed above with its translation, character by character as given.
-- Do NOT paraphrase or re-translate — use the exact translations provided.
-- Keep the same font style, weight, size, color, position, 3D effect, and visual appearance for each text element.
-- Do NOT change: colors, layout, background, images, logos, graphic elements, "Bridge Markets" brand, promo codes, numbers.
-- Output ONLY the edited image.
-`);
-
-        if (!pass1) throw new Error('El modelo no generó la imagen.');
+        if (!resultImage) throw new Error('El modelo no generó la imagen. Inténtalo de nuevo.');
 
         return NextResponse.json({
             success: true,
             type: 'image',
-            data: `data:image/jpeg;base64,${pass1}`,
+            data: `data:image/jpeg;base64,${resultImage}`,
             socialCopy: `Flyer localizado a ${market}.`,
-            debug: { translationMap },
         });
 
     } catch (error: any) {
