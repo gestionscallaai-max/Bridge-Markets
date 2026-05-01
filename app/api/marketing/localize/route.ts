@@ -9,30 +9,15 @@ export async function POST(req: NextRequest) {
     try {
         const { market, image } = await req.json();
 
-        if (!apiKey) return NextResponse.json({ success: false, error: 'ERROR_SISTEMA: API_KEY_NO_DETECTADA' }, { status: 500 });
+        if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key de Gemini' }, { status: 500 });
 
-        // Prompt for High-Fidelity Design Extraction
-        const prompt = `
-            You are a professional design reconstruction engine. 
-            TASK: Identify every text block in this flyer and its background context for a PIXEL-PERFECT replacement.
-            
-            FOR EACH BLOCK, PROVIDE:
-            1. originalText: Exact text in the image.
-            2. translatedText: The translation to ${market}.
-            3. x, y: Center coordinates (0.0 to 1.0).
-            4. fontSize: Estimated size in pixels.
-            5. color: Text color (HEX).
-            6. bgColor: The EXACT background color/hex behind this specific text (CRITICAL).
-            7. bold: boolean.
-            
-            RETURN ONLY THIS JSON SCHEMA:
-            {
-              "layers": [
-                { "originalText": "...", "translatedText": "...", "x": 0.5, "y": 0.5, "fontSize": 50, "color": "#FFFFFF", "bgColor": "#2D1B4E", "bold": true }
-              ],
-              "socialCopy": "..."
-            }
-        `;
+        const genAI = new GoogleGenerativeAI(apiKey);
+        // Use v1beta and pro model for native image generation support
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" }, { apiVersion: 'v1beta' });
+
+        const prompt = `Re-create this image exactly as it is, pixel by pixel, but translate all the text to ${market}. 
+        Maintain the exact 3D metallic silver typography, the purple abstract background, and the Bridge Markets branding.
+        The output must be the GENERATED IMAGE.`;
 
         const imagePart = {
             inlineData: {
@@ -41,38 +26,38 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        const modelsToTry = ["gemini-1.5-pro-latest", "gemini-1.5-flash-latest", "gemini-1.5-pro", "gemini-1.5-flash"];
-        let lastError = null;
+        const result = await model.generateContent([prompt, imagePart]);
+        const response = await result.response;
+        
+        // Look for the image in the response parts
+        const parts = response.candidates?.[0]?.content?.parts || [];
+        const imagePartFound = parts.find((p: any) => p.inlineData);
 
-        for (const modelId of modelsToTry) {
-            try {
-                const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({ 
-                    model: modelId
-                }, { apiVersion: 'v1beta' });
-
-                const result = await model.generateContent([prompt, imagePart]);
-                const response = await result.response;
-                const responseText = response.text().replace(/```json|```/g, '').trim();
-                const aiData = JSON.parse(responseText);
-
-                return NextResponse.json({
-                    success: true,
-                    type: 'layers',
-                    layers: aiData.layers,
-                    socialCopy: aiData.socialCopy
-                });
-            } catch (e: any) {
-                lastError = e;
-                console.warn(`Modelo ${modelId} falló, intentando el siguiente...`);
-                continue;
-            }
+        if (imagePartFound && imagePartFound.inlineData) {
+            return NextResponse.json({ 
+                success: true, 
+                type: 'image',
+                data: `data:${imagePartFound.inlineData.mimeType};base64,${imagePartFound.inlineData.data}`,
+                socialCopy: response.text() || "Flyer rediseñado correctamente."
+            });
         }
 
-        throw lastError || new Error("No se pudo procesar el rediseño con los modelos disponibles.");
+        // Fallback: Check if it returned a base64 string in the text
+        const text = response.text();
+        const b64Match = text.match(/data:image\/[a-zA-Z]*;base64,[^"']*/);
+        if (b64Match) {
+            return NextResponse.json({
+                success: true,
+                type: 'image',
+                data: b64Match[0],
+                socialCopy: text
+            });
+        }
+
+        throw new Error("El modelo no devolvió la imagen reconstruida. Asegúrate de que los permisos de generación de imagen están activos.");
 
     } catch (error: any) {
-        console.error('Error in design analysis:', error);
+        console.error('Error in Gemini image generation:', error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
