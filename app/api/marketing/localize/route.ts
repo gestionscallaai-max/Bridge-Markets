@@ -11,14 +11,28 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
-        // Exact re-creation prompt (matching user's screenshot)
-        const prompt = `Crea una imagen exactamente igual a esta, pero traducida al ${market}.
-        
-        REQUISITOS CRÍTICOS:
-        1. El diseño debe ser IDÉNTICO (estilo metálico 3D, colores púrpuras).
-        2. Todo el texto debe estar en ${market}.
-        3. Especial atención a la palabra "CUPÓN" -> debe ser "${market === 'French' ? 'COUPON' : 'CUPÓN'}".
-        4. Devuelve la imagen GENERADA.`;
+        // High-precision design extraction prompt for Smart Masking
+        const prompt = `
+            You are "Nano Banana", a high-end design engine.
+            TASK: Extract every text layer and its background context for a SEAMLESS redesign.
+            
+            FOR EACH TEXT ELEMENT, IDENTIFY:
+            1. originalText: The text in the image.
+            2. translatedText: The translation to ${market}.
+            3. x, y: Coordinates (0.0 to 1.0).
+            4. fontSize: Estimated size.
+            5. color: Text color (HEX).
+            6. bgColor: The EXACT background color/hex behind this specific text (CRITICAL for erasing it).
+            7. bold: boolean.
+            
+            RETURN ONLY THIS JSON:
+            {
+              "success": true,
+              "type": "layers",
+              "layers": [...],
+              "socialCopy": "..."
+            }
+        `;
 
         // Prepare image for SDK
         const imagePart = {
@@ -28,44 +42,25 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        const modelsToTry = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"];
+        const modelsToTry = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-1.5-pro"];
         let lastError = null;
 
         for (const modelId of modelsToTry) {
             try {
                 const genAI = new GoogleGenerativeAI(apiKey);
-                // Try to use v1beta for better image generation tool support
                 const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1' });
 
                 const result = await model.generateContent([prompt, imagePart]);
                 const response = await result.response;
-                
-                const parts = response.candidates?.[0]?.content?.parts || [];
-                const imagePartFound = parts.find((p: any) => p.inlineData);
-
-                if (imagePartFound && imagePartFound.inlineData) {
-                    return NextResponse.json({ 
-                        success: true, 
-                        type: 'image',
-                        data: `data:${imagePartFound.inlineData.mimeType};base64,${imagePartFound.inlineData.data}`,
-                        socialCopy: response.text() || ""
-                    });
-                }
-                
-                const text = response.text();
-                const match = text.match(/data:image\/[a-zA-Z]*;base64,[^"']*/);
-                if (match) {
-                    return NextResponse.json({ success: true, type: 'image', data: match[0], socialCopy: text });
-                }
-
-                throw new Error("El modelo no devolvió una imagen generada.");
+                const responseText = response.text().replace(/```json|```/g, '').trim();
+                return NextResponse.json(JSON.parse(responseText));
             } catch (e: any) {
                 lastError = e;
                 continue;
             }
         }
 
-        throw lastError || new Error("No se pudo procesar el rediseño.");
+        throw lastError || new Error("No se pudo procesar el rediseño inteligente.");
 
     } catch (error: any) {
         console.error('Error in marketing localization:', error);
