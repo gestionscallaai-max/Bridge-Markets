@@ -11,10 +11,6 @@ export async function POST(req: NextRequest) {
 
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key de Gemini' }, { status: 500 });
 
-        const genAI = new GoogleGenerativeAI(apiKey);
-        // Use v1beta and pro model for native image generation support
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" }, { apiVersion: 'v1beta' });
-
         const prompt = `Re-create this image exactly as it is, pixel by pixel, but translate all the text to ${market}. 
         Maintain the exact 3D metallic silver typography, the purple abstract background, and the Bridge Markets branding.
         The output must be the GENERATED IMAGE.`;
@@ -26,8 +22,30 @@ export async function POST(req: NextRequest) {
             }
         };
 
-        const result = await model.generateContent([prompt, imagePart]);
-        const response = await result.response;
+        const modelsToTry = [
+            "gemini-2.0-flash-exp", 
+            "gemini-1.5-pro-latest", 
+            "gemini-1.5-pro",
+            "gemini-1.5-flash-latest"
+        ];
+        let lastError = null;
+        let response;
+
+        for (const modelId of modelsToTry) {
+            try {
+                const genAI = new GoogleGenerativeAI(apiKey);
+                const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1beta' });
+                const result = await model.generateContent([prompt, imagePart]);
+                response = await result.response;
+                break; // If successful, exit the loop
+            } catch (e: any) {
+                lastError = e;
+                continue;
+            }
+        }
+
+        if (!response) throw lastError || new Error("No se pudo procesar con ningún modelo.");
+
         
         // Look for the image in the response parts
         const parts = response.candidates?.[0]?.content?.parts || [];
