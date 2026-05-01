@@ -29,56 +29,78 @@ export async function POST(req: NextRequest) {
         const ai = new GoogleGenAI({ apiKey });
         const { en: targetEn, native: targetNative } = LANG_META[market] ?? { en: market, native: market };
 
-        // ── Single image edit call with retry ────────────────────────────────────
-        const IMAGE_MODELS = ['gemini-2.5-flash-image', 'gemini-3.1-flash-image-preview'];
+        // ── STEP 1: Fast text extraction + translation (thinking disabled) ────────
+        // thinkingBudget: 0 skips chain-of-thought → responds in ~3s instead of ~25s
+        let translationGuide = '';
+        try {
+            const textRes = await ai.models.generateContent({
+                model: 'gemini-2.5-flash',
+                config: {
+                    thinkingConfig: { thinkingBudget: 0 },
+                } as any,
+                contents: [{
+                    role: 'user',
+                    parts: [
+                        { inlineData: { mimeType: 'image/jpeg', data: image } },
+                        { text: `List every Spanish text element visible in this image and its ${targetEn} translation. Respond ONLY with a compact JSON array, no markdown:
+[{"o":"<original>","t":"<${targetEn} translation>"}]
+Skip: brand names (Bridge Markets), promo codes, pure numbers.` },
+                    ],
+                }],
+            } as any);
 
+            const raw = textRes.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+            const match = raw.match(/\[[\s\S]*\]/);
+            if (match) {
+                const map: Array<{ o: string; t: string }> = JSON.parse(match[0]);
+                translationGuide = map.map(x => `"${x.o}" → "${x.t}"`).join('\n');
+            }
+        } catch (e) {
+            console.warn('[Localize] Text extraction failed, proceeding without map:', e);
+        }
+
+        // ── STEP 2: Image edit with exact translation map ─────────────────────────
+        const prompt = translationGuide
+            ? `Edit this image. Replace each Spanish text with its exact ${targetEn} (${targetNative}) translation as listed:
+
+${translationGuide}
+
+Rules:
+- Use EXACTLY the translations listed above, character by character.
+- The large stylized/3D headline is also in Spanish — translate it using the list.
+- Keep all visual styles: colors, layout, fonts, sizes, 3D effects, background, images.
+- Do NOT change: "Bridge Markets", promo codes, numbers, non-text elements.
+- Output only the edited image.`
+            : `Translate every Spanish word in this image to ${targetEn} (${targetNative}). Keep all visual design identical. Output only the translated image.`;
+
+        const IMAGE_MODELS = ['gemini-3.1-flash-image-preview', 'gemini-2.5-flash-image'];
         let resultImage: string | null = null;
 
         for (const model of IMAGE_MODELS) {
-            for (let attempt = 0; attempt < 2; attempt++) {
-                try {
-                    const res = await ai.models.generateContent({
-                        model,
-                        contents: [{
-                            role: 'user',
-                            parts: [
-                                { inlineData: { mimeType: 'image/jpeg', data: image } },
-                                { text: `Translate all Spanish text in this image to ${targetEn} (${targetNative}).
+            try {
+                const res = await ai.models.generateContent({
+                    model,
+                    contents: [{
+                        role: 'user',
+                        parts: [
+                            { inlineData: { mimeType: 'image/jpeg', data: image } },
+                            { text: prompt },
+                        ],
+                    }],
+                    config: { responseModalities: ['IMAGE', 'TEXT'] },
+                } as any);
 
-WHAT TO TRANSLATE: every word, phrase, headline, subtitle, body text, label, button, caption, watermark, and disclaimer that is written in Spanish.
-
-WHAT NOT TO TRANSLATE: the brand name "Bridge Markets", promo/discount codes (e.g. BM10%), numbers, percentages, and non-text graphic elements.
-
-IMPORTANT — the large stylized or 3D headline text in the center is also in Spanish. Translate it too. It is not a brand name.
-
-OUTPUT RULES:
-- Keep the exact same visual design: colors, layout, background, images, fonts, sizes, and 3D effects.
-- Output only the translated image, no commentary.` },
-                            ],
-                        }],
-                        config: { responseModalities: ['IMAGE', 'TEXT'] },
-                    } as any);
-
-                    for (const part of res.candidates?.[0]?.content?.parts ?? []) {
-                        if (part.inlineData?.data) {
-                            resultImage = part.inlineData.data;
-                            break;
-                        }
+                for (const part of res.candidates?.[0]?.content?.parts ?? []) {
+                    if (part.inlineData?.data) {
+                        resultImage = part.inlineData.data;
+                        break;
                     }
-
-                    if (resultImage) break;
-                } catch (e: any) {
-                    const isRetryable = attempt === 0 && (e.status === 429 || e.status === 503);
-                    if (isRetryable) {
-                        await new Promise(r => setTimeout(r, 4000));
-                        continue;
-                    }
-                    // Try next model on non-retryable error
-                    console.warn(`[Localize] Model ${model} failed (attempt ${attempt}):`, e.message);
-                    break;
                 }
+                if (resultImage) break;
+            } catch (e: any) {
+                console.warn(`[Localize] Model ${model} failed:`, e.message);
+                if (e.status === 429) await new Promise(r => setTimeout(r, 4000));
             }
-            if (resultImage) break;
         }
 
         if (!resultImage) throw new Error('El modelo no generó la imagen. Inténtalo de nuevo.');
