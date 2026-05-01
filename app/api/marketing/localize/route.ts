@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         const lang = targetLang[market] || market;
 
         // Retry helper for 503/429 errors
-        async function callWithRetry(fn: () => Promise<any>, maxRetries = 3): Promise<any> {
+        const callWithRetry = async (fn: () => Promise<any>, maxRetries = 3): Promise<any> => {
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
                     return await fn();
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
                     throw e;
                 }
             }
-        }
+        };
 
         const result = await callWithRetry(async () => {
             const res = await ai.models.generateContentStream({
