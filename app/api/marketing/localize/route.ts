@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
             max_tokens: 500
         });
 
-        const dallePrompt = visionResponse.choices[0].message.content || "A professional marketing flyer for Bridge Markets with metallic 3D text.";
+        const dallePrompt = visionResponse.choices?.[0]?.message?.content || "A professional marketing flyer for Bridge Markets with metallic 3D text.";
 
         // Step 2: Generate the new image with DALL-E 3
         const imageGeneration = await openai.images.generate({
@@ -53,7 +53,11 @@ export async function POST(req: NextRequest) {
             response_format: "b64_json"
         });
 
-        const newImageBase64 = imageGeneration.data[0].b64_json;
+        const newImageBase64 = imageGeneration.data?.[0]?.b64_json;
+
+        if (!newImageBase64) {
+            throw new Error("DALL-E 3 no devolvió los datos de la imagen.");
+        }
 
         return NextResponse.json({
             success: true,
