@@ -93,17 +93,11 @@ ${textBlocks.map((t: string, i: number) => `${i + 1}. ${t}`).join('\n')}`,
                             },
                         },
                         {
-                            text: `TASK: Edit this advertisement image. You MUST replace ALL text with the translated versions below. Do NOT leave ANY text in the original language.
+                            text: `Edit this image. Replace the text exactly as shown below. Keep everything else identical.
 
-HERE IS THE COMPLETE LIST OF EVERY TEXT REPLACEMENT YOU MUST MAKE:
 ${replacementPairs}
 
-MANDATORY RULES:
-- You MUST replace EVERY SINGLE line of text listed above. Check each one individually.
-- After replacing, there should be ZERO words remaining in the original language (except brand names like "Bridge Markets" and codes like "BM10%").
-- Keep the exact same image design, colors, layout, typography style, 3D effects, and visual elements.
-- Do NOT add any new visual elements, flags, or cultural symbols.
-- VERIFY: Go through the list above one by one and confirm each replacement was made before outputting the final image.`,
+Replace ALL text above. No original language text should remain. Keep the same design.`,
                         },
                     ],
                 },
