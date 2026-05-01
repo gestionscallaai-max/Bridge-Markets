@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
         if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
 
         const ai = new GoogleGenAI({ apiKey });
-        const model = 'gemini-2.5-flash-preview-05-20';
+        const model = 'gemini-2.5-flash-image';
 
         const contents = [
             {
