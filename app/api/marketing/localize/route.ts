@@ -13,57 +13,67 @@ export async function POST(req: NextRequest) {
 
         const ai = new GoogleGenAI({ apiKey });
 
-        const targetLang: Record<string, string> = {
+        const lang: Record<string, string> = {
             'French': 'French', 'English': 'English', 'Portuguese': 'Portuguese',
             'Chinese': 'Chinese', 'Hindi': 'Hindi', 'Japanese': 'Japanese',
             'Russian': 'Russian', 'Arabic': 'Arabic', 'Bengali': 'Bengali', 'Spanish': 'Spanish',
         };
 
-        const lang = targetLang[market] || market;
+        const target = lang[market] || market;
 
-        // Retry helper for 503/429 errors
-        const callWithRetry = async (fn: () => Promise<any>, maxRetries = 3): Promise<any> => {
-            for (let attempt = 0; attempt < maxRetries; attempt++) {
+        // Helper: call image model with retry
+        const generateImage = async (inputImage: string, prompt: string): Promise<string | null> => {
+            for (let attempt = 0; attempt < 3; attempt++) {
                 try {
-                    return await fn();
+                    const res = await ai.models.generateContentStream({
+                        model: 'gemini-2.5-flash-image',
+                        config: { responseModalities: ['image', 'text'] },
+                        contents: [{
+                            role: 'user',
+                            parts: [
+                                { inlineData: { mimeType: 'image/jpeg', data: inputImage } },
+                                { text: prompt },
+                            ],
+                        }],
+                    } as any);
+
+                    for await (const chunk of res) {
+                        if (!chunk.candidates?.[0]?.content?.parts) continue;
+                        for (const part of chunk.candidates[0].content.parts) {
+                            if (part.inlineData?.data) return part.inlineData.data;
+                        }
+                    }
+                    return null;
                 } catch (e: any) {
-                    const status = e?.status || e?.httpStatusCode || 0;
-                    if ((status === 503 || status === 429) && attempt < maxRetries - 1) {
-                        const delay = (attempt + 1) * 5000; // 5s, 10s, 15s
-                        await new Promise(r => setTimeout(r, delay));
+                    if (attempt < 2) {
+                        await new Promise(r => setTimeout(r, (attempt + 1) * 5000));
                         continue;
                     }
                     throw e;
                 }
             }
+            return null;
         };
 
-        const result = await callWithRetry(async () => {
-            const res = await ai.models.generateContentStream({
-                model: 'gemini-2.5-flash-image',
-                config: { responseModalities: ['image', 'text'] },
-                contents: [{
-                    role: 'user',
-                    parts: [
-                        { inlineData: { mimeType: 'image/jpeg', data: image } },
-                        { text: `Translate ALL text in this advertisement image to ${lang}. Replace every single word with its ${lang} translation. Do not leave any word in the original language. Keep the exact same visual design, layout, colors, and style. Only change the language of the text.` },
-                    ],
-                }],
-            } as any);
+        // PASS 1: Initial translation
+        const pass1 = await generateImage(image,
+            `Translate ALL text in this advertisement to ${target}. Replace every word. Keep the exact same design. Only change the language.`
+        );
 
-            for await (const chunk of res) {
-                if (!chunk.candidates?.[0]?.content?.parts) continue;
-                for (const part of chunk.candidates[0].content.parts) {
-                    if (part.inlineData?.data) return part.inlineData.data;
-                }
-            }
-            throw new Error("No image returned");
-        });
+        if (!pass1) throw new Error("El modelo no generó la imagen.");
+
+        // Wait 3 seconds to avoid rate limiting
+        await new Promise(r => setTimeout(r, 3000));
+
+        // PASS 2: Fix remaining untranslated text
+        const pass2 = await generateImage(pass1,
+            `Some text in this image is still in Spanish. Replace ALL remaining Spanish text with ${target}. Do not change anything else.`
+        );
 
         return NextResponse.json({ 
             success: true, 
             type: 'image',
-            data: `data:image/jpeg;base64,${result}`,
+            data: `data:image/jpeg;base64,${pass2 || pass1}`,
             socialCopy: `Flyer localizado a ${market}.`
         });
 
