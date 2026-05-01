@@ -1,69 +1,72 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from 'openai';
 
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const openaiKey = process.env.OPENAI_API_KEY;
+    if (!openaiKey) {
+        return NextResponse.json({ success: false, error: "Falta OPENAI_API_KEY en el servidor." }, { status: 500 });
+    }
+    const openai = new OpenAI({ apiKey: openaiKey });
 
     try {
         const { market, image } = await req.json();
 
-        if (!apiKey) return NextResponse.json({ success: false, error: 'Falta API Key' }, { status: 500 });
+        // Step 1: Analyze original image with GPT-4o Vision to generate a perfect reconstruction prompt
+        const visionResponse = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                {
+                    role: "user",
+                    content: [
+                        { 
+                            type: "text", 
+                            text: `Analyze this Bridge Markets flyer. Generate a high-detail prompt for DALL-E 3 to RECREATE this exact image pixel-by-pixel. 
+                            The background must be the same dark purple abstract texture. 
+                            The branding "BRIDGE MARKETS Propfirm" must be at the top.
+                            The central text must be changed to ${market}. 
+                            If it's French, use "COUPON SPÉCIAL". 
+                            Maintain the 3D metallic silver/chrome effect for the main numbers and text.
+                            The bottom code is "BM10%".
+                            Return ONLY the prompt for DALL-E 3, nothing else.` 
+                        },
+                        { 
+                            type: "image_url", 
+                            image_url: { url: `data:image/jpeg;base64,${image}` } 
+                        }
+                    ]
+                }
+            ],
+            max_tokens: 500
+        });
 
-        // High-precision design extraction prompt for Smart Masking
-        const prompt = `
-            You are "Nano Banana", a high-end design engine.
-            TASK: Extract every text layer and its background context for a SEAMLESS redesign.
-            
-            FOR EACH TEXT ELEMENT, IDENTIFY:
-            1. originalText: The text in the image.
-            2. translatedText: The translation to ${market}.
-            3. x, y: Coordinates (0.0 to 1.0).
-            4. fontSize: Estimated size.
-            5. color: Text color (HEX).
-            6. bgColor: The EXACT background color/hex behind this specific text (CRITICAL for erasing it).
-            7. bold: boolean.
-            
-            RETURN ONLY THIS JSON:
-            {
-              "success": true,
-              "type": "layers",
-              "layers": [...],
-              "socialCopy": "..."
-            }
-        `;
+        const dallePrompt = visionResponse.choices[0].message.content || "A professional marketing flyer for Bridge Markets with metallic 3D text.";
 
-        // Prepare image for SDK
-        const imagePart = {
-            inlineData: {
-                data: image,
-                mimeType: "image/jpeg"
-            }
-        };
+        // Step 2: Generate the new image with DALL-E 3
+        const imageGeneration = await openai.images.generate({
+            model: "dall-e-3",
+            prompt: dallePrompt,
+            n: 1,
+            size: "1024x1792", // Vertical aspect ratio
+            quality: "hd",
+            response_format: "b64_json"
+        });
 
-        const modelsToTry = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-1.5-pro"];
-        let lastError = null;
+        const newImageBase64 = imageGeneration.data[0].b64_json;
 
-        for (const modelId of modelsToTry) {
-            try {
-                const genAI = new GoogleGenerativeAI(apiKey);
-                const model = genAI.getGenerativeModel({ model: modelId }, { apiVersion: 'v1' });
-
-                const result = await model.generateContent([prompt, imagePart]);
-                const response = await result.response;
-                const responseText = response.text().replace(/```json|```/g, '').trim();
-                return NextResponse.json(JSON.parse(responseText));
-            } catch (e: any) {
-                lastError = e;
-                continue;
-            }
-        }
-
-        throw lastError || new Error("No se pudo procesar el rediseño inteligente.");
+        return NextResponse.json({
+            success: true,
+            type: 'image',
+            data: `data:image/png;base64,${newImageBase64}`,
+            socialCopy: "Flyer rediseñado profesionalmente por DALL-E 3."
+        });
 
     } catch (error: any) {
-        console.error('Error in marketing localization:', error);
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        console.error('Error in OpenAI reconstruction:', error);
+        return NextResponse.json({ 
+            success: false, 
+            error: error.message || "Error al rediseñar la imagen con OpenAI." 
+        }, { status: 500 });
     }
 }
