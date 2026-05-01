@@ -13,123 +13,62 @@ export async function POST(req: NextRequest) {
 
         const ai = new GoogleGenAI({ apiKey });
 
-        // ============================================================
-        // STEP 1: Extract ALL text from the image using a text model
-        // ============================================================
-        const extractionResponse = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: [
-                {
-                    role: 'user',
-                    parts: [
-                        {
-                            inlineData: {
-                                mimeType: 'image/jpeg',
-                                data: image,
-                            },
-                        },
-                        {
-                            text: `Extract EVERY piece of text visible in this image. List each text block on a separate line. Include ALL text no matter how small - headers, subheaders, body text, labels, captions, watermarks, everything. Do NOT skip any text. Return ONLY the raw text, one block per line, nothing else.`,
-                        },
-                    ],
-                },
-            ],
-        });
+        const targetLang: Record<string, string> = {
+            'French': 'French', 'English': 'English', 'Portuguese': 'Portuguese',
+            'Chinese': 'Chinese', 'Hindi': 'Hindi', 'Japanese': 'Japanese',
+            'Russian': 'Russian', 'Arabic': 'Arabic', 'Bengali': 'Bengali', 'Spanish': 'Spanish',
+        };
 
-        const extractedText = extractionResponse.text || '';
-        const textBlocks = extractedText.split('\n').filter((line: string) => line.trim().length > 0);
+        const lang = targetLang[market] || market;
 
-        // ============================================================
-        // STEP 2: Translate all extracted text
-        // ============================================================
-        const translationResponse = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: [
-                {
-                    role: 'user',
-                    parts: [
-                        {
-                            text: `Translate the following text blocks to ${market}. 
-                            
-RULES:
-- Translate EVERY line
-- Do NOT translate brand names like "Bridge Markets", promotional codes like "BM10%", URLs, or email addresses
-- Return ONLY the translations, one per line, in the SAME ORDER as the input
-- Each output line must correspond to the same input line number
-
-INPUT TEXT:
-${textBlocks.map((t: string, i: number) => `${i + 1}. ${t}`).join('\n')}`,
-                        },
-                    ],
-                },
-            ],
-        });
-
-        const translatedText = translationResponse.text || '';
-        const translations = translatedText.split('\n').filter((line: string) => line.trim().length > 0);
-
-        // Build the replacement map
-        const replacementPairs = textBlocks.map((original: string, i: number) => {
-            const translated = translations[i]?.replace(/^\d+\.\s*/, '') || original;
-            return `"${original.trim()}" → "${translated.trim()}"`;
-        }).join('\n');
-
-        // ============================================================
-        // STEP 3: Generate the localized image with explicit replacements
-        // ============================================================
-        const imageResponse = await ai.models.generateContentStream({
-            model: 'gemini-2.5-flash-image',
-            config: {
-                responseModalities: ['image', 'text'],
-            },
-            contents: [
-                {
-                    role: 'user',
-                    parts: [
-                        {
-                            inlineData: {
-                                mimeType: 'image/jpeg',
-                                data: image,
-                            },
-                        },
-                        {
-                            text: `Edit this image. Replace the text exactly as shown below. Keep everything else identical.
-
-${replacementPairs}
-
-Replace ALL text above. No original language text should remain. Keep the same design.`,
-                        },
-                    ],
-                },
-            ],
-        } as any);
-
-        let base64Image: string | null = null;
-        for await (const chunk of imageResponse) {
-            if (!chunk.candidates?.[0]?.content?.parts) continue;
-            
-            for (const part of chunk.candidates[0].content.parts) {
-                if (part.inlineData) {
-                    base64Image = part.inlineData.data || null;
-                    break;
+        // Retry helper for 503/429 errors
+        async function callWithRetry(fn: () => Promise<any>, maxRetries = 3): Promise<any> {
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    return await fn();
+                } catch (e: any) {
+                    const status = e?.status || e?.httpStatusCode || 0;
+                    if ((status === 503 || status === 429) && attempt < maxRetries - 1) {
+                        const delay = (attempt + 1) * 5000; // 5s, 10s, 15s
+                        await new Promise(r => setTimeout(r, delay));
+                        continue;
+                    }
+                    throw e;
                 }
             }
-            if (base64Image) break;
         }
 
-        if (base64Image) {
-            return NextResponse.json({ 
-                success: true, 
-                type: 'image',
-                data: `data:image/jpeg;base64,${base64Image}`,
-                socialCopy: `Flyer localizado a ${market} correctamente.`
-            });
-        }
+        const result = await callWithRetry(async () => {
+            const res = await ai.models.generateContentStream({
+                model: 'gemini-2.5-flash-image',
+                config: { responseModalities: ['image', 'text'] },
+                contents: [{
+                    role: 'user',
+                    parts: [
+                        { inlineData: { mimeType: 'image/jpeg', data: image } },
+                        { text: `Translate ALL text in this advertisement image to ${lang}. Replace every single word with its ${lang} translation. Do not leave any word in the original language. Keep the exact same visual design, layout, colors, and style. Only change the language of the text.` },
+                    ],
+                }],
+            } as any);
 
-        throw new Error("El modelo no devolvió la imagen. Verifica tu cuota en https://aistudio.google.com/apikey");
+            for await (const chunk of res) {
+                if (!chunk.candidates?.[0]?.content?.parts) continue;
+                for (const part of chunk.candidates[0].content.parts) {
+                    if (part.inlineData?.data) return part.inlineData.data;
+                }
+            }
+            throw new Error("No image returned");
+        });
+
+        return NextResponse.json({ 
+            success: true, 
+            type: 'image',
+            data: `data:image/jpeg;base64,${result}`,
+            socialCopy: `Flyer localizado a ${market}.`
+        });
 
     } catch (error: any) {
-        console.error('Error in localization pipeline:', error);
+        console.error('Error:', error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }

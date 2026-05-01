@@ -82,8 +82,8 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                     let width = img.width;
                     let height = img.height;
                     
-                    // Max dimension to ensure base64 is small (< 1MB)
-                    const MAX_DIM = 1080;
+                    // Max dimension - higher resolution helps AI read ALL text
+                    const MAX_DIM = 1920;
                     if (width > MAX_DIM || height > MAX_DIM) {
                         if (width > height) {
                             height = (height / width) * MAX_DIM;
@@ -99,8 +99,8 @@ const LocalizerModal: React.FC<LocalizerModalProps> = ({ isOpen, onClose, imageU
                     const ctx = canvas.getContext('2d');
                     if (ctx) {
                         ctx.drawImage(img, 0, 0, width, height);
-                        // Compress to JPEG with 0.8 quality
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        // Higher quality for better text readability
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
                         resolve(dataUrl.split(',')[1]);
                     } else {
                         reject(new Error('No canvas context'));
