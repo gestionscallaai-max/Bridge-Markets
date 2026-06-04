@@ -11,6 +11,7 @@ import { renderSPHero, renderSPAbout, renderSPAdvantages, renderSPFamilies, rend
 import { renderHeroDark, renderHeroLight, renderHeroGradient, renderHeroOfficial } from './heroes';
 import { renderBentoGrid, renderFeatureSplit, renderStatsRow, renderRiskGrid, renderLeaderboard, renderTrustBadges, renderMultiAsset, renderWorkflowSteps, renderSecurityFees, renderCtaCommunity, renderCalculator } from './features';
 import { renderTestimonials, renderSntFooter } from './forms';
+import { renderVEHeader, renderVEHero, renderVEMetrics, renderVECountdown, renderVESplitInfo, renderVEVideo, renderVEDetails, renderVERegistration, renderVEFooter } from './vipEvent';
 
 export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, brand: BrandConfig) => string> = {
     // PROPFIRM
@@ -106,6 +107,17 @@ export const SECTION_RENDERERS: Record<string, (content: Record<string, any>, br
     sp_faq: renderSPFAQ,
     sp_final_cta: renderSPFinalCTA,
     sp_footer: renderSPFooter,
+
+    // VIP EVENT BOGOTA (Blueprint 9)
+    ve_header: renderVEHeader,
+    ve_hero: renderVEHero,
+    ve_metrics: renderVEMetrics,
+    ve_countdown: renderVECountdown,
+    ve_split_info: renderVESplitInfo,
+    ve_video: renderVEVideo,
+    ve_details: renderVEDetails,
+    ve_registration: renderVERegistration,
+    ve_footer: renderVEFooter,
 
     // SHARED / MODULAR SECTIONS
     hero_dark: renderHeroDark,

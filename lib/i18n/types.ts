@@ -55,6 +55,7 @@ export type TranslationKeys = {
         synthetic_universe_total_desc: string;
         propfirm_sinteticos_premium_name: string;
         propfirm_sinteticos_premium_desc: string;
+        [key: string]: string;
     };
 
     // Sidebar Navigation

@@ -155,6 +155,29 @@ export const LANDING_TEMPLATES: LandingTemplate[] = [
         badge: 'Official',
         badgeColor: '#10b981',
         theme: 'dark',
+    },
+    {
+        id: 'vip_event_bogota',
+        name: 'Evento VIP Bogotá — Lanzamiento Oficial',
+        category: 'Official',
+        description: 'Landing page ultra-premium para la captación de leads en eventos presenciales en Bogotá.',
+        sourceFile: 'Blueprint VIP',
+        sections: [
+            've_header',
+            've_hero',
+            've_metrics',
+            've_countdown',
+            've_split_info',
+            've_video',
+            've_details',
+            've_registration',
+            've_footer'
+        ],
+        gradient: 'linear-gradient(135deg, #0A051A 0%, #150933 50%, #865BFF 100%)',
+        accentColor: '#865BFF',
+        badge: 'Premium',
+        badgeColor: '#865BFF',
+        theme: 'dark'
     }
 ];
 

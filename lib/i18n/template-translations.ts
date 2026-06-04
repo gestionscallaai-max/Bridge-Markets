@@ -258,6 +258,18 @@ const TEMPLATE_DESC: Record<string, Record<LangCode, string>> = {
         ru: 'Ультра-премиум дизайн, оптимизированный для челленджей на синтетических индексах. Высокая конверсия и эстетика Cyber Purple.',
         ja: 'シンセティック指数の資金調達チャレンジ向けに最適化されたウルトラプレミアムデザイン。高コンバージョンとサイバーパープルな美学。',
     },
+    vip_event_bogota: {
+        es: 'Landing page ultra-premium para la captación de leads en eventos presenciales en Bogotá.',
+        en: 'Ultra-premium landing page optimized for lead capture in live events in Bogotá.',
+        zh: '波哥大现场活动线索获取超优质落地页。',
+        hi: 'बोगोटा में लाइव इवेंट में लीड कैप्चर के लिए अनुकूलित अल्ट्रा-प्रीमियम लैंडिंग पेज।',
+        fr: 'Landing page ultra-premium optimisée pour la capture de prospects lors d\'événements en direct à Bogotá.',
+        ar: 'صفحة هبوط فائقة الجودة محسنة لجذب العملاء المحتملين في الفعاليات الحية في بوغوتا.',
+        bn: 'বোগোটায় লাইভ ইভেন্টগুলিতে লিড ক্যাপচারের জন্য অপ্টিমাইজড আল্ট্রা-প্রিমিয়াম ল্যান্ডিং পৃষ্ঠা।',
+        pt: 'Landing page ultra-premium otimizada para captação de leads em eventos ao vivo em Bogotá.',
+        ru: 'Ультра-премиум лендинг, оптимизированный для сбора лидов на живых мероприятиях в Боготе.',
+        ja: 'ボゴタでのライブイベントにおけるリード獲得に最適化されたウルトラプレミアムLP。',
+    },
 };
 
 // ── Template badges ──
