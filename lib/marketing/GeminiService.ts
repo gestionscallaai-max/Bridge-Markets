@@ -16,7 +16,7 @@ export async function generateLocalizedAd(
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
         // Usamos el modelo más reciente capaz de generar/editar imágenes con texto
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
         const prompt = `Translate all text in this advertisement image to the language of ${market}. 
         ONLY translate the text - do not add any cultural imagery, flags, national symbols, or stereotypical visual elements. 
