@@ -3,9 +3,12 @@ import { BrandConfig } from '../types';
 // ─── PROP HERO ──────────────────────────────────────────────
 export function renderPropHero(content: Record<string, any>, brand: BrandConfig): string {
     const ibName = brand.communityName || brand.fullName || 'Partner Oficial';
-    const ctaText = content.ctaText || "Empieza tu Challenge";
+    const tag = content.tag || 'OFICIAL PROPFIRM';
+    const title = content.title || 'Opera Capital Institucional sin Arriesgar tu Dinero';
+    const desc = content.desc || brand.heroPhrase || 'Obtén hasta $200,000 USD en capital fondeado con las mejores condiciones del mercado.';
+    const ibPhrase = content.ibPhrase || brand.heroPhrase || 'Únete a nuestra red de traders apoyados por Bridge Markets';
+    const ctaText = content.ctaText || "Comenzar ahora";
     const ctaLink = content.ctaUrl || brand.ctaLink || "#register";
-    const heroPhrase = brand.heroPhrase || "Demuestra tu talento. Opera capital real. Cobra tus ganancias.";
 
     return `
     <section class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#050505]">
@@ -22,16 +25,16 @@ export function renderPropHero(content: Record<string, any>, brand: BrandConfig)
                     <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-5 object-contain border-r border-white/20 pr-4">
                     <div class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                        <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Partner Oficial: <span class="text-white">${ibName}</span></span>
+                        <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">${tag}: <span class="text-white">${ibName}</span></span>
                     </div>
                 </div>
 
                 <h1 class="text-4xl md:text-7xl font-black font-headline text-white mb-8 tracking-tighter leading-[1.1] uppercase italic">
-                    ${content.title || 'Bridge Markets <span class="text-gradient-gold">PropFirm</span> — FOREX/CFDs & Synthetic PropTrading'}
+                    ${title}
                 </h1>
                 
                 <p class="text-xl md:text-2xl text-white/60 font-light mb-12 max-w-2xl leading-relaxed italic">
-                    ${heroPhrase}
+                    ${desc}
                 </p>
 
                 <div class="flex flex-col md:flex-row items-center gap-12">
@@ -40,8 +43,8 @@ export function renderPropHero(content: Record<string, any>, brand: BrandConfig)
                             <span class="relative z-10 uppercase tracking-widest text-sm">${ctaText}</span>
                         </a>
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">${content.tag || `¿Qué es PropTrading?`}</span>
-                            <span class="text-xs font-bold text-white/80 italic">Bridge Markets te financia para operar en mercados reales.</span>
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">Nota del Partner</span>
+                            <span class="text-xs font-bold text-white/80 italic">${ibPhrase}</span>
                         </div>
                     </div>
                     

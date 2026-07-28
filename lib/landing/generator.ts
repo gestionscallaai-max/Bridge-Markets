@@ -1,5 +1,6 @@
 import { LANDING_TEMPLATES } from '../landing-templates';
 import { SECTION_RENDERERS } from './renderers';
+import { SECTION_CATALOG } from './catalog';
 import { BrandConfig } from './types';
 import { DEFAULT_SECTIONS, SECTION_LABELS, TRANSLATIONS, SectionConfig, ContentOverrides, LandingConfig, ModularConfig, LandingData } from './dictionary';
 
@@ -533,8 +534,11 @@ export function generateModularLandingHTML(config: ModularConfig, brand: BrandCo
         .map((sId: string, idx: number) => {
             const renderer = SECTION_RENDERERS[sId];
             if (!renderer) return `<!-- Section "${sId}" not found -->`;
+            const sectionMeta = SECTION_CATALOG.find(s => s.id === sId);
+            const defaultContent = sectionMeta?.defaultContent || {};
             const overrides = config.overrides?.[sId] || {};
-            const sectionHtml = renderer(overrides, brandConfig);
+            const mergedContent = { ...defaultContent, ...overrides };
+            const sectionHtml = renderer(mergedContent, brandConfig);
             return `<div class="section-wrapper section-reveal">\n${sectionHtml}\n</div>`;
         })
         .join('\n');

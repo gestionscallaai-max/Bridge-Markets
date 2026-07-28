@@ -24,7 +24,7 @@ export function renderMamCopyHero(content: Record<string, any>, brand: BrandConf
                     <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-5 object-contain border-r border-white/20 pr-4">
                     <div class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                        <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Partner Oficial: <span class="text-white">${ibName}</span></span>
+                        <span class="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">${content.tag || 'Partner Oficial'}: <span class="text-white">${ibName}</span></span>
                     </div>
                 </div>
 
