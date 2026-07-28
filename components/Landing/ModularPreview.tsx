@@ -38,6 +38,27 @@ export default function ModularPreview({ html, theme = 'dark', className, style 
             ${getSharedScripts()}
             <script>
                 const root = document.getElementById('preview-root');
+
+                // Prevenir que clics en la vista previa naveguen fuera del iframe
+                document.addEventListener('click', (e) => {
+                    const target = e.target.closest('a, button');
+                    if (target) {
+                        const href = target.getAttribute('href');
+                        if (href && href.startsWith('#')) {
+                            e.preventDefault();
+                            const targetEl = document.querySelector(href);
+                            if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+                        } else if (href) {
+                            e.preventDefault();
+                        }
+                    }
+                }, true);
+
+                // Prevenir envío real de formularios en el preview
+                document.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                }, true);
+
                 window.addEventListener('message', (e) => {
                     if (e.data.type === 'UPDATE_CONTENT') {
                         root.classList.add('updating');
