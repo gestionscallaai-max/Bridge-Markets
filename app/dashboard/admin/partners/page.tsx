@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { 
     Users, Shield, ShieldCheck, Search, Filter, 
     MoreHorizontal, ArrowUpRight, Mail, Calendar,
-    ChevronLeft, ChevronRight, Loader2, Award
+    ChevronLeft, ChevronRight, Loader2, Award, Trash2, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDateUpperCase } from '@/lib/utils';
@@ -18,6 +18,10 @@ export default function PartnersManagementPage() {
         show: false,
         partner: null,
         targetRole: ''
+    });
+    const [showDeleteModal, setShowDeleteModal] = useState<{show: boolean, partner: any}>({
+        show: false,
+        partner: null
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
@@ -64,6 +68,13 @@ export default function PartnersManagementPage() {
         });
     };
 
+    const openDeleteModal = (partner: any) => {
+        setShowDeleteModal({
+            show: true,
+            partner
+        });
+    };
+
     async function handleConfirmRole() {
         if (!showConfirmModal.partner) return;
         
@@ -98,6 +109,39 @@ export default function PartnersManagementPage() {
             }
         } catch (err) {
             alert('Error actualizando rol: ' + (err as any).message);
+        } finally {
+            setIsProcessing(false);
+        }
+    }
+
+    async function handleDeletePartner() {
+        if (!showDeleteModal.partner) return;
+        setIsProcessing(true);
+        const { partner } = showDeleteModal;
+
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user?.id === partner.id) {
+                alert('No puedes eliminar tu propia cuenta mientras estás logueado.');
+                setIsProcessing(false);
+                return;
+            }
+
+            const res = await fetch('/api/admin/partners/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ partnerId: partner.id }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Error al eliminar el socio');
+            }
+
+            setPartners(partners.filter(p => p.id !== partner.id));
+            setShowDeleteModal({ show: false, partner: null });
+        } catch (err: any) {
+            alert('Error eliminando socio: ' + err.message);
         } finally {
             setIsProcessing(false);
         }
@@ -243,15 +287,19 @@ export default function PartnersManagementPage() {
                                                 onClick={() => openRoleModal(partner)}
                                                 className={`p-3 rounded-2xl transition-all duration-300 ${
                                                     partner.role === 'admin' 
-                                                    ? 'bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white hover:shadow-lg hover:shadow-rose-500/20' 
+                                                    ? 'bg-amber-50 text-amber-500 hover:bg-amber-500 hover:text-white hover:shadow-lg hover:shadow-amber-500/20' 
                                                     : 'bg-emerald-50 text-emerald-500 hover:bg-emerald-500 hover:text-white hover:shadow-lg hover:shadow-emerald-500/20'
                                                 }`}
                                                 title={partner.role === 'admin' ? 'Quitar Admin' : 'Hacer Admin'}
                                             >
                                                 {partner.role === 'admin' ? <Shield className="w-4.5 h-4.5" /> : <ShieldCheck className="w-4.5 h-4.5" />}
                                             </button>
-                                            <button className="p-3 rounded-2xl bg-slate-50 text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-300">
-                                                <MoreHorizontal className="w-4.5 h-4.5" />
+                                            <button 
+                                                onClick={() => openDeleteModal(partner)}
+                                                className="p-3 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white hover:shadow-lg hover:shadow-rose-500/20 transition-all duration-300"
+                                                title="Eliminar Socio Definitivamente"
+                                            >
+                                                <Trash2 className="w-4.5 h-4.5" />
                                             </button>
                                         </div>
                                     </td>
@@ -312,7 +360,7 @@ export default function PartnersManagementPage() {
                 </div>
             </motion.div>
 
-            {/* Custom Confirmation Modal */}
+            {/* Custom Role Confirmation Modal */}
             <AnimatePresence>
                 {showConfirmModal.show && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
@@ -350,7 +398,7 @@ export default function PartnersManagementPage() {
                                     className={`w-full py-5 rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2 italic ${
                                         showConfirmModal.targetRole === 'admin' 
                                         ? 'bg-emerald-500 text-white shadow-emerald-500/20 hover:bg-emerald-600' 
-                                        : 'bg-rose-500 text-white shadow-rose-500/20 hover:bg-rose-600'
+                                        : 'bg-amber-500 text-white shadow-amber-500/20 hover:bg-amber-600'
                                     }`}
                                 >
                                     {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
@@ -359,6 +407,64 @@ export default function PartnersManagementPage() {
                                 <button 
                                     disabled={isProcessing}
                                     onClick={() => setShowConfirmModal({...showConfirmModal, show: false})}
+                                    className="w-full py-5 text-slate-400 text-xs font-black uppercase tracking-widest hover:text-slate-600 transition-colors italic"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Custom Delete Confirmation Modal */}
+            <AnimatePresence>
+                {showDeleteModal.show && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                        <motion.div 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            onClick={() => !isProcessing && setShowDeleteModal({ show: false, partner: null })}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+                        />
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-md bg-white rounded-[40px] shadow-2xl overflow-hidden p-10 text-center"
+                        >
+                            <div className="w-20 h-20 rounded-[35%] mx-auto mb-8 flex items-center justify-center bg-rose-50 text-rose-500">
+                                <AlertTriangle className="w-10 h-10" />
+                            </div>
+                            
+                            <h2 className="text-2xl font-black text-slate-900 mb-4 tracking-tight leading-tight uppercase italic">
+                                Eliminar Socio Definitivamente
+                            </h2>
+                            
+                            <p className="text-slate-500 text-sm font-medium leading-relaxed mb-6 px-2 italic">
+                                ¿Estás seguro de eliminar a <strong className="text-slate-800">{showDeleteModal.partner?.name}</strong> (<span className="text-rose-500 font-mono text-xs">{showDeleteModal.partner?.email}</span>)?
+                            </p>
+
+                            <div className="bg-rose-50/70 border border-rose-100 rounded-2xl p-4 mb-8 text-left text-xs text-rose-700">
+                                <p className="font-bold mb-1">⚠️ Acción Irreversible:</p>
+                                <ul className="list-disc list-inside space-y-1 text-[11px] text-rose-600">
+                                    <li>Se eliminará su cuenta de autenticación.</li>
+                                    <li>No podrá volver a ingresar al dashboard.</li>
+                                    <li>Se eliminarán sus landings, leads y datos asociados.</li>
+                                </ul>
+                            </div>
+
+                            <div className="flex flex-col gap-3">
+                                <button 
+                                    disabled={isProcessing}
+                                    onClick={handleDeletePartner}
+                                    className="w-full py-5 rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2 italic bg-rose-500 text-white shadow-rose-500/20 hover:bg-rose-600"
+                                >
+                                    {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                                    Sí, Eliminar Socio Ahora
+                                </button>
+                                <button 
+                                    disabled={isProcessing}
+                                    onClick={() => setShowDeleteModal({ show: false, partner: null })}
                                     className="w-full py-5 text-slate-400 text-xs font-black uppercase tracking-widest hover:text-slate-600 transition-colors italic"
                                 >
                                     Cancelar

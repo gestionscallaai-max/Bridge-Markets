@@ -52,11 +52,27 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
+  const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
+
   // refresca la sesion si expiro
   let user = null;
   try {
     const { data } = await supabase.auth.getUser();
     user = data.user;
+
+    // Si intenta ingresar a dashboard, verificar que el perfil partner exista en DB
+    if (user && isDashboardRoute) {
+      const { data: partner } = await supabase
+        .from('partners')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+      
+      if (!partner) {
+        user = null;
+      }
+    }
   } catch (err) {
     // Si falla la verificación de sesión (e.g., token inválido, red),
     // tratamos al usuario como no autenticado y dejamos que el route handler lo maneje.
@@ -64,8 +80,6 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Protection logic
-  const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
 
   if (isDashboardRoute && !user) {
     const url = request.nextUrl.clone()

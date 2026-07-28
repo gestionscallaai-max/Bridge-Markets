@@ -144,8 +144,9 @@ export function renderVEMetrics(content: Record<string, any>, brand: BrandConfig
 }
 
 export function renderVECountdown(content: Record<string, any>, brand: BrandConfig): string {
+    const rawTarget = content.countdownTarget || content.targetDate || content.eventDateTime || '2026-10-22T19:00:00';
     const c = {
-        targetDate: '2026-07-18T19:00:00',
+        targetDate: rawTarget,
         ctaText: 'VER ETAPAS DEL EVENTO',
         ...content
     };
@@ -188,14 +189,18 @@ export function renderVECountdown(content: Record<string, any>, brand: BrandConf
 
         <script>
             (function() {
-                const target = new Date("${c.targetDate}").getTime();
+                const targetStr = "${rawTarget}";
+                const target = new Date(targetStr).getTime();
                 
                 function updateTimer() {
                     const now = new Date().getTime();
                     const diff = target - now;
 
-                    if (diff <= 0) {
-                        clearInterval(interval);
+                    if (isNaN(target) || diff <= 0) {
+                        document.getElementById("timer-days").textContent = "000";
+                        document.getElementById("timer-hours").textContent = "00";
+                        document.getElementById("timer-minutes").textContent = "00";
+                        document.getElementById("timer-seconds").textContent = "00";
                         return;
                     }
 

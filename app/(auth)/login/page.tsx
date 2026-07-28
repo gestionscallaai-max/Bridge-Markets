@@ -78,6 +78,22 @@ export default function LoginPage() {
                 setErrorMsg(error.message);
                 setLoading(false);
             } else {
+                // Verificar que el perfil del partner siga existiendo en la base de datos
+                if (data.user) {
+                    const { data: partner, error: partnerErr } = await supabase
+                        .from('partners')
+                        .select('id')
+                        .eq('id', data.user.id)
+                        .maybeSingle();
+
+                    if (partnerErr || !partner) {
+                        await supabase.auth.signOut();
+                        setErrorMsg('Esta cuenta ha sido eliminada o desactivada por un administrador.');
+                        setLoading(false);
+                        return;
+                    }
+                }
+
                 setSuccess(true);
                 setLoading(false);
                 setTimeout(() => router.push('/dashboard'), 800);

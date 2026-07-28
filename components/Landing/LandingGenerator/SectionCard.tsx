@@ -113,6 +113,66 @@ export default function SectionCard({
                             );
                         }
 
+                        const isDateTimePicker = key === 'countdownTarget' || key === 'targetDate' || key === 'eventDateTime';
+
+                        if (isDateTimePicker) {
+                            const currentVal = (overrides[key] ?? val) as string;
+                            let dateForInput = '';
+                            try {
+                                const d = new Date(currentVal);
+                                if (!isNaN(d.getTime())) {
+                                    // Local ISO format YYYY-MM-DDTHH:mm
+                                    const year = d.getFullYear();
+                                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                                    const day = String(d.getDate()).padStart(2, '0');
+                                    const hours = String(d.getHours()).padStart(2, '0');
+                                    const mins = String(d.getMinutes()).padStart(2, '0');
+                                    dateForInput = `${year}-${month}-${day}T${hours}:${mins}`;
+                                } else {
+                                    dateForInput = currentVal.slice(0, 16);
+                                }
+                            } catch {
+                                dateForInput = currentVal;
+                            }
+
+                            return (
+                                <div key={key} className="p-3 bg-violet-50/60 rounded-xl border border-[#865BFF]/20 space-y-2">
+                                    <label className="text-[10px] font-black text-[#865BFF] uppercase tracking-wider block">
+                                        📅 Fecha y Hora del Evento (Temporizador Regresivo)
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        value={dateForInput}
+                                        onChange={(e) => {
+                                            const selectedVal = e.target.value;
+                                            const newIso = selectedVal ? `${selectedVal}:00` : selectedVal;
+                                            onUpdateOverride(key, newIso);
+
+                                            // Auto-formatear texto de fecha y hora si existen en la sección
+                                            try {
+                                                const d = new Date(selectedVal);
+                                                if (!isNaN(d.getTime())) {
+                                                    const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+                                                    const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+                                                    const dayStr = `${dayNames[d.getDay()]}, ${d.getDate()} de ${monthNames[d.getMonth()]} de ${d.getFullYear()}`;
+                                                    const hours = String(d.getHours()).padStart(2, '0');
+                                                    const mins = String(d.getMinutes()).padStart(2, '0');
+                                                    const timeStr = `${hours}:${mins} Horas`;
+
+                                                    if ('date' in content) onUpdateOverride('date', dayStr);
+                                                    if ('time' in content) onUpdateOverride('time', timeStr);
+                                                }
+                                            } catch (err) {}
+                                        }}
+                                        className="w-full bg-white border border-[#865BFF]/30 rounded-lg py-2 px-3 text-sm text-slate-800 focus:outline-none focus:border-[#865BFF] focus:ring-2 focus:ring-[#865BFF]/20 font-bold"
+                                    />
+                                    <p className="text-[9px] text-[#865BFF] font-medium italic">
+                                        Selecciona fecha y hora. El reloj de la landing y los textos descriptivos se sincronizarán en tiempo real.
+                                    </p>
+                                </div>
+                            );
+                        }
+
                         return (
                             <div key={key}>
                                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">

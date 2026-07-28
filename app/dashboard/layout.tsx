@@ -138,7 +138,7 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                         .from('partners')
                         .select('*')
                         .eq('id', user.id)
-                        .single();
+                        .maybeSingle();
                     
                     if (partner) {
                         setPartnerData(partner);
@@ -146,9 +146,10 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                         setUserRole(partner.role || 'partner');
                         setIsAdmin(partner.role === 'admin');
                     } else {
-                        // Fallback
-                        const fId = 'BM_' + user.id.replace(/-/g, '').substring(0, 24).toUpperCase();
-                        setPartnerId(fId);
+                        // Si el usuario fue eliminado de la BD, cerrar sesión y expulsar al login
+                        await supabase.auth.signOut();
+                        router.push('/login');
+                        return;
                     }
                 }
             } catch (error) {

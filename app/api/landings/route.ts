@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 import { notifyAdminNewLanding, notifyPartnerStatusUpdate } from '@/lib/mail';
 
 // Lazy initialization of the admin client
@@ -85,39 +87,70 @@ export async function POST(request: Request) {
             }, { status: 500 });
         }
 
-        // Resolve the real partner_id (UUID)
-        let realPartnerId = data.partnerId;
-        
-        // 1. Try to resolve UUID from partners table if we have a userId
-        const idToResolve = userId || data.userId;
-        if (idToResolve) {
-            const { data: partner, error: partnerError } = await supabaseAdmin
-                .from('partners')
-                .select('id')
-                .eq('id', idToResolve)
-                .maybeSingle(); // Does not throw if not found
-            
-            if (partner?.id) {
-                realPartnerId = partner.id;
-            } else if (partnerError) {
-                console.warn('Partner lookup error:', partnerError.message);
+        // 1. Resolve realPartnerId (UUID) from session cookies first
+        let realPartnerId: string | null = null;
+        try {
+            const cookieStore = cookies();
+            const supabaseUserClient = createServerClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY)!,
+                {
+                    cookies: {
+                        get(name: string) {
+                            return cookieStore.get(name)?.value;
+                        },
+                    },
+                }
+            );
+            const { data: { user: sessionUser } } = await supabaseUserClient.auth.getUser();
+            if (sessionUser?.id) {
+                realPartnerId = sessionUser.id;
+            }
+        } catch (e) {
+            // Ignore cookie error and fallback to resolution
+        }
+
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const idToResolve = userId || data?.userId || data?.partnerId;
+
+        // 2. If no session UUID, try resolving idToResolve
+        if (!realPartnerId && idToResolve) {
+            if (uuidRegex.test(idToResolve)) {
+                realPartnerId = idToResolve;
+            } else {
+                // Lookup in partners table by partner_id (e.g. BM_...)
+                const { data: partner } = await supabaseAdmin
+                    .from('partners')
+                    .select('id')
+                    .eq('partner_id', idToResolve)
+                    .maybeSingle();
+                
+                if (partner?.id) {
+                    realPartnerId = partner.id;
+                }
             }
         }
 
-        // 2. Validate realPartnerId is a UUID
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!realPartnerId || !uuidRegex.test(realPartnerId)) {
-            // If it's not a valid UUID, we fallback to the userId (which should be a UUID)
-            // if both fail, we might need a hardcoded fallback or fail gracefully
-            if (idToResolve && uuidRegex.test(idToResolve)) {
-                realPartnerId = idToResolve;
-            } else {
-                return NextResponse.json({ 
-                    success: false, 
-                    error: 'Invalid Partner Identity',
-                    details: 'A valid UUID is required for partner_id'
-                }, { status: 400 });
+        // 3. If realPartnerId is a short code (e.g. BM_...), resolve to UUID
+        if (realPartnerId && !uuidRegex.test(realPartnerId)) {
+            const { data: partner } = await supabaseAdmin
+                .from('partners')
+                .select('id')
+                .eq('partner_id', realPartnerId)
+                .maybeSingle();
+            
+            if (partner?.id) {
+                realPartnerId = partner.id;
             }
+        }
+
+        // 4. Validate we have a valid UUID
+        if (!realPartnerId || !uuidRegex.test(realPartnerId)) {
+            return NextResponse.json({ 
+                success: false, 
+                error: 'Invalid Partner Identity',
+                details: 'A valid UUID is required for partner_id. Inicia sesión nuevamente.'
+            }, { status: 400 });
         }
 
         // 3. Prepare Metadata to bypass missing 'data' column
