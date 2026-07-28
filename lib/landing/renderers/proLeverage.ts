@@ -23,16 +23,14 @@ export function renderLX12Hero(content: Record<string, any>, brand: BrandConfig)
                 <!-- Product Badge -->
                 <div class="inline-flex items-center gap-4 px-6 py-3 bg-purple-600/10 border border-purple-500/30 rounded-full mb-10 backdrop-blur-md animate-fade-in-up">
                     <img src="/images/logo-bm-blanco.png" alt="Bridge Markets" class="h-5 border-r border-white/20 pr-4">
-                    <span class="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">PRO LEVERAGE X12</span>
+                    <span class="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em]">${content.tag || `PRO LEVERAGE X12`}</span>
                 </div>
 
                 <div class="mb-6">
                     <span class="text-[10px] text-white/40 uppercase tracking-widest font-black">Presentado por <span class="text-white">${ibName}</span></span>
                 </div>
 
-                <h1 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 leading-[1.1] uppercase tracking-tighter">
-                    Opera con capital real. <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">Sin evaluaciones. Sin esperas.</span>
-                </h1>
+                <h1 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 leading-[1.1] uppercase tracking-tighter">${content.title || `Opera con capital real. <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">Sin evaluaciones. Sin esperas.</span>`}</h1>
                 
                 <p class="text-xl md:text-2xl text-white/60 font-light mb-12 max-w-3xl mx-auto leading-relaxed">
                     Multiplica tu capital hasta x12 y opera directamente en mercados CFDs con una cuenta real financiada por Bridge Markets.
@@ -75,7 +73,7 @@ export function renderLX12Intro(content: Record<string, any>, brand: BrandConfig
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32 section-reveal">
                 <div>
                     <span class="text-purple-500 font-black text-xs uppercase tracking-widest mb-6 block">Acceso Directo a Capital</span>
-                    <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-10 uppercase leading-tight">¿Qué es la Cuenta PRO LEVERAGE X12?</h2>
+                    <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-10 uppercase leading-tight">${content.title || `¿Qué es la Cuenta PRO LEVERAGE X12?`}</h2>
                     <div class="space-y-6 text-white/60 text-lg leading-relaxed">
                         <p>La Cuenta PRO LEVERAGE X12 es un producto de acceso directo a capital real, diseñado para traders con experiencia que buscan multiplicar su capacidad operativa sin aumentar su capital inicial.</p>
                         <p class="p-8 bg-purple-600/5 border-l-4 border-purple-500 rounded-r-3xl">Al adquirir la cuenta, Bridge Markets te otorga un apalancamiento real de 12x sobre tu depósito. No existe fase de evaluación ni challenge previo. Empiezas a operar desde el primer día en mercados CFDs con el capital apalancado activo.</p>
@@ -145,7 +143,7 @@ export function renderLX12Pricing(content: Record<string, any>, brand: BrandConf
     <section id="precios" class="py-32 px-8 bg-[#050505]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20 section-reveal">
-                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-6 uppercase">Elige el tamaño de tu cuenta</h2>
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-6 uppercase">${content.title || `Elige el tamaño de tu cuenta`}</h2>
                 <p class="text-white/40 text-lg max-w-2xl mx-auto">Elige el balance de cuenta que mejor se adapte a tu estrategia. Todos los tamaños incluyen el mismo apalancamiento x12 y el 100% de los beneficios.</p>
             </div>
 
@@ -183,7 +181,7 @@ export function renderLX12Example(content: Record<string, any>, brand: BrandConf
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20 section-reveal">
                 <span class="text-purple-500 font-black text-xs uppercase tracking-widest mb-4 block">Entiende el poder de tu cuenta</span>
-                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-6 uppercase">¿Cómo funciona? Ejemplo real</h2>
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-6 uppercase">${content.title || `¿Cómo funciona? Ejemplo real`}</h2>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 section-reveal">
@@ -234,7 +232,7 @@ export function renderLX12Rules(content: Record<string, any>, brand: BrandConfig
             <div class="flex items-center gap-6 mb-16 section-reveal">
                 <img src="/images/imagenes_nuevas/rey_rosa.png" class="h-24 drop-shadow-[0_0_30px_rgba(168,85,247,0.2)]">
                 <div>
-                    <h2 class="text-4xl font-black font-montserrat text-white uppercase tracking-tight">Condiciones y Reglas</h2>
+                    <h2 class="text-4xl font-black font-montserrat text-white uppercase tracking-tight">${content.title || `Condiciones y Reglas`}</h2>
                     <p class="text-purple-500 font-bold uppercase tracking-widest text-xs mt-2">Protocolo Institucional de Riesgo</p>
                 </div>
             </div>
@@ -313,7 +311,7 @@ export function renderLX12Withdrawals(content: Record<string, any>, brand: Brand
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col lg:flex-row gap-20 items-center section-reveal">
                 <div class="flex-1">
-                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase leading-none">Retiros y Condiciones Operativas</h2>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase leading-none">${content.title || `Retiros y Condiciones Operativas`}</h2>
                     <p class="text-xl text-white/50 mb-12">Producto directo a liquidez. Tu capital está disponible bajo las siguientes ventanas de tiempo oficial:</p>
                     
                     <div class="space-y-6">
@@ -372,7 +370,7 @@ export function renderLX12Benefits(content: Record<string, any>, brand: BrandCon
     return `
     <section class="py-32 px-8 bg-[#050505]">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-20 uppercase text-center">¿Por qué elegir PRO LEVERAGE X12?</h2>
+            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-20 uppercase text-center">${content.title || `¿Por qué elegir PRO LEVERAGE X12?`}</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 section-reveal">
                 ${benefits.map(b => `
@@ -411,8 +409,8 @@ export function renderLX12Community(content: Record<string, any>, brand: BrandCo
             <div class="bg-gradient-to-br from-purple-600/10 via-transparent to-slate-900 border border-white/10 rounded-[4rem] p-12 md:p-24 relative overflow-hidden section-reveal">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
                     <div>
-                        <span class="text-purple-500 font-black text-xs uppercase tracking-[0.4em] mb-8 block italic">Sección Personalizada</span>
-                        <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-10 uppercase italic leading-none">${ibName}</h2>
+                        <span class="text-purple-500 font-black text-xs uppercase tracking-[0.4em] mb-8 block italic">${content.tag || `Sección Personalizada`}</span>
+                        <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-10 uppercase italic leading-none">${content.title || `${ibName}`}</h2>
                         <div class="text-white/60 text-lg md:text-xl leading-relaxed mb-12 italic">
                             ${message}
                         </div>
@@ -466,7 +464,7 @@ export function renderLX12Faq(content: Record<string, any>, brand: BrandConfig):
     return `
     <section class="py-32 px-8 bg-[#050505]">
         <div class="max-w-4xl mx-auto section-reveal">
-            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-16 text-center uppercase">Preguntas Frecuentes</h2>
+            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-16 text-center uppercase">${content.title || `Preguntas Frecuentes`}</h2>
             <div class="space-y-4">
                 ${faqs.map(faq => `
                     <div class="p-6 bg-white/[0.02] border border-white/5 rounded-3xl hover:border-purple-500/30 transition-all group">
@@ -490,7 +488,7 @@ export function renderLX12FinalCTA(content: Record<string, any>, brand: BrandCon
             <p class="text-purple-400 font-bold uppercase tracking-[0.4em] mb-12 text-sm max-w-2xl mx-auto leading-relaxed">
                 'Las Cuentas Apalancadas x12 son una herramienta potente de alto rendimiento que exige disciplina en la gestión del riesgo, cumplimiento estricto y control emocional.'
             </p>
-            <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-12 uppercase leading-none tracking-tighter">¿Listo para operar con capital real?</h2>
+            <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-12 uppercase leading-none tracking-tighter">${content.title || `¿Listo para operar con capital real?`}</h2>
             
             <a href="${ctaLink}" class="inline-block px-16 py-8 bg-white text-black font-black rounded-2xl hover:bg-purple-600 hover:text-white transition-all text-sm uppercase tracking-widest hover:scale-105 active:scale-95 shadow-2xl">
                 Activar mi cuenta X12 →
@@ -566,7 +564,7 @@ export function renderLX12Registration(content: Record<string, any>, brand: Bran
                 <!-- Info -->
                 <div class="lg:w-1/2 p-16 lg:p-24 bg-gradient-to-br from-purple-900/20 to-transparent flex flex-col justify-center">
                     <span class="text-purple-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Inicia tu operativa</span>
-                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">Tu Cuenta <br><span class="text-purple-400 italic">X12</span> te espera.</h2>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">${content.title || `Tu Cuenta <br><span class="text-purple-400 italic">X12</span> te espera.`}</h2>
                     <p class="text-lg text-white/40 font-light mb-12 leading-relaxed italic">
                         No pierdas más tiempo en evaluaciones. Registra tus datos, elige tu balance y empieza a operar con el apalancamiento institucional de Bridge Markets.
                     </p>

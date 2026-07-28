@@ -22,8 +22,8 @@ export function renderTestimonials(content: Record<string, any>, brand: BrandCon
     <section class="py-32 bg-white overflow-hidden section-reveal">
         <div class="max-w-7xl mx-auto px-8">
             <div class="text-center mb-20">
-                <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase mb-4 block">${c.sectionLabel}</span>
-                <h2 class="text-5xl font-headline font-bold text-[#211635]">${c.title}</h2>
+                <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase mb-4 block">${content.tag || `${c.sectionLabel}`}</span>
+                <h2 class="text-5xl font-headline font-bold text-[#211635]">${content.title || `${c.title}`}</h2>
             </div>
             <div class="flex gap-8 overflow-x-auto pb-8 snap-x px-4" style="-ms-overflow-style: none; scrollbar-width: none;">${items}</div>
         </div>

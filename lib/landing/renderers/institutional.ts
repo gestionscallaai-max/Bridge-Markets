@@ -30,11 +30,9 @@ export function renderInstHero(content: Record<string, any>, brand: BrandConfig)
                         </div>
                     </div>
                     
-                    <h1 class="text-5xl md:text-[90px] font-black font-montserrat text-white leading-[0.95] uppercase tracking-tighter mb-10">
-                        Tu ecosistema <br>
+                    <h1 class="text-5xl md:text-[90px] font-black font-montserrat text-white leading-[0.95] uppercase tracking-tighter mb-10">${content.title || `Tu ecosistema <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-indigo-600 italic">Financiero</span><br>
-                        Completo.
-                    </h1>
+                        Completo.`}</h1>
                     
                     <p class="text-xl md:text-2xl text-white/40 font-light mb-12 max-w-3xl leading-relaxed">
                         Opera, invierte y crece con Bridge Markets. Desde Forex y CFDs hasta índices sintéticos exclusivos. <span class="text-white">Un solo broker. Todo lo que necesitas.</span>
@@ -88,7 +86,7 @@ export function renderInstAbout(content: Record<string, any>, brand: BrandConfig
                 <div class="lg:w-1/3">
                     <div class="sticky top-32">
                         <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Trayectoria</span>
-                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-8 tracking-tighter">¿Quiénes somos?</h2>
+                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-8 tracking-tighter">${content.title || `¿Quiénes somos?`}</h2>
                         <div class="w-20 h-1 bg-indigo-600"></div>
                     </div>
                 </div>
@@ -158,7 +156,7 @@ export function renderInstWhy(content: Record<string, any>, brand: BrandConfig):
         <div class="max-w-7xl mx-auto relative">
             <div class="flex justify-between items-end mb-24 section-reveal">
                 <div class="max-w-2xl">
-                    <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white uppercase leading-[0.9] tracking-tighter mb-8">El estándar <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-slate-500">Bridge.</span></h2>
+                    <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white uppercase leading-[0.9] tracking-tighter mb-8">${content.title || `El estándar <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-slate-500">Bridge.</span>`}</h2>
                     <p class="text-white/40 text-lg font-light">¿Por qué el 1% de los traders profesionales eligen nuestra infraestructura?</p>
                 </div>
                 <div class="hidden lg:block text-indigo-900/20 text-9xl font-black select-none">01</div>
@@ -199,7 +197,7 @@ export function renderInstEcosystem(content: Record<string, any>, brand: BrandCo
         <div class="max-w-7xl mx-auto">
             <div class="mb-24 section-reveal">
                 <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-6 block italic underline underline-offset-8 decoration-indigo-600">Portafolio</span>
-                <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white uppercase tracking-tighter mb-8 leading-none">Nuestro Ecosistema <br>de Productos</h2>
+                <h2 class="text-4xl md:text-7xl font-black font-montserrat text-white uppercase tracking-tighter mb-8 leading-none">${content.title || `Nuestro Ecosistema <br>de Productos`}</h2>
                 <p class="text-white/40 text-xl max-w-4xl leading-relaxed italic">
                     En Bridge Markets encontrarás el ecosistema financiero más completo para traders e inversores. Cada producto está diseñado para un perfil específico, pero todos comparten el mismo estándar: tecnología institucional, transparencia total y un equipo dedicado a tu crecimiento.
                 </p>
@@ -322,7 +320,7 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
             <div class="absolute inset-0 bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="relative z-10">
                 <span class="text-indigo-500 font-black text-xs uppercase tracking-widest mb-12 block italic">Quiero operar y generar beneficios</span>
-                <h2 class="text-5xl md:text-[100px] font-black text-white mb-8 leading-none tracking-tighter uppercase">Soy <br><span class="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Trader</span></h2>
+                <h2 class="text-5xl md:text-[100px] font-black text-white mb-8 leading-none tracking-tighter uppercase">${content.title || `Soy <br><span class="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Trader</span>`}</h2>
                 <ul class="space-y-6 mb-16 max-w-sm">
                     <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors italic">
                         <span class="w-1 h-1 bg-indigo-500 rounded-full"></span> PropFirm: Capital financiado
@@ -348,7 +346,7 @@ export function renderInstSelector(content: Record<string, any>, brand: BrandCon
             <div class="absolute inset-0 bg-slate-800/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="relative z-10">
                 <span class="text-slate-500 font-black text-xs uppercase tracking-widest mb-12 block italic">Quiero inversión con gestión pro</span>
-                <h2 class="text-5xl md:text-[100px] font-black text-white mb-8 leading-none tracking-tighter uppercase">Soy <br><span class="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Inversor</span></h2>
+                <h2 class="text-5xl md:text-[100px] font-black text-white mb-8 leading-none tracking-tighter uppercase">${content.title || `Soy <br><span class="italic text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Inversor</span>`}</h2>
                 <ul class="space-y-6 mb-16 max-w-sm">
                     <li class="flex items-center gap-4 text-sm font-black text-white/40 uppercase tracking-widest group-hover:text-white transition-colors italic">
                         <span class="w-1 h-1 bg-slate-500 rounded-full"></span> Copy Trading: Réplica verificada
@@ -381,7 +379,7 @@ export function renderInstPartners(content: Record<string, any>, brand: BrandCon
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center section-reveal">
                 <div class="lg:col-span-7">
-                    <h2 class="text-6xl md:text-[100px] font-black font-montserrat text-white leading-[0.85] uppercase tracking-tighter mb-12">Construye <br>tu Propia <br><span class="text-indigo-500">Red.</span></h2>
+                    <h2 class="text-6xl md:text-[100px] font-black font-montserrat text-white leading-[0.85] uppercase tracking-tighter mb-12">${content.title || `Construye <br>tu Propia <br><span class="text-indigo-500">Red.</span>`}</h2>
                     <p class="text-xl md:text-3xl text-white/40 font-light mb-12 max-w-2xl leading-tight">Conviértete en socio IB y conecta traders con el ecosistema más completo del mercado.</p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 mb-16">
@@ -442,7 +440,7 @@ export function renderInstWorkflow(content: Record<string, any>, brand: BrandCon
     <section class="py-40 px-8 bg-[#050505]">
         <div class="max-w-7xl mx-auto">
             <div class="section-reveal text-center">
-                <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-20">Cómo empezar en <span class="italic text-indigo-500">Bridge</span></h2>
+                <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-20">${content.title || `Cómo empezar en <span class="italic text-indigo-500">Bridge</span>`}</h2>
                 <div class="flex flex-wrap justify-center gap-4">
                     ${[
                         'Crea tu cuenta', 'Completa KYC', 'Elige producto', 'Deposita', 'Descarga MT5', 'Opera o Invierte', 'Crece'
@@ -481,7 +479,7 @@ export function renderInstCommunity(content: Record<string, any>, brand: BrandCo
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
                     <div class="lg:col-span-8">
                         <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic underline underline-offset-8 decoration-indigo-600">Partner Community</span>
-                        <h2 class="text-5xl md:text-[90px] font-black font-montserrat text-white uppercase tracking-tighter leading-none mb-10 italic">${ibName}</h2>
+                        <h2 class="text-5xl md:text-[90px] font-black font-montserrat text-white uppercase tracking-tighter leading-none mb-10 italic">${content.title || `${ibName}`}</h2>
                         <div class="text-xl md:text-2xl text-white/50 font-light mb-12 leading-relaxed italic max-w-2xl border-l-2 border-indigo-600 pl-8">
                             ${message}
                         </div>
@@ -535,7 +533,7 @@ export function renderInstFAQ(content: Record<string, any>, brand: BrandConfig):
     return `
     <section class="py-40 px-8 bg-[#050505]">
         <div class="max-w-4xl mx-auto section-reveal">
-            <h2 class="text-4xl font-black text-white text-center uppercase tracking-tighter mb-24 italic underline decoration-indigo-600 underline-offset-8">Central de Consultas</h2>
+            <h2 class="text-4xl font-black text-white text-center uppercase tracking-tighter mb-24 italic underline decoration-indigo-600 underline-offset-8">${content.title || `Central de Consultas`}</h2>
             <div class="space-y-4">
                 ${faqs.map(faq => `
                     <div class="p-10 bg-white/[0.01] border border-white/5 rounded-[2rem] hover:bg-white/[0.03] transition-all group">
@@ -564,10 +562,8 @@ export function renderInstFinalCTA(content: Record<string, any>, brand: BrandCon
         
         <div class="max-w-6xl mx-auto relative z-10 section-reveal">
             <span class="text-indigo-500 font-black text-xs uppercase tracking-[0.5em] mb-12 block italic">Tu camino comienza aquí</span>
-            <h2 class="text-6xl md:text-[120px] font-black text-white uppercase leading-[0.85] tracking-tighter mb-12 italic">
-                Un solo Broker. <br>
-                <span class="text-indigo-500">Todo</span> lo que necesitas.
-            </h2>
+            <h2 class="text-6xl md:text-[120px] font-black text-white uppercase leading-[0.85] tracking-tighter mb-12 italic">${content.title || `Un solo Broker. <br>
+                <span class="text-indigo-500">Todo</span> lo que necesitas.`}</h2>
             
             <p class="text-xl text-white/40 mb-20 max-w-2xl mx-auto italic">No importa si eres trader, inversor o gestor. En Bridge Markets tienes el ecosistema completo para crecer.</p>
             
@@ -677,7 +673,7 @@ export function renderInstRegistration(content: Record<string, any>, brand: Bran
                 <!-- Info -->
                 <div class="p-16 md:p-24 bg-[#050505] flex flex-col justify-center">
                     <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Apertura de Cuenta</span>
-                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">Forma parte de la <br><span class="text-white/40 italic">Nueva Era.</span></h2>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">${content.title || `Forma parte de la <br><span class="text-white/40 italic">Nueva Era.</span>`}</h2>
                     <p class="text-lg text-white/40 font-light mb-12 leading-relaxed italic">
                         Inicia tu proceso de registro institucional. Un especialista se pondrá en contacto contigo para finalizar la configuración de tu portafolio.
                     </p>

@@ -27,7 +27,7 @@ export function renderPropHero(content: Record<string, any>, brand: BrandConfig)
                 </div>
 
                 <h1 class="text-4xl md:text-7xl font-black font-headline text-white mb-8 tracking-tighter leading-[1.1] uppercase italic">
-                    Bridge Markets <span class="text-gradient-gold">PropFirm</span> — FOREX/CFDs & Synthetic PropTrading
+                    ${content.title || 'Bridge Markets <span class="text-gradient-gold">PropFirm</span> — FOREX/CFDs & Synthetic PropTrading'}
                 </h1>
                 
                 <p class="text-xl md:text-2xl text-white/60 font-light mb-12 max-w-2xl leading-relaxed italic">
@@ -40,7 +40,7 @@ export function renderPropHero(content: Record<string, any>, brand: BrandConfig)
                             <span class="relative z-10 uppercase tracking-widest text-sm">${ctaText}</span>
                         </a>
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">¿Qué es PropTrading?</span>
+                            <span class="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">${content.tag || `¿Qué es PropTrading?`}</span>
                             <span class="text-xs font-bold text-white/80 italic">Bridge Markets te financia para operar en mercados reales.</span>
                         </div>
                     </div>
@@ -77,8 +77,8 @@ export function renderPropEducation(content: Record<string, any>, brand: BrandCo
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div class="section-reveal">
-                    <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-4 block italic">El Modelo de Éxito</span>
-                    <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 leading-[1.1] uppercase italic">Tú pones el talento. <br>Nosotros el capital.</h2>
+                    <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-4 block italic">${content.tag || 'MODELO DE NEGOCIO'}</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 leading-[1.1] uppercase italic">${content.title || 'Tú pones el talento. <br>Nosotros el capital.'}</h2>
                     <div class="space-y-6">
                         <div class="flex items-start gap-4 p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
                             <span class="material-symbols-outlined text-[#D4AF37] text-3xl italic">ads_click</span>
@@ -123,8 +123,8 @@ export function renderPropProgramsForex(content: Record<string, any>, brand: Bra
     <section class="py-32 px-8 bg-[#050505]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20 section-reveal">
-                <h2 class="text-3xl md:text-5xl font-black font-headline text-white mb-4 uppercase tracking-tight italic">FOREX / CFDs PropTrading — Mercados Reales Internacionales</h2>
-                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">Opera Forex, índices, commodities y más bajo estándares institucionales.</p>
+                <h2 class="text-3xl md:text-5xl font-black font-headline text-white mb-4 uppercase tracking-tight italic">${content.title || 'FOREX / CFDs PropTrading — Mercados Reales Internacionales'}</h2>
+                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">${content.desc || 'Opera Forex, índices, commodities y más bajo estándares institucionales.'}</p>
             </div>
 
             <div class="overflow-x-auto section-reveal">
@@ -196,8 +196,8 @@ export function renderPropProgramsSynthetic(content: Record<string, any>, brand:
     <section class="py-32 px-8 bg-[#080808] border-t border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20 section-reveal">
-                <h2 class="text-3xl md:text-5xl font-black font-headline text-white mb-4 uppercase tracking-tight italic">Synthetic PropTrading — Índices Sintéticos 24/7</h2>
-                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">Opera BullX500, índices sintéticos y más, disponibles los 7 días de la semana.</p>
+                <h2 class="text-3xl md:text-5xl font-black font-headline text-white mb-4 uppercase tracking-tight italic">${content.title || 'Synthetic PropTrading — Índices Sintéticos 24/7'}</h2>
+                <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">${content.desc || 'Opera BullX500, índices sintéticos y más, disponibles los 7 días de la semana.'}</p>
             </div>
 
             <div class="overflow-x-auto section-reveal">
@@ -271,8 +271,8 @@ export function renderPropSteps(content: Record<string, any>, brand: BrandConfig
     <section class="py-32 px-8 bg-[#050505] relative z-10">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <span class="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4 block italic">El Camino al Éxito</span>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white uppercase italic">Proceso Paso a Paso</h2>
+                <span class="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4 block italic">${content.tag || 'PASO A PASO'}</span>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white uppercase italic">${content.title || 'Proceso Paso a Paso'}</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative section-reveal">
@@ -310,8 +310,8 @@ export function renderPropRules(content: Record<string, any>, brand: BrandConfig
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-20 section-reveal">
                 <span class="material-symbols-outlined text-6xl text-[#D4AF37] mb-6 italic">gavel</span>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white uppercase italic">Reglas Clave</h2>
-                <p class="text-white/40 mt-4 font-medium uppercase tracking-[0.2em] text-[10px] italic">Parámetros Operativos Oficiales 2026</p>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white uppercase italic">${content.title || 'Reglas Clave'}</h2>
+                <p class="text-white/40 mt-4 font-medium uppercase tracking-[0.2em] text-[10px] italic">${content.desc || 'Parámetros Operativos Oficiales 2026'}</p>
             </div>
 
             <div class="space-y-4 section-reveal">
@@ -364,11 +364,11 @@ export function renderPropCommunity(content: Record<string, any>, brand: BrandCo
                 </div>
 
                 <div class="section-reveal order-1 lg:order-2">
-                    <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-4 block italic">Liderazgo & Comunidad</span>
-                    <h2 class="text-4xl md:text-7xl font-black font-headline text-white mb-8 uppercase leading-[0.9] italic">${communityName}</h2>
+                    <span class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-4 block italic">${content.tag || `Liderazgo & Comunidad`}</span>
+                    <h2 class="text-4xl md:text-7xl font-black font-headline text-white mb-8 uppercase leading-[0.9] italic">${content.communityName || communityName}</h2>
                     <div class="prose prose-invert max-w-none mb-12">
                         <p class="text-xl text-white/60 font-light leading-relaxed italic">
-                            ${welcomeMsg}
+                            ${content.communityMessage || content.welcomeMsg || welcomeMsg}
                         </p>
                     </div>
 
@@ -404,7 +404,7 @@ export function renderPropFAQ(content: Record<string, any>, brand: BrandConfig):
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div class="section-reveal">
-                    <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-12 uppercase italic">Preguntas Frecuentes</h2>
+                    <h2 class="text-4xl md:text-5xl font-black font-headline text-white mb-12 uppercase italic">${content.title || 'Preguntas Frecuentes'}</h2>
                     <div class="space-y-6">
                         ${faqs.map((faq, i) => `
                             <div class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl hover:bg-white/[0.03] transition-colors">
@@ -433,7 +433,7 @@ export function renderPropBenefits(content: Record<string, any>, brand: BrandCon
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div class="section-reveal">
-                    <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 uppercase italic">Certificación y Beneficios</h2>
+                    <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-8 uppercase italic">${content.title || 'Certificación y Beneficios'}</h2>
                     <ul class="space-y-6">
                         ${[
                             'Insignia Oficial de Certificación — Trader Financiado Certificado Bridge Markets',
@@ -480,7 +480,7 @@ export function renderPropFinalCTA(content: Record<string, any>, brand: BrandCon
         </div>
         
         <div class="max-w-4xl mx-auto text-center relative z-10 section-reveal">
-            <h2 class="text-5xl md:text-8xl font-black font-headline text-white mb-8 tracking-tighter uppercase italic">¿Listo para operar con <span class="text-[#D4AF37]">capital real?</span></h2>
+            <h2 class="text-5xl md:text-8xl font-black font-headline text-white mb-8 tracking-tighter uppercase italic">${content.title || '¿Listo para operar con <span class="text-[#D4AF37]">capital real?</span>'}</h2>
             <p class="text-xl md:text-2xl text-white/50 font-light mb-12 italic">Elige tu programa y demuestra tu talento como trader</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -556,8 +556,8 @@ export function renderPropRegistration(content: Record<string, any>, brand: Bran
         <div class="max-w-xl mx-auto relative z-10 section-reveal">
             <div class="bg-white/[0.02] border border-white/10 rounded-[3rem] p-10 md:p-16 backdrop-blur-3xl shadow-2xl">
                 <div class="text-center mb-12">
-                    <h2 class="text-4xl font-black font-headline text-white mb-4 uppercase italic">${dict.title}</h2>
-                    <p class="text-white/40 text-sm font-medium italic">${dict.sub}</p>
+                    <h2 class="text-4xl font-black font-headline text-white mb-4 uppercase italic">${content.title || dict.title}</h2>
+                    <p class="text-white/40 text-sm font-medium italic">${content.desc || content.subtitle || dict.sub}</p>
                 </div>
                 
                 <form id="landing-form" class="space-y-6" onsubmit="return false;">
@@ -574,7 +574,7 @@ export function renderPropRegistration(content: Record<string, any>, brand: Bran
                         <label class="text-[10px] font-black text-white/40 uppercase tracking-widest block mb-2 italic">${dict.phone}</label>
                         <input name="phone" type="tel" class="w-full bg-white/5 border border-white/10 text-white placeholder:text-white/20 rounded-2xl p-5 focus:outline-none focus:border-[#D4AF37] transition-colors focus:bg-white/10 italic" placeholder="+1 234 567 8900" required />
                     </div>
-                    <button type="submit" class="w-full py-5 bg-[#D4AF37] text-black font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-95 text-lg uppercase tracking-widest mt-4 italic">${dict.btn}</button>
+                    <button type="submit" class="w-full py-5 bg-[#D4AF37] text-black font-black rounded-2xl shadow-xl transition-all hover:scale-[1.02] active:scale-95 text-lg uppercase tracking-widest mt-4 italic">${content.buttonText || dict.btn}</button>
                     <p class="text-[10px] text-white/30 text-center italic mt-6 font-medium">${dict.disc}</p>
                 </form>
             </div>

@@ -16,6 +16,7 @@ import { AdminContext, RoleContext } from '@/lib/context';
 
 const NotificationBell = dynamic(() => import('@/components/Dashboard/NotificationBell'), { ssr: false });
 const GlobalNotice = dynamic(() => import('@/components/Dashboard/GlobalNotice'), { ssr: false });
+const SessionTimer = dynamic(() => import('@/components/Dashboard/SessionTimer'), { ssr: false });
 
 // ─── Language Selector Dropdown ──────────────────────────────
 function LanguageSelector() {
@@ -430,6 +431,9 @@ function DashboardInner({ children }: { children: React.ReactNode }) {
                         </div>
 
                         <div className="flex items-center gap-1.5 lg:gap-2.5">
+                            {/* Temporizador de Sesión (30 Minutos) */}
+                            <SessionTimer />
+
                             {/* Language Selector */}
                             <LanguageSelector />
 

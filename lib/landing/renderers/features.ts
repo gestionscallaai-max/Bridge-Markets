@@ -30,8 +30,8 @@ export function renderBentoGrid(content: Record<string, any>, brand: BrandConfig
     <section class="py-32 relative bg-gray-50">
         <div class="max-w-7xl mx-auto px-8 section-reveal">
             <div class="mb-20 text-center">
-                <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase">${c.sectionLabel}</span>
-                <h2 class="text-5xl font-headline font-bold text-[#211635] mt-4">${c.title}</h2>
+                <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase">${content.tag || `${c.sectionLabel}`}</span>
+                <h2 class="text-5xl font-headline font-bold text-[#211635] mt-4">${content.title || `${c.title}`}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">${cards}</div>
         </div>
@@ -54,7 +54,7 @@ export function renderFeatureSplit(content: Record<string, any>, brand: BrandCon
         <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-full bg-primary/10 blur-[150px] rounded-full"></div>
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-24 items-center section-reveal">
             <div class="lg:w-1/2 relative z-10">
-                <h2 class="text-5xl font-extrabold font-headline leading-tight mb-8 text-white">${c.title} <span class="text-gradient-purple">${c.highlight}</span></h2>
+                <h2 class="text-5xl font-extrabold font-headline leading-tight mb-8 text-white">${content.title || `${c.title} <span class="text-gradient-purple">${c.highlight}</span>`}</h2>
                 <p class="text-lg text-white/50 mb-12 leading-relaxed">${c.subtitle}</p>
                 <div class="space-y-10">${features}</div>
             </div>
@@ -100,7 +100,7 @@ export function renderRiskGrid(content: Record<string, any>, brand: BrandConfig)
     <section class="py-24 px-8 relative" style="background: transparent;">
         <div class="max-w-7xl mx-auto glass-panel asym-card bg-[#0f081d]/40 p-12 md:p-20 border-white/5 section-reveal">
             <div class="text-center mb-20">
-                <h2 class="text-4xl font-extrabold font-headline mb-4 text-white">${c.title}</h2>
+                <h2 class="text-4xl font-extrabold font-headline mb-4 text-white">${content.title || `${c.title}`}</h2>
                 <p class="text-white/50 max-w-2xl mx-auto">${c.subtitle}</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">${items}</div>
@@ -140,7 +140,7 @@ export function renderLeaderboard(content: Record<string, any>, brand: BrandConf
     <section class="py-24 px-8" style="background: transparent;">
         <div class="max-w-7xl mx-auto section-reveal">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-                <div><h2 class="text-4xl font-extrabold font-headline mb-4 text-white">${c.title} <span class="text-accent">${c.highlight}</span></h2>
+                <div><h2 class="text-4xl font-extrabold font-headline mb-4 text-white">${content.title || `${c.title} <span class="text-accent">${c.highlight}</span>`}</h2>
                 <p class="text-white/50">${c.subtitle}</p></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">${traders}</div>
@@ -160,8 +160,8 @@ export function renderTrustBadges(content: Record<string, any>, brand: BrandConf
     return `
     <section class="py-24 bg-gray-50 relative overflow-hidden section-reveal">
         <div class="max-w-7xl mx-auto px-8 relative z-10 text-center">
-            <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase mb-4 block">${c.sectionLabel}</span>
-            <h2 class="text-4xl font-headline font-bold mb-16 text-[#211635]">${c.title}</h2>
+            <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase mb-4 block">${content.tag || `${c.sectionLabel}`}</span>
+            <h2 class="text-4xl font-headline font-bold mb-16 text-[#211635]">${content.title || `${c.title}`}</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10">${badges}</div>
         </div>
     </section>`;
@@ -189,8 +189,8 @@ export function renderMultiAsset(content: Record<string, any>, brand: BrandConfi
         <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div class="order-2 lg:order-1 grid grid-cols-2 md:grid-cols-3 gap-6">${assets}</div>
             <div class="order-1 lg:order-2">
-                <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase">${c.sectionLabel}</span>
-                <h2 class="text-5xl font-headline font-extrabold tracking-tighter mt-6 mb-8 leading-tight text-[#211635]">${c.title} <br>${c.highlight}</h2>
+                <span class="text-primary text-xs tracking-[0.3em] font-bold uppercase">${content.tag || `${c.sectionLabel}`}</span>
+                <h2 class="text-5xl font-headline font-extrabold tracking-tighter mt-6 mb-8 leading-tight text-[#211635]">${content.title || `${c.title} <br>${c.highlight}`}</h2>
                 <p class="text-gray-500 text-lg leading-relaxed mb-10 font-medium">${c.subtitle}</p>
                 <div class="space-y-6">${checks}</div>
             </div>
@@ -415,10 +415,8 @@ export function renderSntHero(content: Record<string, any>, brand: BrandConfig):
                 </div>
 
                 <!-- Fixed Main Title -->
-                <h1 class="text-4xl md:text-7xl font-black text-white leading-tight mb-8 tracking-tighter uppercase">
-                    OPERA EN UN NUEVO <br>
-                    <span class="text-gradient-purple animate-gradient-x">UNIVERSO</span> DE OPORTUNIDADES.
-                </h1>
+                <h1 class="text-4xl md:text-7xl font-black text-white leading-tight mb-8 tracking-tighter uppercase">${content.title || `OPERA EN UN NUEVO <br>
+                    <span class="text-gradient-purple animate-gradient-x">UNIVERSO</span> DE OPORTUNIDADES.`}</h1>
 
                 <!-- Fixed Subtitle -->
                 <p class="text-lg md:text-xl text-white/60 leading-relaxed mb-10 font-medium max-w-xl">
@@ -483,12 +481,10 @@ export function renderSntAbout(content: Record<string, any>, brand: BrandConfig)
             <div class="order-1 lg:order-2">
                 <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 mb-8">
                     <span class="material-symbols-outlined text-sm text-[#8b5cf6]">school</span>
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">Sección Educativa</span>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">${content.tag || `Sección Educativa`}</span>
                 </div>
                 
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-10 tracking-tighter uppercase leading-[1.1]">
-                    ¿Qué son los <br><span class="text-gradient-purple">Índices Sintéticos?</span>
-                </h2>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-10 tracking-tighter uppercase leading-[1.1]">${content.title || `¿Qué son los <br><span class="text-gradient-purple">Índices Sintéticos?</span>`}</h2>
                 
                 <div class="space-y-8">
                     <p class="text-xl text-white/60 leading-relaxed font-light">
@@ -524,10 +520,8 @@ export function renderSntAdvantages(content: Record<string, any>, brand: BrandCo
     <section class="py-32 px-8 bg-[#020205] relative border-b border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/10 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/20">Ventajas Exclusivas</span>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase leading-tight">
-                    ¿Por qué operar con <br><span class="text-gradient-purple">Bridge Markets?</span>
-                </h2>
+                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/10 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/20">${content.tag || `Ventajas Exclusivas`}</span>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase leading-tight">${content.title || `¿Por qué operar con <br><span class="text-gradient-purple">Bridge Markets?</span>`}</h2>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 section-reveal">
@@ -602,8 +596,8 @@ export function renderSntFamilies(content: Record<string, any>, brand: BrandConf
     <section id="families" class="py-32 px-8 bg-[#020205] relative border-b border-white/5 overflow-hidden">
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="text-center mb-24 section-reveal">
-                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/10 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/20">Catálogo de Activos</span>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase mb-6">Nuestras Familias de Índices</h2>
+                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/10 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/20">${content.tag || `Catálogo de Activos`}</span>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase mb-6">${content.title || `Nuestras Familias de Índices`}</h2>
                 <p class="text-xl text-white/40 max-w-3xl mx-auto font-light leading-relaxed">
                     Bridge Markets agrupa sus índices en cuatro familias principales, cada una con un comportamiento característico y un propósito de trading distinto.
                 </p>
@@ -697,8 +691,8 @@ export function renderSntWorkflow(content: Record<string, any>, brand: BrandConf
     <section class="py-32 px-8 bg-[#050508] relative border-b border-white/5 overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/10 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/20">Metodología</span>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase mb-6">¿Cómo operar Sintéticos?</h2>
+                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/10 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/20">${content.tag || `Metodología`}</span>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase mb-6">${content.title || `¿Cómo operar Sintéticos?`}</h2>
                 <p class="text-white/40 max-w-2xl mx-auto font-light leading-relaxed">Sigue este flujo profesional para maximizar tu eficiencia operativa.</p>
             </div>
             
@@ -740,9 +734,9 @@ export function renderSntSpecs(content: Record<string, any>, brand: BrandConfig)
             <div>
                 <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 mb-8">
                     <span class="material-symbols-outlined text-sm text-[#8b5cf6]">terminal</span>
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">Especificaciones Técnicas</span>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">${content.tag || `Especificaciones Técnicas`}</span>
                 </div>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-10 tracking-tighter uppercase leading-[1.1]">${title.replace('de Ejecución', '<br><span class="text-gradient-purple">de Ejecución</span>')}</h2>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-10 tracking-tighter uppercase leading-[1.1]">${content.title || `${title.replace('de Ejecución', '<br><span class="text-gradient-purple">de Ejecución</span>')}`}</h2>
                 
                 <p class="text-white/50 font-light leading-relaxed mb-12">${intro}</p>
                 
@@ -806,9 +800,9 @@ export function renderSntPlatforms(content: Record<string, any>, brand: BrandCon
             <div class="lg:w-1/2">
                 <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 mb-8">
                     <span class="material-symbols-outlined text-sm text-[#8b5cf6]">download_for_offline</span>
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">Tecnología de Vanguardia</span>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">${content.tag || `Tecnología de Vanguardia`}</span>
                 </div>
-                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-10 tracking-tighter uppercase leading-[1.1]">Dominio <br><span class="text-gradient-purple">Multiplataforma</span></h2>
+                <h2 class="text-4xl md:text-6xl font-black font-headline text-white mb-10 tracking-tighter uppercase leading-[1.1]">${content.title || `Dominio <br><span class="text-gradient-purple">Multiplataforma</span>`}</h2>
                 
                 <p class="text-lg text-white/50 font-light leading-relaxed mb-12">
                     Lleva el mercado contigo. Nuestra infraestructura está optimizada para ofrecer la menor latencia y la mayor estabilidad en cualquier dispositivo.
@@ -897,7 +891,7 @@ export function renderSntCommunity(content: Record<string, any>, brand: BrandCon
                             </div>
                         </div>
                         <div class="space-y-4">
-                            <span class="px-4 py-1.5 bg-[#8b5cf6]/20 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.3em] rounded-full border border-[#8b5cf6]/30 inline-block">IB Partner Oficial</span>
+                            <span class="px-4 py-1.5 bg-[#8b5cf6]/20 text-[#c4b5fd] text-[10px] font-black uppercase tracking-[0.3em] rounded-full border border-[#8b5cf6]/30 inline-block">${content.tag || `IB Partner Oficial`}</span>
                             <h2 class="text-4xl md:text-6xl font-black font-headline text-white tracking-tighter uppercase leading-tight">${communityName}</h2>
                             <p class="text-sm font-bold text-white/30 uppercase tracking-widest flex items-center gap-2 justify-center lg:justify-start">
                                 <span class="material-symbols-outlined text-sm">language</span>
@@ -980,8 +974,8 @@ export function renderSntFAQ(content: Record<string, any>, brand: BrandConfig): 
         
         <div class="max-w-4xl mx-auto section-reveal relative z-10">
             <div class="text-center mb-20">
-                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/40">Soporte y Dudas</span>
-                <h2 class="text-5xl md:text-7xl font-black font-headline text-white mb-6 uppercase tracking-tighter drop-shadow-2xl">Preguntas Frecuentes</h2>
+                <span class="inline-block px-5 py-2 bg-[#8b5cf6]/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6 rounded-full border border-[#8b5cf6]/40">${content.tag || `Soporte y Dudas`}</span>
+                <h2 class="text-5xl md:text-7xl font-black font-headline text-white mb-6 uppercase tracking-tighter drop-shadow-2xl">${content.title || `Preguntas Frecuentes`}</h2>
             </div>
             
             <div class="space-y-6">
@@ -1054,9 +1048,7 @@ export function renderSntCTA(content: Record<string, any>, brand: BrandConfig): 
                 </div>
             </div>
             
-            <h2 class="text-5xl md:text-8xl font-black font-headline text-white mb-12 tracking-tighter uppercase leading-[0.85]">
-                Explora. Aprende.<br>Opera. <span class="text-gradient-purple">Evoluciona.</span>
-            </h2>
+            <h2 class="text-5xl md:text-8xl font-black font-headline text-white mb-12 tracking-tighter uppercase leading-[0.85]">${content.title || `Explora. Aprende.<br>Opera. <span class="text-gradient-purple">Evoluciona.</span>`}</h2>
             
             <p class="text-xl md:text-2xl text-white/50 font-light mb-20 max-w-3xl mx-auto leading-relaxed">
                 Sumérgete en el ecosistema de índices sintéticos de Bridge Markets y descubre un nuevo nivel de libertad y precisión operativa.

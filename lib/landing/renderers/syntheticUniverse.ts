@@ -26,11 +26,9 @@ export function renderSNUHero(content: Record<string, any>, brand: BrandConfig):
                         </span>
                     </div>
                     
-                    <h1 class="text-5xl md:text-[85px] font-black font-montserrat text-white leading-[0.9] uppercase tracking-tighter mb-10">
-                        Opera todos los índices <br>
+                    <h1 class="text-5xl md:text-[85px] font-black font-montserrat text-white leading-[0.9] uppercase tracking-tighter mb-10">${content.title || `Opera todos los índices <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-indigo-600 italic">Sintéticos</span><br>
-                        del mercado.
-                    </h1>
+                        del mercado.`}</h1>
                     
                     <p class="text-xl md:text-2xl text-white/40 font-light mb-8 max-w-3xl leading-relaxed">
                         Bridge Markets es el único broker que conecta en una sola cuenta los índices de <span class="text-white">Deriv</span>, los de <span class="text-white">Weltrade</span> y sus propios índices <span class="text-white font-medium">exclusivos</span>. Más de 100 instrumentos 24/7.
@@ -98,7 +96,7 @@ export function renderSNUUniverses(content: Record<string, any>, brand: BrandCon
     <section class="py-40 px-8 bg-[#000]">
         <div class="max-w-7xl mx-auto">
             <div class="mb-24 section-reveal">
-                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 leading-none italic">Los 3 Universos de <br>Índices Sintéticos</h2>
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 leading-none italic">${content.title || `Los 3 Universos de <br>Índices Sintéticos`}</h2>
                 <p class="text-white/30 text-lg max-w-2xl font-light italic">Bridge Markets conecta en una sola cuenta tres universos de índices sintéticos de diferentes ecosistemas:</p>
             </div>
 
@@ -149,7 +147,7 @@ export function renderSNUUnvBM(content: Record<string, any>, brand: BrandConfig)
                 <div class="lg:col-span-7">
                     <div class="flex items-center gap-4 mb-6">
                         <span class="text-2xl">🟣</span>
-                        <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">Índices Propios <br>Bridge Markets</h2>
+                        <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">${content.title || `Índices Propios <br>Bridge Markets`}</h2>
                     </div>
                     <p class="text-white/40 text-lg font-light leading-relaxed italic border-l-2 border-purple-600 pl-8">
                         Desarrollados y operados exclusivamente por Bridge Markets. Infraestructura propietaria diseñada para traders algorítmicos y manuales.
@@ -191,7 +189,7 @@ export function renderSNUUnvDeriv(content: Record<string, any>, brand: BrandConf
             <div class="mb-24 section-reveal">
                 <div class="flex items-center gap-4 mb-6">
                     <span class="text-2xl">🔵</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">Mercados Deriv <br>(vía Bridge Markets)</h2>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">${content.title || `Mercados Deriv <br>(vía Bridge Markets)`}</h2>
                 </div>
                 <p class="text-white/40 text-lg font-light leading-relaxed italic border-l-2 border-blue-600 pl-8">
                     Opera los índices del ecosistema Deriv directamente desde tu cuenta BM. Equiparación de símbolos oficial.
@@ -241,7 +239,7 @@ export function renderSNUUnvWeltrade(content: Record<string, any>, brand: BrandC
             <div class="mb-24 section-reveal">
                 <div class="flex items-center gap-4 mb-6">
                     <span class="text-2xl">🔴</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">Mercados Weltrade <br>(vía Bridge Markets)</h2>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">${content.title || `Mercados Weltrade <br>(vía Bridge Markets)`}</h2>
                 </div>
                 <p class="text-white/40 text-lg font-light leading-relaxed italic border-l-2 border-red-600 pl-8">
                     Conexión directa con los índices de alta intensidad de Weltrade. Todo en una sola MT5.
@@ -288,7 +286,7 @@ export function renderSNUWhy(content: Record<string, any>, brand: BrandConfig): 
     <section class="py-40 px-8 bg-[#000] relative overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="mb-24 section-reveal text-center">
-                <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter italic leading-none mb-10">La Conexión que <br>Ningún Otro Broker Tiene</h2>
+                <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter italic leading-none mb-10">${content.title || `La Conexión que <br>Ningún Otro Broker Tiene`}</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10 section-reveal">
@@ -321,7 +319,7 @@ export function renderSNUWorkflow(content: Record<string, any>, brand: BrandConf
     <section class="py-40 px-8 bg-[#020202] border-t border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="mb-24 section-reveal text-center">
-                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">¿Cómo empezar a operar?</h2>
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic">${content.title || `¿Cómo empezar a operar?`}</h2>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-8 section-reveal">
@@ -361,7 +359,7 @@ export function renderSNUCommunity(content: Record<string, any>, brand: BrandCon
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
                     <div class="lg:col-span-7">
                         <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic underline underline-offset-8 decoration-indigo-600">IB Partner Community</span>
-                        <h2 class="text-5xl md:text-[80px] font-black text-white uppercase tracking-tighter leading-none mb-10 italic">${ibName}</h2>
+                        <h2 class="text-5xl md:text-[80px] font-black text-white uppercase tracking-tighter leading-none mb-10 italic">${content.title || `${ibName}`}</h2>
                         <div class="text-xl md:text-2xl text-white/50 font-light mb-12 leading-relaxed italic max-w-2xl border-l-2 border-indigo-600 pl-8">
                             ${message}
                         </div>
@@ -412,7 +410,7 @@ export function renderSNUFAQ(content: Record<string, any>, brand: BrandConfig): 
     return `
     <section class="py-40 px-8 bg-[#020202] border-t border-white/5">
         <div class="max-w-4xl mx-auto section-reveal">
-            <h2 class="text-4xl font-black text-white text-center uppercase tracking-tighter mb-24 italic underline decoration-indigo-600 underline-offset-8">Central de Consultas Sintéticas</h2>
+            <h2 class="text-4xl font-black text-white text-center uppercase tracking-tighter mb-24 italic underline decoration-indigo-600 underline-offset-8">${content.title || `Central de Consultas Sintéticas`}</h2>
             <div class="space-y-4">
                 ${faqs.map(faq => `
                     <div class="p-10 bg-white/[0.01] border border-white/5 rounded-3xl hover:bg-white/[0.03] transition-all group">
@@ -436,10 +434,8 @@ export function renderSNUFinalCTA(content: Record<string, any>, brand: BrandConf
     return `
     <section class="py-60 px-8 bg-[#000] text-center relative overflow-hidden">
         <div class="max-w-6xl mx-auto relative z-10 section-reveal">
-            <h2 class="text-5xl md:text-[100px] font-black text-white uppercase leading-[0.85] tracking-tighter mb-12 italic">
-                Deriv, Weltrade y propios BM. <br>
-                <span class="text-indigo-600">Todo en Bridge Markets.</span>
-            </h2>
+            <h2 class="text-5xl md:text-[100px] font-black text-white uppercase leading-[0.85] tracking-tighter mb-12 italic">${content.title || `Deriv, Weltrade y propios BM. <br>
+                <span class="text-indigo-600">Todo en Bridge Markets.</span>`}</h2>
             <p class="text-xl text-white/30 mb-20 max-w-2xl mx-auto italic font-light uppercase tracking-widest">
                 Más de 100 instrumentos. Tres ecosistemas. Una sola cuenta. Disponible 24/7.
             </p>
@@ -532,7 +528,7 @@ export function renderSNURegistration(content: Record<string, any>, brand: Brand
                     <div class="absolute top-0 left-0 w-full h-full opacity-10 stars-container"></div>
                     <div class="relative z-10">
                         <span class="text-indigo-500 font-black text-[10px] uppercase tracking-[0.5em] mb-12 block italic">Acceso Galáctico</span>
-                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">Entra al Universo <br><span class="text-indigo-400">Sintético.</span></h2>
+                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase leading-none mb-10 tracking-tighter italic">${content.title || `Entra al Universo <br><span class="text-indigo-400">Sintético.</span>`}</h2>
                         <p class="text-lg text-white/40 font-light mb-12 leading-relaxed italic">
                             La mayor oferta de índices sintéticos del planeta te espera. Regístrate y activa tu cuenta MT5 en minutos.
                         </p>

@@ -29,11 +29,11 @@ export function renderMamCopyHero(content: Record<string, any>, brand: BrandConf
                 </div>
 
                 <h1 class="text-4xl md:text-7xl font-black font-montserrat text-white mb-8 leading-[1.1] uppercase">
-                    Gestiona o invierte capital de forma <span class="text-gradient-mamcopy">profesional, automatizada y transparente.</span>
+                    ${content.title || 'Gestiona o invierte capital de forma <span class="text-gradient-mamcopy">profesional, automatizada y transparente.</span>'}
                 </h1>
                 
                 <p class="text-xl md:text-2xl text-white/60 font-light mb-6 max-w-3xl mx-auto leading-relaxed">
-                    Accede a las Cuentas MAM y al Copy Trading de Bridge Markets. Dos soluciones. Un mismo ecosistema profesional.
+                    ${content.desc || 'Accede a las Cuentas MAM y al Copy Trading de Bridge Markets. Dos soluciones. Un mismo ecosistema profesional.'}
                 </p>
 
                 ${ibPhrase ? `<p class="text-lg text-blue-400/80 font-medium mb-12 tracking-wide italic">${ibPhrase}</p>` : ''}
@@ -123,8 +123,8 @@ export function renderMamCopyIntro(content: Record<string, any>, brand: BrandCon
     return `
     <section class="py-32 px-8 bg-[#050505] text-center">
         <div class="max-w-4xl mx-auto section-reveal">
-            <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">Dos soluciones, un ecosistema</span>
-            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-10 uppercase">Conectando capital con talento</h2>
+            <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">${content.tag || 'Dos soluciones, un ecosistema'}</span>
+            <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-10 uppercase">${content.title || 'Conectando capital con talento'}</h2>
             
             <div class="space-y-8 text-white/50 text-lg leading-relaxed">
                 <p>En el entorno actual de los mercados financieros, han surgido herramientas que permiten optimizar la gestión de inversiones tanto para traders profesionales como para inversionistas.</p>
@@ -162,8 +162,8 @@ export function renderMamBlock(content: Record<string, any>, brand: BrandConfig)
                     <span class="material-symbols-outlined text-3xl text-blue-500">work</span>
                 </div>
                 <div>
-                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">Cuentas MAM</h2>
-                    <p class="text-blue-500 font-bold uppercase tracking-widest text-xs">Multi-Account Manager — Gestión profesional centralizada</p>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">${content.title || 'Cuentas MAM'}</h2>
+                    <p class="text-blue-500 font-bold uppercase tracking-widest text-xs">${content.desc || 'Multi-Account Manager — Gestión profesional centralizada'}</p>
                 </div>
             </div>
 
@@ -315,7 +315,7 @@ export function renderCopyBlock(content: Record<string, any>, brand: BrandConfig
                     <span class="material-symbols-outlined text-3xl text-emerald-500">assignment</span>
                 </div>
                 <div>
-                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">Copy Trading</h2>
+                    <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">${content.title || 'Copy Trading'}</h2>
                     <p class="text-emerald-500 font-bold uppercase tracking-widest text-xs">Replica automáticamente estrategias de traders profesionales verificados</p>
                 </div>
             </div>
@@ -409,7 +409,7 @@ export function renderMamCopyComparison(content: Record<string, any>, brand: Bra
     <section id="comparativa" class="py-32 px-8 bg-[#050505]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20 section-reveal">
-                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-4 uppercase tracking-tight">Comparativa MAM vs Copy Trading</h2>
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-4 uppercase tracking-tight">${content.title || `Comparativa MAM vs Copy Trading`}</h2>
                 <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">Elige el modelo que mejor se adapte a tu perfil operativo</p>
             </div>
 
@@ -451,7 +451,7 @@ export function renderMamCopyBenefits(content: Record<string, any>, brand: Brand
     <section class="py-32 px-8 bg-[#080808] border-t border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20 section-reveal">
-                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-4 uppercase">Beneficios Generales del Sistema</h2>
+                <h2 class="text-3xl md:text-5xl font-black font-montserrat text-white mb-4 uppercase">${content.title || `Beneficios Generales del Sistema`}</h2>
                 <p class="text-white/40 font-medium uppercase tracking-[0.2em] text-xs italic">Infraestructura institucional para tu éxito</p>
             </div>
 
@@ -474,7 +474,7 @@ export function renderMamCopySteps(content: Record<string, any>, brand: BrandCon
     <section class="py-32 px-8 bg-[#080808] border-y border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">¿Cómo empezar?</h2>
+                <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white uppercase tracking-tighter">${content.title || `¿Cómo empezar?`}</h2>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 section-reveal">
@@ -549,7 +549,7 @@ export function renderMamCopyFAQ(content: Record<string, any>, brand: BrandConfi
     return `
     <section class="py-32 px-8 bg-[#050505]">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-20 text-center uppercase">Preguntas Frecuentes</h2>
+            <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-20 text-center uppercase">${content.title || `Preguntas Frecuentes`}</h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 section-reveal">
                 <div>
@@ -593,7 +593,7 @@ export function renderMamCopyFinalCTA(content: Record<string, any>, brand: Brand
             <img src="/images/imagenes_nuevas/reyna_rosa.png" class="absolute -bottom-20 -right-20 w-1/3 object-contain transform -rotate-12">
         </div>
         <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
-            <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 tracking-tighter uppercase leading-none">Conecta talento con <span class="text-blue-500">capital.</span></h2>
+            <h2 class="text-5xl md:text-8xl font-black font-montserrat text-white mb-8 tracking-tighter uppercase leading-none">${content.title || `Conecta talento con <span class="text-blue-500">capital.</span>`}</h2>
             <p class="text-xl md:text-2xl text-white/50 font-light mb-12">Elige tu modelo: gestión centralizada con MAM o libertad total con Copy Trading.</p>
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -629,8 +629,8 @@ export function renderMCCommunity(content: Record<string, any>, brand: BrandConf
             <div class="bg-gradient-to-br from-blue-600/10 via-transparent to-emerald-600/10 border border-white/10 rounded-[3rem] p-10 md:p-20 backdrop-blur-3xl overflow-hidden relative">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div>
-                        <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">Comunidad Exclusiva</span>
-                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase">${ibName}</h2>
+                        <span class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-6 block">${content.tag || `Comunidad Exclusiva`}</span>
+                        <h2 class="text-4xl md:text-6xl font-black font-montserrat text-white mb-8 uppercase">${content.title || `${ibName}`}</h2>
                         <p class="text-white/60 text-lg md:text-xl leading-relaxed mb-12">${message}</p>
                         
                         <div class="flex flex-wrap gap-4 mb-12">
@@ -710,7 +710,7 @@ export function renderMCRegistration(content: Record<string, any>, brand: BrandC
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <!-- Info Side -->
                     <div class="p-12 md:p-16 bg-gradient-to-br from-blue-600/20 to-emerald-600/20 flex flex-col justify-center">
-                        <h2 class="text-3xl font-black font-montserrat text-white mb-6 uppercase">Únete al ecosistema</h2>
+                        <h2 class="text-3xl font-black font-montserrat text-white mb-6 uppercase">${content.title || `Únete al ecosistema`}</h2>
                         <p class="text-white/60 text-sm leading-relaxed mb-8">
                             Completa el formulario y un especialista de Bridge Markets te guiará en el proceso de apertura y configuración de tu cuenta.
                         </p>

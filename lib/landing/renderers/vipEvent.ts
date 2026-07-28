@@ -73,9 +73,7 @@ export function renderVEHero(content: Record<string, any>, brand: BrandConfig): 
                 </div>
 
                 <!-- Headline -->
-                <h1 class="text-4xl md:text-5xl lg:text-[4rem] font-black leading-[1.1] font-headline tracking-tighter text-white">
-                    ${c.title}
-                </h1>
+                <h1 class="text-4xl md:text-5xl lg:text-[4rem] font-black leading-[1.1] font-headline tracking-tighter text-white">${content.title || `${c.title}`}</h1>
 
                 <!-- Subtext -->
                 <p class="text-white/60 text-base md:text-lg leading-relaxed max-w-xl font-light">
@@ -367,7 +365,7 @@ export function renderVEDetails(content: Record<string, any>, brand: BrandConfig
         <div class="max-w-7xl mx-auto space-y-16">
             <!-- Header -->
             <div class="text-center space-y-4">
-                <h2 class="text-4xl md:text-5xl font-black uppercase font-headline">Detalles del evento</h2>
+                <h2 class="text-4xl md:text-5xl font-black uppercase font-headline">${content.title || `Detalles del evento`}</h2>
                 <div class="w-20 h-1 bg-[#865BFF] mx-auto rounded-full"></div>
             </div>
 
@@ -467,7 +465,7 @@ export function renderVERegistration(content: Record<string, any>, brand: BrandC
             <div class="lg:col-span-7 bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-[2.5rem] shadow-2xl backdrop-blur-3xl">
                 <div class="space-y-8">
                     <div class="text-left space-y-3">
-                        <h2 class="text-3xl md:text-4xl font-black uppercase font-headline tracking-tighter">FORMULARIO DE REGISTRO</h2>
+                        <h2 class="text-3xl md:text-4xl font-black uppercase font-headline tracking-tighter">${content.title || `FORMULARIO DE REGISTRO`}</h2>
                         <div class="w-16 h-1 bg-[#865BFF] rounded-full"></div>
                     </div>
 

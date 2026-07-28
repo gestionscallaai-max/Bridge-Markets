@@ -24,6 +24,15 @@ export default function LoginPage() {
     const [success, setSuccess] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('reason') === 'timeout') {
+                setErrorMsg('Tu sesión ha expirado tras 30 minutos de inactividad por seguridad. Por favor, inicia sesión nuevamente.');
+            }
+        }
+    }, []);
+
     // Initialize Vanta.js
     useEffect(() => {
         const loadVantaScripts = async () => {

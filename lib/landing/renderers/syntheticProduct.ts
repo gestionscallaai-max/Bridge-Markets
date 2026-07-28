@@ -26,11 +26,9 @@ export function renderSPHero(content: Record<string, any>, brand: BrandConfig): 
                         <span class="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">Sin noticias, sin pausas, sin límites.</span>
                     </div>
                     
-                    <h1 class="text-5xl md:text-[85px] font-black font-montserrat text-white leading-[0.9] uppercase tracking-tightest mb-10">
-                        Opera en un nuevo <br>
+                    <h1 class="text-5xl md:text-[85px] font-black font-montserrat text-white leading-[0.9] uppercase tracking-tightest mb-10">${content.title || `Opera en un nuevo <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Universo</span> de <br>
-                        Oportunidades.
-                    </h1>
+                        Oportunidades.`}</h1>
                     
                     <p class="text-xl md:text-2xl text-slate-400 font-light mb-6 max-w-2xl leading-relaxed">
                         Bienvenido a los <span class="text-white font-bold">Índices Sintéticos</span> de Bridge Markets, mercados virtuales 24/7 con comportamientos realistas.
@@ -87,10 +85,8 @@ export function renderSPAbout(content: Record<string, any>, brand: BrandConfig):
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center section-reveal">
                 <div class="lg:col-span-5">
-                    <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">${t.aboutTag}</span>
-                    <h2 class="text-4xl md:text-5xl font-black text-white uppercase leading-tight tracking-tighter">
-                        ${t.aboutTitle}
-                    </h2>
+                    <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">${content.tag || `${t.aboutTag}`}</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-white uppercase leading-tight tracking-tighter">${content.title || `${t.aboutTitle}`}</h2>
                 </div>
                 <div class="lg:col-span-7 space-y-8">
                     <p class="text-lg md:text-xl text-slate-400 leading-relaxed font-light text-justify">
@@ -113,8 +109,8 @@ export function renderSPAdvantages(content: Record<string, any>, brand: BrandCon
     <section class="py-40 px-8 bg-[#050505] relative">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">${t.advantagesTag}</span>
-                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tightest">${t.advantagesTitle}</h2>
+                <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">${content.tag || `${t.advantagesTag}`}</span>
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tightest">${content.title || `${t.advantagesTitle}`}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 section-reveal">
                 ${t.advantagesList.map((a: any) => `
@@ -147,8 +143,8 @@ export function renderSPFamilies(content: Record<string, any>, brand: BrandConfi
     <section class="py-40 px-8 bg-[#050505] relative border-t border-white/5">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">${t.familiesTag}</span>
-                <h2 class="text-5xl md:text-7xl font-black text-white uppercase tracking-tightest">${t.familiesTitle}</h2>
+                <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">${content.tag || `${t.familiesTag}`}</span>
+                <h2 class="text-5xl md:text-7xl font-black text-white uppercase tracking-tightest">${content.title || `${t.familiesTitle}`}</h2>
                 <p class="mt-8 text-slate-500 max-w-2xl mx-auto font-medium">${t.familiesSub}</p>
             </div>
 
@@ -187,7 +183,7 @@ export function renderSPWorkflow(content: Record<string, any>, brand: BrandConfi
     <section class="py-40 px-8 bg-[#050505] border-y border-white/5 relative">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-24 section-reveal">
-                <h2 class="text-4xl font-black text-white uppercase tracking-widest text-sm mb-4">${t.workflowTitle}</h2>
+                <h2 class="text-4xl font-black text-white uppercase tracking-widest text-sm mb-4">${content.title || `${t.workflowTitle}`}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 section-reveal">
                 ${t.workflowSteps.map((s: any, i: number) => `
@@ -216,7 +212,7 @@ export function renderSPTechSpecs(content: Record<string, any>, brand: BrandConf
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-start">
                 <div class="lg:col-span-4 section-reveal">
-                    <h2 class="text-4xl font-black text-white uppercase mb-8">${t.techTitle}</h2>
+                    <h2 class="text-4xl font-black text-white uppercase mb-8">${content.title || `${t.techTitle}`}</h2>
                     <p class="text-slate-400 font-light leading-relaxed mb-8">
                         ${t.techDesc}
                     </p>
@@ -268,8 +264,8 @@ export function renderSPActivation(content: Record<string, any>, brand: BrandCon
                     </div>
                 </div>
                 <div class="order-1 lg:order-2 section-reveal delay-200">
-                    <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">${t.activationTag}</span>
-                    <h2 class="text-5xl md:text-6xl font-black text-white uppercase mb-12">${t.activationTitle}</h2>
+                    <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">${content.tag || `${t.activationTag}`}</span>
+                    <h2 class="text-5xl md:text-6xl font-black text-white uppercase mb-12">${content.title || `${t.activationTitle}`}</h2>
                     <div class="space-y-4">
                         ${t.activationSteps.map((s: string, i: number) => `
                             <div class="p-6 bg-white/[0.03] border border-white/5 rounded-2xl flex items-center gap-6 group hover:bg-emerald-500/10 transition-all duration-300">
@@ -312,8 +308,8 @@ export function renderSPCommunity(content: Record<string, any>, brand: BrandConf
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 bg-[#0a0a0a] rounded-[4rem] border border-white/5 overflow-hidden section-reveal shadow-2xl">
                 <div class="p-16 md:p-24 flex flex-col justify-center">
-                    <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">${t.communityTag}</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tightest mb-8">${ibName}</h2>
+                    <span class="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">${content.tag || `${t.communityTag}`}</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tightest mb-8">${content.title || `${ibName}`}</h2>
                     <p class="text-slate-400 text-xl font-light leading-relaxed mb-12">${message}</p>
                     
                     <div class="flex flex-wrap gap-4 mb-12">
@@ -347,7 +343,7 @@ export function renderSPFAQ(content: Record<string, any>, brand: BrandConfig): s
     return `
     <section class="py-40 px-8 bg-[#050505] relative">
         <div class="max-w-4xl mx-auto section-reveal">
-            <h2 class="text-4xl md:text-6xl font-black text-white uppercase text-center mb-24">${t.faqTitle}</h2>
+            <h2 class="text-4xl md:text-6xl font-black text-white uppercase text-center mb-24">${content.title || `${t.faqTitle}`}</h2>
             <div class="space-y-4">
                 ${t.faqList.map((f: any) => `
                     <div class="p-8 bg-[#0a0a0a] border border-white/5 rounded-[2rem] hover:border-emerald-500/20 transition-all group">
@@ -376,9 +372,7 @@ export function renderSPFinalCTA(content: Record<string, any>, brand: BrandConfi
     <section class="py-60 px-8 bg-[#050505] relative overflow-hidden text-center border-t border-white/5">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 blur-[180px] rounded-full"></div>
         <div class="max-w-5xl mx-auto relative z-10 section-reveal">
-            <h2 class="text-6xl md:text-[100px] font-black text-white uppercase leading-[0.85] tracking-tightest mb-16">
-                ${t.finalTitle}
-            </h2>
+            <h2 class="text-6xl md:text-[100px] font-black text-white uppercase leading-[0.85] tracking-tightest mb-16">${content.title || `${t.finalTitle}`}</h2>
             <p class="text-xl text-slate-400 mb-16 max-w-3xl mx-auto font-light">
                 ${t.finalSub}
             </p>

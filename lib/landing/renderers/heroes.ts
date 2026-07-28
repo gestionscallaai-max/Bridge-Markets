@@ -7,9 +7,7 @@ export function renderHeroDark(content: Record<string, any>, brand: BrandConfig)
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div class="relative z-10 section-reveal">
                 <span class="inline-block px-4 py-1 rounded-full bg-primary/20 border border-primary/30 text-accent text-xs font-bold uppercase tracking-widest mb-8">${c.badge}</span>
-                <h1 class="text-6xl md:text-7xl font-extrabold font-headline leading-[1.05] mb-8 tracking-tighter text-white">
-                    ${c.title} <br><span class="text-gradient-purple">${c.highlight}</span>
-                </h1>
+                <h1 class="text-6xl md:text-7xl font-extrabold font-headline leading-[1.05] mb-8 tracking-tighter text-white">${content.title || `${c.title} <br><span class="text-gradient-purple">${c.highlight}</span>`}</h1>
                 <p class="text-xl text-white/60 leading-relaxed mb-10 max-w-xl font-light">${c.subtitle}</p>
                 <div class="flex flex-wrap gap-6">
                     <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="px-10 py-5 bg-primary text-white font-bold asym-card hover:shadow-2xl transition-all scale-100 hover:scale-105 inline-block">${c.cta1}</a>
@@ -46,9 +44,7 @@ export function renderHeroLight(content: Record<string, any>, brand: BrandConfig
                     <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                     <span class="text-primary text-[10px] tracking-[0.2em] font-bold uppercase">${c.badge}</span>
                 </div>
-                <h1 class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-[#211635] leading-[0.85] mb-8">
-                    ${c.title} <br><span class="text-gradient-dark">${c.highlight}</span>
-                </h1>
+                <h1 class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-[#211635] leading-[0.85] mb-8">${content.title || `${c.title} <br><span class="text-gradient-dark">${c.highlight}</span>`}</h1>
                 <p class="text-xl text-[#494455] max-w-lg mb-12 leading-relaxed font-medium">${c.subtitle}</p>
                 <div class="flex flex-wrap gap-4">
                     <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="bg-primary px-10 py-5 asym-card-rev text-white font-bold flex items-center gap-3 shadow-2xl hover:translate-y-[-2px] transition-all inline-flex">
@@ -89,9 +85,7 @@ export function renderHeroGradient(content: Record<string, any>, brand: BrandCon
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/30 rounded-full blur-[200px] -translate-y-1/3 translate-x-1/3"></div>
         <div class="max-w-5xl mx-auto text-center relative z-10 section-reveal">
             <span class="inline-block px-5 py-2 rounded-full bg-white/10 border border-white/20 text-accent text-xs font-bold uppercase tracking-[0.2em] mb-8 backdrop-blur">${c.badge}</span>
-            <h1 class="text-6xl md:text-8xl font-extrabold font-headline leading-[0.9] mb-8 tracking-tighter text-white">
-                ${c.title} <span class="text-gradient-purple">${c.highlight}</span>
-            </h1>
+            <h1 class="text-6xl md:text-8xl font-extrabold font-headline leading-[0.9] mb-8 tracking-tighter text-white">${content.title || `${c.title} <span class="text-gradient-purple">${c.highlight}</span>`}</h1>
             <p class="text-xl text-white/60 leading-relaxed mb-12 max-w-2xl mx-auto">${c.subtitle}</p>
             <div class="flex flex-wrap justify-center gap-6">
                 <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="px-10 py-5 bg-white text-primary font-bold rounded-full hover:shadow-2xl transition-all scale-100 hover:scale-105 inline-block text-lg">${c.cta1}</a>
@@ -117,11 +111,9 @@ export function renderHeroOfficial(content: Record<string, any>, brand: BrandCon
             <div class="lg:w-2/3 section-reveal">
                 <div class="inline-flex items-center gap-3 glass-panel px-6 py-2 rounded-full mb-10 border-primary/30">
                     <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-accent">${partnerInfo}</span>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-accent">${content.tag || `${partnerInfo}`}</span>
                 </div>
-                <h1 class="text-6xl md:text-8xl font-black font-headline leading-[0.9] mb-10 tracking-tighter text-white">
-                    ${c.fixedTitle} <br><span class="text-gradient-purple">${c.highlight}</span>
-                </h1>
+                <h1 class="text-6xl md:text-8xl font-black font-headline leading-[0.9] mb-10 tracking-tighter text-white">${content.title || `${c.fixedTitle} <br><span class="text-gradient-purple">${c.highlight}</span>`}</h1>
                 <p class="text-2xl text-white/50 leading-relaxed max-w-2xl mb-12 font-light">${subtitle}</p>
                 <div class="flex flex-wrap gap-8 items-center">
                     <a href="${c.ctaUrl || brand.ctaLink || '#register'}" class="px-12 py-6 bg-primary text-white font-black asym-card text-xl hover:shadow-[0_0_50px_rgba(102,53,222,0.4)] transition-all transform hover:scale-105">${c.ctaText}</a>

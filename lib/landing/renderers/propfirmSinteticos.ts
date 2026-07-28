@@ -39,10 +39,8 @@ export function renderPSHero(content: Record<string, any>, brand: BrandConfig): 
                         <span class="text-[10px] font-black text-white/50 uppercase tracking-[0.5em] group-hover:text-white transition-colors italic">High-Frequency Environment</span>
                     </div>
 
-                    <h1 class="text-7xl md:text-[11rem] lg:text-[14rem] font-black leading-[0.75] text-white mb-16 tracking-tightest uppercase italic">
-                        ${title} <br>
-                        <span class="text-[#865BFF] drop-shadow-[0_0_50px_rgba(134,91,255,0.4)] italic">${highlight}</span>
-                    </h1>
+                    <h1 class="text-7xl md:text-[11rem] lg:text-[14rem] font-black leading-[0.75] text-white mb-16 tracking-tightest uppercase italic">${content.title || `${title} <br>
+                        <span class="text-[#865BFF] drop-shadow-[0_0_50px_rgba(134,91,255,0.4)] italic">${highlight}</span>`}</h1>
 
                     <div class="flex flex-col md:flex-row gap-16 items-start md:items-center">
                         <div class="max-w-md">
@@ -54,7 +52,7 @@ export function renderPSHero(content: Record<string, any>, brand: BrandConfig): 
                         <div class="flex gap-10 items-center">
                             <a href="${ctaLink}" class="group relative px-16 py-8 bg-[#865BFF] text-white font-black overflow-hidden hover:scale-105 transition-all duration-500 shadow-[0_0_40px_rgba(134,91,255,0.3)]">
                                 <div class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                                <span class="relative z-10 uppercase tracking-[0.4em] text-xs">${ctaText}</span>
+                                <span class="relative z-10 uppercase tracking-[0.4em] text-xs">${content.tag || `${ctaText}`}</span>
                             </a>
                         </div>
                     </div>
@@ -151,7 +149,7 @@ export function renderPSFeatures(content: Record<string, any>, brand: BrandConfi
             <div class="flex flex-col lg:flex-row items-end justify-between mb-40 gap-12 section-reveal">
                 <div class="lg:w-7/12">
                     <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.8em] mb-10 block italic">The Architecture of Power</span>
-                    <h2 class="text-7xl md:text-9xl font-black text-white uppercase tracking-tightest leading-[0.8] italic">${title}</h2>
+                    <h2 class="text-7xl md:text-9xl font-black text-white uppercase tracking-tightest leading-[0.8] italic">${content.title || `${title}`}</h2>
                 </div>
                 <div class="lg:w-4/12 border-t-4 border-white/5 pt-12">
                     <p class="text-white/30 text-lg uppercase font-black italic tracking-tighter leading-tight">We don't just provide capital, we provide the infrastructure for legends.</p>
@@ -191,9 +189,7 @@ export function renderPSMatrix(content: Record<string, any>, brand: BrandConfig)
         
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="text-center mb-40 section-reveal">
-                <h2 class="text-7xl md:text-[10rem] font-black text-white uppercase tracking-tightest leading-[0.8] italic mb-12">
-                    SELECT YOUR <br> <span class="text-[#865BFF]">TIER.</span>
-                </h2>
+                <h2 class="text-7xl md:text-[10rem] font-black text-white uppercase tracking-tightest leading-[0.8] italic mb-12">${content.title || `SELECT YOUR <br> <span class="text-[#865BFF]">TIER.</span>`}</h2>
                 <div class="flex items-center justify-center gap-6">
                     <div class="h-px w-20 bg-white/10"></div>
                     <p class="text-white/30 font-black text-[10px] uppercase tracking-[0.5em] italic">Institutional Grade Capital</p>
@@ -239,7 +235,7 @@ export function renderPSCalculator(content: Record<string, any>, brand: BrandCon
             <div class="bg-gradient-to-br from-[#140633] to-[#0C0027] p-12 md:p-24 rounded-[5rem] border border-white/5 shadow-[0_50px_100px_rgba(0,0,0,0.5)] relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
                 
-                <h2 class="text-5xl md:text-[6rem] font-black text-center text-white mb-24 tracking-tighter uppercase italic leading-none">${title}</h2>
+                <h2 class="text-5xl md:text-[6rem] font-black text-center text-white mb-24 tracking-tighter uppercase italic leading-none">${content.title || `${title}`}</h2>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center relative z-10">
                     <div class="space-y-12">
@@ -305,9 +301,7 @@ export function renderPSRules(content: Record<string, any>, brand: BrandConfig):
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
                 <div class="section-reveal">
                     <span class="text-[11px] font-black text-[#865BFF] uppercase tracking-[0.6em] mb-8 block">ESTÁNDARES GLOBALES</span>
-                    <h2 class="text-6xl md:text-[7rem] font-black text-white uppercase tracking-tighter mb-12 leading-[0.9]">
-                        REGLAS <br> <span class="text-[#865BFF]">PRECISAS</span>
-                    </h2>
+                    <h2 class="text-6xl md:text-[7rem] font-black text-white uppercase tracking-tighter mb-12 leading-[0.9]">${content.title || `REGLAS <br> <span class="text-[#865BFF]">PRECISAS</span>`}</h2>
                     <p class="text-2xl text-white/40 font-light leading-relaxed mb-16 max-w-xl">
                         Nuestros protocolos están diseñados para filtrar a los mejores traders del mundo mediante métricas objetivas y transparentes.
                     </p>
@@ -344,10 +338,8 @@ export function renderPSContact(content: Record<string, any>, brand: BrandConfig
     <section class="py-40 px-6 bg-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-32 section-reveal">
-                <h1 class="text-9xl md:text-[18rem] font-black text-[#0C0027]/[0.02] uppercase tracking-tighter absolute top-0 left-0 w-full select-none -z-0">SOPORTE</h1>
-                <h2 class="text-6xl md:text-[8rem] font-black text-[#0C0027] relative z-10 uppercase tracking-tighter italic leading-none mb-10">
-                    ${title}
-                </h2>
+                <h1 class="text-9xl md:text-[18rem] font-black text-[#0C0027]/[0.02] uppercase tracking-tighter absolute top-0 left-0 w-full select-none -z-0">${content.title || `SOPORTE`}</h1>
+                <h2 class="text-6xl md:text-[8rem] font-black text-[#0C0027] relative z-10 uppercase tracking-tighter italic leading-none mb-10">${content.title || `${title}`}</h2>
                 <p class="text-2xl text-[#0C0027]/50 font-light max-w-2xl mx-auto leading-relaxed relative z-10">
                     ${subtitle}
                 </p>
@@ -436,11 +428,11 @@ export function renderPSFooter(content: Record<string, any>, brand: BrandConfig)
                 </p>
                 <div class="mt-16 flex gap-10">
                     <div class="flex flex-col gap-2">
-                        <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">Broker Oficial</span>
+                        <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">${content.tag || `Broker Oficial`}</span>
                         <span class="text-sm font-bold text-white/60">Bridge Markets Ltd.</span>
                     </div>
                     <div class="flex flex-col gap-2">
-                        <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">Regulación</span>
+                        <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">${content.tag || `Regulación`}</span>
                         <span class="text-sm font-bold text-white/60">Comoros Finance Authority</span>
                     </div>
                 </div>
@@ -468,7 +460,7 @@ export function renderPSFooter(content: Record<string, any>, brand: BrandConfig)
             
             <div class="flex items-center gap-4 px-6 py-3 bg-[#865BFF]/10 rounded-full border border-[#865BFF]/20">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">SYSTEMS OPERATIONAL</span>
+                <span class="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.4em]">${content.tag || `SYSTEMS OPERATIONAL`}</span>
             </div>
         </div>
     </footer>`;

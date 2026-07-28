@@ -23,9 +23,7 @@ export function renderV3Hero(content: Record<string, any>, brand: BrandConfig): 
                     <!-- Content Layer -->
                     <div class="relative z-20 flex lg:justify-center lg:items-center h-full flex-col pt-16 lg:pt-0 mx-auto px-6 lg:px-0">
                         <div class="w-full lg:w-1/2 lg:ml-auto lg:pl-12">
-                            <h1 class="text-4xl md:text-5xl xl:text-7xl text-[#2F1E5D] text-start mb-8 font-headline leading-tight">
-                                ${c.title}
-                            </h1>
+                            <h1 class="text-4xl md:text-5xl xl:text-7xl text-[#2F1E5D] text-start mb-8 font-headline leading-tight">${content.title || `${c.title}`}</h1>
                             <p class="text-lg text-[#2F1E5D]/70 text-start mb-10 max-w-lg leading-relaxed">
                                 ${c.subtitle}
                             </p>
@@ -85,7 +83,7 @@ export function renderV3Features(content: Record<string, any>, brand: BrandConfi
     <section class="py-32 bg-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-8 relative z-10">
             <div class="text-center max-w-3xl mx-auto mb-24">
-                <h2 class="text-5xl font-black text-[#2F1E5D] mb-8 leading-tight uppercase tracking-tighter">Tecnología diseñada para <span class="text-[#865BFF]">el éxito</span></h2>
+                <h2 class="text-5xl font-black text-[#2F1E5D] mb-8 leading-tight uppercase tracking-tighter">${content.title || `Tecnología diseñada para <span class="text-[#865BFF]">el éxito</span>`}</h2>
                 <p class="text-xl text-gray-500 font-medium">Nuestra infraestructura V3 combina la robustez institucional con la agilidad necesaria para el trader moderno.</p>
             </div>
 
@@ -155,9 +153,7 @@ export function renderV3Community(content: Record<string, any>, brand: BrandConf
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                 
                 <div class="lg:w-1/2 relative z-10">
-                    <h2 class="text-5xl md:text-7xl font-black mb-10 leading-tight uppercase tracking-tightest">
-                        ${c.title}
-                    </h2>
+                    <h2 class="text-5xl md:text-7xl font-black mb-10 leading-tight uppercase tracking-tightest">${content.title || `${c.title}`}</h2>
                     <p class="text-xl text-white/80 font-medium mb-12 max-w-lg leading-relaxed">
                         ${c.subtitle}
                     </p>
@@ -264,7 +260,7 @@ export function renderV3Registration(content: Record<string, any>, brand: BrandC
                 <div class="lg:w-1/2 p-16 lg:p-24 bg-gradient-to-br from-[#865BFF] to-[#6366f1] text-white relative overflow-hidden">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                     <div class="relative z-10">
-                        <h2 class="text-5xl font-black mb-8 leading-tight uppercase tracking-tighter italic">Empieza tu <br><span class="text-white/60">camino al éxito</span></h2>
+                        <h2 class="text-5xl font-black mb-8 leading-tight uppercase tracking-tighter italic">${content.title || `Empieza tu <br><span class="text-white/60">camino al éxito</span>`}</h2>
                         <p class="text-xl text-white/80 font-medium mb-12 leading-relaxed">
                             Regístrate ahora para acceder a la infraestructura de trading más avanzada y unirte a nuestra comunidad institucional.
                         </p>
