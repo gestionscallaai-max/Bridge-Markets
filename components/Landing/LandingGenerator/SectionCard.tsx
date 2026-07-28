@@ -15,6 +15,56 @@ interface SectionCardProps {
     onUpdateOverride: (key: string, value: any) => void;
 }
 
+const SPANISH_FIELD_LABELS: Record<string, string> = {
+    tag: 'Etiqueta / Distintivo',
+    title: 'Título Principal',
+    heading: 'Encabezado',
+    subtitle: 'Subtítulo',
+    badge: 'Distintivo / Badge',
+    desc: 'Descripción / Texto Principal',
+    text: 'Texto Principal',
+    ibPhrase: 'Frase del IB / Socio',
+    ctaText: 'Texto del Botón Principal (CTA)',
+    ctaUrl: 'Enlace del Botón Principal (URL)',
+    secondaryCtaText: 'Texto del Botón Secundario',
+    secondaryCtaUrl: 'Enlace del Botón Secundario (URL)',
+    communityName: 'Nombre de tu Comunidad',
+    communityMessage: 'Mensaje para tu Comunidad',
+    photoUrl: 'URL de tu Foto o Logo',
+    date: 'Texto de Fecha Visible',
+    time: 'Texto de Hora Visible',
+    place: 'Lugar / Ubicación del Evento',
+    location: 'Ubicación / Sede',
+    videoTitle: 'Título del Video Promocional',
+    videoDesc: 'Descripción del Video',
+    videoUrl: 'URL del Video (YouTube Embed)',
+    titleLeft: 'Título Columna Izquierda',
+    subtitleLeft: 'Subtítulo Columna Izquierda',
+    textLeft: 'Texto Columna Izquierda',
+    btnLeftText: 'Texto Botón Izquierdo',
+    titleRight: 'Título Columna Derecha',
+    subtitleRight: 'Subtítulo Columna Derecha',
+    textRight: 'Texto Columna Derecha',
+    btnRightText: 'Texto Botón Derecho',
+    buttonText: 'Texto del Botón de Envío',
+    copyrightText: 'Texto de Pie de Página (Copyright)',
+    tab1Label: 'Pestaña 1 (Título)',
+    tab2Label: 'Pestaña 2 (Título)',
+    metric1Val: 'Métrica 1 (Valor)',
+    metric1Label: 'Métrica 1 (Etiqueta)',
+    metric2Val: 'Métrica 2 (Valor)',
+    metric2Label: 'Métrica 2 (Etiqueta)',
+    metric3Val: 'Métrica 3 (Valor)',
+    metric3Label: 'Métrica 3 (Etiqueta)',
+    ibName: 'Nombre del IB',
+    supportContact: 'Contacto de Soporte'
+};
+
+function getFieldLabel(key: string) {
+    if (SPANISH_FIELD_LABELS[key]) return SPANISH_FIELD_LABELS[key];
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+}
+
 export default function SectionCard({
     section,
     isEnabled,
@@ -81,7 +131,7 @@ export default function SectionCard({
                             return (
                                 <div key={key} className="space-y-4 py-2">
                                     <label className="text-[10px] font-black text-[#865BFF] uppercase tracking-[0.2em] mb-2 block">
-                                        {key.replace(/([A-Z])/g, ' $1').trim()} (Tabla/Lista)
+                                        {getFieldLabel(key)} (Tabla/Lista)
                                     </label>
                                     <div className="space-y-3 pl-3 border-l-2 border-[#865BFF]/20">
                                         {(overrides[key] || val).map((item: any, idx: number) => (
@@ -92,7 +142,7 @@ export default function SectionCard({
                                                 <div className="grid grid-cols-2 gap-3">
                                                     {Object.entries(item).map(([subKey, subVal]) => (
                                                         <div key={subKey} className={subKey === 'family' || subKey === 'title' ? 'col-span-2' : ''}>
-                                                            <label className="text-[8px] font-bold text-slate-400 uppercase mb-1 block">{subKey.replace(/([A-Z])/g, ' $1').trim()}</label>
+                                                            <label className="text-[8px] font-bold text-slate-400 uppercase mb-1 block">{getFieldLabel(subKey)}</label>
                                                             <input
                                                                 type="text"
                                                                 value={subVal as string}
@@ -176,7 +226,7 @@ export default function SectionCard({
                         return (
                             <div key={key}>
                                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">
-                                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                                    {getFieldLabel(key)}
                                 </label>
                                 {(val as string).length > 80 ? (
                                     <textarea
