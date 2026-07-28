@@ -156,32 +156,32 @@ export function renderVECountdown(content: Record<string, any>, brand: BrandConf
     <section class="py-24 px-6 bg-[#070216] relative overflow-hidden text-center text-white">
         <!-- Countdown Background with Glow -->
         <div class="absolute inset-0 bg-[#0d0426] opacity-40 z-0"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#865BFF]/5 rounded-full blur-[200px] -z-10"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#865BFF]/10 rounded-full blur-[200px] -z-10"></div>
         
         <div class="max-w-4xl mx-auto relative z-10 space-y-12">
-            <!-- Timer Grid -->
-            <div class="grid grid-cols-4 gap-4 max-w-2xl mx-auto" id="ve-countdown-timer">
-                <div class="bg-white/[0.02] border border-white/5 backdrop-blur-md p-6 rounded-[2rem] space-y-1">
-                    <span class="text-4xl md:text-6xl font-black font-headline text-white" id="timer-days">000</span>
-                    <span class="block text-[9px] font-black uppercase text-white/30 tracking-widest mt-2">Días</span>
+            <!-- Timer Grid - Responsive 2x2 on mobile, 4x1 on desktop -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 max-w-2xl mx-auto" id="ve-countdown-timer">
+                <div class="bg-white/[0.04] border border-[#865BFF]/30 backdrop-blur-xl p-5 sm:p-7 rounded-[2.5rem] flex flex-col items-center justify-center space-y-1 shadow-[0_10px_30px_rgba(134,91,255,0.15)] hover:border-[#865BFF]/60 transition-all">
+                    <span class="text-3xl sm:text-5xl font-black font-headline text-white tracking-tight" id="timer-days">00</span>
+                    <span class="block text-[10px] font-black uppercase text-[#a885ff] tracking-widest mt-1">Días</span>
                 </div>
-                <div class="bg-white/[0.02] border border-white/5 backdrop-blur-md p-6 rounded-[2rem] space-y-1">
-                    <span class="text-4xl md:text-6xl font-black font-headline text-white" id="timer-hours">00</span>
-                    <span class="block text-[9px] font-black uppercase text-white/30 tracking-widest mt-2">Horas</span>
+                <div class="bg-white/[0.04] border border-[#865BFF]/30 backdrop-blur-xl p-5 sm:p-7 rounded-[2.5rem] flex flex-col items-center justify-center space-y-1 shadow-[0_10px_30px_rgba(134,91,255,0.15)] hover:border-[#865BFF]/60 transition-all">
+                    <span class="text-3xl sm:text-5xl font-black font-headline text-white tracking-tight" id="timer-hours">00</span>
+                    <span class="block text-[10px] font-black uppercase text-[#a885ff] tracking-widest mt-1">Horas</span>
                 </div>
-                <div class="bg-white/[0.02] border border-white/5 backdrop-blur-md p-6 rounded-[2rem] space-y-1">
-                    <span class="text-4xl md:text-6xl font-black font-headline text-white" id="timer-minutes">00</span>
-                    <span class="block text-[9px] font-black uppercase text-white/30 tracking-widest mt-2">Minutos</span>
+                <div class="bg-white/[0.04] border border-[#865BFF]/30 backdrop-blur-xl p-5 sm:p-7 rounded-[2.5rem] flex flex-col items-center justify-center space-y-1 shadow-[0_10px_30px_rgba(134,91,255,0.15)] hover:border-[#865BFF]/60 transition-all">
+                    <span class="text-3xl sm:text-5xl font-black font-headline text-white tracking-tight" id="timer-minutes">00</span>
+                    <span class="block text-[10px] font-black uppercase text-[#a885ff] tracking-widest mt-1">Minutos</span>
                 </div>
-                <div class="bg-white/[0.02] border border-white/5 backdrop-blur-md p-6 rounded-[2rem] space-y-1">
-                    <span class="text-4xl md:text-6xl font-black font-headline text-white" id="timer-seconds">00</span>
-                    <span class="block text-[9px] font-black uppercase text-white/30 tracking-widest mt-2">Segundos</span>
+                <div class="bg-white/[0.04] border border-[#865BFF]/30 backdrop-blur-xl p-5 sm:p-7 rounded-[2.5rem] flex flex-col items-center justify-center space-y-1 shadow-[0_10px_30px_rgba(134,91,255,0.15)] hover:border-[#865BFF]/60 transition-all">
+                    <span class="text-3xl sm:text-5xl font-black font-headline text-white tracking-tight" id="timer-seconds">00</span>
+                    <span class="block text-[10px] font-black uppercase text-[#a885ff] tracking-widest mt-1">Segundos</span>
                 </div>
             </div>
 
             <!-- Button -->
             <div>
-                <a href="${ctaLink}" class="inline-flex justify-center items-center py-4 px-10 rounded-2xl border border-[#865BFF]/50 hover:border-[#865BFF] bg-white/[0.01] hover:bg-[#865BFF]/5 text-white font-bold text-xs uppercase tracking-widest transition-all">
+                <a href="${ctaLink}" class="inline-flex justify-center items-center py-4.5 px-10 rounded-2xl border border-[#865BFF]/50 hover:border-[#865BFF] bg-[#865BFF]/10 hover:bg-[#865BFF]/20 text-white font-bold text-xs uppercase tracking-widest transition-all shadow-[0_10px_30px_rgba(134,91,255,0.2)]">
                     ${c.ctaText}
                 </a>
             </div>
@@ -190,17 +190,26 @@ export function renderVECountdown(content: Record<string, any>, brand: BrandConf
         <script>
             (function() {
                 const targetStr = "${rawTarget}";
-                const target = new Date(targetStr).getTime();
+                let targetMs = new Date(targetStr).getTime();
                 
-                function updateTimer() {
-                    const now = new Date().getTime();
-                    const diff = target - now;
+                // Si la fecha es inválida o ya pasó, establecer 30 días en el futuro por defecto
+                if (isNaN(targetMs) || targetMs <= Date.now()) {
+                    targetMs = Date.now() + (30 * 24 * 60 * 60 * 1000);
+                }
 
-                    if (isNaN(target) || diff <= 0) {
-                        document.getElementById("timer-days").textContent = "000";
-                        document.getElementById("timer-hours").textContent = "00";
-                        document.getElementById("timer-minutes").textContent = "00";
-                        document.getElementById("timer-seconds").textContent = "00";
+                function updateTimer() {
+                    const now = Date.now();
+                    const diff = targetMs - now;
+
+                    if (diff <= 0) {
+                        const elD = document.getElementById("timer-days");
+                        const elH = document.getElementById("timer-hours");
+                        const elM = document.getElementById("timer-minutes");
+                        const elS = document.getElementById("timer-seconds");
+                        if (elD) elD.textContent = "00";
+                        if (elH) elH.textContent = "00";
+                        if (elM) elM.textContent = "00";
+                        if (elS) elS.textContent = "00";
                         return;
                     }
 
@@ -209,14 +218,19 @@ export function renderVECountdown(content: Record<string, any>, brand: BrandConf
                     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                    document.getElementById("timer-days").textContent = String(days).padStart(3, '0');
-                    document.getElementById("timer-hours").textContent = String(hours).padStart(2, '0');
-                    document.getElementById("timer-minutes").textContent = String(minutes).padStart(2, '0');
-                    document.getElementById("timer-seconds").textContent = String(seconds).padStart(2, '0');
+                    const elDays = document.getElementById("timer-days");
+                    const elHours = document.getElementById("timer-hours");
+                    const elMins = document.getElementById("timer-minutes");
+                    const elSecs = document.getElementById("timer-seconds");
+
+                    if (elDays) elDays.textContent = String(days).padStart(2, '0');
+                    if (elHours) elHours.textContent = String(hours).padStart(2, '0');
+                    if (elMins) elMins.textContent = String(minutes).padStart(2, '0');
+                    if (elSecs) elSecs.textContent = String(seconds).padStart(2, '0');
                 }
 
                 updateTimer();
-                const interval = setInterval(updateTimer, 1000);
+                setInterval(updateTimer, 1000);
             })();
         </script>
     </section>
