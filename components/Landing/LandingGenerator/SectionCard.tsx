@@ -90,7 +90,9 @@ export default function SectionCard({
         }`}>
             <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <span className="material-symbols-outlined text-lg flex-shrink-0 text-[#865BFF]">{section.icon}</span>
+                    <span className="material-symbols-outlined text-lg flex-shrink-0 text-[#865BFF]">
+                        {section.icon === 'stepper' ? 'alt_route' : section.icon === 'tabs' ? 'tab' : section.icon}
+                    </span>
                     <div className="min-w-0">
                         <div className="flex items-center gap-2">
                             <h4 className={`font-bold text-[13px] truncate ${isEnabled ? 'text-slate-800' : 'text-slate-400'}`}>
